@@ -76,5 +76,5 @@ export function gaps(P, state, sel) {
     ${first < i ? h`<p class="cgaps-same">Same move as row ${first + 1}.</p>` : ''}<div class="cgaps-move">${showMove(moves[i], p.b)}</div></li>`; };
   return h`<h2>Need against help</h2><p class="cgaps-says">${says(P, b, rows)}</p>
     ${rows.length ? h`<ol class="cgaps-list">${rows.map(row)}</ol>` : h`<p class="cgaps-empty">No neighborhood has ${MIN_FLAGS} or more ${kindName(b.barrier).toLowerCase()} flags.</p>`}
-    <p class="hint">Neighborhood and barrier pairs with fewer than ${MIN_FLAGS} flags are left out. A patient can carry more than one flag of a kind. Choose a row to see it on the map.</p>`;
+    <p class="hint">Neighborhood and barrier pairs with fewer than ${MIN_FLAGS} flags are left out. A patient can carry more than one flag of a kind.</p>`;
 }

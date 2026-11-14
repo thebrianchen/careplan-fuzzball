@@ -19,8 +19,7 @@ export async function worklist(root) {
   cases.sort((a, b) => (b.has_recording - a.has_recording) || a.case_id.localeCompare(b.case_id));
   root.innerHTML = h`<div class="page">
     <div class="page-head">
-      <div><h1>Visits</h1>
-        <p class="muted">Before the patient leaves, check the plan against what was said, what is in the chart, and where they live.</p></div>
+      <div><h1>Visits</h1></div>
       <div class="page-tools"><span class="muted">${plural(cases.length, 'visit')} · ${saved} with a saved run · ${reviewed} reviewed</span>
         <input id="find" type="search" placeholder="Find a patient or clinic" aria-label="Find a patient or clinic"></div>
     </div>

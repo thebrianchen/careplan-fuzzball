@@ -96,7 +96,14 @@ function finding(it, rows, chart, animate) {
     })}</ul></div>` : ''}`;
 }
 
-const decided = dec => !dec ? 'The doctor decides.' : dec.decision === 'accept' ? 'Accepted.' : dec.decision === 'dismiss' ? 'Dismissed: the plan stays as written.' : h`Changed to: “${dec.note}”`;
+const DECIDED = { accept: 'Accepted', edit: 'Changed', dismiss: 'Dismissed' };
+// A flagged item folded shut: what stands in its way, and how much is behind the fold.
+function brief(it, dec) {
+  const evidence = it.barriers.reduce((n, b) => n + b.evidence.length, 0);
+  return h`<b>${it.barriers.map(b => cap(b.label)).join(' · ')}</b>
+    <span>${dec && dec.decision === 'edit' ? h`Changed to: “${dec.note}”` : [plural(evidence, 'piece') + ' of evidence', it.alternatives.length && plural(it.alternatives.length, 'alternative')].filter(Boolean).join(' · ')}</span>`;
+}
+const decided = dec => !dec ? '' : dec.decision === 'accept' ? 'Accepted.' : dec.decision === 'dismiss' ? 'Dismissed: the plan stays as written.' : h`Changed to: “${dec.note}”`;
 
 function decideBar(it, dec, saved) {
   const on = d => dec && dec.decision === d ? 'on' : '';
@@ -129,6 +136,7 @@ export async function visit(root, id) {
   let doc = await api(`case/${id}`);
   setPlanner(doc.planner);
   let es = null, tick = null, running = false, savedAt = {}, onlyUnsaid = false;
+  let open = new Set();                              // the flagged items whose evidence is unfolded; the rest show one line
   const MODES = ['recorded', 'sample', 'live'];        // in the order a visit falls back to them
   const canRun = m => m === 'recorded' ? doc.has_recording : m === 'sample' ? doc.can_sample : doc.planner.answers;
   const kept = localStorage.getItem('cp.mode');
@@ -167,7 +175,7 @@ export async function visit(root, id) {
         <div class="summary" id="summary" hidden></div>
         <ol class="plan" id="plan">${doc.plan.map((x, i) => h`<li class="pitem" id="p-${x.item_id}">
           <div class="pitem-head"><span class="num">${i + 1}</span><div class="ptext">${x.text}<small>${(x.type || '').replace('_', ' ')}</small></div><span class="slot"></span></div>
-          <div class="pitem-body"></div></li>`)}</ol>
+          <div class="brief"></div><div class="pitem-body"></div></li>`)}</ol>
         <section class="boundary" id="boundary"></section>
         <div class="after" id="after" hidden></div>
       </section>
@@ -180,18 +188,29 @@ export async function visit(root, id) {
     const node = li(it.item_id);
     if (!node) return;
     const dec = doc.decisions[it.item_id];
-    node.className = `pitem done ${it.status}${animate ? ' in' : ''}`;
+    const flagged = it.status !== 'likely_ok', shut = flagged && !open.has(it.item_id);
+    node.className = `pitem done ${it.status}${animate ? ' in' : ''}${flagged ? ' folds' : ''}${shut ? ' shut' : ''}`;
     node.style.animationDelay = animate && delay ? `${delay}ms` : '';
     node.dataset.decision = dec ? dec.decision : '';
-    $('.slot', node).innerHTML = h`<span class="chip ${it.status}">${it.status_label}</span>`;
+    $('.slot', node).innerHTML = h`${dec ? h`<span class="chip dec ${dec.decision}">${DECIDED[dec.decision]}</span>` : ''}<span class="chip ${it.status}">${it.status_label}</span>
+      ${flagged ? h`<button type="button" class="fold" aria-expanded="${String(!shut)}" aria-label="Evidence for plan item ${it.item_id}"></button>` : ''}`;
+    $('.brief', node).innerHTML = flagged ? brief(it, dec) : '';
     $('.pitem-body', node).innerHTML = h`${finding(it, rows, doc.chart, animate)}${decidable && it.status !== 'likely_ok' ? decideBar(it, dec, savedAt[it.item_id]) : ''}`;
     mount(node, city);
   }
+  function fold(itemId, on) {                         // the map behind a fold draws when it is first shown (it watches its own size)
+    on ? open.add(itemId) : open.delete(itemId);
+    const node = li(itemId);
+    node.classList.toggle('shut', !on);
+    $('.fold', node).setAttribute('aria-expanded', String(on));
+  }
+  const nextUndecided = () => flaggedOf(doc).find(i => !doc.decisions[i.item_id]);
+  function openNext() { const next = nextUndecided(); open = new Set(next ? [next.item_id] : []); }
   function clearItems(state) {                       // '' = as written, 'checking' = waiting for the review
     $$('.pitem', root).forEach(n => {
       n.className = `pitem ${state}`; n.dataset.decision = '';
       $('.slot', n).innerHTML = state ? h`<span class="chip wait">Checking</span>` : '';
-      $('.pitem-body', n).innerHTML = '';
+      $('.pitem-body', n).innerHTML = ''; $('.brief', n).innerHTML = '';
     });
   }
   function paintSteps(phase) {                       // phase: a pending label while running, or null when done
@@ -245,7 +264,7 @@ export async function visit(root, id) {
   }
   function paintAll() {
     const reviewed = doc.items.length > 0;
-    if (reviewed) doc.items.forEach(it => paintItem(it, { decidable: true })); else clearItems('');
+    if (reviewed) { openNext(); doc.items.forEach(it => paintItem(it, { decidable: true })); } else clearItems('');
     paintSteps(null); paintRunline('done'); paintSummary(); paintAfter(); markCited();
     el('#boundary').innerHTML = boundary(doc, reviewed ? 'done' : 'before');
     el('#go').textContent = reviewed ? 'Review again' : 'Review the plan';
@@ -282,7 +301,7 @@ export async function visit(root, id) {
   }
   function start(useMode, note) {
     if (running) return;
-    running = true; savedAt = {}; showUnsaid(false);
+    running = true; savedAt = {}; open.clear(); showUnsaid(false);
     doc = { ...doc, items: [], steps: [], crossings: [], decisions: {}, meta: { ...doc.meta, source: 'none' } };
     el('#fail').hidden = !note; el('#fail').className = 'notice'; el('#fail').innerHTML = note || '';
     el('#summary').hidden = true; el('#after').hidden = true;
@@ -306,6 +325,7 @@ export async function visit(root, id) {
         paintSteps('Weighing the plan against what it read');
       } else if (ev.type === 'item') {
         doc.items = [...doc.items.filter(i => i.item_id !== ev.item.item_id), ev.item];
+        if (!open.size && ev.item.status !== 'likely_ok') open.add(ev.item.item_id);      // the first flag to arrive opens; the rest fold
         paintItem(ev.item, { animate: true });
         paintSteps('Writing the findings');
       } else if (ev.type === 'rewrite') {
@@ -315,6 +335,7 @@ export async function visit(root, id) {
         stop();
         if (!ev.ok) return failed(ev.error || 'No reason was given.', useMode);
         doc = ev.doc;
+        if (![...open].some(i => doc.items.some(x => x.item_id === i && x.status !== 'likely_ok'))) openNext();
         let late = 0;                                   // items that did not stream (the planner sent the card whole) fade in one after another
         doc.items.forEach(it => paintItem(it, { decidable: true, animate: !shown.has(it.item_id), delay: shown.has(it.item_id) ? 0 : 90 * late++ }));
         paintSteps(null); paintRunline('done'); paintSummary(); paintAfter(); markCited();
@@ -333,7 +354,10 @@ export async function visit(root, id) {
       const r = await api(`decision/${id}`, { item_id: itemId, decision, note });
       doc.decisions = r.decisions; savedAt[itemId] = r.saved;
       doc.handout = null;
+      open.delete(itemId);                             // a decided flag folds to one line, and the next one without a decision opens
       paintItem(doc.items.find(i => i.item_id === itemId), { decidable: true });
+      const next = nextUndecided();
+      if (next) fold(next.item_id, true);
       paintSummary(); paintAfter();
     } catch (err) {
       out.innerHTML = h`<span class="bad">Not saved: ${err.message}</span> Choose again to retry.`;
@@ -361,6 +385,8 @@ export async function visit(root, id) {
     if (seg) { mode = seg.dataset.mode; localStorage.setItem('cp.mode', mode); return paintControls(); }
     if (t.closest('#go')) return start(mode);
     if (t.closest('#unsaid')) { showUnsaid(!onlyUnsaid); return paintSummary(); }
+    const head = t.closest('.pitem.folds .pitem-head, .pitem.folds .brief');
+    if (head) { const node = head.closest('.pitem'); return fold(node.id.slice(2), node.classList.contains('shut')); }
     if (cites) return showSource(cites.dataset.ref);
     if (d) {
       const bar = d.closest('.decide'), box = $('.editbox', bar);

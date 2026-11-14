@@ -380,7 +380,6 @@ table.grid td.mono{white-space:nowrap}
 .cgrid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;margin-top:16px}
 .cgrid2>.card{margin:0}
 .cfrom{margin:10px 2px 0;font-size:12.5px;color:var(--muted)}
-.cladder{margin:18px 2px 0;font-size:14px;color:var(--ink2);max-width:90ch}
 @media (max-width:980px){.cgrid2{grid-template-columns:1fr}}
 .careas{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
 .carea{display:inline-flex;align-items:baseline;gap:7px;padding:3px 10px;border:1px solid var(--line);border-radius:999px;font-size:13px;color:var(--ink2);white-space:nowrap}
@@ -402,3 +401,17 @@ html.stage .chip,html.stage .unsaid,html.stage .runtag{font-weight:700}
 html.stage .step{border-color:var(--line)}
 html.stage .summary span{color:#e6ebf0}
 html.stage .cbar-track{background:var(--line2)}html.stage .cbar-zone{background:#9aa7b4}
+
+/* ---- a flagged plan item folds to one line; its head toggles it */
+.pitem.folds .pitem-head,.pitem.folds .brief{cursor:pointer}
+.slot{display:flex;align-items:center;gap:6px;flex:none}
+.fold{width:26px;height:26px;padding:0;border:0;border-radius:6px;background:none;position:relative}
+.fold::before{content:"";position:absolute;left:8px;top:7px;width:7px;height:7px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);transition:transform .15s}
+.fold[aria-expanded=true]::before{transform:rotate(225deg);top:11px}
+.brief{display:none;margin:6px 0 0 36px;font-size:14px;color:var(--ink2)}
+.brief b{font-weight:600;margin-right:8px}.brief span{color:var(--muted)}
+.pitem.shut .brief{display:block}
+.pitem.shut .pitem-body{display:none}
+.chip.dec{background:var(--ink2);color:#fff}.chip.dec.accept{background:var(--ok)}.chip.dec.edit{background:var(--brand)}
+.pitem[data-decision=dismiss] .chip.dec{text-decoration:none;background:var(--ink2);color:#fff}
+@media (max-width:620px){.brief{margin-left:0}}

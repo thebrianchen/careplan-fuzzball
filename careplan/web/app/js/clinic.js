@@ -182,7 +182,7 @@ export async function clinic(root, query) {
   root.innerHTML = h`<div class="page clinic">
     ${head(P)}
     <div class="cgrid">
-      <section class="card cbars"><h2>Barriers flagged</h2><p class="hint">Flags across ${P.reviewed} reviewed plans. Choose one to see where it clusters.</p><div id="bars"></div></section>
+      <section class="card cbars"><h2>Barriers flagged</h2><p class="hint">Flags across ${P.reviewed} reviewed plans</p><div id="bars"></div></section>
       <section class="card cmapcard"><h2 id="map-title"></h2><p class="csays" id="says"></p><div class="careas" id="areas"></div>
         <figure class="cmap"><div class="cmap-stack"></div>${B || W ? h`<figcaption class="cmap-src">Map: ${(B || W).source}</figcaption>` : ''}</figure>
         <div class="legend" id="legend"></div>
@@ -193,8 +193,7 @@ export async function clinic(root, query) {
     <div class="cgrid2">
       <section class="card cgaps" id="gaps"></section>
       <section class="card cpublic" id="public"></section>
-    </div>
-    <p class="cladder">One flag helps one patient keep a plan. A panel of flags tells a clinic where to find partners. The counts alone, with no patient in them, can go to the county.</p></div>`;
+    </div></div>`;
   const el = sel => $(sel, root);
   const byId = Object.fromEntries(P.tracts.map(t => [t.tract_id, t]));
   const hidden = new Set();                            // kinds of place the manager switched off in the legend, for this visit only
