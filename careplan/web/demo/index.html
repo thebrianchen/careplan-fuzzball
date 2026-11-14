@@ -7,8 +7,11 @@
 </head>
 <body>
 <header>
-  <div class="brand">Care Plan Check</div>
-  <div class="tags"><span class="tag">made-up patient</span><span class="tag mode" id="mode"></span></div>
+  <div class="brand">
+    <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect width="24" height="24" rx="6" fill="currentColor"/><path d="M6.5 12.5l3.6 3.6 7.4-8" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span>Care Plan Check</span>
+  </div>
+  <div class="tags"><a id="clinic" class="clinic" hidden>Open the clinic app</a><span class="tag">made-up patient</span><span class="tag mode" id="mode"></span></div>
 </header>
 
 <main>
@@ -36,8 +39,8 @@
     <div id="summary" class="summary" hidden></div>
     <div id="findings"></div>
     <div class="card" id="boundary" hidden>
-      <h2>What left the private box</h2>
-      <p class="muted">Everything else stayed on the box that holds the patient. Only this crossed to the box that reads the web:</p>
+      <h2>What left the private side</h2>
+      <p class="muted">Everything else stayed on the private side, with the patient's records. Only this crossed to the public side, which reads the web:</p>
       <table><thead><tr><th>Neighborhood (census tract)</th><th>Kind of need</th><th>Days</th></tr></thead><tbody id="crossings"></tbody></table>
     </div>
   </section>
