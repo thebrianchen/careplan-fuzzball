@@ -1,10 +1,9 @@
-# DRAFT dev case by Claude 2026-10-25 for Lynna to review. All details synthetic.
-# ALL-OK case: nothing in the plan should be flagged. Decoys test over-flagging.
+# ALL-OK case: nothing in the plan should be flagged. Decoys test over-flagging. All details synthetic.
 case_id: D005
 split: dev
 title: Well-resourced asthma follow-up with a no-conflict plan
 author: claude-draft
-reviewed_by: null
+reviewed_by: Lynna Yang (dispute review, 2026-11-10)
 written_at: "2026-10-25"
 frozen_sha256: null
 

@@ -1,4 +1,4 @@
-# HELD-OUT TEST CASE. Drafted by Claude 2026-10-31 for Lynna to review; never edit after freezing.
+# HELD-OUT TEST CASE. Never edit after freezing.
 # Everything synthetic. ALL-OK case: nothing in the plan should be flagged.
 # Hyde Park tract 17031410800 fires no_vehicle_share (0.563) but PLACES lack-of-transport is 7.0 and
 # every other measure is low; he bikes. ADAP makes the antiretroviral $0 (no cost tier recorded).
@@ -6,7 +6,7 @@ case_id: T009
 split: test
 title: Virally suppressed HIV in a graduate student; routine six-month visit with no barriers
 author: claude-draft
-reviewed_by: null
+reviewed_by: Lynna Yang (dispute review, 2026-11-10)
 written_at: "2026-10-31"
 frozen_sha256: null
 
