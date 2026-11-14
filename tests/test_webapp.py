@@ -285,6 +285,18 @@ class WebAppTests(unittest.TestCase):
         finally:
             webapp.PANEL["reviews"] = real
 
+    def test_the_basemap_has_an_outline_for_every_neighborhood_in_the_panel(self):
+        base = self.get("basemap")["basemap"]
+        self.clinic.samples = True
+        try:
+            panel = self.get("panel")["panel"]
+        finally:
+            self.clinic.samples = False
+        self.assertTrue(all(t["tract_id"] in base["tracts"] for t in panel["tracts"]))
+        lat, lon = base["tracts"][panel["clinic"]["tract_id"]][0][0]
+        self.assertTrue(41 < lat < 43 and -89 < lon < -87)
+        self.assertGreater(len(base["streets"]), 1000)
+
     def test_pages_are_served_and_nothing_outside_them(self):
         with urllib.request.urlopen(f"{self.url}/app/") as r:
             self.assertIn("Care Plan Check", r.read().decode())

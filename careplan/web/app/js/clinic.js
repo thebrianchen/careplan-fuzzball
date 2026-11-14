@@ -4,9 +4,10 @@
 // The view lives in the address: #/clinic?b=<barrier>&order=share&t=<tract>, kept current with replaceState.
 import { $, $$, api, cap, date, h, plural } from './ui.js';
 import { at, countyBar, mount, viewAttr, viewOf } from './exhibits.js';
+import { HELPS, nameOf, pct, tractName } from './clinic_words.js';
+import { gaps } from './clinic_gaps.js';
+import { publicView } from './clinic_public.js';
 
-const LABEL = { med_cost: 'Medication cost', transport: 'Transportation', language_literacy: 'Language or literacy' };
-const HELPS = { food_access: 'food', med_cost: 'medication costs', utilities: 'utility bills' };   // "places that could help with ..."
 // The public figures that speak to a barrier come first in a neighborhood's detail when that barrier is chosen.
 const FACTS = {
   food_access: ['tract:places_foodinsecu', 'tract:lila_half_10', 'tract:lila_1_10'],
@@ -18,9 +19,6 @@ const TOP = 8;
 const FEW = 10;            // below this many reviewed patients one or two flags swing the share
 const ORDERS = { count: 'Most flags', share: 'Highest share' };
 
-const nameOf = b => LABEL[b.barrier] || cap(b.label);
-const tractName = id => `Tract ${+id.slice(5, 9)}${id.slice(9) === '00' ? '' : `.${id.slice(9)}`}`;
-const pct = x => `${Math.round(x * 100)}%`;
 const who = t => t.reviewed === t.patients ? plural(t.patients, 'patient') : `${plural(t.patients, 'patient')}, ${t.reviewed} reviewed`;
 
 // The one measure the page reads: all barriers -> patients with any flag; one barrier -> that barrier's flags; both per reviewed patient.
@@ -203,10 +201,16 @@ export async function clinic(root, query) {
       <section class="card cbars"><h2>Barriers flagged</h2><p class="hint">Flags across ${P.reviewed} reviewed plans. Choose one to see where it clusters.</p><div id="bars"></div></section>
       <section class="card cmapcard"><h2 id="map-title"></h2><p class="csays" id="says"></p>
         <figure class="exmap cmap"><div class="exmap-box cmap-box"></div><div class="cmap-tip" role="status" hidden></div></figure>
-        <div class="legend" id="legend"></div></section>
+        <div class="legend" id="legend"></div>
+        <p class="cfrom">This map is built from what clinicians' plans ran into in visits, not from public data alone. Only counts left the patient side, and a neighborhood with fewer than ${P.k} patients is withheld.</p></section>
       <section class="card crank"><h2 id="rank-title"></h2><div id="rank"></div></section>
       <section class="card cdetail" id="detail" aria-live="polite"></section>
-    </div></div>`;
+    </div>
+    <div class="cgrid2">
+      <section class="card cgaps" id="gaps"></section>
+      <section class="card cpublic" id="public"></section>
+    </div>
+    <p class="cladder">One flag helps one patient keep a plan. A panel of flags tells a clinic where to find partners. The counts alone, with no patient in them, can go to the county.</p></div>`;
   const el = sel => $(sel, root), box = el('.cmap-box');
   const g = geometry(P, Math.round(box.clientWidth));
   box.style.aspectRatio = `${g.w} / ${g.h}`;
@@ -240,6 +244,8 @@ export async function clinic(root, query) {
     el('#legend').innerHTML = legend(P, g, state);
     el('#rank').innerHTML = rankList(P, state, sel);
     el('#detail').innerHTML = detail(P, state, sel);
+    el('#gaps').innerHTML = gaps(P, state, sel);
+    el('#public').innerHTML = publicView(P, state, sel);
     el('.page').classList.toggle('one-barrier', !!b);
   }
 

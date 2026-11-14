@@ -12,6 +12,7 @@ POST /api/app/reset/<id>      forget this visit's review and its decisions on sc
 GET  /api/app/system          the operator's view: planner, reviews, crossings, decisions, activity. Case ids only, no patient fields.
 GET  /api/app/panel           the clinic manager's view: counts by neighborhood from the reviews of a whole panel (careplan.aggregates).
                               Counts only; neighborhoods with fewer than k patients are not in it.
+GET  /api/app/basemap         the clinic page's map: tract outlines, streets, rail and water around the clinic (pipeline/basemap.py). Public data.
 GET  /api/app/city            the backdrop of the visit page's maps: tract centers and transit stops. Public data, no patient fields.
 
 A review is shown the same way whether it is live or a saved run: start, step*, item*, end (with the whole document).
@@ -114,6 +115,7 @@ def hood_facts(tract: dict | None, county: dict[str, dict]) -> list[dict]:
 
 PANEL = {"reviews": ROOT / "reports" / "panel_aggregates.json", "sample": ROOT / "reports" / "panel_aggregates_sample.json"}
 PANEL_COUNTS = ("patients", "reviewed", "flagged_patients", "flagged_items", "appointments", "no_shows", "barriers")
+BASEMAP = ROOT / "data" / "processed" / "basemap_westside.json"
 PANEL_CLINIC = "17031260300"                      # scripts/panel.py draws the panel from the tracts nearest this one
 HELP_KM = 1.6                                     # "near" a neighborhood: within a mile of its center
 PANEL_EDGE = 0.012                                # degrees beyond the outermost neighborhood centers that the map still shows
@@ -499,6 +501,10 @@ def handle(app, h, method: str, path: str, query: str) -> None:
         return js(200, c.system())
     if method == "GET" and route == "city":
         return js(200, c.city)
+    if method == "GET" and route == "basemap":
+        if not BASEMAP.is_file():
+            return js(200, {"basemap": None})
+        return h._send(200, '{"basemap":' + BASEMAP.read_text() + "}", "application/json; charset=utf-8")
     if method == "GET" and route == "panel":
         return js(200, {"panel": panel(app.tracts, app.resources, c.county, c.samples)})
     if method == "GET" and route == "case" and cid:
