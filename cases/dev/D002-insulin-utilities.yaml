@@ -1,0 +1,190 @@
+case_id: D002
+split: dev
+title: Type 1 diabetic with a utility shutoff and an hourly warehouse job
+author: claude-draft
+reviewed_by: Lynna Yang (dispute review, 2026-11-10)
+written_at: '2026-10-25'
+frozen_sha256: null
+patient:
+  patient_id: P-D002
+  name: Marisol Tejeda
+  dob: '1980-07-02'
+  sex: F
+  language: en
+  mrn: MRN-PELWALU2SL
+  address: 3100 W 26th St, Chicago, IL 60623
+  tract_geoid: null
+  coverage:
+    type: medicaid
+    plan: Lakeshore Community Health Plan (fictional Medicaid MCO)
+    transport_benefit: 'yes'
+  pcp: Dr. L. Brandt (fictional)
+  problems:
+  - ref: prob:1
+    code: E10.65
+    system: ICD-10-CM
+    display: Type 1 diabetes with hyperglycemia
+  - ref: prob:2
+    code: E10.9
+    system: ICD-10-CM
+    display: Type 1 diabetes without complications
+  meds:
+  - ref: med:1
+    name: insulin glargine
+    dose: 22 units
+    frequency: nightly
+    cost_tier: 2
+    monthly_copay_usd: 3.0
+    refill_gap_days: 0
+    needs_refrigeration: true
+  - ref: med:2
+    name: insulin lispro
+    dose: sliding scale
+    frequency: with meals
+    cost_tier: 2
+    monthly_copay_usd: 3.0
+    refill_gap_days: 0
+    needs_refrigeration: true
+  appointments:
+  - ref: appt:1
+    date: '2026-08-11'
+    dept: endocrinology
+    time: '10:00'
+    location: Hospital endocrine clinic
+    status: no_show
+  - ref: appt:2
+    date: '2026-09-15'
+    dept: endocrinology
+    time: '10:00'
+    location: Hospital endocrine clinic
+    status: cancelled
+  - ref: appt:3
+    date: '2026-10-20'
+    dept: primary_care
+    time: '17:30'
+    location: Clinic
+    status: kept
+  screener:
+    date: '2026-10-20'
+    answers:
+      living_situation: steady_place
+      housing_problems: pests
+      food_worry: never_true
+      food_ran_out: never_true
+      transportation: 'no'
+      utilities_shutoff: 'yes'
+  notes:
+  - ref: note:1
+    date: '2026-10-20'
+    role: nursing
+    topics:
+    - utilities
+    text: Patient reports ComEd shutoff notice received last week; balance past due.
+visit:
+  visit_id: V-D002
+  date: '2026-10-20'
+  setting: primary care evening visit
+  transcript:
+  - ref: turn:T01
+    speaker: doctor
+    text: Your sugars have been running high. Walk me through your insulin.
+  - ref: turn:T02
+    speaker: patient
+    text: I've been keeping it in a cooler some days. We got a shutoff notice and the power's been off twice this month.
+    topics:
+    - utilities
+  - ref: turn:T03
+    speaker: doctor
+    text: How long was it off?
+  - ref: turn:T04
+    speaker: patient
+    text: A day each time. I put ice in the cooler but I'm not sure it stayed cold.
+    topics:
+    - utilities
+  - ref: turn:T05
+    speaker: doctor
+    text: You missed a couple of endocrinology visits too.
+  - ref: turn:T06
+    speaker: patient
+    text: They're always at ten in the morning. I work at the warehouse, six to two, and if I miss a shift I lose the hours.
+      No sick days.
+    topics:
+    - work_schedule
+  - ref: turn:T07
+    speaker: doctor
+    text: Do you have a smartphone? There's a glucose sensor that sends readings to an app.
+  - ref: turn:T08
+    speaker: patient
+    text: Yeah, I've got an iPhone. That I can do.
+  - ref: turn:T09
+    speaker: doctor
+    text: Anything going on at home besides the power?
+  - ref: turn:T10
+    speaker: patient
+    text: Mice. The landlord says he's dealing with it.
+    topics:
+    - housing
+draft_plan:
+- item_id: P1
+  type: medication
+  text: Continue insulin glargine 22 units nightly and lispro with meals; store insulin refrigerated
+- item_id: P2
+  type: appointment
+  text: Endocrinology follow-up in 4 weeks, Tuesday 10:00 AM
+  schedule: once, Tue 10:00
+- item_id: P3
+  type: monitoring
+  text: Start continuous glucose monitor with smartphone app; review readings at next visit
+- item_id: P4
+  type: education
+  text: Diabetes self-management class, Thursdays 2:00 PM for 4 weeks
+  schedule: Thu 14:00 x4
+planted_conflicts:
+- conflict_id: C1
+  item_id: P1
+  barrier: utilities
+  expected_status: at_risk
+  evidence:
+  - source: transcript
+    ref: turn:T02
+  - source: transcript
+    ref: turn:T04
+  - source: record
+    ref: screener:utilities_shutoff
+  - source: record
+    ref: note:1
+  acceptable_alternative_categories:
+  - medical_certificate_utilities
+  - utility_assistance
+- conflict_id: C2
+  item_id: P2
+  barrier: work_schedule
+  expected_status: at_risk
+  evidence:
+  - source: transcript
+    ref: turn:T06
+  - source: record
+    ref: appt:1
+  acceptable_alternative_categories:
+  - flexible_scheduling
+  - telehealth
+- conflict_id: C3
+  item_id: P4
+  barrier: work_schedule
+  expected_status: blocked
+  evidence:
+  - source: transcript
+    ref: turn:T06
+  acceptable_alternative_categories:
+  - flexible_scheduling
+  - telehealth
+  - plain_language_materials
+decoys:
+- barrier: housing
+  ref: turn:T10
+  why_irrelevant: Pests are a real problem but no plan item depends on housing; flagging housing for any item is a false flag.
+- barrier: digital_access
+  ref: turn:T08
+  why_irrelevant: Patient has a smartphone and says the app is fine; P3 is OK.
+expected_ok_items:
+- P3

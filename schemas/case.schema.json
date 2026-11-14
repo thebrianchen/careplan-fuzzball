@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "careplan/case.schema.json",
+  "title": "Care Plan Check case",
+  "type": "object",
+  "required": ["case_id", "split", "patient", "visit", "draft_plan", "planted_conflicts", "decoys"],
+  "additionalProperties": false,
+  "$defs": {
+    "barrier": {
+      "enum": ["transport", "food_access", "med_cost", "other_cost", "utilities", "housing",
+               "caregiving", "language_literacy", "digital_access", "work_schedule"]
+    },
+    "alt_category": {
+      "enum": ["nemt", "paratransit", "dialysis_social_worker", "schedule_change", "home_dialysis_evaluation",
+               "coordinate_with_existing_visit", "telehealth", "phone_followup", "food_pantry", "snap",
+               "medically_tailored_meals", "renal_dietitian", "utility_assistance", "medical_certificate_utilities",
+               "med_assistance_program", "generic_or_formulary_switch", "mail_order_pharmacy", "caregiver_support",
+               "interpreter", "plain_language_materials", "community_health_worker", "housing_assistance",
+               "flexible_scheduling", "other"]
+    },
+    "ref": {"type": "string", "pattern": "^((prob|med|appt|note|turn|screener|tract|resource):[A-Za-z0-9_]+|transit:appt:[0-9]+)$"},
+    "evidence": {
+      "type": "object",
+      "required": ["source", "ref"],
+      "additionalProperties": false,
+      "properties": {
+        "source": {"enum": ["record", "transcript", "tract", "resource"]},
+        "ref": {"$ref": "#/$defs/ref"}
+      }
+    }
+  },
+  "properties": {
+    "case_id": {"type": "string", "pattern": "^([DT][0-9]{3}|S[0-9]{5})$"},
+    "split": {"enum": ["dev", "test"]},
+    "title": {"type": "string"},
+    "author": {"type": "string"},
+    "reviewed_by": {"type": ["string", "null"]},
+    "written_at": {"type": "string"},
+    "frozen_sha256": {"type": ["string", "null"]},
+    "patient": {
+      "type": "object",
+      "required": ["patient_id", "name", "dob", "mrn", "address", "coverage", "problems", "meds", "appointments"],
+      "additionalProperties": false,
+      "properties": {
+        "patient_id": {"type": "string"},
+        "name": {"type": "string"},
+        "dob": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$"},
+        "sex": {"enum": ["F", "M", "X"]},
+        "language": {"type": "string"},
+        "mrn": {"type": "string", "pattern": "^MRN-[A-Z2-7]{10}$"},
+        "address": {"type": "string"},
+        "tract_geoid": {"type": ["string", "null"], "pattern": "^[0-9]{11}$"},
+        "coverage": {
+          "type": "object",
+          "required": ["type"],
+          "additionalProperties": false,
+          "properties": {
+            "type": {"enum": ["medicare", "medicaid", "dual", "commercial", "none"]},
+            "plan": {"type": "string"},
+            "transport_benefit": {"enum": ["yes", "no", "unknown"]}
+          }
+        },
+        "pcp": {"type": "string"},
+        "problems": {"type": "array", "items": {
+          "type": "object", "required": ["ref", "code", "display"], "additionalProperties": false,
+          "properties": {"ref": {"$ref": "#/$defs/ref"}, "code": {"type": "string"}, "system": {"type": "string"}, "display": {"type": "string"}}}},
+        "meds": {"type": "array", "items": {
+          "type": "object", "required": ["ref", "name"], "additionalProperties": false,
+          "properties": {"ref": {"$ref": "#/$defs/ref"}, "name": {"type": "string"}, "dose": {"type": "string"},
+                          "frequency": {"type": "string"}, "cost_tier": {"type": "integer"},
+                          "monthly_copay_usd": {"type": "number"}, "refill_gap_days": {"type": "integer"},
+                          "needs_refrigeration": {"type": "boolean"}}}},
+        "appointments": {"type": "array", "items": {
+          "type": "object", "required": ["ref", "date", "dept", "status"], "additionalProperties": false,
+          "properties": {"ref": {"$ref": "#/$defs/ref"}, "date": {"type": "string"}, "dept": {"type": "string"},
+                          "time": {"type": "string"}, "location": {"type": "string"}, "facility_ccn": {"type": "string"},
+                          "status": {"enum": ["kept", "no_show", "cancelled", "scheduled"]}}}},
+        "screener": {
+          "type": "object", "additionalProperties": false,
+          "properties": {
+            "date": {"type": "string"},
+            "answers": {"type": "object", "additionalProperties": {"type": "string"}}
+          }
+        },
+        "notes": {"type": "array", "items": {
+          "type": "object", "required": ["ref", "text"], "additionalProperties": false,
+          "properties": {"ref": {"$ref": "#/$defs/ref"}, "date": {"type": "string"}, "role": {"type": "string"},
+                          "topics": {"type": "array", "items": {"$ref": "#/$defs/barrier"}},
+                          "text": {"type": "string"}}}}
+      }
+    },
+    "visit": {
+      "type": "object",
+      "required": ["visit_id", "transcript"],
+      "additionalProperties": false,
+      "properties": {
+        "visit_id": {"type": "string"},
+        "date": {"type": "string"},
+        "setting": {"type": "string"},
+        "transcript": {"type": "array", "minItems": 1, "items": {
+          "type": "object", "required": ["ref", "speaker", "text"], "additionalProperties": false,
+          "properties": {"ref": {"$ref": "#/$defs/ref"}, "speaker": {"enum": ["doctor", "patient", "caregiver", "nurse", "interpreter"]},
+                          "text": {"type": "string"}, "topics": {"type": "array", "items": {"$ref": "#/$defs/barrier"}}}}}
+      }
+    },
+    "draft_plan": {"type": "array", "minItems": 1, "items": {
+      "type": "object", "required": ["item_id", "type", "text"], "additionalProperties": false,
+      "properties": {"item_id": {"type": "string", "pattern": "^P[0-9]+$"},
+                      "type": {"enum": ["appointment", "diet", "medication", "activity", "referral", "monitoring", "education"]},
+                      "text": {"type": "string"}, "schedule": {"type": "string"}}}},
+    "planted_conflicts": {"type": "array", "items": {
+      "type": "object", "required": ["conflict_id", "item_id", "barrier", "expected_status", "evidence"], "additionalProperties": false,
+      "properties": {"conflict_id": {"type": "string"}, "item_id": {"type": "string"}, "barrier": {"$ref": "#/$defs/barrier"},
+                      "expected_status": {"enum": ["at_risk", "blocked"]},
+                      "evidence": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/evidence"}},
+                      "acceptable_alternative_categories": {"type": "array", "items": {"$ref": "#/$defs/alt_category"}},
+                      "needs_tract_check": {"type": "boolean"},
+                      "note": {"type": "string"}}}},
+    "decoys": {"type": "array", "items": {
+      "type": "object", "required": ["barrier", "ref", "why_irrelevant"], "additionalProperties": false,
+      "properties": {"barrier": {"$ref": "#/$defs/barrier"}, "ref": {"$ref": "#/$defs/ref"}, "why_irrelevant": {"type": "string"}}}},
+    "expected_ok_items": {"type": "array", "items": {"type": "string"}}
+  }
+}

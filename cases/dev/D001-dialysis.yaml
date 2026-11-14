@@ -1,0 +1,297 @@
+case_id: D001
+split: dev
+title: Hemodialysis patient missing sessions after selling his car
+author: claude-draft
+reviewed_by: Lynna Yang (dispute review, 2026-11-10)
+written_at: '2026-10-25'
+frozen_sha256: null
+patient:
+  patient_id: P-D001
+  name: Raymond Ellis
+  dob: '1968-03-14'
+  sex: M
+  language: en
+  mrn: MRN-K7Q2XW3D4M
+  address: 4200 W Madison St, Chicago, IL 60624
+  tract_geoid: null
+  coverage:
+    type: dual
+    plan: Lakeshore Community Health Plan (fictional Medicaid MCO)
+    transport_benefit: 'yes'
+  pcp: Dr. A. Moreno (fictional)
+  problems:
+  - ref: prob:1
+    code: N18.6
+    system: ICD-10-CM
+    display: End stage renal disease
+  - ref: prob:2
+    code: Z99.2
+    system: ICD-10-CM
+    display: Dependence on renal dialysis
+  - ref: prob:3
+    code: E11.22
+    system: ICD-10-CM
+    display: Type 2 diabetes with diabetic chronic kidney disease
+  - ref: prob:4
+    code: I12.0
+    system: ICD-10-CM
+    display: Hypertensive CKD with stage 5 CKD or ESRD
+  meds:
+  - ref: med:1
+    name: sevelamer carbonate
+    dose: 800 mg
+    frequency: three times daily with meals
+    cost_tier: 2
+    monthly_copay_usd: 4.9
+    refill_gap_days: 0
+  - ref: med:2
+    name: amlodipine
+    dose: 10 mg
+    frequency: daily
+    cost_tier: 1
+    monthly_copay_usd: 1.6
+    refill_gap_days: 0
+  - ref: med:3
+    name: insulin glargine
+    dose: 18 units
+    frequency: nightly
+    cost_tier: 2
+    monthly_copay_usd: 4.9
+    refill_gap_days: 0
+  appointments:
+  - ref: appt:1
+    date: '2026-09-28'
+    dept: dialysis
+    time: '15:00'
+    location: DaVita Park Manor Dialysis, 9505 S Colfax Ave
+    facility_ccn: '142831'
+    status: kept
+  - ref: appt:2
+    date: '2026-09-30'
+    dept: dialysis
+    time: '15:00'
+    location: DaVita Park Manor Dialysis, 9505 S Colfax Ave
+    facility_ccn: '142831'
+    status: no_show
+  - ref: appt:3
+    date: '2026-10-05'
+    dept: dialysis
+    time: '15:00'
+    location: DaVita Park Manor Dialysis, 9505 S Colfax Ave
+    facility_ccn: '142831'
+    status: no_show
+  - ref: appt:4
+    date: '2026-10-07'
+    dept: dialysis
+    time: '15:00'
+    location: DaVita Park Manor Dialysis, 9505 S Colfax Ave
+    facility_ccn: '142831'
+    status: kept
+  - ref: appt:5
+    date: '2026-10-12'
+    dept: dialysis
+    time: '15:00'
+    location: DaVita Park Manor Dialysis, 9505 S Colfax Ave
+    facility_ccn: '142831'
+    status: no_show
+  - ref: appt:6
+    date: '2026-10-14'
+    dept: nephrology
+    time: '13:30'
+    location: Hospital nephrology clinic
+    status: kept
+  screener:
+    date: '2026-04-02'
+    answers:
+      living_situation: steady_place
+      housing_problems: none
+      food_worry: sometimes_true
+      food_ran_out: never_true
+      transportation: 'no'
+      utilities_shutoff: 'no'
+  notes:
+  - ref: note:1
+    date: '2026-04-02'
+    role: social_work
+    topics:
+    - caregiving
+    - housing
+    text: Lives alone in a third-floor walk-up. Daughter lives in Gary, Indiana and visits monthly. Drives himself to dialysis.
+  - ref: note:2
+    date: '2026-10-14'
+    role: nursing
+    topics:
+    - digital_access
+    text: Patient does not have a smartphone. Prefers paper instructions and phone calls to a landline.
+visit:
+  visit_id: V-D001
+  date: '2026-10-21'
+  setting: nephrology clinic follow-up
+  transcript:
+  - ref: turn:T01
+    speaker: doctor
+    text: The dialysis unit tells me you've missed three sessions this month. What's been going on?
+  - ref: turn:T02
+    speaker: patient
+    text: I don't drive anymore. I sold the car in August, couldn't keep up with the insurance.
+    topics:
+    - transport
+    - other_cost
+  - ref: turn:T03
+    speaker: doctor
+    text: How have you been getting to the unit?
+  - ref: turn:T04
+    speaker: patient
+    text: Two buses, all the way down to Park Manor. That was the only chair they had, three o'clock. I'm out the door by
+      one-thirty, and after four hours on the machine it's two more buses home. I don't get in till eight-thirty. Some days
+      I just don't go.
+    topics:
+    - transport
+  - ref: turn:T05
+    speaker: doctor
+    text: Is there anyone who can drive you?
+  - ref: turn:T06
+    speaker: patient
+    text: My daughter's in Indiana. My neighbor helped a couple times but he works days.
+    topics:
+    - transport
+    - caregiving
+  - ref: turn:T07
+    speaker: doctor
+    text: Let's talk about food. How are you eating on dialysis days?
+  - ref: turn:T08
+    speaker: patient
+    text: Mostly whatever the corner store has. Chips, lunch meat. The real grocery is a bus ride away and I'm wiped out after
+      treatment.
+    topics:
+    - food_access
+    - transport
+  - ref: turn:T09
+    speaker: doctor
+    text: And the phosphate binder, the sevelamer?
+  - ref: turn:T10
+    speaker: patient
+    text: I take it when I eat. If I skip lunch I skip the pill too.
+    topics:
+    - food_access
+  - ref: turn:T11
+    speaker: doctor
+    text: Any trouble paying for your medicines?
+  - ref: turn:T12
+    speaker: patient
+    text: No, the copays are a few dollars. That part's fine.
+    topics:
+    - med_cost
+  - ref: turn:T13
+    speaker: doctor
+    text: I'd also like the surgeons to look at your fistula in two weeks.
+  - ref: turn:T14
+    speaker: patient
+    text: Another trip downtown? I'll try.
+    topics:
+    - transport
+draft_plan:
+- item_id: P1
+  type: appointment
+  text: Continue in-center hemodialysis Monday/Wednesday/Friday at 3:00 PM at DaVita Park Manor Dialysis
+  schedule: MWF 15:00
+- item_id: P2
+  type: diet
+  text: 'Renal diet: low potassium and low phosphorus, fluid limit 1 L/day, more fresh produce from the low-potassium list'
+- item_id: P3
+  type: medication
+  text: Sevelamer 800 mg three times daily with meals
+- item_id: P4
+  type: referral
+  text: Vascular surgery clinic visit in 2 weeks for fistula check
+  schedule: once, ~2026-11-04
+- item_id: P5
+  type: monitoring
+  text: Daily weight and blood pressure log on paper; bring to each session
+planted_conflicts:
+- conflict_id: C1
+  item_id: P1
+  barrier: transport
+  expected_status: blocked
+  evidence:
+  - source: transcript
+    ref: turn:T02
+  - source: transcript
+    ref: turn:T04
+  - source: record
+    ref: appt:2
+  - source: record
+    ref: transit:appt:2
+  - source: tract
+    ref: tract:no_vehicle_share
+  - source: tract
+    ref: tract:places_lacktrpt
+  acceptable_alternative_categories:
+  - nemt
+  - paratransit
+  - dialysis_social_worker
+  - schedule_change
+  - home_dialysis_evaluation
+- conflict_id: C2
+  item_id: P2
+  barrier: food_access
+  expected_status: at_risk
+  evidence:
+  - source: transcript
+    ref: turn:T08
+  - source: tract
+    ref: tract:places_foodinsecu
+  - source: record
+    ref: screener:food_worry
+  acceptable_alternative_categories:
+  - food_pantry
+  - snap
+  - medically_tailored_meals
+  - renal_dietitian
+- conflict_id: C3
+  item_id: P4
+  barrier: transport
+  expected_status: at_risk
+  evidence:
+  - source: transcript
+    ref: turn:T14
+  - source: transcript
+    ref: turn:T02
+  acceptable_alternative_categories:
+  - nemt
+  - coordinate_with_existing_visit
+  - paratransit
+- conflict_id: C4
+  item_id: P3
+  barrier: food_access
+  expected_status: at_risk
+  evidence:
+  - source: transcript
+    ref: turn:T10
+  - source: transcript
+    ref: turn:T08
+  acceptable_alternative_categories:
+  - renal_dietitian
+  - food_pantry
+  - medically_tailored_meals
+  note: 'Binder is tied to meals; skipped meals mean skipped doses. Lynna: keep or drop?'
+- conflict_id: C5
+  item_id: P2
+  barrier: caregiving
+  expected_status: at_risk
+  evidence:
+  - source: transcript
+    ref: turn:T06
+  acceptable_alternative_categories:
+  - caregiver_support
+  - schedule_change
+  note: 'Added from Lynna''s dispute review: the system raised it, the key had missed it.'
+decoys:
+- barrier: med_cost
+  ref: turn:T12
+  why_irrelevant: Patient states copays are a few dollars; dual coverage. Flagging cost for P3 is a false flag.
+- barrier: digital_access
+  ref: note:2
+  why_irrelevant: No smartphone, but P5 is a paper log and nothing in the plan needs an app.
+expected_ok_items:
+- P5

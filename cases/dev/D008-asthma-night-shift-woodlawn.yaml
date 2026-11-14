@@ -1,0 +1,200 @@
+case_id: D008
+split: dev
+title: Night-shift security guard with asthma; morning test, home nebulizer, low-sodium diet
+author: claude-draft
+reviewed_by: Lynna Yang (dispute review, 2026-11-10)
+written_at: '2026-10-25'
+frozen_sha256: null
+patient:
+  patient_id: P-D008
+  name: Darnell Whitaker
+  dob: '1985-02-19'
+  sex: M
+  language: en
+  mrn: MRN-VMTIZWZ4QA
+  address: 300 E 63rd St, Chicago, IL 60637
+  tract_geoid: null
+  coverage:
+    type: medicaid
+    plan: Lakeshore Community Health Plan (fictional Medicaid MCO)
+    transport_benefit: 'yes'
+  pcp: Dr. S. Patel (fictional)
+  problems:
+  - ref: prob:1
+    code: J45.41
+    system: ICD-10-CM
+    display: Moderate persistent asthma with acute exacerbation
+  - ref: prob:2
+    code: I10
+    system: ICD-10-CM
+    display: Essential hypertension
+  meds:
+  - ref: med:1
+    name: budesonide-formoterol inhaler
+    dose: 160/4.5 mcg 2 puffs
+    frequency: twice daily
+    cost_tier: 2
+    monthly_copay_usd: 3.0
+    refill_gap_days: 0
+  - ref: med:2
+    name: albuterol nebulizer solution
+    dose: 2.5 mg
+    frequency: every 4 hours as needed
+    cost_tier: 1
+    monthly_copay_usd: 1.0
+    refill_gap_days: 0
+  - ref: med:3
+    name: lisinopril
+    dose: 10 mg
+    frequency: daily
+    cost_tier: 1
+    monthly_copay_usd: 1.0
+    refill_gap_days: 0
+  appointments:
+  - ref: appt:1
+    date: '2026-10-12'
+    dept: emergency
+    time: 03:40
+    location: Hospital ED
+    status: kept
+  - ref: appt:2
+    date: '2026-10-22'
+    dept: primary_care
+    time: '16:00'
+    location: Clinic
+    status: kept
+  screener:
+    date: '2026-10-12'
+    answers:
+      living_situation: steady_place
+      housing_problems: none
+      food_worry: never_true
+      food_ran_out: never_true
+      transportation: 'no'
+      utilities_shutoff: 'yes'
+  notes:
+  - ref: note:1
+    date: '2026-10-12'
+    role: social_work
+    topics:
+    - utilities
+    text: 'ED social work: patient reports ComEd disconnection notice, balance about $600. Given LIHEAP flyer.'
+visit:
+  visit_id: V-D008
+  date: '2026-10-22'
+  setting: ED follow-up, primary care
+  transcript:
+  - ref: turn:T01
+    speaker: doctor
+    text: You were in the ER last week for your asthma. How's the breathing now?
+  - ref: turn:T02
+    speaker: patient
+    text: Better. The steroids helped. I still get tight at night sometimes.
+  - ref: turn:T03
+    speaker: doctor
+    text: What's your work schedule like?
+  - ref: turn:T04
+    speaker: patient
+    text: Overnights. Security at a warehouse, eleven to seven. I sleep in the morning.
+    topics:
+    - work_schedule
+  - ref: turn:T05
+    speaker: doctor
+    text: How do you get to work?
+  - ref: turn:T06
+    speaker: patient
+    text: I drive. My car's old but it runs.
+  - ref: turn:T07
+    speaker: doctor
+    text: Are you using the inhaler twice a day?
+  - ref: turn:T08
+    speaker: patient
+    text: Most days. I forget the night one at work sometimes.
+    topics:
+    - work_schedule
+  - ref: turn:T09
+    speaker: doctor
+    text: Your blood pressure's up too. How's your eating?
+  - ref: turn:T10
+    speaker: patient
+    text: Whatever's quick. I'm working nights.
+    topics:
+    - work_schedule
+draft_plan:
+- item_id: P1
+  type: appointment
+  text: Pulmonary function testing at the hospital lab, weekday 8:00 AM slot
+  schedule: once, weekday 08:00
+- item_id: P2
+  type: medication
+  text: Albuterol by home nebulizer every 4 hours as needed during flares
+- item_id: P3
+  type: diet
+  text: Low-sodium diet (under 2 g/day) with fresh fruits and vegetables for blood pressure
+- item_id: P4
+  type: medication
+  text: Continue budesonide-formoterol 2 puffs twice daily; set a phone reminder for the evening dose
+planted_conflicts:
+- conflict_id: C1
+  item_id: P1
+  barrier: work_schedule
+  expected_status: at_risk
+  evidence:
+  - source: transcript
+    ref: turn:T04
+  acceptable_alternative_categories:
+  - flexible_scheduling
+  - schedule_change
+- conflict_id: C2
+  item_id: P2
+  barrier: utilities
+  expected_status: at_risk
+  evidence:
+  - source: record
+    ref: note:1
+  - source: record
+    ref: screener:utilities_shutoff
+  acceptable_alternative_categories:
+  - utility_assistance
+  - medical_certificate_utilities
+  note: 'Record-only: a nebulizer needs power and a shutoff is pending. Illinois utilities offer medical certificates that
+    delay disconnection.'
+- conflict_id: C3
+  item_id: P3
+  barrier: food_access
+  expected_status: at_risk
+  evidence:
+  - source: tract
+    ref: tract:places_foodinsecu
+  acceptable_alternative_categories:
+  - food_pantry
+  - snap
+  - other
+  note: 'Tract-only. T10 hints at schedule-driven eating but isn''t food-access evidence. Lynna: is this too weak to plant?'
+- conflict_id: C4
+  item_id: P3
+  barrier: work_schedule
+  expected_status: at_risk
+  evidence:
+  - source: transcript
+    ref: turn:T10
+  acceptable_alternative_categories:
+  - flexible_scheduling
+  - telehealth
+  note: 'Added from Lynna''s dispute review: the system raised it, the key had missed it.'
+- conflict_id: C5
+  item_id: P4
+  barrier: work_schedule
+  expected_status: at_risk
+  evidence:
+  - source: transcript
+    ref: turn:T08
+  acceptable_alternative_categories:
+  - flexible_scheduling
+  - telehealth
+  note: 'Added from Lynna''s dispute review: the system raised it, the key had missed it.'
+decoys:
+- barrier: transport
+  ref: turn:T06
+  why_irrelevant: The tract has many car-free households, but this patient drives; flagging transport is a false flag.
+expected_ok_items: []

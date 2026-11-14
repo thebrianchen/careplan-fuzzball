@@ -1,0 +1,1 @@
+- 2026-11-13T12:20Z: re-froze 18 case(s) (T002, T003, T004, T005, T006, T007, T008, T010, T011, T012, T013, T014, T015, T016, T017, T018, T019, T020). Reason: Keys changed by Lynna's physician review of all 20 held-out cases (reports/reviews.jsonl, applied Nov 10 and Nov 12 by scripts/apply_reviews.py). No case text was changed for any other reason.

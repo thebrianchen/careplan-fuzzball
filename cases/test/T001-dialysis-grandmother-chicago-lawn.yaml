@@ -1,0 +1,124 @@
+# HELD-OUT TEST CASE. Drafted by Claude 2026-10-31 for Lynna to review; never edit after freezing.
+# Everything synthetic. The dialysis unit is REAL (Fresenius Marquette Park, CMS 142566) so facility checks work.
+# Purpose: dialysis repeat with a different barrier mix. Caregiving is spoken (raising two grandchildren,
+# school lets out at 3 PM, Thursday chair runs to ~3:45). Med cost is record-only (cinacalcet tier 3,
+# $45/month, 21-day refill gap; never mentioned). Food access is tract + stale screener (Chicago Lawn
+# foodinsecu 34.0 >= 32.8; July screener "sometimes_true"); the visit never asks about groceries.
+# Tract 17031660500 also fires housing (27.2); no plan item depends on it.
+case_id: T001
+split: test
+title: Hemodialysis patient raising two grandchildren; Thursday sessions cut short or missed
+author: claude-draft
+reviewed_by: null
+written_at: "2026-10-31"
+frozen_sha256: null
+
+patient:
+  patient_id: P-T001
+  name: Bernice Tolliver
+  dob: "1964-08-22"
+  sex: F
+  language: en
+  mrn: MRN-ABXQDWCZHG
+  address: "6300 S Kedzie Ave, Chicago, IL 60629"   # commercial corridor, not a residence
+  tract_geoid: null
+  coverage:
+    type: medicare
+    plan: Original Medicare (Parts A, B, D); no supplemental plan; not enrolled in Extra Help
+    transport_benefit: "no"
+  pcp: Dr. H. Adeyemi (fictional)
+  problems:
+    - {ref: prob:1, code: N18.6, system: ICD-10-CM, display: End stage renal disease}
+    - {ref: prob:2, code: Z99.2, system: ICD-10-CM, display: Dependence on renal dialysis}
+    - {ref: prob:3, code: N25.81, system: ICD-10-CM, display: Secondary hyperparathyroidism of renal origin}
+    - {ref: prob:4, code: I12.0, system: ICD-10-CM, display: Hypertensive CKD with stage 5 CKD or ESRD}
+  meds:
+    - {ref: med:1, name: sevelamer carbonate, dose: 800 mg, frequency: three times daily with meals, cost_tier: 2, monthly_copay_usd: 9.00, refill_gap_days: 0}
+    - {ref: med:2, name: amlodipine, dose: 10 mg, frequency: daily, cost_tier: 1, monthly_copay_usd: 2.00, refill_gap_days: 0}
+    - {ref: med:3, name: cinacalcet, dose: 30 mg, frequency: daily, cost_tier: 3, monthly_copay_usd: 45.00, refill_gap_days: 21}
+  appointments:
+    - {ref: appt:1, date: "2026-10-06", dept: dialysis, time: "11:30", location: "Fresenius Kidney Care Marquette Park, 6535 S Western Ave", facility_ccn: "142566", status: kept}
+    - {ref: appt:2, date: "2026-10-08", dept: dialysis, time: "11:30", location: "Fresenius Kidney Care Marquette Park, 6535 S Western Ave", facility_ccn: "142566", status: no_show}
+    - {ref: appt:3, date: "2026-10-10", dept: dialysis, time: "11:30", location: "Fresenius Kidney Care Marquette Park, 6535 S Western Ave", facility_ccn: "142566", status: kept}
+    - {ref: appt:4, date: "2026-10-13", dept: dialysis, time: "11:30", location: "Fresenius Kidney Care Marquette Park, 6535 S Western Ave", facility_ccn: "142566", status: kept}
+    - {ref: appt:5, date: "2026-10-15", dept: dialysis, time: "11:30", location: "Fresenius Kidney Care Marquette Park, 6535 S Western Ave", facility_ccn: "142566", status: no_show}
+    - {ref: appt:6, date: "2026-10-17", dept: dialysis, time: "11:30", location: "Fresenius Kidney Care Marquette Park, 6535 S Western Ave", facility_ccn: "142566", status: kept}
+    - {ref: appt:7, date: "2026-10-20", dept: dialysis, time: "11:30", location: "Fresenius Kidney Care Marquette Park, 6535 S Western Ave", facility_ccn: "142566", status: kept}
+    - {ref: appt:8, date: "2026-10-22", dept: dialysis, time: "11:30", location: "Fresenius Kidney Care Marquette Park, 6535 S Western Ave", facility_ccn: "142566", status: no_show}
+    - {ref: appt:9, date: "2026-10-24", dept: dialysis, time: "11:30", location: "Fresenius Kidney Care Marquette Park, 6535 S Western Ave", facility_ccn: "142566", status: kept}
+    - {ref: appt:10, date: "2026-10-27", dept: nephrology, time: "09:00", location: Hospital nephrology clinic, status: kept}
+  screener:
+    date: "2026-07-14"
+    answers:
+      living_situation: steady_place
+      housing_problems: none
+      food_worry: sometimes_true
+      food_ran_out: never_true
+      transportation: "no"
+      utilities_shutoff: "no"
+  notes:
+    - {ref: note:1, date: "2026-10-20", role: dialysis_social_work, topics: [caregiving], text: "Patient has signed off 45-60 minutes early the last three Tuesdays to meet her grandchildren (ages 6 and 9) after school, and has missed the last two Thursday treatments. Daughter (the children's mother) works downtown until 18:30. No other adult in the home."}
+    - {ref: note:2, date: "2026-07-14", role: nursing, topics: [digital_access], text: "Patient does not use a smartphone; has a basic cell phone. Prefers paper handouts."}
+
+visit:
+  visit_id: V-T001
+  date: "2026-10-27"
+  setting: nephrology clinic follow-up for missed and shortened treatments
+  transcript:
+    - {ref: turn:T01, speaker: doctor, text: "The unit tells me you've been coming off the machine early on Tuesdays and you missed the last three Thursdays. What's happening on Thursdays?"}
+    - {ref: turn:T02, speaker: patient, text: "Thursdays I've got nobody for the kids. My grandbabies get out of school at three. On Tuesdays my neighbor picks them up, but Thursdays she works.", topics: [caregiving]}
+    - {ref: turn:T03, speaker: doctor, text: "Who else is at home with you?"}
+    - {ref: turn:T04, speaker: patient, text: "Just me and the two of them. Their mother, my daughter, works downtown till six-thirty. Weekends she's home, that's why Saturdays are no problem.", topics: [caregiving]}
+    - {ref: turn:T05, speaker: doctor, text: "How are you getting to Marquette Park?"}
+    - {ref: turn:T06, speaker: patient, text: "I drive. It's ten minutes."}
+    - {ref: turn:T07, speaker: doctor, text: "Your phosphorus was high again this month. What does a normal dinner look like?"}
+    - {ref: turn:T08, speaker: patient, text: "I eat what the kids eat, honestly. Hot dogs, macaroni and cheese. I try to do the vegetables."}
+    - {ref: turn:T09, speaker: doctor, text: "And the cinacalcet, the parathyroid pill, are you taking it every day?"}
+    - {ref: turn:T10, speaker: patient, text: "Most days."}
+    - {ref: turn:T11, speaker: doctor, text: "I want you keeping a daily blood pressure and weight log that you bring to the unit."}
+    - {ref: turn:T12, speaker: patient, text: "On paper? I don't do the phone apps.", topics: [digital_access]}
+    - {ref: turn:T13, speaker: doctor, text: "Paper is fine. I'd also like you to sit with the unit dietitian."}
+    - {ref: turn:T14, speaker: patient, text: "She comes by the chairs on Tuesdays. I can do that."}
+
+draft_plan:
+  - {item_id: P1, type: appointment, text: "Continue in-center hemodialysis Tuesday/Thursday/Saturday 11:30 AM at Fresenius Kidney Care Marquette Park; complete the full 4-hour prescription each session", schedule: "TTS 11:30"}
+  - {item_id: P2, type: diet, text: "Renal diet: low phosphorus and low potassium, fluid limit 1.2 L/day; replace processed meats and boxed meals with fresh produce from the low-potassium list"}
+  - {item_id: P3, type: medication, text: "Cinacalcet 30 mg daily; recheck PTH and calcium in 4 weeks"}
+  - {item_id: P4, type: monitoring, text: "Daily blood pressure and weight log on paper; bring to each dialysis session"}
+  - {item_id: P5, type: referral, text: "Renal dietitian visit chairside at the dialysis unit"}
+
+planted_conflicts:
+  - conflict_id: C1
+    item_id: P1
+    barrier: caregiving
+    expected_status: at_risk
+    evidence:
+      - {source: transcript, ref: turn:T02}
+      - {source: transcript, ref: turn:T04}
+      - {source: record, ref: note:1}
+      - {source: record, ref: appt:8}
+    acceptable_alternative_categories: [schedule_change, dialysis_social_worker, caregiver_support, home_dialysis_evaluation]
+    note: "An earlier chair (first shift ~6 AM) or a Mon/Wed/Fri slot that ends before 3 PM fixes it; PD at home is also plausible for a grandmother with children in the house. Lynna: is at_risk right, or blocked for the Thursday session specifically?"
+  - conflict_id: C2
+    item_id: P3
+    barrier: med_cost
+    expected_status: at_risk
+    evidence:
+      - {source: record, ref: med:3}
+    acceptable_alternative_categories: [med_assistance_program, generic_or_formulary_switch, other]
+    note: "Record-only: $45/month on tier 3 with a 21-day refill gap; T10 'most days' is deliberately not tagged. Extra Help (LIS) screening is the obvious fix."
+  - conflict_id: C3
+    item_id: P2
+    barrier: food_access
+    expected_status: at_risk
+    evidence:
+      - {source: tract, ref: tract:places_foodinsecu}   # 34.0 (Cook p75 32.8)
+      - {source: record, ref: screener:food_worry}      # sometimes_true, July screener
+    acceptable_alternative_categories: [food_pantry, snap, renal_dietitian, medically_tailored_meals]
+    needs_tract_check: false
+    note: "Not spoken: T08 is about habits, not access, and is untagged. Tract confirmed with pipeline.lookup on 2026-10-31."
+
+decoys:
+  - {barrier: digital_access, ref: turn:T12, why_irrelevant: "No smartphone, but P4 is a paper log and nothing in the plan needs an app or portal."}
+
+expected_ok_items: [P4, P5]

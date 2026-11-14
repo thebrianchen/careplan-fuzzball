@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Fuzzball · Care Plan Check{% endblock %}
+{% block head %}<style>
+.grid3{display:grid;grid-template-columns:1.2fr 1fr;gap:18px}
+.decision{font-size:22px;font-weight:700;margin:12px 0 6px}.decision.bad{color:var(--bad)}.decision.ok{color:var(--ok)}
+.strip{display:flex;gap:8px;align-items:stretch;margin:10px 0}.strip div{flex:1;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px}
+.strip b{display:block;color:#fff}.strip span{color:var(--muted);font-size:12px}.arrow{flex:0 0 auto!important;border:none!important;background:none!important;padding:10px 0!important;color:var(--faint)}
+.big{font-size:30px;font-weight:700;color:#fff;font-variant-numeric:tabular-nums}
+</style>{% endblock %}
+{% block content %}
+<div class="grid3">
+<section class="panel">
+  <h2>A hijacked public-zone agent asks the scheduler for the patient volume</h2>
+  <p class="muted" style="margin-top:0">The web agent (no patient tools) reads a poisoned "cluster maintenance" page that tells it to start a job mounting <code>ehr</code>.
+  {% if real %}The decision below is Fuzzball's.{% else %}<b>Rehearsal:</b> the decision comes from a stand-in that applies the rules our Fuzzfiles declare. On the cluster it is Fuzzball's own.{% endif %}</p>
+  <button id="run" class="primary">Run it</button> <button id="rec" class="ghost">▶ Recorded run</button> <span id="rstat" class="muted"></span><span class="recbadge" id="recbadge">RECORDED RUN</span>
+  <div id="rlog" style="margin-top:10px"></div>
+  <div id="rdec"></div>
+</section>
+<section class="panel">
+  <h2>Red team as a task array</h2>
+  <div class="count"><div><div class="big" id="rtA">—</div><div class="l">single agent: leaked / runs</div></div>
+  <div><div class="big" id="rtB">—</div><div class="l">split: leaked / runs</div></div></div>
+  <p class="faint" style="font-size:13px">Counts the attack runs that have finished in this session. The full measured result is 20–39 of 114 vs 0 of 228.</p>
+  <h2 style="margin-top:20px">Three data tiers</h2>
+  <ul class="fz"><li><span class="tag b2">patient data</span> volume held by the private node; only its group can mount it</li>
+  <li><span class="tag b2">counts by tract</span> the one thing published outward, tracts with fewer than 5 patients dropped</li>
+  <li><span class="tag b1">public data</span> built on the public node, signed, pulled in</li></ul>
+</section>
+</div>
+<section class="panel" style="margin-top:18px">
+  <h2>The night workflow on the private box</h2>
+  <div class="strip"><div><b>Stop the planner</b><span>frees the GPU</span></div><div class="arrow">→</div>
+  <div><b>Collect training examples</b><span>731, made-up patients only</span></div><div class="arrow">→</div>
+  <div><b>Train the small model</b><span>Nemotron Nano 30B, 4.6 h</span></div><div class="arrow">→</div>
+  <div><b>Score it</b><span>held-out cases, physician-reviewed key</span></div><div class="arrow">→</div>
+  <div><b>Restart the planner</b><span>by morning</span></div></div>
+  <table><tr><th>Small model, same tools, 20 held-out cases</th><th>Barriers found with evidence</th><th>Cards it failed to finish</th></tr>
+  <tr><td>Stock</td><td class="mono">0.19</td><td class="mono">8 of 20</td></tr>
+  <tr><td>Trained on this box</td><td class="mono">0.47</td><td class="mono">1 of 20</td></tr>
+  <tr><td class="muted">For reference: the big stock model, which writes the cards</td><td class="mono muted">0.56</td><td class="mono muted">0 of 60</td></tr></table>
+  <p class="faint" style="font-size:13px">One run per small-model row, on our own GB10; the trained row is the Nov 13 night rehearsal (5.3 hours end to end). The trained small model does not match the big one; the weights never leave this volume.</p>
+</section>
+{% endblock %}
+{% block scripts %}<script>
+(() => { const $=id=>document.getElementById(id); let es=null;
+  const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  function go(replay){ if(es) return; $('recbadge').classList.remove('on'); $('rlog').innerHTML=''; $('rdec').innerHTML=''; $('rstat').textContent=replay?'recorded run':'running…';
+    es=new EventSource('/fuzzball/refusal/run'+(replay?'?replay=1':''));
+    es.onmessage=m=>{const ev=JSON.parse(m.data);
+      if(ev.type==='recorded'){$('recbadge').classList.add('on');}
+      if(ev.type==='call'){const d=document.createElement('div'); d.className='row '+(ev.tool==='start_workflow'?'cross':'local');
+        d.innerHTML=`<span class='t'>${ev.t} s</span><span class='what'><span class='tag b1'>public agent</span>${esc(ev.tool)} <span class='muted'>${esc(ev.url||('mount '+ev.volume+' · '+ev.command))}</span></span>`; $('rlog').appendChild(d);}
+      if(ev.type==='decision'){const d=document.createElement('div'); d.innerHTML=`<div class='decision ${ev.accepted?'ok':'bad'}'>${esc(ev.status)}</div>`+(ev.reasons||[]).map(r=>`<div class='muted'>${esc(r)}</div>`).join(''); $('rlog').appendChild(d);}
+      if(ev.type==='end'){es.close(); es=null; $('rstat').textContent=ev.error?esc(ev.error):'done';}}; }
+  $('run').onclick=()=>go(false); $('rec').onclick=()=>go(true);
+  async function rt(){ try{const r=await (await fetch('/redteam/live')).json(); $('rtA').textContent=r.single_agent.runs?`${r.single_agent.leaked} / ${r.single_agent.runs}`:'—'; $('rtB').textContent=r.split.runs?`${r.split.leaked} / ${r.split.runs}`:'—';}catch(e){} }
+  rt(); setInterval(rt,5000);
+})();
+</script>{% endblock %}

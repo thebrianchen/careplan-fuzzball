@@ -1,0 +1,210 @@
+case_id: T005
+split: test
+title: Seven-year-old with moderate persistent asthma; mold the landlord paints over and a baby sister
+author: claude-draft
+reviewed_by: Lynna Yang (dispute review, 2026-11-10)
+written_at: '2026-10-31'
+frozen_sha256: null
+patient:
+  patient_id: P-T005
+  name: Jayden Brooks
+  dob: '2019-06-02'
+  sex: M
+  language: en
+  mrn: MRN-H5TBS24AGV
+  address: 3600 W Roosevelt Rd, Chicago, IL 60624
+  tract_geoid: null
+  coverage:
+    type: medicaid
+    plan: All Kids / HealthChoice Illinois (fictional Lakeshore Community Health Plan)
+    transport_benefit: 'yes'
+  pcp: Dr. E. Okonkwo, pediatrics (fictional)
+  problems:
+  - ref: prob:1
+    code: J45.41
+    system: ICD-10-CM
+    display: Moderate persistent asthma with acute exacerbation
+  - ref: prob:2
+    code: J30.9
+    system: ICD-10-CM
+    display: Allergic rhinitis, unspecified
+  meds:
+  - ref: med:1
+    name: fluticasone HFA inhaler with spacer
+    dose: 44 mcg 2 puffs
+    frequency: twice daily
+    cost_tier: 1
+    monthly_copay_usd: 0.0
+    refill_gap_days: 0
+  - ref: med:2
+    name: albuterol HFA inhaler with spacer
+    dose: 90 mcg 2 puffs
+    frequency: every 4 hours as needed
+    cost_tier: 1
+    monthly_copay_usd: 0.0
+    refill_gap_days: 0
+  - ref: med:3
+    name: montelukast chewable
+    dose: 5 mg
+    frequency: nightly
+    cost_tier: 1
+    monthly_copay_usd: 0.0
+    refill_gap_days: 0
+  appointments:
+  - ref: appt:1
+    date: '2026-09-21'
+    dept: emergency
+    time: '22:10'
+    location: Children's hospital ED
+    status: kept
+  - ref: appt:2
+    date: '2026-10-06'
+    dept: allergy_immunology
+    time: 09:00
+    location: Hospital main campus allergy clinic
+    status: no_show
+  - ref: appt:3
+    date: '2026-10-26'
+    dept: pediatrics
+    time: '15:30'
+    location: Neighborhood pediatric clinic
+    status: kept
+  screener:
+    date: '2026-10-26'
+    answers:
+      living_situation: steady_place
+      housing_problems: pests,mold
+      food_worry: sometimes_true
+      food_ran_out: never_true
+      transportation: 'no'
+      utilities_shutoff: 'no'
+  notes:
+  - ref: note:1
+    date: '2026-09-21'
+    role: nursing
+    topics:
+    - housing
+    text: 'ED: mother reports visible mold around the bathroom window and cockroaches in the kitchen; landlord notified twice
+      with no repair. Two other children in the home including a newborn.'
+visit:
+  visit_id: V-T005
+  date: '2026-10-26'
+  setting: pediatric clinic, ED follow-up; mother answers for the patient
+  transcript:
+  - ref: turn:T01
+    speaker: doctor
+    text: He was in the emergency room last month. How many nights a week is he coughing now?
+  - ref: turn:T02
+    speaker: caregiver
+    text: Three, maybe four. It got worse when the heat came on.
+  - ref: turn:T03
+    speaker: doctor
+    text: Is he getting the orange inhaler through the spacer morning and night?
+  - ref: turn:T04
+    speaker: caregiver
+    text: Yes. I do it before school and before bed.
+  - ref: turn:T05
+    speaker: doctor
+    text: Tell me about the apartment. Any mold, smoke, pests?
+  - ref: turn:T06
+    speaker: caregiver
+    text: There's black mold around the bathroom window and we've got roaches. I've told the landlord twice. He says he'll
+      paint over it.
+    topics:
+    - housing
+  - ref: turn:T07
+    speaker: doctor
+    text: We'll write a letter for the landlord. I also want the allergist at the main hospital to see him. You missed the
+      one in October.
+  - ref: turn:T08
+    speaker: caregiver
+    text: I had nobody for the baby. She's four months. I can't take her and him downtown at nine in the morning and sit there
+      for two hours.
+    topics:
+    - caregiving
+  - ref: turn:T09
+    speaker: doctor
+    text: Is there anyone who could watch her?
+  - ref: turn:T10
+    speaker: caregiver
+    text: My sister, but she works mornings.
+    topics:
+    - caregiving
+  - ref: turn:T11
+    speaker: doctor
+    text: How do you usually get here?
+  - ref: turn:T12
+    speaker: caregiver
+    text: The Roosevelt bus. That's easy, it's ten minutes.
+  - ref: turn:T13
+    speaker: doctor
+    text: Good. Last thing, the school needs an asthma action plan on file.
+  - ref: turn:T14
+    speaker: caregiver
+    text: The school nurse already gave me the form. I brought it.
+draft_plan:
+- item_id: P1
+  type: medication
+  text: Step up controller to fluticasone 110 mcg 2 puffs twice daily with spacer; continue montelukast 5 mg nightly; albuterol
+    as needed
+- item_id: P2
+  type: referral
+  text: Allergy/immunology evaluation with skin testing at the hospital main campus, weekday 9:00 AM
+  schedule: once, weekday 09:00
+- item_id: P3
+  type: education
+  text: 'Home trigger reduction: remediate bathroom mold, pest control, allergen-proof mattress and pillow covers, no smoking
+    indoors'
+- item_id: P4
+  type: education
+  text: School asthma action plan completed and signed today for the school nurse
+- item_id: P5
+  type: appointment
+  text: Pediatric follow-up in 6 weeks
+  schedule: once, ~2026-12-07
+planted_conflicts:
+- conflict_id: C1
+  item_id: P3
+  barrier: housing
+  expected_status: at_risk
+  evidence:
+  - source: transcript
+    ref: turn:T06
+  - source: record
+    ref: note:1
+  - source: record
+    ref: screener:housing_problems
+  - source: tract
+    ref: tract:places_housinsecu
+  acceptable_alternative_categories:
+  - housing_assistance
+  - community_health_worker
+  - other
+  note: The family cannot remediate mold or pests themselves in a rental the landlord will not fix. 'other' = physician letter
+    / legal aid / city building-code complaint; CHW home visit for the covers.
+- conflict_id: C2
+  item_id: P2
+  barrier: caregiving
+  expected_status: at_risk
+  evidence:
+  - source: transcript
+    ref: turn:T08
+  - source: transcript
+    ref: turn:T10
+  - source: record
+    ref: appt:2
+  acceptable_alternative_categories:
+  - caregiver_support
+  - schedule_change
+  - flexible_scheduling
+  note: A 9 AM downtown slot with a 4-month-old and no childcare already produced one no-show. Afternoon slot, or a clinic
+    that lets the infant come along, fixes it. Skin testing needs an in-person visit, so telehealth is not acceptable.
+decoys:
+- barrier: transport
+  ref: turn:T12
+  why_irrelevant: Tract fires transport (no-vehicle 0.415, lacktrpt 24.8), but the mother says the bus is easy and Medicaid
+    NEMT is available; the allergy-visit problem is childcare, not the ride.
+expected_ok_items:
+- P1
+- P4
+- P5

@@ -1,0 +1,153 @@
+case_id: D004
+split: dev
+title: Spanish-speaking patient with new CKD and English-only instructions
+author: claude-draft
+reviewed_by: Lynna Yang (dispute review, 2026-11-10)
+written_at: '2026-10-25'
+frozen_sha256: null
+patient:
+  patient_id: P-D004
+  name: Ernesto Villalobos
+  dob: '1974-11-09'
+  sex: M
+  language: es
+  mrn: MRN-MHHQXRG23D
+  address: 4400 S Ashland Ave, Chicago, IL 60609
+  tract_geoid: null
+  coverage:
+    type: commercial
+    plan: Employer PPO (fictional)
+    transport_benefit: 'no'
+  pcp: Dr. R. Castillo (fictional)
+  problems:
+  - ref: prob:1
+    code: N18.31
+    system: ICD-10-CM
+    display: Chronic kidney disease stage 3a
+  - ref: prob:2
+    code: I10
+    system: ICD-10-CM
+    display: Essential hypertension
+  meds:
+  - ref: med:1
+    name: losartan
+    dose: 25 mg
+    frequency: daily
+    cost_tier: 1
+    monthly_copay_usd: 10.0
+    refill_gap_days: 0
+  appointments:
+  - ref: appt:1
+    date: '2026-10-19'
+    dept: primary_care
+    time: '16:00'
+    location: Clinic
+    status: kept
+  screener:
+    date: '2026-10-19'
+    answers:
+      living_situation: steady_place
+      housing_problems: none
+      food_worry: never_true
+      food_ran_out: never_true
+      transportation: 'no'
+      utilities_shutoff: 'no'
+  notes:
+  - ref: note:1
+    date: '2026-10-19'
+    role: nursing
+    topics:
+    - language_literacy
+    text: Preferred language Spanish. Interpreter used for visit. Patient reports he reads a little English but not medical
+      forms.
+visit:
+  visit_id: V-D004
+  date: '2026-10-19'
+  setting: primary care visit with phone interpreter
+  transcript:
+  - ref: turn:T01
+    speaker: doctor
+    text: Your kidney numbers show early kidney disease. I want to adjust your blood pressure medicine over the next month.
+  - ref: turn:T02
+    speaker: interpreter
+    text: He says he understands it's about the kidneys and wants to know what to do.
+  - ref: turn:T03
+    speaker: doctor
+    text: 'I''ll print a schedule: the losartan goes up every two weeks depending on your readings.'
+  - ref: turn:T04
+    speaker: interpreter
+    text: He asks if the paper will be in Spanish. Last time the papers were in English and his son had to read them, but
+      his son is away at school now.
+    topics:
+    - language_literacy
+  - ref: turn:T05
+    speaker: doctor
+    text: And please send me your home blood pressure readings through the patient portal.
+  - ref: turn:T06
+    speaker: interpreter
+    text: He has the app on his phone, but everything in it is in English and he doesn't know where to type the numbers.
+    topics:
+    - language_literacy
+    - digital_access
+  - ref: turn:T07
+    speaker: doctor
+    text: Do you have a blood pressure cuff?
+  - ref: turn:T08
+    speaker: interpreter
+    text: Yes, his wife bought one. She's home with their younger kids and helps him remember the pills.
+draft_plan:
+- item_id: P1
+  type: medication
+  text: 'Losartan titration: increase from 25 mg to 50 mg in 2 weeks if home BP > 130/80, per printed English schedule'
+- item_id: P2
+  type: monitoring
+  text: Home BP twice daily; send readings weekly via the patient portal
+- item_id: P3
+  type: referral
+  text: Nephrology referral within 3 months
+- item_id: P4
+  type: diet
+  text: Limit sodium and processed foods; handout on kidney-friendly eating (English)
+planted_conflicts:
+- conflict_id: C1
+  item_id: P1
+  barrier: language_literacy
+  expected_status: at_risk
+  evidence:
+  - source: transcript
+    ref: turn:T04
+  - source: record
+    ref: note:1
+  acceptable_alternative_categories:
+  - interpreter
+  - plain_language_materials
+  - phone_followup
+- conflict_id: C2
+  item_id: P2
+  barrier: language_literacy
+  expected_status: at_risk
+  evidence:
+  - source: transcript
+    ref: turn:T06
+  acceptable_alternative_categories:
+  - phone_followup
+  - interpreter
+  - plain_language_materials
+- conflict_id: C3
+  item_id: P4
+  barrier: language_literacy
+  expected_status: at_risk
+  evidence:
+  - source: record
+    ref: note:1
+  - source: transcript
+    ref: turn:T04
+  acceptable_alternative_categories:
+  - plain_language_materials
+  - interpreter
+decoys:
+- barrier: caregiving
+  ref: turn:T08
+  why_irrelevant: Young kids at home, but his wife is home with them and helps with meds; nothing in the plan conflicts.
+expected_ok_items:
+- P3

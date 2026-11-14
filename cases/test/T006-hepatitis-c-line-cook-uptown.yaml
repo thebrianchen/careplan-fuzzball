@@ -1,0 +1,200 @@
+case_id: T006
+split: test
+title: Hepatitis C treatment approved but not picked up; evening alcohol group during his shift
+author: claude-draft
+reviewed_by: Lynna Yang (dispute review, 2026-11-10)
+written_at: '2026-10-31'
+frozen_sha256: null
+patient:
+  patient_id: P-T006
+  name: Kevin Oduya
+  dob: '1982-05-09'
+  sex: M
+  language: en
+  mrn: MRN-YXKL3E44ZP
+  address: 4700 N Broadway, Chicago, IL 60640
+  tract_geoid: null
+  coverage:
+    type: commercial
+    plan: Restaurant-group high-deductible PPO (fictional); deductible met; specialty tier coinsurance capped at $650 per
+      fill
+    transport_benefit: 'no'
+  pcp: Dr. N. Farooqi, hepatology (fictional)
+  problems:
+  - ref: prob:1
+    code: B18.2
+    system: ICD-10-CM
+    display: Chronic viral hepatitis C
+  - ref: prob:2
+    code: F10.10
+    system: ICD-10-CM
+    display: Alcohol abuse, uncomplicated
+  - ref: prob:3
+    code: K76.0
+    system: ICD-10-CM
+    display: Fatty liver, not elsewhere classified
+  meds:
+  - ref: med:1
+    name: sofosbuvir-velpatasvir
+    dose: 400/100 mg
+    frequency: daily for 12 weeks
+    cost_tier: 5
+    monthly_copay_usd: 650.0
+    refill_gap_days: 0
+  - ref: med:2
+    name: thiamine
+    dose: 100 mg
+    frequency: daily
+    cost_tier: 1
+    monthly_copay_usd: 4.0
+    refill_gap_days: 0
+  appointments:
+  - ref: appt:1
+    date: '2026-09-23'
+    dept: hepatology
+    time: '11:00'
+    location: Hospital liver clinic
+    status: kept
+  - ref: appt:2
+    date: '2026-10-14'
+    dept: hepatology
+    time: '11:00'
+    location: Hospital liver clinic
+    status: kept
+  - ref: appt:3
+    date: '2026-10-28'
+    dept: hepatology
+    time: '11:00'
+    location: Hospital liver clinic
+    status: kept
+  screener:
+    date: '2026-09-23'
+    answers:
+      living_situation: steady_place_worried
+      housing_problems: none
+      food_worry: never_true
+      food_ran_out: never_true
+      transportation: 'no'
+      utilities_shutoff: 'no'
+  notes:
+  - ref: note:1
+    date: '2026-10-22'
+    role: specialty_pharmacy
+    topics:
+    - med_cost
+    text: Prior authorization approved 10/16. Patient cost share is $650 per 28-day fill (specialty tier coinsurance). Called
+      10/19 and 10/22 to schedule first delivery; patient has not confirmed. First fill not dispensed.
+visit:
+  visit_id: V-T006
+  date: '2026-10-28'
+  setting: hepatology visit, treatment start
+  transcript:
+  - ref: turn:T01
+    speaker: doctor
+    text: Your insurance approved the twelve-week treatment. Did the specialty pharmacy reach you about the delivery?
+  - ref: turn:T02
+    speaker: patient
+    text: They left a couple of messages. I've been working doubles. I'll call them back.
+  - ref: turn:T03
+    speaker: doctor
+    text: It's one pill a day for twelve weeks and you can't miss doses. Where will you keep it?
+  - ref: turn:T04
+    speaker: patient
+    text: Nightstand, next to the vitamins. I'm good with pills.
+  - ref: turn:T05
+    speaker: doctor
+    text: The other piece is the drinking. I want you in the Wednesday evening group here, six o'clock.
+  - ref: turn:T06
+    speaker: patient
+    text: Wednesday at six I'm on the line. I cook at a place on Clark, three to eleven, Tuesday through Saturday. Sunday
+      and Monday are my only days off.
+    topics:
+    - work_schedule
+  - ref: turn:T07
+    speaker: doctor
+    text: Would a daytime group work?
+  - ref: turn:T08
+    speaker: patient
+    text: Mornings, yeah. Anything that ends before two.
+    topics:
+    - work_schedule
+  - ref: turn:T09
+    speaker: doctor
+    text: How are things at home?
+  - ref: turn:T10
+    speaker: patient
+    text: Rent goes up in January. I might have to find something cheaper, but I'm fine where I am for now.
+    topics:
+    - housing
+  - ref: turn:T11
+    speaker: doctor
+    text: How did you get here today?
+  - ref: turn:T12
+    speaker: patient
+    text: Red Line to Lawrence. It's right there.
+  - ref: turn:T13
+    speaker: doctor
+    text: We'll check labs at week four and at the end, and a viral load three months after you finish.
+  - ref: turn:T14
+    speaker: patient
+    text: Fine by me.
+draft_plan:
+- item_id: P1
+  type: medication
+  text: Sofosbuvir-velpatasvir 400/100 mg daily for 12 weeks; start this week
+- item_id: P2
+  type: monitoring
+  text: HCV RNA and liver panel at treatment week 4 and week 12 at the hospital lab
+- item_id: P3
+  type: referral
+  text: Alcohol use group at hospital behavioral health, Wednesdays 6:00 PM weekly
+  schedule: Wed 18:00 weekly
+- item_id: P4
+  type: medication
+  text: Hepatitis A and hepatitis B vaccine series; first doses today
+- item_id: P5
+  type: monitoring
+  text: SVR12 viral load 12 weeks after the end of treatment
+  schedule: once, ~2027-04
+planted_conflicts:
+- conflict_id: C1
+  item_id: P1
+  barrier: med_cost
+  expected_status: at_risk
+  evidence:
+  - source: record
+    ref: note:1
+  - source: record
+    ref: med:1
+  acceptable_alternative_categories:
+  - med_assistance_program
+  - generic_or_formulary_switch
+  - other
+  note: 'Record-only: $650 per fill x3 and the first fill is sitting at the pharmacy. T02 ''working doubles'' is deliberately
+    untagged. Manufacturer copay card / foundation grant, or the plan''s preferred (authorized-generic) DAA.'
+- conflict_id: C2
+  item_id: P3
+  barrier: work_schedule
+  expected_status: blocked
+  evidence:
+  - source: transcript
+    ref: turn:T06
+  - source: transcript
+    ref: turn:T08
+  acceptable_alternative_categories:
+  - schedule_change
+  - flexible_scheduling
+  - telehealth
+  note: 6 PM Wednesday is mid-shift Tue-Sat. A morning group or a Sunday/Monday option fixes it.
+decoys:
+- barrier: housing
+  ref: turn:T10
+  why_irrelevant: Rent worry (screener steady_place_worried) but he is stably housed now and no plan item depends on housing.
+- barrier: transport
+  ref: turn:T12
+  why_irrelevant: Tract no-vehicle share is 0.429 but PLACES lack-of-transport is 11.3 and he takes the Red Line one stop;
+    no transport barrier.
+expected_ok_items:
+- P2
+- P4
+- P5

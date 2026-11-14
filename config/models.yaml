@@ -1,0 +1,178 @@
+# Model profiles for the planner. Every run records the profile it used.
+# OpenRouter slugs: check https://openrouter.ai/models before a big run; they change.
+profiles:
+  super:
+    model: nvidia/nemotron-3-super-120b-a12b
+    base_url: https://openrouter.ai/api/v1
+    api_key_env: OPENROUTER_API_KEY
+    temperature: 1.0          # NVIDIA's recommended sampling for Nemotron 3 Super
+    top_p: 0.95
+    max_tokens: 8192
+    tool_mode: native         # switch to "json" if the provider rejects tool calls
+    quantization: bf16 DeepInfra, fp8 DekaLLM on overflow (provider logged per step in E1 runs; not NVFP4)
+    extra_body: {provider: {order: [DeepInfra, DekaLLM], allow_fallbacks: false}}
+  super-lowreason:                # H5 lever: same model, low reasoning effort (OpenRouter param;
+    model: nvidia/nemotron-3-super-120b-a12b   # on vLLM the equivalent is a reasoning budget)
+    base_url: https://openrouter.ai/api/v1
+    api_key_env: OPENROUTER_API_KEY
+    temperature: 1.0
+    top_p: 0.95
+    max_tokens: 8192
+    tool_mode: native
+    quantization: bf16 DeepInfra, fp8 DekaLLM on overflow (provider logged per step in E1 runs; not NVFP4)
+    extra_body: {provider: {order: [DeepInfra, DekaLLM], allow_fallbacks: false}, reasoning: {effort: low}}
+  super-noreason:                 # H5 lever: reasoning off (on vLLM: chat_template_kwargs enable_thinking=false)
+    model: nvidia/nemotron-3-super-120b-a12b
+    base_url: https://openrouter.ai/api/v1
+    api_key_env: OPENROUTER_API_KEY
+    temperature: 1.0
+    top_p: 0.95
+    max_tokens: 8192
+    tool_mode: native
+    quantization: bf16 DeepInfra, fp8 DekaLLM on overflow (provider logged per step in E1 runs; not NVFP4)
+    extra_body: {provider: {order: [DeepInfra, DekaLLM], allow_fallbacks: false}, reasoning: {enabled: false}}
+  super-free:                     # NOTE 2026-10-25: upstream NVIDIA route 404s; use `super`
+    model: nvidia/nemotron-3-super-120b-a12b:free
+    base_url: https://openrouter.ai/api/v1
+    api_key_env: OPENROUTER_API_KEY
+    temperature: 1.0
+    top_p: 0.95
+    max_tokens: 8192
+    tool_mode: native
+    quantization: provider-default; free tier may log prompts (synthetic data only)
+  nano:
+    model: nvidia/nemotron-3-nano-30b-a3b   # slug verified 2026-10-25
+    base_url: https://openrouter.ai/api/v1
+    api_key_env: OPENROUTER_API_KEY
+    temperature: 1.0
+    top_p: 0.95
+    max_tokens: 8192
+    tool_mode: native
+    quantization: fp4 (Novita, pinned; closest to the box's NVFP4)
+    extra_body: {provider: {order: [Novita], allow_fallbacks: false}}
+  nano-noreason:
+    model: nvidia/nemotron-3-nano-30b-a3b
+    base_url: https://openrouter.ai/api/v1
+    api_key_env: OPENROUTER_API_KEY
+    temperature: 1.0
+    top_p: 0.95
+    max_tokens: 8192
+    tool_mode: native
+    quantization: fp4 (Novita, pinned; closest to the box's NVFP4)
+    extra_body: {provider: {order: [Novita, Nebius], allow_fallbacks: false}, reasoning: {enabled: false}}
+  claude:
+    model: anthropic/claude-sonnet-5.5   # reference row (C4); set 2026-10-26, run date is logged
+    base_url: https://openrouter.ai/api/v1
+    api_key_env: OPENROUTER_API_KEY
+    temperature: 0.6
+    top_p: 0.95
+    max_tokens: 8192
+    tool_mode: native
+  super-vllm:                     # the real box: vLLM serving the NVFP4 checkpoint
+    model: nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-NVFP4
+    base_url: http://localhost:8000/v1
+    api_key_env: VLLM_API_KEY
+    temperature: 1.0
+    top_p: 0.95
+    max_tokens: 8192
+    tool_mode: native
+    quantization: NVFP4
+    # Reasoning off won on the dev set (higher supported recall, ~3.5x faster). VERIFY the template kwarg
+    # name against the NVFP4 model card's chat template before the event.
+    extra_body: {chat_template_kwargs: {enable_thinking: false}}
+  super-vllm-raw:                 # same server, but the client renders the chat template and parses the tool XML itself
+    model: nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-NVFP4   # (careplan.rawtools), so card items stream one by one
+    base_url: http://localhost:8000/v1
+    api_key_env: VLLM_API_KEY
+    temperature: 1.0
+    top_p: 0.95
+    max_tokens: 8192
+    tool_mode: raw
+    template_dir: data/tokenizers/NVIDIA-Nemotron-3-Super-120B-A12B-NVFP4   # on the Spark: ~/models/<same name>
+    quantization: NVFP4
+    extra_body: {chat_template_kwargs: {enable_thinking: false}}
+  super35-vllm:                   # TEST (Nov 13): Nemotron 3.5 Super VL NVFP4 on vLLM 0.32, native tool mode (model card's DGX Spark recipe)
+    model: nemotron-3.5-super-vl
+    base_url: http://localhost:8000/v1
+    base_url_env: PLANNER_URL     # on the cluster: http://planner:8000/v1 inside a workflow, or the endpoint URL
+    api_key_env: VLLM_API_KEY
+    temperature: 1.0
+    top_p: 0.95
+    max_tokens: 8192
+    tool_mode: native
+    quantization: NVFP4
+    extra_body: {chat_template_kwargs: {enable_thinking: false}}
+  super35-vllm-raw:               # TEST: same server, client-rendered template (does item-by-item streaming still parse?)
+    model: nemotron-3.5-super-vl
+    base_url: http://localhost:8000/v1
+    base_url_env: PLANNER_URL     # on the cluster: http://planner:8000/v1 inside a workflow, or the endpoint URL
+    api_key_env: VLLM_API_KEY
+    temperature: 1.0
+    top_p: 0.95
+    max_tokens: 8192
+    tool_mode: raw
+    template_dir: data/tokenizers/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-NVFP4
+    quantization: NVFP4
+    extra_body: {chat_template_kwargs: {enable_thinking: false}}
+  super35-vllm-think:             # TEST (Nov 14): same server, medium-effort reasoning (the model card's option for 3.5)
+    model: nemotron-3.5-super-vl
+    base_url: http://localhost:8000/v1
+    base_url_env: PLANNER_URL
+    api_key_env: VLLM_API_KEY
+    temperature: 1.0
+    top_p: 0.95
+    max_tokens: 8192
+    tool_mode: native
+    quantization: NVFP4
+    extra_body: {chat_template_kwargs: {enable_thinking: true, medium_effort: true}}
+  nano-vllm:
+    model: nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-NVFP4    # VERIFY the repo ID on Hugging Face
+    base_url: http://localhost:8001/v1
+    api_key_env: VLLM_API_KEY
+    temperature: 1.0
+    top_p: 0.95
+    max_tokens: 8192
+    tool_mode: native
+    quantization: NVFP4
+  nano-base-vllm:                 # DGX Spark week: base Nano BF16 on local vLLM (spark/finetune.sh)
+    model: nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16
+    base_url: http://localhost:8001/v1
+    base_url_env: READER_URL      # on the cluster: the small model's service or endpoint URL
+    api_key_env: VLLM_API_KEY
+    temperature: 1.0
+    top_p: 0.95
+    max_tokens: 8192
+    tool_mode: native
+    quantization: bf16
+    extra_body: {chat_template_kwargs: {enable_thinking: false}}
+  nano-lora-vllm:                 # same server, LoRA adapter "planner" trained on synthetic trajectories
+    model: planner
+    base_url: http://localhost:8001/v1
+    base_url_env: READER_URL      # on the cluster: the small model's service or endpoint URL
+    api_key_env: VLLM_API_KEY
+    temperature: 1.0
+    top_p: 0.95
+    max_tokens: 8192
+    tool_mode: native
+    quantization: bf16 + LoRA
+    extra_body: {chat_template_kwargs: {enable_thinking: false}}
+  nano-base-vllm-alt:             # spark/finetune.sh fallback: base Nano on :8002 when the tuned model is merged on :8001
+    model: nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16
+    base_url: http://localhost:8002/v1
+    api_key_env: VLLM_API_KEY
+    temperature: 1.0
+    top_p: 0.95
+    max_tokens: 8192
+    tool_mode: native
+    quantization: bf16
+    extra_body: {chat_template_kwargs: {enable_thinking: false}}
+  nano-fp8-vllm:                  # DGX Spark speed test: Nano FP8 on local vLLM (Super NVFP4 OOMs in a Vast container)
+    model: nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-FP8
+    base_url: http://localhost:8000/v1
+    api_key_env: VLLM_API_KEY
+    temperature: 1.0
+    top_p: 0.95
+    max_tokens: 8192
+    tool_mode: native
+    quantization: fp8
+    extra_body: {chat_template_kwargs: {enable_thinking: false}}

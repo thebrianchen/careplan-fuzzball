@@ -1,0 +1,213 @@
+case_id: T013
+split: test
+title: Alzheimer's dementia; adult day program drop-off at 8 AM and a caregiver class during the son's shift
+author: claude-draft
+reviewed_by: Lynna Yang (dispute review, 2026-11-10)
+written_at: '2026-10-31'
+frozen_sha256: null
+patient:
+  patient_id: P-T013
+  name: Yuk-Ling Chan
+  dob: '1947-03-05'
+  sex: F
+  language: yue
+  mrn: MRN-MBPHMVAGPZ
+  address: 2200 S Wentworth Ave, Chicago, IL 60616
+  tract_geoid: null
+  coverage:
+    type: dual
+    plan: Medicare + Illinois Medicaid (fictional Lakeshore MMAI plan)
+    transport_benefit: 'yes'
+  pcp: Dr. W. Leung, geriatrics (fictional)
+  problems:
+  - ref: prob:1
+    code: G30.1
+    system: ICD-10-CM
+    display: Alzheimer's disease with late onset
+  - ref: prob:2
+    code: F02.80
+    system: ICD-10-CM
+    display: Dementia in other diseases classified elsewhere, unspecified severity, without behavioral disturbance
+  - ref: prob:3
+    code: I10
+    system: ICD-10-CM
+    display: Essential hypertension
+  - ref: prob:4
+    code: E11.9
+    system: ICD-10-CM
+    display: Type 2 diabetes mellitus without complications
+  meds:
+  - ref: med:1
+    name: donepezil
+    dose: 5 mg
+    frequency: nightly
+    cost_tier: 1
+    monthly_copay_usd: 0.0
+    refill_gap_days: 0
+  - ref: med:2
+    name: amlodipine
+    dose: 5 mg
+    frequency: daily
+    cost_tier: 1
+    monthly_copay_usd: 0.0
+    refill_gap_days: 0
+  - ref: med:3
+    name: metformin
+    dose: 500 mg
+    frequency: twice daily
+    cost_tier: 1
+    monthly_copay_usd: 0.0
+    refill_gap_days: 0
+  appointments:
+  - ref: appt:1
+    date: '2026-09-10'
+    dept: geriatrics
+    time: '10:00'
+    location: Hospital geriatrics clinic
+    status: kept
+  - ref: appt:2
+    date: '2026-10-29'
+    dept: geriatrics
+    time: '10:00'
+    location: Hospital geriatrics clinic
+    status: kept
+  screener:
+    date: '2026-09-10'
+    answers:
+      living_situation: steady_place
+      housing_problems: none
+      food_worry: never_true
+      food_ran_out: never_true
+      transportation: 'no'
+      utilities_shutoff: 'no'
+  notes:
+  - ref: note:1
+    date: '2026-09-10'
+    role: nursing
+    topics:
+    - language_literacy
+    text: Patient speaks Cantonese only and reads traditional Chinese. Son (English-speaking) interprets and manages all medications,
+      mail and appointments.
+  - ref: note:2
+    date: '2026-09-10'
+    role: social_work
+    topics:
+    - caregiving
+    text: Son is the only child and lives with the patient. He works full-time as a building engineer downtown, 07:00-15:30
+      Monday-Friday. Patient alone at home during the day; wandered once in August. Community Care Program in-home aide application
+      pending.
+visit:
+  visit_id: V-T013
+  date: '2026-10-29'
+  setting: geriatrics follow-up; son answers for the patient
+  transcript:
+  - ref: turn:T01
+    speaker: doctor
+    text: How has your mother been since September?
+  - ref: turn:T02
+    speaker: caregiver
+    text: More confused in the afternoons. She left the stove on twice. And she went out looking for my father, who's been
+      gone ten years.
+  - ref: turn:T03
+    speaker: doctor
+    text: She shouldn't be alone during the day anymore. There's an adult day program on the West Side that takes her plan,
+      Monday to Friday, drop-off at eight.
+  - ref: turn:T04
+    speaker: caregiver
+    text: I'm at work by seven. I leave the house at six-fifteen. She can't take the bus alone, she'd get lost, and I can't
+      be downtown and driving her to the West Side at eight.
+    topics:
+    - transport
+  - ref: turn:T05
+    speaker: doctor
+    text: Does the program run a van?
+  - ref: turn:T06
+    speaker: caregiver
+    text: I don't know. Nobody said.
+  - ref: turn:T07
+    speaker: doctor
+    text: We'll ask. I'd also like you in the caregiver class here, six Thursdays at ten in the morning.
+  - ref: turn:T08
+    speaker: caregiver
+    text: Thursday at ten I'm on a boiler somewhere. I don't have that kind of flexibility, they'd dock me.
+    topics:
+    - work_schedule
+  - ref: turn:T09
+    speaker: doctor
+    text: Understood. We'll go up on the donepezil. Who gives her the pills?
+  - ref: turn:T10
+    speaker: caregiver
+    text: I do, morning and night. I fill the box on Sundays.
+  - ref: turn:T11
+    speaker: doctor
+    text: Good. Stove knob covers, take up the loose rugs, night lights, and a bracelet with your number on it.
+  - ref: turn:T12
+    speaker: caregiver
+    text: I ordered the knob covers already.
+  - ref: turn:T13
+    speaker: doctor
+    text: And how are you holding up?
+  - ref: turn:T14
+    speaker: caregiver
+    text: Tired. But I'm managing.
+draft_plan:
+- item_id: P1
+  type: medication
+  text: Increase donepezil to 10 mg nightly
+- item_id: P2
+  type: referral
+  text: Adult day program Monday through Friday at the West Side center, drop-off 8:00 AM, pick-up 4:00 PM
+  schedule: Mon-Fri 08:00-16:00
+- item_id: P3
+  type: education
+  text: Dementia caregiver education series for the son, Thursdays 10:00 AM for 6 weeks at the hospital
+  schedule: Thu 10:00 x6
+- item_id: P4
+  type: education
+  text: 'Home safety: stove knob covers, remove loose rugs, night lights, ID bracelet with son''s phone number'
+- item_id: P5
+  type: appointment
+  text: Geriatrics follow-up in 3 months with son
+  schedule: once, ~2027-01
+planted_conflicts:
+- conflict_id: C1
+  item_id: P2
+  barrier: transport
+  expected_status: at_risk
+  evidence:
+  - source: transcript
+    ref: turn:T04
+  - source: tract
+    ref: tract:no_vehicle_share
+  acceptable_alternative_categories:
+  - nemt
+  - other
+  - schedule_change
+  note: 'Dual-eligible: Medicaid NEMT or the program''s own van (''other'') gets her there without the son; a program with
+    a later drop-off is schedule_change.'
+- conflict_id: C2
+  item_id: P3
+  barrier: work_schedule
+  expected_status: blocked
+  evidence:
+  - source: transcript
+    ref: turn:T08
+  acceptable_alternative_categories:
+  - schedule_change
+  - flexible_scheduling
+  - other
+  note: Thursday 10 AM is mid-shift for a 7:00-15:30 building engineer. Evening or Saturday series, or a recorded/online version
+    ('other'), fixes it.
+decoys:
+- barrier: language_literacy
+  ref: note:1
+  why_irrelevant: The patient reads only Chinese, but her English-speaking son manages every medication, letter and appointment;
+    no plan item requires her to read or speak English.
+- barrier: caregiving
+  ref: note:2
+  why_irrelevant: The son's caregiving load is the reason for P2 and P3, not a barrier to them; what blocks them is the ride
+    (C1) and his work hours (C2). The patient herself cares for no one.
+expected_ok_items:
+- P1
+- P4
+- P5

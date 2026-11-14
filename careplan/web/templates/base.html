@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Care Plan Check{% endblock %}</title>
+<link rel="stylesheet" href="/static/app.css">
+{% block head %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+<header class="top">
+  <a class="brand" href="/">Care Plan Check</a>
+  <nav>
+    <a href="/" {% if nav == 'home' %}class="on"{% endif %}>Patients</a>
+    {% if case_id %}
+    <a href="/stage/{{ case_id }}" {% if nav == 'stage' %}class="on"{% endif %}>Stage</a>
+    <a href="/card/{{ case_id }}" {% if nav == 'card' %}class="on"{% endif %}>Card</a>
+    <a href="/summary/{{ case_id }}" {% if nav == 'summary' %}class="on"{% endif %}>Patient summary</a>
+    <a href="/attack/{{ case_id }}" {% if nav == 'attack' %}class="on"{% endif %}>Attack</a>
+    {% endif %}
+    <a href="/fuzzball" {% if nav == 'fuzzball' %}class="on"{% endif %}>Fuzzball</a>
+    <a href="/audit" {% if nav == 'audit' %}class="on"{% endif %}>Audit</a>
+    <a href="/numbers" {% if nav == 'numbers' %}class="on"{% endif %}>Numbers</a>
+  </nav>
+  <span class="zone">private box · zone-private · {{ profile }}</span>
+</header>
+<main class="{% block main_class %}{% endblock %}">
+{% block content %}{% endblock %}
+</main>
+{% block scripts %}{% endblock %}
+</body>
+</html>

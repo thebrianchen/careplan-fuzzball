@@ -1,0 +1,246 @@
+case_id: T010
+split: test
+title: Pulmonary tuberculosis on daily observed therapy; the clinic opens two hours after the work van leaves
+author: claude-draft
+reviewed_by: Lynna Yang (dispute review, 2026-11-10)
+written_at: '2026-10-31'
+frozen_sha256: null
+patient:
+  patient_id: P-T010
+  name: Yusuf Haddad
+  dob: '1988-01-26'
+  sex: M
+  language: ar
+  mrn: MRN-XCKMOODNLH
+  address: 4800 N Kedzie Ave, Chicago, IL 60625
+  tract_geoid: null
+  coverage:
+    type: none
+    plan: Uninsured; TB medications and visits covered by the city TB program
+    transport_benefit: 'no'
+  pcp: Dr. S. Mehta, TB clinic (fictional)
+  problems:
+  - ref: prob:1
+    code: A15.0
+    system: ICD-10-CM
+    display: Tuberculosis of lung
+  meds:
+  - ref: med:1
+    name: isoniazid
+    dose: 300 mg
+    frequency: daily (observed)
+    monthly_copay_usd: 0.0
+    refill_gap_days: 0
+  - ref: med:2
+    name: rifampin
+    dose: 600 mg
+    frequency: daily (observed)
+    monthly_copay_usd: 0.0
+    refill_gap_days: 0
+  - ref: med:3
+    name: pyrazinamide
+    dose: 1500 mg
+    frequency: daily (observed)
+    monthly_copay_usd: 0.0
+    refill_gap_days: 0
+  - ref: med:4
+    name: ethambutol
+    dose: 1200 mg
+    frequency: daily (observed)
+    monthly_copay_usd: 0.0
+    refill_gap_days: 0
+  - ref: med:5
+    name: pyridoxine
+    dose: 50 mg
+    frequency: daily
+    monthly_copay_usd: 0.0
+    refill_gap_days: 0
+  appointments:
+  - ref: appt:1
+    date: '2026-10-08'
+    dept: emergency
+    time: '19:30'
+    location: Hospital ED
+    status: kept
+  - ref: appt:2
+    date: '2026-10-08'
+    dept: inpatient
+    location: Hospital (airborne isolation 10-08 to 10-15)
+    status: kept
+  - ref: appt:3
+    date: '2026-10-16'
+    dept: tb_clinic
+    time: 08:00
+    location: City TB clinic
+    status: kept
+  - ref: appt:4
+    date: '2026-10-19'
+    dept: tb_clinic
+    time: 08:00
+    location: City TB clinic
+    status: no_show
+  - ref: appt:5
+    date: '2026-10-20'
+    dept: tb_clinic
+    time: 08:00
+    location: City TB clinic
+    status: kept
+  - ref: appt:6
+    date: '2026-10-21'
+    dept: tb_clinic
+    time: 08:00
+    location: City TB clinic
+    status: no_show
+  - ref: appt:7
+    date: '2026-10-22'
+    dept: tb_clinic
+    time: 08:00
+    location: City TB clinic
+    status: no_show
+  - ref: appt:8
+    date: '2026-10-23'
+    dept: tb_clinic
+    time: 08:00
+    location: City TB clinic
+    status: kept
+  - ref: appt:9
+    date: '2026-10-26'
+    dept: tb_clinic
+    time: 08:00
+    location: City TB clinic
+    status: kept
+  screener:
+    date: '2026-10-09'
+    answers:
+      living_situation: steady_place
+      housing_problems: none
+      food_worry: never_true
+      food_ran_out: never_true
+      transportation: 'no'
+      utilities_shutoff: 'no'
+  notes:
+  - ref: note:1
+    date: '2026-10-09'
+    role: nursing
+    topics:
+    - language_literacy
+    text: Preferred language Arabic; in-person interpreter used. Patient reads Arabic; does not read English. Spoken English
+      limited to basic phrases.
+  - ref: note:2
+    date: '2026-10-15'
+    role: public_health_nurse
+    topics:
+    - housing
+    text: Shares a two-bedroom apartment with five other men who work day labor. Contact investigation opened; names and phone
+      numbers of all five collected.
+visit:
+  visit_id: V-T010
+  date: '2026-10-26'
+  setting: TB clinic physician visit with in-person interpreter
+  transcript:
+  - ref: turn:T01
+    speaker: doctor
+    text: You missed three of your observed doses last week. The medicine only works if you take it every day for the full
+      course. What's getting in the way?
+  - ref: turn:T02
+    speaker: interpreter
+    text: The clinic opens at eight. The work vans pick us up at six on Lawrence. If I'm not there, I don't work that day.
+      The three days I came here I lost the whole day's pay.
+    topics:
+    - work_schedule
+  - ref: turn:T03
+    speaker: doctor
+    text: Do you have a smartphone? We can watch you take the dose on video instead of in person.
+  - ref: turn:T04
+    speaker: interpreter
+    text: Yes, I have a phone with WhatsApp. I use it with my family every day.
+  - ref: turn:T05
+    speaker: doctor
+    text: Good. Are you taking any pills on the days you miss?
+  - ref: turn:T06
+    speaker: interpreter
+    text: I have no pills at home. You give them here.
+  - ref: turn:T07
+    speaker: doctor
+    text: Right, that's how observed therapy works. Any yellowing of the eyes, nausea, belly pain, changes in your vision?
+  - ref: turn:T08
+    speaker: interpreter
+    text: No. My urine is orange. The nurse said that is normal.
+  - ref: turn:T09
+    speaker: doctor
+    text: What about paying for any of this?
+  - ref: turn:T10
+    speaker: interpreter
+    text: I have no insurance. The nurse said the TB program pays for everything. I hope that is true.
+    topics:
+    - other_cost
+  - ref: turn:T11
+    speaker: doctor
+    text: 'It is. The medicines, the visits and the tests are free through the health department. One more thing: the men
+      you live with need to be tested.'
+  - ref: turn:T12
+    speaker: interpreter
+    text: I told them. Two already came in.
+    topics:
+    - housing
+draft_plan:
+- item_id: P1
+  type: medication
+  text: Directly observed therapy with isoniazid, rifampin, pyrazinamide and ethambutol daily at the TB clinic, weekdays 8:00
+    AM, through the 8-week intensive phase; weekend doses self-administered
+  schedule: weekdays 08:00 x8 weeks
+- item_id: P2
+  type: monitoring
+  text: Monthly liver panel and sputum smear and culture, collected at a DOT encounter
+- item_id: P3
+  type: education
+  text: 'Written side-effect instructions and when to call: jaundice, vomiting, abdominal pain, vision change'
+- item_id: P4
+  type: referral
+  text: Household contact screening for all five household members
+- item_id: P5
+  type: medication
+  text: Pyridoxine 50 mg daily while on isoniazid
+planted_conflicts:
+- conflict_id: C1
+  item_id: P1
+  barrier: work_schedule
+  expected_status: blocked
+  evidence:
+  - source: transcript
+    ref: turn:T02
+  - source: record
+    ref: appt:4
+  - source: record
+    ref: appt:7
+  acceptable_alternative_categories:
+  - telehealth
+  - schedule_change
+  - flexible_scheduling
+  - other
+  note: Video DOT (he has a smartphone, T04) is the standard fix; 'other' = outreach worker delivering DOT at the pickup corner
+    or at home before 6 AM.
+- conflict_id: C2
+  item_id: P3
+  barrier: language_literacy
+  expected_status: at_risk
+  evidence:
+  - source: record
+    ref: note:1
+  acceptable_alternative_categories:
+  - interpreter
+  - plain_language_materials
+  note: 'Record-only: he reads Arabic, not English. Hepatotoxicity warning signs need to reach him in Arabic (written or recorded).'
+decoys:
+- barrier: other_cost
+  ref: turn:T10
+  why_irrelevant: Uninsured, but TB medications, visits and labs are free through the city TB program, as the doctor confirms;
+    no plan item carries a cost.
+- barrier: housing
+  ref: turn:T12
+  why_irrelevant: Crowded shared apartment drives the contact investigation (P4) but does not prevent it; two contacts have
+    already been screened.
+expected_ok_items:
+- P2
+- P4
+- P5

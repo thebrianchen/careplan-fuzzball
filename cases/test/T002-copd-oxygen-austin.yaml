@@ -1,0 +1,253 @@
+case_id: T002
+split: test
+title: COPD discharge on home oxygen; pulmonary rehab by two buses, a shutoff notice nobody mentions
+author: claude-draft
+reviewed_by: Lynna Yang (dispute review, 2026-11-10)
+written_at: '2026-10-31'
+frozen_sha256: null
+patient:
+  patient_id: P-T002
+  name: Willie Dorsey
+  dob: '1959-12-04'
+  sex: M
+  language: en
+  mrn: MRN-2Z735IUOAA
+  address: 5600 W Chicago Ave, Chicago, IL 60651
+  tract_geoid: null
+  coverage:
+    type: dual
+    plan: Medicare + Illinois Medicaid (fictional Lakeshore MMAI plan)
+    transport_benefit: 'yes'
+  pcp: Dr. T. Nwosu (fictional)
+  problems:
+  - ref: prob:1
+    code: J44.1
+    system: ICD-10-CM
+    display: COPD with acute exacerbation
+  - ref: prob:2
+    code: Z99.81
+    system: ICD-10-CM
+    display: Dependence on supplemental oxygen
+  - ref: prob:3
+    code: I10
+    system: ICD-10-CM
+    display: Essential hypertension
+  - ref: prob:4
+    code: F17.210
+    system: ICD-10-CM
+    display: Nicotine dependence, cigarettes, uncomplicated
+  meds:
+  - ref: med:1
+    name: fluticasone-umeclidinium-vilanterol inhaler
+    dose: 100/62.5/25 mcg
+    frequency: one inhalation daily
+    cost_tier: 3
+    monthly_copay_usd: 4.9
+    refill_gap_days: 0
+  - ref: med:2
+    name: albuterol-ipratropium nebulizer solution
+    dose: 2.5/0.5 mg
+    frequency: every 6 hours as needed
+    cost_tier: 1
+    monthly_copay_usd: 1.6
+    refill_gap_days: 0
+  - ref: med:3
+    name: albuterol HFA inhaler
+    dose: 90 mcg
+    frequency: 2 puffs every 4 hours as needed
+    cost_tier: 1
+    monthly_copay_usd: 1.6
+    refill_gap_days: 0
+  - ref: med:4
+    name: amlodipine
+    dose: 5 mg
+    frequency: daily
+    cost_tier: 1
+    monthly_copay_usd: 1.6
+    refill_gap_days: 0
+  appointments:
+  - ref: appt:1
+    date: '2026-10-09'
+    dept: emergency
+    time: 05:50
+    location: Hospital ED
+    status: kept
+  - ref: appt:2
+    date: '2026-10-09'
+    dept: inpatient
+    location: Hospital (admitted 10-09, discharged 10-13 on 2 L home oxygen)
+    status: kept
+  - ref: appt:3
+    date: '2026-10-21'
+    dept: primary_care
+    time: '11:00'
+    location: Clinic
+    status: kept
+  - ref: appt:4
+    date: '2026-10-28'
+    dept: pulmonology
+    time: '13:00'
+    location: Hospital pulmonary clinic
+    status: kept
+  screener:
+    date: '2026-10-09'
+    answers:
+      living_situation: steady_place
+      housing_problems: none
+      food_worry: sometimes_true
+      food_ran_out: sometimes_true
+      transportation: 'yes'
+      utilities_shutoff: 'yes'
+  notes:
+  - ref: note:1
+    date: '2026-10-12'
+    role: social_work
+    topics:
+    - utilities
+    text: 'Inpatient SW: patient reports ComEd disconnection notice dated 10/02, balance about $740; Peoples Gas also past
+      due. Being discharged on 2 L/min oxygen by concentrator. LIHEAP application started; patient to bring ID and bill to
+      the clinic.'
+  - ref: note:2
+    date: '2026-10-13'
+    role: case_management
+    text: 'Discharge: lives alone in a first-floor apartment. Nephew lives nearby. Oxygen concentrator and portable tanks
+      delivered by DME vendor.'
+visit:
+  visit_id: V-T002
+  date: '2026-10-28'
+  setting: post-hospital pulmonology visit
+  transcript:
+  - ref: turn:T01
+    speaker: doctor
+    text: You were in the hospital for a flare about three weeks ago. How's the breathing now?
+  - ref: turn:T02
+    speaker: patient
+    text: Better than it was. I still can't do a flight of stairs without stopping.
+  - ref: turn:T03
+    speaker: doctor
+    text: I want to get you into pulmonary rehab. It's here at the hospital, twice a week for eight weeks, and it makes a
+      real difference.
+  - ref: turn:T04
+    speaker: patient
+    text: That's two buses with the oxygen tank. Chicago Avenue and then the Pulaski bus. Getting here today took an hour
+      and a half and I was wiped out before I walked in.
+    topics:
+    - transport
+  - ref: turn:T05
+    speaker: doctor
+    text: Is there anyone who could drive you?
+  - ref: turn:T06
+    speaker: patient
+    text: My nephew, now and then. He's got his own job.
+    topics:
+    - transport
+  - ref: turn:T07
+    speaker: doctor
+    text: Are the inhalers okay cost-wise?
+  - ref: turn:T08
+    speaker: patient
+    text: Few dollars each with the Medicaid. That part's fine.
+    topics:
+    - med_cost
+  - ref: turn:T09
+    speaker: doctor
+    text: Are you wearing the oxygen at night and when you walk?
+  - ref: turn:T10
+    speaker: patient
+    text: Most nights. I take the little tank when I go out.
+  - ref: turn:T11
+    speaker: doctor
+    text: Still smoking?
+  - ref: turn:T12
+    speaker: patient
+    text: Three or four a day. I want to be done with it.
+  - ref: turn:T13
+    speaker: doctor
+    text: Good, we'll use the patch and a pill to help. You've also lost about eight pounds since summer. I want you eating
+      six small meals a day with protein in each one.
+  - ref: turn:T14
+    speaker: patient
+    text: All right, doc.
+draft_plan:
+- item_id: P1
+  type: referral
+  text: Pulmonary rehabilitation at the hospital outpatient center, Tuesday/Thursday 10:00 AM for 8 weeks
+  schedule: TuTh 10:00 x8 weeks
+- item_id: P2
+  type: medication
+  text: Continue fluticasone-umeclidinium-vilanterol one inhalation daily; albuterol HFA as needed
+- item_id: P3
+  type: medication
+  text: Home oxygen 2 L/min by concentrator at least 15 hours/day including sleep; nebulized albuterol-ipratropium every 6
+    hours as needed for flares
+- item_id: P4
+  type: diet
+  text: 'High-calorie, high-protein diet: six small meals a day with protein at each, plus an oral nutrition supplement twice
+    daily'
+- item_id: P5
+  type: medication
+  text: 'Smoking cessation: nicotine patch 14 mg daily plus varenicline; Illinois Tobacco Quitline referral'
+planted_conflicts:
+- conflict_id: C1
+  item_id: P1
+  barrier: transport
+  expected_status: at_risk
+  evidence:
+  - source: transcript
+    ref: turn:T04
+  - source: transcript
+    ref: turn:T06
+  - source: record
+    ref: screener:transportation
+  - source: tract
+    ref: tract:places_lacktrpt
+  acceptable_alternative_categories:
+  - nemt
+  - paratransit
+  - schedule_change
+  - other
+  note: 'Dual-eligible: Medicaid NEMT is the first fix. ''other'' covers home-based pulmonary rehab.'
+- conflict_id: C2
+  item_id: P3
+  barrier: utilities
+  expected_status: at_risk
+  evidence:
+  - source: record
+    ref: note:1
+  - source: record
+    ref: screener:utilities_shutoff
+  - source: tract
+    ref: tract:places_shututility
+  acceptable_alternative_categories:
+  - medical_certificate_utilities
+  - utility_assistance
+  note: 'Record-only: a concentrator and a nebulizer both need power and a disconnection notice is pending. Nobody raises
+    it at the visit. Illinois medical-certificate rules delay disconnection for life-support equipment.'
+- conflict_id: C3
+  item_id: P4
+  barrier: food_access
+  expected_status: at_risk
+  evidence:
+  - source: record
+    ref: screener:food_ran_out
+  - source: record
+    ref: screener:food_worry
+  - source: tract
+    ref: tract:places_foodinsecu
+  - source: tract
+    ref: tract:lila_half_10
+  acceptable_alternative_categories:
+  - food_pantry
+  - snap
+  - medically_tailored_meals
+  - other
+  needs_tract_check: false
+  note: 'Record + tract only: six protein meals a day plus supplement drinks for a man whose ED screener says food ran out.
+    Tract confirmed with pipeline.lookup on 2026-10-31.'
+decoys:
+- barrier: med_cost
+  ref: turn:T08
+  why_irrelevant: Dual coverage, copays are a few dollars and he says so; flagging cost on P2 or P5 is a false flag.
+expected_ok_items:
+- P2
+- P5

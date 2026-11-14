@@ -1,0 +1,140 @@
+case_id: D009
+split: dev
+title: New atrial fibrillation on warfarin; caregiver for a husband with dementia
+author: claude-draft
+reviewed_by: Lynna Yang (dispute review, 2026-11-10)
+written_at: '2026-10-25'
+frozen_sha256: null
+patient:
+  patient_id: P-D009
+  name: Eileen Costigan
+  dob: '1953-06-27'
+  sex: F
+  language: en
+  mrn: MRN-WE2LGI6RIV
+  address: 10300 S Western Ave, Chicago, IL 60643
+  tract_geoid: null
+  coverage:
+    type: medicare
+    plan: Medicare Advantage (fictional Lakeshore Senior PPO)
+    transport_benefit: unknown
+  pcp: Dr. M. Brennan (fictional)
+  problems:
+  - ref: prob:1
+    code: I48.91
+    system: ICD-10-CM
+    display: Unspecified atrial fibrillation
+  - ref: prob:2
+    code: M81.0
+    system: ICD-10-CM
+    display: Age-related osteoporosis without current pathological fracture
+  meds:
+  - ref: med:1
+    name: warfarin
+    dose: 5 mg
+    frequency: daily
+    cost_tier: 1
+    monthly_copay_usd: 0.0
+    refill_gap_days: 0
+  - ref: med:2
+    name: metoprolol tartrate
+    dose: 25 mg
+    frequency: twice daily
+    cost_tier: 1
+    monthly_copay_usd: 0.0
+    refill_gap_days: 0
+  - ref: med:3
+    name: calcium with vitamin D
+    dose: 600 mg/800 IU
+    frequency: daily
+    cost_tier: 1
+    monthly_copay_usd: 0.0
+    refill_gap_days: 0
+  appointments:
+  - ref: appt:1
+    date: '2026-10-19'
+    dept: cardiology
+    time: '10:30'
+    location: Hospital cardiology clinic
+    status: kept
+  screener:
+    date: '2026-10-19'
+    answers:
+      living_situation: steady_place
+      housing_problems: none
+      food_worry: never_true
+      food_ran_out: never_true
+      transportation: 'no'
+      utilities_shutoff: 'no'
+  notes:
+  - ref: note:1
+    date: '2026-09-02'
+    role: social_work
+    topics:
+    - caregiving
+    text: Sole caregiver for husband with moderate Alzheimer's dementia. He cannot be left alone more than about an hour.
+      Daughter in Arizona. Waitlisted for adult day program.
+visit:
+  visit_id: V-D009
+  date: '2026-10-19'
+  setting: cardiology new-diagnosis visit
+  transcript:
+  - ref: turn:T01
+    speaker: doctor
+    text: Your monitor confirmed atrial fibrillation. I'd like to start a blood thinner to prevent strokes.
+  - ref: turn:T02
+    speaker: patient
+    text: My sister was on warfarin. Is that the one?
+  - ref: turn:T03
+    speaker: doctor
+    text: That's the one we'll use. It needs regular blood checks at first.
+  - ref: turn:T04
+    speaker: patient
+    text: All right. I'm careful with pills. I have one of those weekly boxes.
+  - ref: turn:T05
+    speaker: doctor
+    text: Any falls lately? Your bones are thin.
+  - ref: turn:T06
+    speaker: patient
+    text: No falls. I walk every day, around the block.
+  - ref: turn:T07
+    speaker: doctor
+    text: Do you drive?
+  - ref: turn:T08
+    speaker: patient
+    text: I do. Five minutes from here.
+draft_plan:
+- item_id: P1
+  type: medication
+  text: Start warfarin 5 mg daily; target INR 2-3
+- item_id: P2
+  type: monitoring
+  text: INR checks at the hospital anticoagulation clinic weekly for 6 weeks (visits take about 2 hours with wait and lab)
+  schedule: weekly x6
+- item_id: P3
+  type: medication
+  text: Continue calcium with vitamin D daily
+- item_id: P4
+  type: activity
+  text: Continue daily walking; add balance exercises from the handout
+planted_conflicts:
+- conflict_id: C1
+  item_id: P2
+  barrier: caregiving
+  expected_status: at_risk
+  evidence:
+  - source: record
+    ref: note:1
+  acceptable_alternative_categories:
+  - caregiver_support
+  - schedule_change
+  - other
+  note: Record-only. Home INR self-testing or a nearby lab draw (point-of-care) are valid 'other' alternatives.
+decoys:
+- barrier: transport
+  ref: turn:T08
+  why_irrelevant: She drives and lives five minutes away.
+expected_ok_items:
+- P1
+- P3
+- P4

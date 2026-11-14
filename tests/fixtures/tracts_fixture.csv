@@ -1,0 +1,4 @@
+tract_geoid,no_vehicle_share,transit_stops_800m,early_service_stops,lila_1_10,lila_half_10,low_income,intpt_lat,intpt_lon,places_lacktrpt,places_foodinsecu,data_vintage
+17031999901,0.41,6,0,1,1,1,41.8810,-87.7310,14.2,24.9,FIXTURE: fake values for tests only
+17031999902,0.12,22,9,0,0,0,41.9420,-87.6530,5.1,8.3,FIXTURE: fake values for tests only
+17031999903,0.29,3,1,0,1,1,41.7790,-87.6440,11.8,19.0,FIXTURE: fake values for tests only

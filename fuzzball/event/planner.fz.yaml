@@ -1,0 +1,72 @@
+# The planner, kept up for the working day: Nemotron 3.5 Super VL (4-bit) on one GB10, served by vLLM with the
+# model card's DGX Spark settings (rehearsed with these flags on our own GB10, Nov 13).
+#   - weights come from our persistent "models" volume (fetch-models.fz.yaml)
+#   - compiled kernels are kept on that volume too (HOME), so only the first start pays the 15 to 40 minute compile
+#   - "bench" is a small CPU job on the same workflow network; `fuzzball workflow exec <id> bench -- sh` gives a
+#     shell that reaches the planner at http://planner:8000/v1
+# Before starting: code.fz.yaml has run (the bench job uses the code volume).
+version: v4
+volumes:
+  models: {use: team4, name: models}
+  code: {use: team4, name: code}
+services:
+  planner:
+    image: {uri: docker://vllm/vllm-openai:v0.32.0}
+    mounts: {/models: models}
+    env:
+      - HOME=/models/home
+      - USER=careplan
+      - XDG_CACHE_HOME=/models/home/.cache
+      - HF_HUB_OFFLINE=1
+      - MAX_JOBS=2
+      - NVCC_THREADS=1
+      - SEQS=3
+    script: |
+      #!/bin/bash
+      mkdir -p "$XDG_CACHE_HOME"
+      M=/models/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-NVFP4
+      exec vllm serve $M --served-model-name nemotron-3.5-super-vl \
+        --max-num-seqs ${SEQS:-1} --trust-remote-code --gpu-memory-utilization 0.75 --max-num-batched-tokens 8192 \
+        --speculative_config.model $M-LiLiCorr \
+        --speculative_config.num_speculative_tokens 7 --speculative_config.method dflash \
+        --mamba-backend flashinfer --mamba-ssm-cache-dtype float16 --enable-mamba-cache-stochastic-rounding \
+        --mamba-cache-philox-rounds 5 --enable-mamba-shared-prefix-checkpoint \
+        --video-pruning-rate 0.5 --media-io-kwargs '{"video": {"fps": 2, "num_frames": 256}}' \
+        --block-size 64 --prefix-match-unit 64 \
+        --enable-auto-tool-choice --tool-call-parser qwen3_coder --reasoning-parser nemotron_v3 \
+        --host 0.0.0.0 --port 8000
+    resource:
+      cpu: {cores: 12}
+      memory: {size: 110GB}
+      devices: {nvidia.com/gpu: 1}
+    network:
+      ports:
+        - {name: openai, port: 8000, protocol: tcp}
+      endpoints:
+        - {name: planner, port-name: openai, protocol: http, type: subdomain, scope: group}
+    persist: true
+    readiness-probe:
+      http-get: {path: /health, port: 8000, scheme: HTTP}
+      initial-delay-seconds: 60
+      period-seconds: 15
+      timeout-seconds: 5
+      failure-threshold: 240
+jobs:
+  bench:
+    image: {uri: docker://rockylinux/rockylinux:9}
+    mounts: {/code: code}
+    cwd: /code/app
+    env:
+      - PYTHONPATH=/code/site
+      - PATH=/code/python/bin:/usr/local/bin:/usr/bin:/bin
+      - PLANNER_URL=http://planner:8000/v1
+      - VLLM_API_KEY=none
+    script: |
+      #!/bin/sh
+      sleep 43200
+    depends-on:
+      - {name: planner, status: RUNNING}
+    policy: {timeout: {execute: 12h}}
+    resource:
+      cpu: {cores: 2}
+      memory: {size: 4GB}

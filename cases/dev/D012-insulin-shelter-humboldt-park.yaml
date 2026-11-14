@@ -1,0 +1,173 @@
+case_id: D012
+split: dev
+title: Insulin-treated diabetes, foot ulcer risk, staying in a shelter (not mentioned at the visit)
+author: claude-draft
+reviewed_by: Lynna Yang (dispute review, 2026-11-10)
+written_at: '2026-10-25'
+frozen_sha256: null
+patient:
+  patient_id: P-D012
+  name: Hector Alvarado
+  dob: '1979-04-30'
+  sex: M
+  language: en
+  mrn: MRN-HMZ4WKG34J
+  address: 4000 W North Ave, Chicago, IL 60639
+  tract_geoid: null
+  coverage:
+    type: medicaid
+    plan: Lakeshore Community Health Plan (fictional Medicaid MCO)
+    transport_benefit: 'yes'
+  pcp: Dr. J. Rivera (fictional)
+  problems:
+  - ref: prob:1
+    code: E11.42
+    system: ICD-10-CM
+    display: Type 2 diabetes mellitus with diabetic polyneuropathy
+  - ref: prob:2
+    code: Z59.01
+    system: ICD-10-CM
+    display: Sheltered homelessness
+  meds:
+  - ref: med:1
+    name: insulin glargine pen
+    dose: 26 units
+    frequency: nightly
+    cost_tier: 2
+    monthly_copay_usd: 2.0
+    refill_gap_days: 0
+    needs_refrigeration: true
+  - ref: med:2
+    name: gabapentin
+    dose: 300 mg
+    frequency: three times daily
+    cost_tier: 1
+    monthly_copay_usd: 1.0
+    refill_gap_days: 0
+  appointments:
+  - ref: appt:1
+    date: '2026-09-14'
+    dept: podiatry
+    time: 09:00
+    location: Hospital podiatry clinic
+    status: no_show
+  - ref: appt:2
+    date: '2026-10-22'
+    dept: primary_care
+    time: '13:00'
+    location: Clinic
+    status: kept
+  screener:
+    date: '2026-09-30'
+    answers:
+      living_situation: no_steady_place
+      housing_problems: none
+      food_worry: sometimes_true
+      food_ran_out: never_true
+      transportation: 'no'
+      utilities_shutoff: 'no'
+  notes:
+  - ref: note:1
+    date: '2026-09-30'
+    role: community_health_worker
+    topics:
+    - housing
+    text: Staying at a West Side shelter since August. No personal refrigerator; shelter staff will not store medications.
+      No reliable mailing address.
+  - ref: note:2
+    date: '2026-09-30'
+    role: community_health_worker
+    topics:
+    - digital_access
+    text: Prepaid phone, often out of minutes.
+visit:
+  visit_id: V-D012
+  date: '2026-10-22'
+  setting: primary care follow-up
+  transcript:
+  - ref: turn:T01
+    speaker: doctor
+    text: Your sugars are all over the place. Are you taking the insulin every night?
+  - ref: turn:T02
+    speaker: patient
+    text: Most nights. Sometimes I skip it.
+  - ref: turn:T03
+    speaker: doctor
+    text: How are your feet? Any sores?
+  - ref: turn:T04
+    speaker: patient
+    text: They burn at night. No sores that I've seen.
+  - ref: turn:T05
+    speaker: doctor
+    text: You missed podiatry last month. They need to check your feet.
+  - ref: turn:T06
+    speaker: patient
+    text: Yeah, I'll try to make the next one.
+  - ref: turn:T07
+    speaker: doctor
+    text: Anything else going on?
+  - ref: turn:T08
+    speaker: patient
+    text: No. I'm good.
+draft_plan:
+- item_id: P1
+  type: medication
+  text: Continue insulin glargine 26 units nightly; keep unopened pens refrigerated
+- item_id: P2
+  type: medication
+  text: Switch to mail-order pharmacy for 90-day supplies to reduce trips
+- item_id: P3
+  type: referral
+  text: Podiatry at the hospital clinic in 2 weeks, 9:00 AM
+  schedule: once, ~2026-11-05 09:00
+- item_id: P4
+  type: monitoring
+  text: A1c in 3 months
+planted_conflicts:
+- conflict_id: C1
+  item_id: P1
+  barrier: housing
+  expected_status: at_risk
+  evidence:
+  - source: record
+    ref: note:1
+  - source: record
+    ref: screener:living_situation
+  acceptable_alternative_categories:
+  - housing_assistance
+  - community_health_worker
+  - other
+  note: 'Record-only. Opened glargine pens keep at room temperature for 28 days, so the fix may be dispensing one pen at a
+    time. Lynna: confirm.'
+- conflict_id: C2
+  item_id: P2
+  barrier: housing
+  expected_status: blocked
+  evidence:
+  - source: record
+    ref: note:1
+  acceptable_alternative_categories:
+  - community_health_worker
+  - housing_assistance
+  - other
+  note: 'Record-only: no reliable mailing address.'
+- conflict_id: C3
+  item_id: P3
+  barrier: transport
+  expected_status: at_risk
+  evidence:
+  - source: tract
+    ref: tract:no_vehicle_share
+  - source: tract
+    ref: tract:places_lacktrpt
+  acceptable_alternative_categories:
+  - nemt
+  - schedule_change
+  - coordinate_with_existing_visit
+  note: Tract-only (the prior no-show is weak evidence). Medicaid NEMT is available.
+decoys:
+- barrier: digital_access
+  ref: note:2
+  why_irrelevant: Prepaid phone runs out, but no plan item depends on a phone or app.
+expected_ok_items:
+- P4

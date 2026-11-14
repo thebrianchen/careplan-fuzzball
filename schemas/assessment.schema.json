@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "careplan/assessment.schema.json",
+  "title": "Planner output (one per case)",
+  "type": "object",
+  "required": ["items"],
+  "additionalProperties": false,
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["item_id", "status"],
+        "additionalProperties": false,
+        "properties": {
+          "item_id": {"type": "string", "pattern": "^P[0-9]+$"},
+          "status": {"enum": ["likely_ok", "at_risk", "blocked"]},
+          "barriers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["barrier", "reason", "evidence"],
+              "additionalProperties": false,
+              "properties": {
+                "barrier": {"enum": ["transport", "food_access", "med_cost", "other_cost", "utilities", "housing",
+                                      "caregiving", "language_literacy", "digital_access", "work_schedule"]},
+                "reason": {"type": "string", "maxLength": 400},
+                "evidence": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {"type": "string", "pattern": "^((prob|med|appt|note|turn|screener|tract|resource):[A-Za-z0-9_]+|transit:appt:[0-9]+)$"}
+                }
+              }
+            }
+          },
+          "alternatives": {
+            "type": "array",
+            "maxItems": 3,
+            "items": {
+              "type": "object",
+              "required": ["category", "text"],
+              "additionalProperties": false,
+              "properties": {
+                "category": {"type": "string"},
+                "resource_record_id": {"type": ["string", "null"]},
+                "text": {"type": "string", "maxLength": 400}
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

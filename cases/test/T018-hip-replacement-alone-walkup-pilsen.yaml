@@ -1,0 +1,268 @@
+case_id: T018
+split: test
+title: Two weeks after hip replacement, living alone in a walk-up; therapy three days a week, a blood-thinner refill and bathroom
+  equipment she already declined
+author: claude-draft
+reviewed_by: Lynna Yang (dispute review, 2026-11-10)
+written_at: '2026-10-31'
+frozen_sha256: null
+patient:
+  patient_id: P-T018
+  name: Consuelo Arriaga
+  dob: '1952-08-30'
+  sex: F
+  language: en
+  mrn: MRN-FBCNSNRGSA
+  address: 1500 W 18th St, Chicago, IL 60608
+  tract_geoid: null
+  coverage:
+    type: medicare
+    plan: Original Medicare (Parts A, B, D) with Medigap Plan G; Part D without Extra Help
+    transport_benefit: 'no'
+  pcp: Dr. J. Petrosyan (fictional)
+  problems:
+  - ref: prob:1
+    code: Z47.1
+    system: ICD-10-CM
+    display: Aftercare following joint replacement surgery
+  - ref: prob:2
+    code: Z96.642
+    system: ICD-10-CM
+    display: Presence of left artificial hip joint
+  - ref: prob:3
+    code: M81.0
+    system: ICD-10-CM
+    display: Age-related osteoporosis without current pathological fracture
+  - ref: prob:4
+    code: I10
+    system: ICD-10-CM
+    display: Essential hypertension
+  meds:
+  - ref: med:1
+    name: enoxaparin prefilled syringe
+    dose: 40 mg
+    frequency: subcutaneously daily (14 syringes dispensed 10-16)
+    cost_tier: 3
+    monthly_copay_usd: 48.0
+    refill_gap_days: 0
+  - ref: med:2
+    name: acetaminophen
+    dose: 1000 mg
+    frequency: three times daily
+    cost_tier: 1
+    monthly_copay_usd: 0.0
+    refill_gap_days: 0
+  - ref: med:3
+    name: oxycodone
+    dose: 5 mg
+    frequency: at bedtime as needed
+    cost_tier: 2
+    monthly_copay_usd: 3.0
+    refill_gap_days: 0
+  - ref: med:4
+    name: amlodipine
+    dose: 5 mg
+    frequency: daily
+    cost_tier: 1
+    monthly_copay_usd: 1.5
+    refill_gap_days: 0
+  - ref: med:5
+    name: alendronate
+    dose: 70 mg
+    frequency: weekly
+    cost_tier: 1
+    monthly_copay_usd: 2.0
+    refill_gap_days: 0
+  appointments:
+  - ref: appt:1
+    date: '2026-10-14'
+    dept: inpatient
+    location: Hospital (left total hip arthroplasty, 10-14 to 10-16)
+    status: kept
+  - ref: appt:2
+    date: '2026-10-19'
+    dept: home_health_physical_therapy
+    location: Home
+    status: kept
+  - ref: appt:3
+    date: '2026-10-23'
+    dept: home_health_physical_therapy
+    location: Home
+    status: kept
+  - ref: appt:4
+    date: '2026-10-28'
+    dept: orthopedic_surgery
+    time: 09:00
+    location: Orthopedic clinic
+    status: kept
+  screener:
+    date: '2026-10-13'
+    answers:
+      living_situation: steady_place
+      housing_problems: none
+      food_worry: never_true
+      food_ran_out: never_true
+      transportation: 'no'
+      utilities_shutoff: 'no'
+  notes:
+  - ref: note:1
+    date: '2026-10-13'
+    role: pre_admission_testing
+    topics:
+    - other_cost
+    - transport
+    text: Lives alone in a second-floor walk-up with a handrail. Income is Social Security only. Declined to buy the raised
+      toilet seat and shower chair ($85 at the pharmacy, not covered by Medicare); asked whether the hospital could lend them.
+      Will not be able to drive for 6 weeks; no family in Chicago (son in Texas).
+  - ref: note:2
+    date: '2026-10-16'
+    role: pharmacy
+    topics:
+    - med_cost
+    text: 'Discharge fill: enoxaparin 40 mg, 14 syringes, Part D copay $48 (tier 3). Patient asked whether there was ''a cheaper
+      shot'' and said she would ''think about it''. Dispensed.'
+visit:
+  visit_id: V-T018
+  date: '2026-10-28'
+  setting: orthopedic clinic, two-week post-operative visit
+  transcript:
+  - ref: turn:T01
+    speaker: doctor
+    text: Two weeks out. Let's look at the hip. How's the pain?
+  - ref: turn:T02
+    speaker: patient
+    text: A five on the stairs, a three on the flat. I'm using the walker.
+  - ref: turn:T03
+    speaker: doctor
+    text: The incision looks good. I want you in outpatient therapy three times a week for six weeks at the hospital rehab
+      center.
+  - ref: turn:T04
+    speaker: patient
+    text: Three times a week. I can't drive until you say so, and I've got nobody here. My son's in Texas.
+    topics:
+    - transport
+  - ref: turn:T05
+    speaker: doctor
+    text: What about the bus?
+  - ref: turn:T06
+    speaker: patient
+    text: The 18th Street bus is right there, but it's the stairs down from my apartment and then the walker on the bus. I'm
+      not ready for that.
+    topics:
+    - transport
+  - ref: turn:T07
+    speaker: doctor
+    text: Are you doing the blood-thinner shots every day?
+  - ref: turn:T08
+    speaker: patient
+    text: Every morning in the belly. I've got six left.
+  - ref: turn:T09
+    speaker: doctor
+    text: Good. With your bone density and living alone I want to extend those to five weeks total. The shower and the toilet,
+      are you managing?
+  - ref: turn:T10
+    speaker: patient
+    text: I'm managing. I sit on the edge of the tub.
+  - ref: turn:T11
+    speaker: doctor
+    text: I'd rather you had a proper seat and a shower chair. Keep walking every day, a little more each time, and no bending
+      past ninety degrees.
+  - ref: turn:T12
+    speaker: patient
+    text: I know the rules.
+  - ref: turn:T13
+    speaker: doctor
+    text: Is your phone working if the therapist calls to schedule?
+  - ref: turn:T14
+    speaker: patient
+    text: It's a regular cell phone. No internet, but it rings.
+    topics:
+    - digital_access
+draft_plan:
+- item_id: P1
+  type: referral
+  text: Outpatient physical therapy at the hospital rehabilitation center, Monday/Wednesday/Friday 10:00 AM for 6 weeks
+  schedule: MWF 10:00 x6 weeks
+- item_id: P2
+  type: medication
+  text: Extend enoxaparin 40 mg daily to 35 days post-op; new prescription for 21 syringes
+- item_id: P3
+  type: activity
+  text: Walk daily with the walker, increasing gradually; maintain posterior hip precautions
+- item_id: P4
+  type: education
+  text: Obtain raised toilet seat and shower chair for bathroom safety
+- item_id: P5
+  type: appointment
+  text: Orthopedic follow-up with X-ray at 6 weeks post-op
+  schedule: once, ~2026-11-25
+planted_conflicts:
+- conflict_id: C1
+  item_id: P1
+  barrier: transport
+  expected_status: blocked
+  evidence:
+  - source: transcript
+    ref: turn:T04
+  - source: transcript
+    ref: turn:T06
+  - source: record
+    ref: note:1
+  - source: tract
+    ref: tract:no_vehicle_share
+  acceptable_alternative_categories:
+  - paratransit
+  - other
+  - schedule_change
+  note: 'Original Medicare: NEMT does not count. Continue home-health PT until she can manage stairs (''other''), or Pace
+    ADA paratransit.'
+- conflict_id: C2
+  item_id: P2
+  barrier: med_cost
+  expected_status: at_risk
+  evidence:
+  - source: record
+    ref: note:2
+  - source: record
+    ref: med:1
+  acceptable_alternative_categories:
+  - generic_or_formulary_switch
+  - med_assistance_program
+  - other
+  note: 'Record-only: she balked at $48 for the first box and the plan now orders 21 more syringes. Aspirin 81 mg (standard
+    for most THA prophylaxis) is the formulary switch; Extra Help screening is med_assistance_program.'
+- conflict_id: C3
+  item_id: P4
+  barrier: other_cost
+  expected_status: at_risk
+  evidence:
+  - source: record
+    ref: note:1
+  acceptable_alternative_categories:
+  - other
+  - community_health_worker
+  note: 'Record-only: she already declined the $85 equipment on a Social-Security-only income; T10 is untagged on purpose.
+    ''other'' = hospital loan closet / Area Agency on Aging equipment program.'
+- conflict_id: C4
+  item_id: P5
+  barrier: transport
+  expected_status: at_risk
+  evidence:
+  - source: record
+    ref: screener:transportation
+  - source: tract
+    ref: tract:no_vehicle_share
+  - source: transcript
+    ref: turn:T04
+  - source: transcript
+    ref: turn:T06
+  acceptable_alternative_categories:
+  - nemt
+  - paratransit
+  note: 'Added from Lynna''s dispute review: the system raised it, the key had missed it.'
+decoys:
+- barrier: digital_access
+  ref: turn:T14
+  why_irrelevant: Basic phone and no internet, but nothing in the plan needs an app or video; the therapist can call.
+expected_ok_items:
+- P3

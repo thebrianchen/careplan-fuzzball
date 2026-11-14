@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Patient summary · {{ case_id }}{% endblock %}
+{% block body_class %}summary{% endblock %}
+{% block content %}
+<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;gap:12px">
+  <h1 style="margin:0">Your plan, in plain words <span class="muted" style="font-size:14px;font-weight:400">· patient language: {{ language }}</span></h1>
+  <span>
+    <button id="gen" class="primary" data-case="{{ case_id }}">{{ 'Regenerate' if summary else 'Write the handout' }}</button>
+    <button onclick="window.print()">Print</button>
+  </span>
+</div>
+<p id="gstat" class="muted" style="font-size:14px"></p>
+<div class="summary-sheet" id="sheet">
+  <h1>Your care plan</h1>
+  <p style="color:#666">Prepared after your visit on {{ visit_date }}. Bring this with you.</p>
+  {% if not rec or not rec.assessment %}
+    <p>The plan hasn't been checked yet. <a href="/stage/{{ case_id }}">Run the check</a> first.</p>
+  {% elif summary %}
+    {% for it in summary['items'] %}
+      <h2>{{ it.heading or plan[it.item_id] }}</h2>
+      {% for s in it.steps %}<div class="step">{{ s }}</div>{% endfor %}
+    {% endfor %}
+    {% if summary.closing %}<p style="margin-top:18px">{{ summary.closing }}</p>{% endif %}
+  {% else %}
+    <p style="color:#666">Draft from the card (click "Write the handout" for the plain-language version):</p>
+    {% for it in rec.assessment['items'] %}
+      <h2>{{ plan[it.item_id] }}</h2>
+      {% if it.status == 'likely_ok' %}<div class="step">Keep doing this as planned.</div>
+      {% else %}{% for b in it.barriers %}<div class="step"><b>{{ b.barrier.replace('_', ' ') | capitalize }}:</b> {{ b.reason }}</div>{% endfor %}
+        {% for a in it.alternatives %}<div class="step">{{ a.text }}</div>{% endfor %}{% endif %}
+    {% endfor %}
+  {% endif %}
+  <p style="color:#666;margin-top:20px;font-size:14px">Questions? Call the clinic. This page was made on the clinic's own computer; your records did not leave it.</p>
+</div>
+{% endblock %}
+{% block scripts %}<script>
+document.getElementById('gen').onclick=async function(){this.disabled=true;const st=document.getElementById('gstat');st.textContent='writing the handout on the private box…';
+  const r=await fetch('/summarize/'+this.dataset.case,{method:'POST'}); if(!r.ok){st.textContent='could not write it ('+r.status+')';this.disabled=false;return;}
+  location.reload();};
+</script>{% endblock %}

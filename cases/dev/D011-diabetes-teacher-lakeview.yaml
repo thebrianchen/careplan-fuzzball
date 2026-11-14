@@ -1,0 +1,144 @@
+case_id: D011
+split: dev
+title: New type 2 diabetes in a teacher; daytime class and an expensive GLP-1
+author: claude-draft
+reviewed_by: Lynna Yang (dispute review, 2026-11-10)
+written_at: '2026-10-25'
+frozen_sha256: null
+patient:
+  patient_id: P-D011
+  name: Priyanka Sood
+  dob: '1992-01-15'
+  sex: F
+  language: en
+  mrn: MRN-C4USSD34GY
+  address: 3200 N Broadway, Chicago, IL 60657
+  tract_geoid: null
+  coverage:
+    type: commercial
+    plan: High-deductible employer plan (fictional), deductible not met
+    transport_benefit: 'no'
+  pcp: Dr. A. Feldman (fictional)
+  problems:
+  - ref: prob:1
+    code: E11.65
+    system: ICD-10-CM
+    display: Type 2 diabetes mellitus with hyperglycemia
+  - ref: prob:2
+    code: E66.9
+    system: ICD-10-CM
+    display: Obesity, unspecified
+  meds:
+  - ref: med:1
+    name: metformin ER
+    dose: 1000 mg
+    frequency: daily with dinner
+    cost_tier: 1
+    monthly_copay_usd: 4.0
+    refill_gap_days: 0
+  - ref: med:2
+    name: semaglutide pen
+    dose: 0.5 mg
+    frequency: weekly
+    cost_tier: 4
+    monthly_copay_usd: 250.0
+    refill_gap_days: 14
+  appointments:
+  - ref: appt:1
+    date: '2026-09-08'
+    dept: primary_care
+    time: '16:30'
+    location: Clinic
+    status: kept
+  - ref: appt:2
+    date: '2026-10-26'
+    dept: primary_care
+    time: '16:30'
+    location: Clinic
+    status: kept
+  screener:
+    date: '2026-10-26'
+    answers:
+      living_situation: steady_place
+      housing_problems: none
+      food_worry: never_true
+      food_ran_out: never_true
+      transportation: 'no'
+      utilities_shutoff: 'no'
+  notes: []
+visit:
+  visit_id: V-D011
+  date: '2026-10-26'
+  setting: primary care follow-up (late-afternoon slot)
+  transcript:
+  - ref: turn:T01
+    speaker: doctor
+    text: Your A1c is 8.9. Let's talk about how the medicines are going.
+  - ref: turn:T02
+    speaker: patient
+    text: The metformin's fine now that I take it at dinner.
+  - ref: turn:T03
+    speaker: doctor
+    text: And the weekly injection?
+  - ref: turn:T04
+    speaker: patient
+    text: I did the first pen. It made me a little queasy but okay.
+  - ref: turn:T05
+    speaker: doctor
+    text: We have a diabetes education class. When are you free?
+  - ref: turn:T06
+    speaker: patient
+    text: I teach fourth grade until three-thirty. Weekdays are hard before four.
+    topics:
+    - work_schedule
+  - ref: turn:T07
+    speaker: doctor
+    text: How do you get around? I noticed you don't have a parking validation.
+  - ref: turn:T08
+    speaker: patient
+    text: I don't own a car. The Brown Line is right there, it's easy.
+draft_plan:
+- item_id: P1
+  type: education
+  text: Diabetes self-management education, 4 weekly sessions, Tuesdays 10:00 AM at the hospital
+  schedule: Tue 10:00 x4
+- item_id: P2
+  type: medication
+  text: Continue metformin ER 1000 mg with dinner
+- item_id: P3
+  type: medication
+  text: Continue semaglutide 0.5 mg weekly; increase to 1 mg in 4 weeks
+- item_id: P4
+  type: monitoring
+  text: Fingerstick glucose fasting and 2 hours after dinner, log in the app
+planted_conflicts:
+- conflict_id: C1
+  item_id: P1
+  barrier: work_schedule
+  expected_status: blocked
+  evidence:
+  - source: transcript
+    ref: turn:T06
+  acceptable_alternative_categories:
+  - flexible_scheduling
+  - telehealth
+  - schedule_change
+- conflict_id: C2
+  item_id: P3
+  barrier: med_cost
+  expected_status: at_risk
+  evidence:
+  - source: record
+    ref: med:2
+  acceptable_alternative_categories:
+  - med_assistance_program
+  - generic_or_formulary_switch
+  note: 'Record-only: $250/month before deductible, and a 14-day refill gap after the first pen. She never mentions cost.'
+decoys:
+- barrier: transport
+  ref: turn:T08
+  why_irrelevant: Car-free by choice next to an L station; the tract's high no-vehicle share does not make transport a barrier
+    here.
+expected_ok_items:
+- P2
+- P4

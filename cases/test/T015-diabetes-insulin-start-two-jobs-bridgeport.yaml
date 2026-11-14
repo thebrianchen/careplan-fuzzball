@@ -1,0 +1,213 @@
+case_id: T015
+split: test
+title: Type 2 diabetes starting basal insulin; educator at 1 PM for a man with two jobs and a shutoff notice in the intake
+  note
+author: claude-draft
+reviewed_by: Lynna Yang (dispute review, 2026-11-10)
+written_at: '2026-10-31'
+frozen_sha256: null
+patient:
+  patient_id: P-T015
+  name: Daniel Reyes
+  dob: '1978-02-27'
+  sex: M
+  language: en
+  mrn: MRN-PJNHLJ7OPO
+  address: 3200 S Halsted St, Chicago, IL 60608
+  tract_geoid: null
+  coverage:
+    type: medicaid
+    plan: HealthChoice Illinois (fictional Lakeshore Community Health Plan)
+    transport_benefit: 'yes'
+  pcp: Dr. A. Sobczak (fictional)
+  problems:
+  - ref: prob:1
+    code: E11.65
+    system: ICD-10-CM
+    display: Type 2 diabetes mellitus with hyperglycemia
+  - ref: prob:2
+    code: E66.9
+    system: ICD-10-CM
+    display: Obesity, unspecified
+  - ref: prob:3
+    code: I10
+    system: ICD-10-CM
+    display: Essential hypertension
+  meds:
+  - ref: med:1
+    name: metformin ER
+    dose: 1000 mg
+    frequency: twice daily
+    cost_tier: 1
+    monthly_copay_usd: 0.0
+    refill_gap_days: 0
+  - ref: med:2
+    name: lisinopril
+    dose: 10 mg
+    frequency: daily
+    cost_tier: 1
+    monthly_copay_usd: 0.0
+    refill_gap_days: 0
+  - ref: med:3
+    name: insulin glargine pen (new today)
+    dose: 10 units
+    frequency: nightly
+    cost_tier: 2
+    monthly_copay_usd: 0.0
+    refill_gap_days: 0
+    needs_refrigeration: true
+  appointments:
+  - ref: appt:1
+    date: '2026-09-16'
+    dept: diabetes_education
+    time: '13:00'
+    location: Clinic
+    status: no_show
+  - ref: appt:2
+    date: '2026-10-07'
+    dept: diabetes_education
+    time: '13:00'
+    location: Clinic
+    status: cancelled
+  - ref: appt:3
+    date: '2026-10-29'
+    dept: primary_care
+    time: '17:30'
+    location: Clinic
+    status: kept
+  screener:
+    date: '2026-10-29'
+    answers:
+      living_situation: steady_place
+      housing_problems: none
+      food_worry: never_true
+      food_ran_out: never_true
+      transportation: 'no'
+      utilities_shutoff: 'yes'
+  notes:
+  - ref: note:1
+    date: '2026-10-29'
+    role: nursing
+    topics:
+    - utilities
+    text: 'Intake: patient reports ComEd disconnection notice received 10/20, balance about $610; on a payment plan but behind.
+      Refrigerator working today. Declined social work today, ''no time''.'
+visit:
+  visit_id: V-T015
+  date: '2026-10-29'
+  setting: primary care evening visit
+  transcript:
+  - ref: turn:T01
+    speaker: doctor
+    text: Your A1c is 10.4, up from 9.1. Metformin alone isn't doing it. I want to start a once-a-day insulin at bedtime.
+  - ref: turn:T02
+    speaker: patient
+    text: If that's what it takes.
+  - ref: turn:T03
+    speaker: doctor
+    text: You've missed the diabetes educator twice. She's the one who'd teach you the pen.
+  - ref: turn:T04
+    speaker: patient
+    text: She's only there at one o'clock. I'm at the warehouse seven to three-thirty, then I drive for Uber till ten. One
+      o'clock on a weekday means I lose half a shift and they write me up.
+    topics:
+    - work_schedule
+  - ref: turn:T05
+    speaker: doctor
+    text: Is there any time that works?
+  - ref: turn:T06
+    speaker: patient
+    text: After four, or Saturday morning.
+    topics:
+    - work_schedule
+  - ref: turn:T07
+    speaker: doctor
+    text: Then we'll teach you the pen here today. What do you eat on a workday?
+  - ref: turn:T08
+    speaker: patient
+    text: Coffee, and whatever's at the gas station between the warehouse and driving. My wife cooks on weekends and we eat
+      decent then.
+    topics:
+    - food_access
+    - work_schedule
+  - ref: turn:T09
+    speaker: doctor
+    text: How do you get here?
+  - ref: turn:T10
+    speaker: patient
+    text: I drive. It's my job.
+  - ref: turn:T11
+    speaker: doctor
+    text: Money okay for the medicines?
+  - ref: turn:T12
+    speaker: patient
+    text: They're free with the card.
+  - ref: turn:T13
+    speaker: doctor
+    text: I also want your eyes checked. You're overdue.
+  - ref: turn:T14
+    speaker: patient
+    text: I'll set it up for a Saturday.
+draft_plan:
+- item_id: P1
+  type: medication
+  text: Start insulin glargine 10 units nightly; increase by 2 units every 3 days until fasting glucose is 80-130
+- item_id: P2
+  type: appointment
+  text: Diabetes educator visit for insulin teaching and meal planning, Wednesday 1:00 PM
+  schedule: once, Wed 13:00
+- item_id: P3
+  type: diet
+  text: Carbohydrate-consistent diet, three meals a day; pack lunch and snacks for work days
+- item_id: P4
+  type: referral
+  text: Dilated eye exam, ophthalmology referral
+- item_id: P5
+  type: monitoring
+  text: Fasting glucose log daily; A1c in 3 months
+planted_conflicts:
+- conflict_id: C1
+  item_id: P2
+  barrier: work_schedule
+  expected_status: blocked
+  evidence:
+  - source: transcript
+    ref: turn:T04
+  - source: transcript
+    ref: turn:T06
+  - source: record
+    ref: appt:1
+  acceptable_alternative_categories:
+  - flexible_scheduling
+  - schedule_change
+  - telehealth
+  note: 1 PM Wednesday is mid-shift and has already produced a no-show and a cancellation; after 4 PM or Saturday fixes it.
+- conflict_id: C3
+  item_id: P3
+  barrier: food_access
+  expected_status: at_risk
+  evidence:
+  - source: transcript
+    ref: turn:T08
+  acceptable_alternative_categories:
+  - food_pantry
+  - snap
+  note: 'Added from Lynna''s dispute review: the system raised it, the key had missed it.'
+- conflict_id: C4
+  item_id: P3
+  barrier: work_schedule
+  expected_status: at_risk
+  evidence:
+  - source: transcript
+    ref: turn:T04
+  - source: transcript
+    ref: turn:T08
+  acceptable_alternative_categories:
+  - flexible_scheduling
+  - telehealth
+  note: 'Added from Lynna''s dispute review: the system raised it, the key had missed it.'
+decoys: []
+expected_ok_items:
+- P4
+- P5
+- P1

@@ -1,0 +1,235 @@
+case_id: T012
+split: test
+title: Diabetic foot ulcer; twice-weekly 8 AM wound clinic by two buses, visiting nurse to a basement with no visitors allowed
+author: claude-draft
+reviewed_by: Lynna Yang (dispute review, 2026-11-10)
+written_at: '2026-10-31'
+frozen_sha256: null
+patient:
+  patient_id: P-T012
+  name: Clarence Boyd
+  dob: '1965-06-14'
+  sex: M
+  language: en
+  mrn: MRN-46W77KZSQV
+  address: 9100 S Commercial Ave, Chicago, IL 60617
+  tract_geoid: null
+  coverage:
+    type: medicaid
+    plan: HealthChoice Illinois (fictional Lakeshore Community Health Plan)
+    transport_benefit: 'yes'
+  pcp: Dr. O. Fashola (fictional)
+  problems:
+  - ref: prob:1
+    code: E11.621
+    system: ICD-10-CM
+    display: Type 2 diabetes mellitus with foot ulcer
+  - ref: prob:2
+    code: L97.512
+    system: ICD-10-CM
+    display: Non-pressure chronic ulcer of other part of right foot with fat layer exposed
+  - ref: prob:3
+    code: E11.42
+    system: ICD-10-CM
+    display: Type 2 diabetes mellitus with diabetic polyneuropathy
+  meds:
+  - ref: med:1
+    name: metformin
+    dose: 1000 mg
+    frequency: twice daily
+    cost_tier: 1
+    monthly_copay_usd: 0.0
+    refill_gap_days: 0
+  - ref: med:2
+    name: gabapentin
+    dose: 300 mg
+    frequency: three times daily
+    cost_tier: 1
+    monthly_copay_usd: 0.0
+    refill_gap_days: 0
+  - ref: med:3
+    name: cephalexin
+    dose: 500 mg
+    frequency: four times daily for 10 days (completed 10-11)
+    cost_tier: 1
+    monthly_copay_usd: 0.0
+    refill_gap_days: 0
+  appointments:
+  - ref: appt:1
+    date: '2026-10-01'
+    dept: emergency
+    time: '16:20'
+    location: Hospital ED
+    status: kept
+  - ref: appt:2
+    date: '2026-10-08'
+    dept: wound_clinic
+    time: 08:00
+    location: Hospital wound care center
+    status: kept
+  - ref: appt:3
+    date: '2026-10-12'
+    dept: wound_clinic
+    time: 08:00
+    location: Hospital wound care center
+    status: no_show
+  - ref: appt:4
+    date: '2026-10-15'
+    dept: wound_clinic
+    time: 08:00
+    location: Hospital wound care center
+    status: kept
+  - ref: appt:5
+    date: '2026-10-19'
+    dept: wound_clinic
+    time: 08:00
+    location: Hospital wound care center
+    status: no_show
+  - ref: appt:6
+    date: '2026-10-22'
+    dept: wound_clinic
+    time: 08:00
+    location: Hospital wound care center
+    status: kept
+  - ref: appt:7
+    date: '2026-10-26'
+    dept: wound_clinic
+    time: 08:00
+    location: Hospital wound care center
+    status: kept
+  screener:
+    date: '2026-10-01'
+    answers:
+      living_situation: no_steady_place
+      housing_problems: none
+      food_worry: sometimes_true
+      food_ran_out: never_true
+      transportation: 'yes'
+      utilities_shutoff: 'no'
+  notes:
+  - ref: note:1
+    date: '2026-10-08'
+    role: community_health_worker
+    topics:
+    - housing
+    text: Staying in a friend's basement since an eviction in September. Friend does not allow visitors or deliveries to the
+      house; patient uses the clinic as his mailing address. No lease. CHA waitlist application started.
+visit:
+  visit_id: V-T012
+  date: '2026-10-26'
+  setting: wound care center, weekly physician review
+  transcript:
+  - ref: turn:T01
+    speaker: doctor
+    text: The ulcer is down from three centimeters to about two. It's healing, but slowly, and you've missed two of the Monday
+      visits.
+  - ref: turn:T02
+    speaker: patient
+    text: Mondays the buses are a mess. I take the 30 to the 95th Street station and then another bus up here. Eight o'clock
+      means leaving at six-fifteen, and with the foot it's slow going.
+    topics:
+    - transport
+  - ref: turn:T03
+    speaker: doctor
+    text: Anyone with a car?
+  - ref: turn:T04
+    speaker: patient
+    text: Not that I can lean on. The guy I'm staying with works nights and sleeps mornings.
+    topics:
+    - transport
+  - ref: turn:T05
+    speaker: doctor
+    text: How are you keeping weight off that foot?
+  - ref: turn:T06
+    speaker: patient
+    text: I wear the boot when I go out. Around the house I don't bother.
+  - ref: turn:T07
+    speaker: doctor
+    text: You need it any time you're standing. I'm also going to have a visiting nurse come three times a week to change
+      the dressing between visits.
+  - ref: turn:T08
+    speaker: patient
+    text: Three times a week? Okay.
+  - ref: turn:T09
+    speaker: doctor
+    text: How are the sugars?
+  - ref: turn:T10
+    speaker: patient
+    text: Mornings around one-sixty. I take the metformin.
+  - ref: turn:T11
+    speaker: doctor
+    text: Are you eating regular meals?
+  - ref: turn:T12
+    speaker: patient
+    text: Two a day. Enough.
+  - ref: turn:T13
+    speaker: doctor
+    text: Call the clinic if there's redness going up the leg, fever, or drainage that smells.
+  - ref: turn:T14
+    speaker: patient
+    text: I will.
+draft_plan:
+- item_id: P1
+  type: appointment
+  text: Wound care center visits Monday and Thursday 8:00 AM for debridement and dressing, 6 more weeks
+  schedule: Mon/Thu 08:00 x6 weeks
+- item_id: P2
+  type: activity
+  text: Removable cast walker boot whenever weight-bearing, indoors and out
+- item_id: P3
+  type: referral
+  text: Home health nursing three times weekly for dressing changes between clinic visits
+  schedule: 3x/week
+- item_id: P4
+  type: medication
+  text: Continue metformin 1000 mg twice daily; A1c today
+- item_id: P5
+  type: education
+  text: 'Return precautions: fever, spreading redness, foul drainage'
+planted_conflicts:
+- conflict_id: C1
+  item_id: P1
+  barrier: transport
+  expected_status: at_risk
+  evidence:
+  - source: transcript
+    ref: turn:T02
+  - source: transcript
+    ref: turn:T04
+  - source: record
+    ref: screener:transportation
+  - source: record
+    ref: appt:3
+  - source: tract
+    ref: tract:no_vehicle_share
+  - source: tract
+    ref: tract:places_lacktrpt
+  acceptable_alternative_categories:
+  - nemt
+  - schedule_change
+  - coordinate_with_existing_visit
+  note: Medicaid NEMT is the obvious fix; a later slot also helps.
+- conflict_id: C2
+  item_id: P3
+  barrier: housing
+  expected_status: blocked
+  evidence:
+  - source: record
+    ref: note:1
+  - source: record
+    ref: screener:living_situation
+  acceptable_alternative_categories:
+  - housing_assistance
+  - community_health_worker
+  - other
+  note: 'Record-only: a visiting nurse cannot come to a house where the host refuses visitors and the patient has no lease.
+    ''other'' = teach self-dressing with supplies dispensed at the clinic, or add a mid-week clinic nurse visit.'
+decoys:
+- barrier: food_access
+  ref: screener:food_worry
+  why_irrelevant: Tract (47.8) and screener suggest food worry, but the plan has no diet item; wound healing nutrition is
+    worth a note, not a flag on any item.
+expected_ok_items:
+- P2
+- P4
+- P5

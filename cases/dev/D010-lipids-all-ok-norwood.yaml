@@ -1,0 +1,126 @@
+case_id: D010
+split: dev
+title: High cholesterol, commercial insurance, plan fits his life
+author: claude-draft
+reviewed_by: Lynna Yang (dispute review, 2026-11-10)
+written_at: '2026-10-25'
+frozen_sha256: null
+patient:
+  patient_id: P-D010
+  name: Gregory Nowak
+  dob: '1971-09-08'
+  sex: M
+  language: en
+  mrn: MRN-OKSKPAZJ3B
+  address: 5200 N Harlem Ave, Chicago, IL 60656
+  tract_geoid: null
+  coverage:
+    type: commercial
+    plan: Employer PPO (fictional)
+    transport_benefit: 'no'
+  pcp: Dr. K. Lindqvist (fictional)
+  problems:
+  - ref: prob:1
+    code: E78.5
+    system: ICD-10-CM
+    display: Hyperlipidemia, unspecified
+  - ref: prob:2
+    code: E66.3
+    system: ICD-10-CM
+    display: Overweight
+  meds:
+  - ref: med:1
+    name: atorvastatin
+    dose: 20 mg
+    frequency: daily
+    cost_tier: 1
+    monthly_copay_usd: 5.0
+    refill_gap_days: 0
+  appointments:
+  - ref: appt:1
+    date: '2026-04-14'
+    dept: primary_care
+    time: 08:00
+    location: Clinic
+    status: kept
+  - ref: appt:2
+    date: '2026-10-21'
+    dept: primary_care
+    time: 08:00
+    location: Clinic
+    status: kept
+  screener:
+    date: '2026-10-21'
+    answers:
+      living_situation: steady_place
+      housing_problems: none
+      food_worry: never_true
+      food_ran_out: never_true
+      transportation: 'no'
+      utilities_shutoff: 'no'
+  notes:
+  - ref: note:1
+    date: '2026-04-14'
+    role: nursing
+    topics:
+    - caregiving
+    text: Mother recently moved to a skilled nursing facility; patient visits on weekends.
+visit:
+  visit_id: V-D010
+  date: '2026-10-21'
+  setting: primary care follow-up
+  transcript:
+  - ref: turn:T01
+    speaker: doctor
+    text: Your LDL came down, but not quite to goal. How's the atorvastatin going?
+  - ref: turn:T02
+    speaker: patient
+    text: No problems. I take it with breakfast.
+  - ref: turn:T03
+    speaker: doctor
+    text: Any muscle aches?
+  - ref: turn:T04
+    speaker: patient
+    text: None.
+  - ref: turn:T05
+    speaker: doctor
+    text: How's the exercise?
+  - ref: turn:T06
+    speaker: patient
+    text: I walk the dog most nights. I could do more.
+  - ref: turn:T07
+    speaker: doctor
+    text: Anything making things harder lately?
+  - ref: turn:T08
+    speaker: patient
+    text: My mom's in a nursing home now, so weekends are busy. And money's a little tighter with her bills, but we're fine.
+    topics:
+    - caregiving
+    - other_cost
+draft_plan:
+- item_id: P1
+  type: medication
+  text: Increase atorvastatin to 40 mg daily
+- item_id: P2
+  type: activity
+  text: Walk 30 minutes at least 5 days a week
+- item_id: P3
+  type: monitoring
+  text: Fasting lipid panel in 3 months at any lab location; early-morning draws available
+  schedule: once, ~2027-01
+- item_id: P4
+  type: medication
+  text: Flu vaccine today
+planted_conflicts: []
+decoys:
+- barrier: caregiving
+  ref: turn:T08
+  why_irrelevant: Weekend visits to his mother don't conflict with any item; the lab draw can be any weekday morning.
+- barrier: other_cost
+  ref: turn:T08
+  why_irrelevant: Says money is tighter but fine; the statin copay is $5 at either dose.
+expected_ok_items:
+- P1
+- P2
+- P3
+- P4

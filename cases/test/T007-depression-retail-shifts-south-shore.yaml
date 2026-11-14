@@ -1,0 +1,195 @@
+case_id: T007
+split: test
+title: Moderate depression; weekly Tuesday therapy against a retail schedule posted every Sunday
+author: claude-draft
+reviewed_by: Lynna Yang (dispute review, 2026-11-10)
+written_at: '2026-10-31'
+frozen_sha256: null
+patient:
+  patient_id: P-T007
+  name: Keisha Lawson
+  dob: '1992-07-30'
+  sex: F
+  language: en
+  mrn: MRN-KPAC5ZW5NS
+  address: 2000 E 71st St, Chicago, IL 60649
+  tract_geoid: null
+  coverage:
+    type: medicaid
+    plan: HealthChoice Illinois (fictional Lakeshore Community Health Plan)
+    transport_benefit: 'yes'
+  pcp: Dr. V. Ramaswamy (fictional)
+  problems:
+  - ref: prob:1
+    code: F33.1
+    system: ICD-10-CM
+    display: Major depressive disorder, recurrent, moderate
+  - ref: prob:2
+    code: G47.00
+    system: ICD-10-CM
+    display: Insomnia, unspecified
+  meds:
+  - ref: med:1
+    name: sertraline
+    dose: 50 mg
+    frequency: daily
+    cost_tier: 1
+    monthly_copay_usd: 0.0
+    refill_gap_days: 0
+  appointments:
+  - ref: appt:1
+    date: '2026-10-07'
+    dept: primary_care
+    time: '17:00'
+    location: Clinic
+    status: kept
+  - ref: appt:2
+    date: '2026-10-14'
+    dept: behavioral_health
+    time: '14:00'
+    location: Hospital behavioral health clinic (intake)
+    status: kept
+  - ref: appt:3
+    date: '2026-10-21'
+    dept: behavioral_health
+    time: '14:00'
+    location: Hospital behavioral health clinic
+    status: no_show
+  - ref: appt:4
+    date: '2026-10-28'
+    dept: primary_care
+    time: '17:00'
+    location: Clinic
+    status: kept
+  screener:
+    date: '2026-10-07'
+    answers:
+      living_situation: steady_place
+      housing_problems: none
+      food_worry: sometimes_true
+      food_ran_out: never_true
+      transportation: 'no'
+      utilities_shutoff: 'no'
+  notes:
+  - ref: note:1
+    date: '2026-10-14'
+    role: behavioral_health_intake
+    topics:
+    - digital_access
+    text: Prepaid phone with a small data plan that runs out mid-month; no home internet. Patient asks for reminders by text
+      or phone call, not the portal. Has not used video visits.
+visit:
+  visit_id: V-T007
+  date: '2026-10-28'
+  setting: primary care follow-up, early evening
+  transcript:
+  - ref: turn:T01
+    speaker: doctor
+    text: Your PHQ-9 is down from nineteen to fourteen. How's the sertraline treating you?
+  - ref: turn:T02
+    speaker: patient
+    text: Some. I'm sleeping a little better. Still dragging through the day.
+  - ref: turn:T03
+    speaker: doctor
+    text: I'd like to go up to a hundred and keep you in weekly therapy. You missed last Tuesday's session.
+  - ref: turn:T04
+    speaker: patient
+    text: My schedule changed. I work at the Target on 87th and they post the shifts every Sunday. Some weeks I'm on Tuesday
+      afternoon, some weeks I'm not. I can't promise the same day every week.
+    topics:
+    - work_schedule
+  - ref: turn:T05
+    speaker: doctor
+    text: Would a fixed evening slot be easier?
+  - ref: turn:T06
+    speaker: patient
+    text: Evenings move too. The only time they never schedule me is before ten in the morning.
+    topics:
+    - work_schedule
+  - ref: turn:T07
+    speaker: doctor
+    text: Who has your daughter when you're working?
+  - ref: turn:T08
+    speaker: patient
+    text: My mother. She's retired, she's got her.
+    topics:
+    - caregiving
+  - ref: turn:T09
+    speaker: doctor
+    text: The care manager can also check in with you between sessions.
+  - ref: turn:T10
+    speaker: patient
+    text: Okay.
+  - ref: turn:T11
+    speaker: doctor
+    text: How do you get to the clinic?
+  - ref: turn:T12
+    speaker: patient
+    text: The 6 goes straight there. Or my mother drives me.
+  - ref: turn:T13
+    speaker: doctor
+    text: Are you getting outside and moving at all?
+  - ref: turn:T14
+    speaker: patient
+    text: Not really. I walk to the bus, that's about it.
+draft_plan:
+- item_id: P1
+  type: medication
+  text: Increase sertraline to 100 mg daily
+- item_id: P2
+  type: appointment
+  text: Weekly cognitive behavioral therapy at the hospital behavioral health clinic, Tuesdays 2:00 PM for 12 weeks
+  schedule: Tue 14:00 x12
+- item_id: P3
+  type: monitoring
+  text: Care manager video check-in every 2 weeks between therapy sessions
+  schedule: q2w
+- item_id: P4
+  type: activity
+  text: Walk 20 minutes daily, outdoors when possible
+- item_id: P5
+  type: appointment
+  text: PHQ-9 at each visit; primary care follow-up in 6 weeks
+  schedule: once, ~2026-12-09
+planted_conflicts:
+- conflict_id: C1
+  item_id: P2
+  barrier: work_schedule
+  expected_status: at_risk
+  evidence:
+  - source: transcript
+    ref: turn:T04
+  - source: transcript
+    ref: turn:T06
+  - source: record
+    ref: appt:3
+  acceptable_alternative_categories:
+  - flexible_scheduling
+  - schedule_change
+  - phone_followup
+  note: A fixed Tuesday 2 PM slot cannot survive shifts posted weekly; a before-10 AM slot or week-to-week booking fixes it.
+    Video therapy is not a fix given note:1, so telehealth is not listed.
+- conflict_id: C2
+  item_id: P3
+  barrier: digital_access
+  expected_status: at_risk
+  evidence:
+  - source: record
+    ref: note:1
+  acceptable_alternative_categories:
+  - phone_followup
+  - other
+  note: 'Record-only: the patient agreed to ''check-ins'' without the word video being discussed; the intake note says limited
+    data and no internet.'
+decoys:
+- barrier: caregiving
+  ref: turn:T08
+  why_irrelevant: Her retired mother covers childcare during shifts; no plan item is blocked by caregiving.
+- barrier: transport
+  ref: turn:T12
+  why_irrelevant: 'The tract fires transport, but the #6 bus goes directly to the clinic, her mother drives, and Medicaid
+    NEMT exists; the therapy problem is scheduling.'
+expected_ok_items:
+- P1
+- P4
+- P5

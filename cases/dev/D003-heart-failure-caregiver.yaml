@@ -1,0 +1,202 @@
+case_id: D003
+split: dev
+title: Heart failure patient who is the full-time caregiver for her husband
+author: claude-draft
+reviewed_by: Lynna Yang (dispute review, 2026-11-10)
+written_at: '2026-10-25'
+frozen_sha256: null
+patient:
+  patient_id: P-D003
+  name: Doreen Whitfield
+  dob: '1959-01-23'
+  sex: F
+  language: en
+  mrn: MRN-WLYHSRAJYL
+  address: 7900 S Cottage Grove Ave, Chicago, IL 60619
+  tract_geoid: null
+  coverage:
+    type: medicare
+    plan: Original Medicare + Part D
+    transport_benefit: 'no'
+  pcp: Dr. S. Okoye (fictional)
+  problems:
+  - ref: prob:1
+    code: I50.22
+    system: ICD-10-CM
+    display: Chronic systolic heart failure
+  - ref: prob:2
+    code: I10
+    system: ICD-10-CM
+    display: Essential hypertension
+  meds:
+  - ref: med:1
+    name: sacubitril-valsartan
+    dose: 49/51 mg
+    frequency: twice daily
+    cost_tier: 3
+    monthly_copay_usd: 12.0
+    refill_gap_days: 0
+  - ref: med:2
+    name: furosemide
+    dose: 40 mg
+    frequency: daily
+    cost_tier: 1
+    monthly_copay_usd: 1.2
+    refill_gap_days: 0
+  - ref: med:3
+    name: carvedilol
+    dose: 12.5 mg
+    frequency: twice daily
+    cost_tier: 1
+    monthly_copay_usd: 1.5
+    refill_gap_days: 0
+  appointments:
+  - ref: appt:1
+    date: '2026-10-01'
+    dept: inpatient
+    location: Hospital
+    status: kept
+  - ref: appt:2
+    date: '2026-10-16'
+    dept: cardiology
+    time: '11:00'
+    location: Hospital cardiology clinic
+    status: kept
+  screener:
+    date: '2026-10-01'
+    answers:
+      living_situation: steady_place
+      housing_problems: none
+      food_worry: never_true
+      food_ran_out: never_true
+      transportation: 'no'
+      utilities_shutoff: 'no'
+  notes:
+  - ref: note:1
+    date: '2026-10-03'
+    role: social_work
+    topics:
+    - caregiving
+    text: 'Discharge note: patient is the primary caregiver for husband with moderate dementia. No other family in Chicago.
+      Neighbor checks in occasionally.'
+visit:
+  visit_id: V-D003
+  date: '2026-10-16'
+  setting: post-discharge cardiology visit
+  transcript:
+  - ref: turn:T01
+    speaker: doctor
+    text: You were in the hospital for fluid two weeks ago. How have you been since?
+  - ref: turn:T02
+    speaker: patient
+    text: Tired. I'm doing everything for Harold now. He can't be left alone, he wanders.
+    topics:
+    - caregiving
+  - ref: turn:T03
+    speaker: doctor
+    text: Who's with him right now?
+  - ref: turn:T04
+    speaker: patient
+    text: My neighbor, for two hours. I owe her a lot already.
+    topics:
+    - caregiving
+  - ref: turn:T05
+    speaker: doctor
+    text: How did you get here today?
+  - ref: turn:T06
+    speaker: patient
+    text: A cab. Harold always did the driving. I never got my license.
+    topics:
+    - transport
+    - other_cost
+  - ref: turn:T07
+    speaker: doctor
+    text: Do you have a scale at home?
+  - ref: turn:T08
+    speaker: patient
+    text: I do. I can weigh myself every morning, that's no problem.
+  - ref: turn:T09
+    speaker: doctor
+    text: Is the internet at home working if we need to do a video visit?
+  - ref: turn:T10
+    speaker: patient
+    text: We don't have internet. Just the house phone.
+    topics:
+    - digital_access
+draft_plan:
+- item_id: P1
+  type: referral
+  text: Cardiac rehabilitation at the hospital, Mon/Wed/Fri 9:00 AM for 12 weeks
+  schedule: MWF 09:00 x12 weeks
+- item_id: P2
+  type: monitoring
+  text: Daily morning weights; call if up more than 3 lb in a day or 5 lb in a week
+- item_id: P3
+  type: diet
+  text: 2 g sodium diet; emphasize fresh vegetables and unprocessed foods
+- item_id: P4
+  type: appointment
+  text: Cardiology follow-up in 2 weeks
+  schedule: once, ~2026-10-30
+planted_conflicts:
+- conflict_id: C1
+  item_id: P1
+  barrier: caregiving
+  expected_status: blocked
+  evidence:
+  - source: transcript
+    ref: turn:T02
+  - source: transcript
+    ref: turn:T04
+  - source: record
+    ref: note:1
+  acceptable_alternative_categories:
+  - caregiver_support
+  - other
+  - telehealth
+  note: '''other'' covers home-based / virtual cardiac rehab. Lynna: is home-based rehab realistic to suggest here?'
+- conflict_id: C2
+  item_id: P1
+  barrier: transport
+  expected_status: at_risk
+  evidence:
+  - source: transcript
+    ref: turn:T06
+  acceptable_alternative_categories:
+  - coordinate_with_existing_visit
+  - paratransit
+  - other
+  note: 'Medicare only: suggesting Medicaid NEMT is wrong here and should not count as a hit.'
+- conflict_id: C3
+  item_id: P4
+  barrier: caregiving
+  expected_status: at_risk
+  evidence:
+  - source: transcript
+    ref: turn:T04
+  - source: record
+    ref: note:1
+  acceptable_alternative_categories:
+  - caregiver_support
+  - phone_followup
+- conflict_id: C4
+  item_id: P3
+  barrier: food_access
+  expected_status: at_risk
+  evidence:
+  - source: tract
+    ref: tract:places_foodinsecu
+  - source: tract
+    ref: tract:lila_half_10
+  acceptable_alternative_categories:
+  - food_pantry
+  - medically_tailored_meals
+  - other
+  note: 'Tract-only conflict: nothing in the visit mentions food. Only valid if the pipeline confirms the tract is low-access;
+    otherwise delete this conflict.'
+decoys:
+- barrier: digital_access
+  ref: turn:T10
+  why_irrelevant: No internet, but no plan item needs it (the follow-up is in person).
+expected_ok_items:
+- P2

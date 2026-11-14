@@ -1,0 +1,458 @@
+{
+ "meta": {
+  "case_id": "D001",
+  "title": "Hemodialysis patient missing sessions after selling his car",
+  "made_up_patient": true,
+  "source": "recorded",
+  "saved": "2026-11-11T16:29:08Z",
+  "model": "super-vllm-raw",
+  "seconds": 91.1
+ },
+ "patient": {
+  "name": "Raymond Ellis",
+  "age": 58,
+  "sex": "M",
+  "coverage": "Lakeshore Community Health Plan (fictional Medicaid MCO)",
+  "problems": [
+   "End stage renal disease",
+   "Dependence on renal dialysis",
+   "Type 2 diabetes with diabetic chronic kidney disease",
+   "Hypertensive CKD with stage 5 CKD or ESRD"
+  ]
+ },
+ "visit": {
+  "date": "2026-10-21",
+  "setting": "nephrology clinic follow-up",
+  "turns": [
+   {
+    "ref": "turn:T01",
+    "speaker": "doctor",
+    "text": "The dialysis unit tells me you've missed three sessions this month. What's been going on?"
+   },
+   {
+    "ref": "turn:T02",
+    "speaker": "patient",
+    "text": "I don't drive anymore. I sold the car in August, couldn't keep up with the insurance."
+   },
+   {
+    "ref": "turn:T03",
+    "speaker": "doctor",
+    "text": "How have you been getting to the unit?"
+   },
+   {
+    "ref": "turn:T04",
+    "speaker": "patient",
+    "text": "Two buses, all the way down to Park Manor. That was the only chair they had, three o'clock. I'm out the door by one-thirty, and after four hours on the machine it's two more buses home. I don't get in till eight-thirty. Some days I just don't go."
+   },
+   {
+    "ref": "turn:T05",
+    "speaker": "doctor",
+    "text": "Is there anyone who can drive you?"
+   },
+   {
+    "ref": "turn:T06",
+    "speaker": "patient",
+    "text": "My daughter's in Indiana. My neighbor helped a couple times but he works days."
+   },
+   {
+    "ref": "turn:T07",
+    "speaker": "doctor",
+    "text": "Let's talk about food. How are you eating on dialysis days?"
+   },
+   {
+    "ref": "turn:T08",
+    "speaker": "patient",
+    "text": "Mostly whatever the corner store has. Chips, lunch meat. The real grocery is a bus ride away and I'm wiped out after treatment."
+   },
+   {
+    "ref": "turn:T09",
+    "speaker": "doctor",
+    "text": "And the phosphate binder, the sevelamer?"
+   },
+   {
+    "ref": "turn:T10",
+    "speaker": "patient",
+    "text": "I take it when I eat. If I skip lunch I skip the pill too."
+   },
+   {
+    "ref": "turn:T11",
+    "speaker": "doctor",
+    "text": "Any trouble paying for your medicines?"
+   },
+   {
+    "ref": "turn:T12",
+    "speaker": "patient",
+    "text": "No, the copays are a few dollars. That part's fine."
+   },
+   {
+    "ref": "turn:T13",
+    "speaker": "doctor",
+    "text": "I'd also like the surgeons to look at your fistula in two weeks."
+   },
+   {
+    "ref": "turn:T14",
+    "speaker": "patient",
+    "text": "Another trip downtown? I'll try."
+   }
+  ]
+ },
+ "plan": [
+  {
+   "item_id": "P1",
+   "type": "appointment",
+   "text": "Continue in-center hemodialysis Monday/Wednesday/Friday at 3:00 PM at DaVita Park Manor Dialysis"
+  },
+  {
+   "item_id": "P2",
+   "type": "diet",
+   "text": "Renal diet: low potassium and low phosphorus, fluid limit 1 L/day, more fresh produce from the low-potassium list"
+  },
+  {
+   "item_id": "P3",
+   "type": "medication",
+   "text": "Sevelamer 800 mg three times daily with meals"
+  },
+  {
+   "item_id": "P4",
+   "type": "referral",
+   "text": "Vascular surgery clinic visit in 2 weeks for fistula check"
+  },
+  {
+   "item_id": "P5",
+   "type": "monitoring",
+   "text": "Daily weight and blood pressure log on paper; bring to each session"
+  }
+ ],
+ "steps": [
+  {
+   "t": 9.24,
+   "kind": "chart",
+   "label": "Read the chart"
+  },
+  {
+   "t": 16.34,
+   "kind": "neighborhood",
+   "label": "Looked up the neighborhood"
+  },
+  {
+   "t": 23.52,
+   "kind": "transit",
+   "label": "Checked the bus trip to the appointment"
+  },
+  {
+   "t": 36.08,
+   "kind": "visit",
+   "label": "Read the visit"
+  },
+  {
+   "t": 36.08,
+   "kind": "crossing",
+   "label": "Asked the public box for transport help near home",
+   "crossed": {
+    "tract_id": "17031260300",
+    "need": "transport",
+    "days": [
+     "Mon",
+     "Wed",
+     "Fri"
+    ]
+   },
+   "results": 0
+  },
+  {
+   "t": 36.09,
+   "kind": "crossing",
+   "label": "Asked the public box for food help near home",
+   "crossed": {
+    "tract_id": "17031260300",
+    "need": "food",
+    "days": [
+     "Mon",
+     "Tue",
+     "Wed",
+     "Thu",
+     "Fri",
+     "Sat",
+     "Sun"
+    ]
+   },
+   "results": 5
+  }
+ ],
+ "items": [
+  {
+   "item_id": "P1",
+   "plan_text": "Continue in-center hemodialysis Monday/Wednesday/Friday at 3:00 PM at DaVita Park Manor Dialysis",
+   "t": 71.45,
+   "status": "at_risk",
+   "status_label": "At risk",
+   "barriers": [
+    {
+     "barrier": "transport",
+     "label": "transport",
+     "reason": "Patient takes 2 buses each way to dialysis, 4+ hour round trip, gets home at 8:30 PM, sometimes skips treatment",
+     "evidence": [
+      {
+       "ref": "turn:T04",
+       "source": "Visit",
+       "text": "Patient: “Two buses, all the way down to Park Manor. That was the only chair they had, three o'clock. I'm out the door by one-thirty, and after four hours on the machine it's two more buses home. I don't get in till eight-thirty. Some days I just don't go.”",
+       "said_in_visit": true
+      },
+      {
+       "ref": "turn:T02",
+       "source": "Visit",
+       "text": "Patient: “I don't drive anymore. I sold the car in August, couldn't keep up with the insurance.”",
+       "said_in_visit": true
+      },
+      {
+       "ref": "screener:transportation",
+       "source": "Screener",
+       "text": "transportation: no",
+       "said_in_visit": false
+      },
+      {
+       "ref": "appt:2",
+       "source": "Appointments",
+       "text": "2026-09-30 15:00 dialysis: no show",
+       "said_in_visit": false
+      },
+      {
+       "ref": "appt:3",
+       "source": "Appointments",
+       "text": "2026-10-05 15:00 dialysis: no show",
+       "said_in_visit": false
+      },
+      {
+       "ref": "appt:5",
+       "source": "Appointments",
+       "text": "2026-10-12 15:00 dialysis: no show",
+       "said_in_visit": false
+      }
+     ]
+    },
+    {
+     "barrier": "caregiving",
+     "label": "caregiving",
+     "reason": "No reliable support network - daughter in Indiana, neighbor works limited hours",
+     "evidence": [
+      {
+       "ref": "turn:T06",
+       "source": "Visit",
+       "text": "Patient: “My daughter's in Indiana. My neighbor helped a couple times but he works days.”",
+       "said_in_visit": true
+      }
+     ]
+    }
+   ],
+   "alternatives": [
+    {
+     "category": "medicaid_nemt",
+     "label": "medicaid nemt",
+     "text": "Medicaid covers non-emergency medical transport; call Lakeshore Community Health Plan number on plan card to schedule rides",
+     "resource": null
+    },
+    {
+     "category": "schedule_change",
+     "label": "schedule change",
+     "text": "Ask dialysis unit for earlier chair time to reduce travel burden and exhaustion",
+     "resource": null
+    },
+    {
+     "category": "dialysis_social_worker",
+     "label": "dialysis social worker",
+     "text": "Message DaVita Park Manor dialysis unit social worker for transport assistance and benefits coordination",
+     "resource": null
+    }
+   ]
+  },
+  {
+   "item_id": "P2",
+   "plan_text": "Renal diet: low potassium and low phosphorus, fluid limit 1 L/day, more fresh produce from the low-potassium list",
+   "t": 79.35,
+   "status": "at_risk",
+   "status_label": "At risk",
+   "barriers": [
+    {
+     "barrier": "food_access",
+     "label": "food access",
+     "reason": "Patient relies on corner store chips/lunch meat; real grocery requires bus ride when exhausted after treatment",
+     "evidence": [
+      {
+       "ref": "turn:T08",
+       "source": "Visit",
+       "text": "Patient: “Mostly whatever the corner store has. Chips, lunch meat. The real grocery is a bus ride away and I'm wiped out after treatment.”",
+       "said_in_visit": true
+      },
+      {
+       "ref": "screener:food_worry",
+       "source": "Screener",
+       "text": "food worry: sometimes_true",
+       "said_in_visit": false
+      },
+      {
+       "ref": "tract:places_foodinsecu",
+       "source": "Neighborhood",
+       "text": "adults with food insecurity (%): 47.7 (above the Cook County 75th percentile)",
+       "said_in_visit": false
+      }
+     ]
+    }
+   ],
+   "alternatives": [
+    {
+     "category": "food_pantry",
+     "label": "food pantry",
+     "text": "Manna Food Pantry open Mondays 1:00-3:00 PM at 1230 S Millard Ave (1.56 miles away)",
+     "resource": {
+      "name": "Manna Food Pantry",
+      "address": "1230 S Millard Ave, Chicago, IL 60623",
+      "hours": "Mon 13:00-15:00",
+      "phone": "773-522-1138",
+      "miles_from_home": 1.6
+     }
+    },
+    {
+     "category": "renal_dietitian",
+     "label": "renal dietitian",
+     "text": "Ask DaVita Park Manor dietitian to adapt renal diet around accessible corner store foods",
+     "resource": null
+    },
+    {
+     "category": "food_pantry",
+     "label": "food pantry",
+     "text": "Greater Garfield MB Church pantry Fridays 10:00 AM-12:00 PM at 3757 W Douglas Blvd (1.71 miles away)",
+     "resource": {
+      "name": "Greater Garfield MB Church",
+      "address": "3757 W Douglas Blvd, Chicago, IL 60623",
+      "hours": "Fri 10:00-12:00",
+      "phone": "773-277-1700",
+      "miles_from_home": 1.7
+     }
+    }
+   ]
+  },
+  {
+   "item_id": "P3",
+   "plan_text": "Sevelamer 800 mg three times daily with meals",
+   "t": 84.53,
+   "status": "at_risk",
+   "status_label": "At risk",
+   "barriers": [
+    {
+     "barrier": "food_access",
+     "label": "food access",
+     "reason": "Sevelamer must be taken with meals but patient skips lunch and skips medication when not eating",
+     "evidence": [
+      {
+       "ref": "turn:T10",
+       "source": "Visit",
+       "text": "Patient: “I take it when I eat. If I skip lunch I skip the pill too.”",
+       "said_in_visit": true
+      },
+      {
+       "ref": "turn:T08",
+       "source": "Visit",
+       "text": "Patient: “Mostly whatever the corner store has. Chips, lunch meat. The real grocery is a bus ride away and I'm wiped out after treatment.”",
+       "said_in_visit": true
+      }
+     ]
+    }
+   ],
+   "alternatives": [
+    {
+     "category": "renal_dietitian",
+     "label": "renal dietitian",
+     "text": "Ask dialysis dietitian to help plan meals/sevelamer timing around accessible foods",
+     "resource": null
+    },
+    {
+     "category": "med_cost_help",
+     "label": "med cost help",
+     "text": "Check if sevelamer has manufacturer assistance or formulary alternatives through pharmacy",
+     "resource": null
+    }
+   ]
+  },
+  {
+   "item_id": "P4",
+   "plan_text": "Vascular surgery clinic visit in 2 weeks for fistula check",
+   "t": 90.25,
+   "status": "at_risk",
+   "status_label": "At risk",
+   "barriers": [
+    {
+     "barrier": "transport",
+     "label": "transport",
+     "reason": "Patient expresses reluctance about 'another trip downtown' for vascular surgery given current dialysis burden",
+     "evidence": [
+      {
+       "ref": "turn:T14",
+       "source": "Visit",
+       "text": "Patient: “Another trip downtown? I'll try.”",
+       "said_in_visit": true
+      },
+      {
+       "ref": "turn:T04",
+       "source": "Visit",
+       "text": "Patient: “Two buses, all the way down to Park Manor. That was the only chair they had, three o'clock. I'm out the door by one-thirty, and after four hours on the machine it's two more buses home. I don't get in till eight-thirty. Some days I just don't go.”",
+       "said_in_visit": true
+      }
+     ]
+    }
+   ],
+   "alternatives": [
+    {
+     "category": "coordinate_with_existing_visit",
+     "label": "coordinate with existing visit",
+     "text": "Schedule vascular surgery visit on same dialysis day to minimize extra trips",
+     "resource": null
+    },
+    {
+     "category": "medicaid_nemt",
+     "label": "medicaid nemt",
+     "text": "Use Medicaid non-emergency transport for vascular surgery appointment",
+     "resource": null
+    },
+    {
+     "category": "schedule_change",
+     "label": "schedule change",
+     "text": "Ask vascular surgery clinic for afternoon appointment to match dialysis transport routine",
+     "resource": null
+    }
+   ]
+  },
+  {
+   "item_id": "P5",
+   "plan_text": "Daily weight and blood pressure log on paper; bring to each session",
+   "t": 90.96,
+   "status": "likely_ok",
+   "status_label": "Likely OK",
+   "barriers": [],
+   "alternatives": []
+  }
+ ],
+ "crossings": [
+  {
+   "tract_id": "17031260300",
+   "need": "transport",
+   "days": [
+    "Mon",
+    "Wed",
+    "Fri"
+   ]
+  },
+  {
+   "tract_id": "17031260300",
+   "need": "food",
+   "days": [
+    "Mon",
+    "Tue",
+    "Wed",
+    "Thu",
+    "Fri",
+    "Sat",
+    "Sun"
+   ]
+  }
+ ]
+}

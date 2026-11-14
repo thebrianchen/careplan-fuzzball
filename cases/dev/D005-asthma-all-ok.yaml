@@ -1,0 +1,68 @@
+# DRAFT dev case by Claude 2026-10-25 for Lynna to review. All details synthetic.
+# ALL-OK case: nothing in the plan should be flagged. Decoys test over-flagging.
+case_id: D005
+split: dev
+title: Well-resourced asthma follow-up with a no-conflict plan
+author: claude-draft
+reviewed_by: null
+written_at: "2026-10-25"
+frozen_sha256: null
+
+patient:
+  patient_id: P-D005
+  name: Priya Raman
+  dob: "1992-05-30"
+  sex: F
+  language: en
+  mrn: MRN-ERFY5JVUOV
+  address: "1600 N Milwaukee Ave, Chicago, IL 60647"
+  tract_geoid: null
+  coverage:
+    type: commercial
+    plan: Employer HMO (fictional)
+    transport_benefit: "no"
+  pcp: Dr. J. Hale (fictional)
+  problems:
+    - {ref: prob:1, code: J45.30, system: ICD-10-CM, display: "Mild persistent asthma, uncomplicated"}
+  meds:
+    - {ref: med:1, name: budesonide-formoterol inhaler, dose: 160/4.5 mcg, frequency: 2 puffs twice daily, cost_tier: 2, monthly_copay_usd: 25.00, refill_gap_days: 0}
+  appointments:
+    - {ref: appt:1, date: "2026-07-14", dept: primary_care, time: "08:30", location: Clinic, status: kept}
+    - {ref: appt:2, date: "2026-10-22", dept: primary_care, time: "08:30", location: Clinic, status: kept}
+  screener:
+    date: "2026-10-22"
+    answers:
+      living_situation: steady_place
+      housing_problems: none
+      food_worry: never_true
+      food_ran_out: never_true
+      transportation: "no"
+      utilities_shutoff: "no"
+  notes: []
+
+visit:
+  visit_id: V-D005
+  date: "2026-10-22"
+  setting: primary care follow-up
+  transcript:
+    - {ref: turn:T01, speaker: doctor, text: "How's the breathing been on the new inhaler?"}
+    - {ref: turn:T02, speaker: patient, text: "Much better. I only woke up once last month."}
+    - {ref: turn:T03, speaker: doctor, text: "Any trouble getting refills or paying for it?"}
+    - {ref: turn:T04, speaker: patient, text: "No, it's fine with my insurance. Money's tight with student loans, but the inhaler isn't the problem.", topics: [other_cost]}
+    - {ref: turn:T05, speaker: doctor, text: "Getting here okay?"}
+    - {ref: turn:T06, speaker: patient, text: "I bike or take the Blue Line, it's two stops."}
+    - {ref: turn:T07, speaker: doctor, text: "Let's check your inhaler technique and do a flu shot today."}
+
+draft_plan:
+  - {item_id: P1, type: medication, text: "Continue budesonide-formoterol 2 puffs twice daily; review inhaler technique today"}
+  - {item_id: P2, type: education, text: "Written asthma action plan"}
+  - {item_id: P3, type: appointment, text: "Follow-up in 3 months, morning slot", schedule: "once, ~2027-01"}
+  - {item_id: P4, type: activity, text: "Flu vaccine today"}
+
+planted_conflicts: []
+
+decoys:
+  - {barrier: other_cost, ref: turn:T04, why_irrelevant: "Student loans are a stressor but she says the inhaler cost is fine; flagging cost for P1 is a false flag."}
+  - {barrier: transport, ref: turn:T06, why_irrelevant: "She bikes or takes the train two stops; no transport barrier."}
+
+expected_ok_items: [P1, P2, P3, P4]

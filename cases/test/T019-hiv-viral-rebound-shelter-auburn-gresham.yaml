@@ -1,0 +1,210 @@
+case_id: T019
+split: test
+title: HIV viral rebound after a two-week gap; 90-day supply to a home address he does not have
+author: claude-draft
+reviewed_by: Lynna Yang (dispute review, 2026-11-10)
+written_at: '2026-10-31'
+frozen_sha256: null
+patient:
+  patient_id: P-T019
+  name: Darius Whitlock
+  dob: '1995-04-02'
+  sex: M
+  language: en
+  mrn: MRN-FK2OMV6LGR
+  address: 7900 S Halsted St, Chicago, IL 60620
+  tract_geoid: null
+  coverage:
+    type: medicaid
+    plan: HealthChoice Illinois (fictional Lakeshore Community Health Plan)
+    transport_benefit: 'yes'
+  pcp: Dr. L. Abernathy, infectious disease (fictional)
+  problems:
+  - ref: prob:1
+    code: B20
+    system: ICD-10-CM
+    display: Human immunodeficiency virus (HIV) disease
+  - ref: prob:2
+    code: R63.4
+    system: ICD-10-CM
+    display: Abnormal weight loss
+  meds:
+  - ref: med:1
+    name: bictegravir-emtricitabine-tenofovir alafenamide
+    dose: 50/200/25 mg
+    frequency: daily
+    cost_tier: 2
+    monthly_copay_usd: 0.0
+    refill_gap_days: 12
+  appointments:
+  - ref: appt:1
+    date: '2026-07-15'
+    dept: infectious_disease
+    time: '13:00'
+    location: Hospital ID clinic
+    status: kept
+  - ref: appt:2
+    date: '2026-10-01'
+    dept: infectious_disease
+    time: '13:00'
+    location: Hospital ID clinic
+    status: no_show
+  - ref: appt:3
+    date: '2026-10-27'
+    dept: infectious_disease
+    time: '13:00'
+    location: Hospital ID clinic
+    status: kept
+  screener:
+    date: '2026-10-27'
+    answers:
+      living_situation: no_steady_place
+      housing_problems: none
+      food_worry: often_true
+      food_ran_out: often_true
+      transportation: 'no'
+      utilities_shutoff: 'no'
+  notes:
+  - ref: note:1
+    date: '2026-10-27'
+    role: community_health_worker
+    topics:
+    - housing
+    text: 'Pre-visit: lost his room at a friend''s place in September; rotating between an Englewood shelter and a cousin''s
+      couch. Says his pill bottle was taken twice at the shelter; went about 12 days without ART in October. Carries everything
+      in a backpack; no mailing address. HOPWA housing referral placed today.'
+  - ref: note:2
+    date: '2026-10-27'
+    role: community_health_worker
+    topics:
+    - food_access
+    text: Eats at the shelter when he is there; otherwise about one meal a day. SNAP is active but the EBT card was lost with
+      the pills; replacement card requested.
+visit:
+  visit_id: V-T019
+  date: '2026-10-27'
+  setting: infectious disease clinic, unscheduled follow-up for viral rebound
+  transcript:
+  - ref: turn:T01
+    speaker: doctor
+    text: Your viral load came back at 2,400. In July it was undetectable. What changed?
+  - ref: turn:T02
+    speaker: patient
+    text: I missed some days. Couple of weeks, maybe.
+  - ref: turn:T03
+    speaker: doctor
+    text: What happened?
+  - ref: turn:T04
+    speaker: patient
+    text: Stuff got lost. I'm back on it now, I've got the bottle on me.
+  - ref: turn:T05
+    speaker: doctor
+    text: I need you taking it every day at the same time, and I'll recheck the viral load in four weeks. Can you make the
+      lab?
+  - ref: turn:T06
+    speaker: patient
+    text: Yeah. The Halsted bus goes straight up.
+  - ref: turn:T07
+    speaker: doctor
+    text: How's your appetite? You're down nine pounds since July.
+  - ref: turn:T08
+    speaker: patient
+    text: I eat when I can.
+  - ref: turn:T09
+    speaker: doctor
+    text: Mood, drinking, anything else going on?
+  - ref: turn:T10
+    speaker: patient
+    text: No. I'm all right.
+  - ref: turn:T11
+    speaker: doctor
+    text: The case manager will set up reminders through the portal for the pills and the lab date.
+  - ref: turn:T12
+    speaker: patient
+    text: My phone's cracked but it works. I've got the app.
+  - ref: turn:T13
+    speaker: doctor
+    text: Good. I'll also send a ninety-day supply so you're not back at the pharmacy every month.
+  - ref: turn:T14
+    speaker: patient
+    text: Okay.
+draft_plan:
+- item_id: P1
+  type: medication
+  text: Continue bictegravir-emtricitabine-tenofovir alafenamide daily; 90-day supply shipped to home address
+- item_id: P2
+  type: monitoring
+  text: HIV viral load in 4 weeks at the hospital lab
+  schedule: once, ~2026-11-24
+- item_id: P3
+  type: monitoring
+  text: Case manager adherence reminders by portal message for pills and lab date
+- item_id: P4
+  type: diet
+  text: High-calorie, high-protein diet to regain weight; oral nutrition supplement twice daily
+- item_id: P5
+  type: appointment
+  text: Infectious disease follow-up in 3 months
+  schedule: once, ~2027-01
+planted_conflicts:
+- conflict_id: C1
+  item_id: P1
+  barrier: housing
+  expected_status: at_risk
+  evidence:
+  - source: record
+    ref: note:1
+  - source: record
+    ref: screener:living_situation
+  - source: record
+    ref: med:1
+  acceptable_alternative_categories:
+  - housing_assistance
+  - community_health_worker
+  - other
+  note: 'Record-only: no home address to ship to and a shelter where pills were stolen twice. ''other'' = 30-day fills picked
+    up at the clinic pharmacy, a lockbox, or clinic-held supply. Lynna: blocked (no address) or at_risk?'
+- conflict_id: C2
+  item_id: P4
+  barrier: food_access
+  expected_status: at_risk
+  evidence:
+  - source: record
+    ref: note:2
+  - source: record
+    ref: screener:food_ran_out
+  - source: record
+    ref: screener:food_worry
+  - source: tract
+    ref: tract:places_foodinsecu
+  - source: tract
+    ref: tract:lila_half_10
+  acceptable_alternative_categories:
+  - food_pantry
+  - snap
+  - medically_tailored_meals
+  - other
+  needs_tract_check: false
+  note: 'Record + tract only: T08 is untagged on purpose. EBT replacement, pantry, and medically tailored meals through the
+    Ryan White program. Tract confirmed with pipeline.lookup on 2026-10-31.'
+- conflict_id: C3
+  item_id: P4
+  barrier: other_cost
+  expected_status: at_risk
+  evidence:
+  - source: record
+    ref: screener:food_ran_out
+  - source: record
+    ref: screener:food_worry
+  acceptable_alternative_categories:
+  - community_health_worker
+  note: 'Added from Lynna''s dispute review: the system raised it, the key had missed it.'
+decoys:
+- barrier: transport
+  ref: turn:T06
+  why_irrelevant: Tract fires transport (0.434 / 18.6) but the Halsted bus goes directly to the hospital and Medicaid NEMT
+    exists; he kept today's visit and says the lab is reachable.
+expected_ok_items:
+- P2
+- P3
+- P5

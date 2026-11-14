@@ -1,0 +1,135 @@
+case_id: T017
+split: test
+title: Well-controlled mild persistent asthma in a seven-year-old; fall check and school plan refresh
+author: claude-draft
+reviewed_by: Lynna Yang (dispute review, 2026-11-10)
+written_at: '2026-10-31'
+frozen_sha256: null
+patient:
+  patient_id: P-T017
+  name: Nora Fitzgerald
+  dob: '2018-11-14'
+  sex: F
+  language: en
+  mrn: MRN-QZX4KKV54W
+  address: 2407 W 111th St, Chicago, IL 60655
+  tract_geoid: null
+  coverage:
+    type: commercial
+    plan: Father's employer PPO (fictional)
+    transport_benefit: 'no'
+  pcp: Dr. K. O'Rourke, pediatrics (fictional)
+  problems:
+  - ref: prob:1
+    code: J45.30
+    system: ICD-10-CM
+    display: Mild persistent asthma, uncomplicated
+  meds:
+  - ref: med:1
+    name: fluticasone HFA inhaler with spacer
+    dose: 44 mcg 2 puffs
+    frequency: twice daily
+    cost_tier: 2
+    monthly_copay_usd: 15.0
+    refill_gap_days: 0
+  - ref: med:2
+    name: albuterol HFA inhaler with spacer
+    dose: 90 mcg 2 puffs
+    frequency: every 4 hours as needed
+    cost_tier: 1
+    monthly_copay_usd: 10.0
+    refill_gap_days: 0
+  appointments:
+  - ref: appt:1
+    date: '2026-07-20'
+    dept: pediatrics
+    time: '16:00'
+    location: Pediatric clinic
+    status: kept
+  - ref: appt:2
+    date: '2026-10-27'
+    dept: pediatrics
+    time: '16:00'
+    location: Pediatric clinic
+    status: kept
+  screener:
+    date: '2026-10-27'
+    answers:
+      living_situation: steady_place
+      housing_problems: none
+      food_worry: never_true
+      food_ran_out: never_true
+      transportation: 'no'
+      utilities_shutoff: 'no'
+  notes:
+  - ref: note:1
+    date: '2026-07-20'
+    role: nursing
+    text: Mother is the school nurse at the patient's elementary school; father works from home two days a week. No smokers
+      in the home; one dog.
+visit:
+  visit_id: V-T017
+  date: '2026-10-27'
+  setting: pediatric clinic, asthma follow-up; father answers for the patient
+  transcript:
+  - ref: turn:T01
+    speaker: doctor
+    text: How has Nora's breathing been this fall?
+  - ref: turn:T02
+    speaker: caregiver
+    text: Good. One coughing spell when the leaves came down and the albuterol handled it. No night symptoms.
+  - ref: turn:T03
+    speaker: doctor
+    text: And the daily inhaler?
+  - ref: turn:T04
+    speaker: caregiver
+    text: Morning and night with the spacer. Her mom's a school nurse, so she's on top of it.
+  - ref: turn:T05
+    speaker: doctor
+    text: Any smoke, pets, mold at home?
+  - ref: turn:T06
+    speaker: caregiver
+    text: No smokers. We have a dog but she's never reacted to him. The house is dry.
+  - ref: turn:T07
+    speaker: doctor
+    text: We'll keep the same dose through the winter and recheck in the spring. Flu shot today.
+  - ref: turn:T08
+    speaker: caregiver
+    text: Fine. She hates it, but fine.
+  - ref: turn:T09
+    speaker: doctor
+    text: The school action plan needs a refresh for this year.
+  - ref: turn:T10
+    speaker: caregiver
+    text: I brought last year's. It just needs the new signature.
+  - ref: turn:T11
+    speaker: doctor
+    text: Easy enough getting here?
+  - ref: turn:T12
+    speaker: caregiver
+    text: Ten minutes in the car.
+draft_plan:
+- item_id: P1
+  type: medication
+  text: Continue fluticasone 44 mcg 2 puffs twice daily with spacer through the winter
+- item_id: P2
+  type: medication
+  text: Albuterol 2 puffs with spacer every 4 hours as needed for cough or wheeze
+- item_id: P3
+  type: education
+  text: Updated school asthma action plan signed today
+- item_id: P4
+  type: medication
+  text: Influenza vaccine today
+- item_id: P5
+  type: appointment
+  text: Asthma follow-up in 4 months
+  schedule: once, ~2027-02
+planted_conflicts: []
+decoys: []
+expected_ok_items:
+- P1
+- P2
+- P3
+- P4
+- P5

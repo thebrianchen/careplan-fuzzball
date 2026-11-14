@@ -1,0 +1,295 @@
+case_id: T020
+split: test
+title: Polish-speaking dialysis patient missing 5:30 AM treatments since his wife's hip fracture
+author: claude-draft
+reviewed_by: Lynna Yang (dispute review, 2026-11-10)
+written_at: '2026-10-31'
+frozen_sha256: null
+patient:
+  patient_id: P-T020
+  name: Tadeusz Wrobel
+  dob: '1954-07-19'
+  sex: M
+  language: pl
+  mrn: MRN-UL7H6SOOOK
+  address: 4800 N Milwaukee Ave, Chicago, IL 60630
+  tract_geoid: null
+  coverage:
+    type: dual
+    plan: Medicare + Illinois Medicaid (fictional Lakeshore MMAI plan)
+    transport_benefit: 'yes'
+  pcp: Dr. B. Nowicki (fictional)
+  problems:
+  - ref: prob:1
+    code: N18.6
+    system: ICD-10-CM
+    display: End stage renal disease
+  - ref: prob:2
+    code: Z99.2
+    system: ICD-10-CM
+    display: Dependence on renal dialysis
+  - ref: prob:3
+    code: E11.22
+    system: ICD-10-CM
+    display: Type 2 diabetes with diabetic chronic kidney disease
+  - ref: prob:4
+    code: I12.0
+    system: ICD-10-CM
+    display: Hypertensive CKD with stage 5 CKD or ESRD
+  - ref: prob:5
+    code: E87.5
+    system: ICD-10-CM
+    display: Hyperkalemia
+  meds:
+  - ref: med:1
+    name: sevelamer carbonate
+    dose: 800 mg
+    frequency: three times daily with meals
+    cost_tier: 2
+    monthly_copay_usd: 0.0
+    refill_gap_days: 0
+  - ref: med:2
+    name: calcitriol
+    dose: 0.25 mcg
+    frequency: daily
+    cost_tier: 1
+    monthly_copay_usd: 0.0
+    refill_gap_days: 0
+  - ref: med:3
+    name: insulin glargine pen
+    dose: 14 units
+    frequency: nightly
+    cost_tier: 2
+    monthly_copay_usd: 0.0
+    refill_gap_days: 0
+    needs_refrigeration: true
+  - ref: med:4
+    name: amlodipine
+    dose: 10 mg
+    frequency: daily
+    cost_tier: 1
+    monthly_copay_usd: 0.0
+    refill_gap_days: 0
+  appointments:
+  - ref: appt:1
+    date: '2026-10-05'
+    dept: dialysis
+    time: 05:30
+    location: DaVita Irving Park Dialysis, 4323 N Pulaski Rd
+    facility_ccn: '142840'
+    status: kept
+  - ref: appt:2
+    date: '2026-10-07'
+    dept: dialysis
+    time: 05:30
+    location: DaVita Irving Park Dialysis, 4323 N Pulaski Rd
+    facility_ccn: '142840'
+    status: kept
+  - ref: appt:3
+    date: '2026-10-09'
+    dept: dialysis
+    time: 05:30
+    location: DaVita Irving Park Dialysis, 4323 N Pulaski Rd
+    facility_ccn: '142840'
+    status: no_show
+  - ref: appt:4
+    date: '2026-10-12'
+    dept: dialysis
+    time: 05:30
+    location: DaVita Irving Park Dialysis, 4323 N Pulaski Rd
+    facility_ccn: '142840'
+    status: no_show
+  - ref: appt:5
+    date: '2026-10-14'
+    dept: dialysis
+    time: 05:30
+    location: DaVita Irving Park Dialysis, 4323 N Pulaski Rd
+    facility_ccn: '142840'
+    status: kept
+  - ref: appt:6
+    date: '2026-10-16'
+    dept: dialysis
+    time: 05:30
+    location: DaVita Irving Park Dialysis, 4323 N Pulaski Rd
+    facility_ccn: '142840'
+    status: no_show
+  - ref: appt:7
+    date: '2026-10-19'
+    dept: dialysis
+    time: 05:30
+    location: DaVita Irving Park Dialysis, 4323 N Pulaski Rd
+    facility_ccn: '142840'
+    status: kept
+  - ref: appt:8
+    date: '2026-10-21'
+    dept: dialysis
+    time: 05:30
+    location: DaVita Irving Park Dialysis, 4323 N Pulaski Rd
+    facility_ccn: '142840'
+    status: no_show
+  - ref: appt:9
+    date: '2026-10-23'
+    dept: dialysis
+    time: 05:30
+    location: DaVita Irving Park Dialysis, 4323 N Pulaski Rd
+    facility_ccn: '142840'
+    status: kept
+  - ref: appt:10
+    date: '2026-10-26'
+    dept: dialysis
+    time: 05:30
+    location: DaVita Irving Park Dialysis, 4323 N Pulaski Rd
+    facility_ccn: '142840'
+    status: kept
+  - ref: appt:11
+    date: '2026-10-28'
+    dept: nephrology
+    time: '11:00'
+    location: Hospital nephrology clinic
+    status: kept
+  screener:
+    date: '2026-04-08'
+    answers:
+      living_situation: steady_place
+      housing_problems: none
+      food_worry: never_true
+      food_ran_out: never_true
+      transportation: 'no'
+      utilities_shutoff: 'no'
+  notes:
+  - ref: note:1
+    date: '2026-10-21'
+    role: dialysis_social_work
+    topics:
+    - transport
+    text: Wife, who drove him to every 05:30 treatment, was admitted 10/06 with a hip fracture and is now in a rehabilitation
+      facility for an expected 4-6 weeks. Patient has not driven since cataract surgery in 2024. Has missed 4 of 8 treatments
+      since 10/06; arrived 70 minutes late on 10/14 by taxi. Does not know how to book plan rides. Interpreter needed for
+      phone calls.
+  - ref: note:2
+    date: '2026-10-14'
+    role: nursing
+    topics:
+    - language_literacy
+    text: Polish-speaking; phone interpreter used chairside. Reads Polish; limited English reading. Daughter in Arizona translates
+      documents over the phone when available.
+  - ref: note:3
+    date: '2026-10-14'
+    role: nursing
+    topics:
+    - digital_access
+    text: No smartphone; landline and a basic cell phone. Keeps a paper notebook of weights.
+visit:
+  visit_id: V-T020
+  date: '2026-10-28'
+  setting: nephrology clinic, urgent follow-up for missed treatments; phone interpreter
+  transcript:
+  - ref: turn:T01
+    speaker: doctor
+    text: The unit says you've missed four treatments this month, and your potassium was 6.1 on Friday. That's dangerous.
+      What's been going on?
+  - ref: turn:T02
+    speaker: interpreter
+    text: I have been very tired. My wife is in the rehabilitation hospital since she fell. It has been a hard month.
+  - ref: turn:T03
+    speaker: doctor
+    text: I'm sorry to hear that. Are you taking the binders with your meals?
+  - ref: turn:T04
+    speaker: interpreter
+    text: Yes, with every meal.
+  - ref: turn:T05
+    speaker: doctor
+    text: Let's go over the diet again. I'll give you the handout on potassium.
+  - ref: turn:T06
+    speaker: interpreter
+    text: The papers are in English. My daughter reads them to me on the telephone, but she is in Arizona and she works. Can
+      I have it in Polish?
+    topics:
+    - language_literacy
+  - ref: turn:T07
+    speaker: doctor
+    text: We'll find you a Polish version. Any chest pain, palpitations, weakness?
+  - ref: turn:T08
+    speaker: interpreter
+    text: Weakness, yes. My legs are heavy.
+  - ref: turn:T09
+    speaker: doctor
+    text: I also want you weighing yourself and checking your blood pressure every morning at home.
+  - ref: turn:T10
+    speaker: interpreter
+    text: I have the scale and the cuff. I write in a notebook.
+  - ref: turn:T11
+    speaker: doctor
+    text: That's fine. And the insulin at night?
+  - ref: turn:T12
+    speaker: interpreter
+    text: Every night. My wife used to do it; now I do it myself.
+  - ref: turn:T13
+    speaker: doctor
+    text: I'll have the unit social worker check in with you today as well.
+  - ref: turn:T14
+    speaker: interpreter
+    text: Thank you, doctor.
+draft_plan:
+- item_id: P1
+  type: appointment
+  text: Continue in-center hemodialysis Monday/Wednesday/Friday 5:30 AM at DaVita Irving Park Dialysis; no missed sessions
+  schedule: MWF 05:30
+- item_id: P2
+  type: education
+  text: 'Renal diet re-education: low-potassium food list and handout; avoid high-potassium fruits, potatoes and salt substitutes'
+- item_id: P3
+  type: monitoring
+  text: Daily morning weight and blood pressure in the notebook; bring to each session
+- item_id: P4
+  type: medication
+  text: Continue sevelamer 800 mg with meals, calcitriol 0.25 mcg daily, insulin glargine 14 units nightly
+- item_id: P5
+  type: monitoring
+  text: Repeat potassium and PTH at the next dialysis session; nephrology follow-up in 4 weeks
+  schedule: once, ~2026-11-25
+planted_conflicts:
+- conflict_id: C1
+  item_id: P1
+  barrier: transport
+  expected_status: at_risk
+  evidence:
+  - source: record
+    ref: note:1
+  - source: record
+    ref: appt:3
+  - source: record
+    ref: appt:4
+  - source: record
+    ref: appt:6
+  - source: record
+    ref: appt:8
+  acceptable_alternative_categories:
+  - nemt
+  - dialysis_social_worker
+  - schedule_change
+  - paratransit
+  note: 'Record-only: the social-work note names the driver who is gone and the 4 misses; T02 is untagged on purpose. Dual-eligible,
+    so booking plan rides (NEMT) is the first fix; a later chair while the wife recovers is schedule_change. Tract fires nothing
+    (early buses exist), so no tract ref.'
+- conflict_id: C2
+  item_id: P2
+  barrier: language_literacy
+  expected_status: at_risk
+  evidence:
+  - source: transcript
+    ref: turn:T06
+  - source: record
+    ref: note:2
+  acceptable_alternative_categories:
+  - plain_language_materials
+  - interpreter
+  note: Polish-language handout or interpreter-delivered teaching.
+decoys:
+- barrier: digital_access
+  ref: note:3
+  why_irrelevant: No smartphone, but P3 is a paper notebook and nothing in the plan needs an app.
+expected_ok_items:
+- P3
+- P4
+- P5

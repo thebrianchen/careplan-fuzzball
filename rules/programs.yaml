@@ -1,0 +1,155 @@
+# Programs the planner may suggest as alternatives. Rendered into the planner's system prompt.
+# DRAFT by Claude, 2026-10-25. Every entry needs Lynna's check (set verified_by).
+# "confidence: source" = taken from the linked page; "confidence: general" = general knowledge, verify.
+version: 0.1-draft
+
+programs:
+  - id: medicaid_nemt
+    category: nemt
+    needs: [transport]
+    eligible_when: "coverage is medicaid or dual"
+    how_to_start: "Managed care members: call the number on the back of the plan card (each MCO has its own scheduling rules). Fee-for-service: Transdev (877-725-0569, netspap.com) gives a list of providers; it does not book rides."
+    caveats: "Advance-booking time varies by MCO. Recurring rides for dialysis are usually set up as standing trips (confirm with the plan)."
+    source_url: https://hfs.illinois.gov/medicalclients/medicaltransportationnonemergency.html
+    confidence: source
+    verified_by: null
+
+  - id: medicare_transport_gap
+    category: nemt
+    needs: [transport]
+    eligible_when: "coverage is medicare only"
+    how_to_start: "Check whether the patient's Medicare Advantage plan includes a transportation benefit."
+    caveats: "Original Medicare generally does not cover routine non-emergency rides to dialysis. Do not promise a covered ride to a Medicare-only patient."
+    source_url: null
+    confidence: general
+    verified_by: null
+
+  - id: ada_paratransit
+    category: paratransit
+    needs: [transport]
+    eligible_when: "disability or health condition prevents using CTA/Pace fixed-route buses and trains"
+    how_to_start: "Apply for ADA Paratransit certification through the Northern Illinois Transit Authority: 312-663-HELP (4357), weekdays 8:30 am to 5:00 pm."
+    caveats: "Not immediate: certification must happen first (federal rule: decision within 21 days of a complete application, or presumptive eligibility). Rides run only at the same times and places as fixed-route service, so it cannot fix a 6 AM trip if no bus runs then. Rides are reserved in advance."
+    source_url: https://www.pacebus.com/paratransit
+    confidence: source
+    verified_by: null
+
+  - id: dialysis_social_worker
+    category: dialysis_social_worker
+    needs: [transport, food_access, other_cost, housing, caregiving]
+    eligible_when: "patient receives in-center dialysis"
+    how_to_start: "Message the dialysis unit's social worker; dialysis facilities have a social worker on the care team."
+    caveats: "Good first step for transport and benefits; still name the specific program."
+    source_url: null
+    confidence: general
+    verified_by: null
+
+  - id: schedule_change
+    category: schedule_change
+    needs: [transport, work_schedule, caregiving]
+    eligible_when: "always worth asking"
+    how_to_start: "Ask the unit or clinic for a later chair time or a day that matches the patient's ride."
+    caveats: "Dialysis chair times are limited; frame as a request."
+    source_url: null
+    confidence: general
+    verified_by: null
+
+  - id: home_dialysis_evaluation
+    category: home_dialysis_evaluation
+    needs: [transport]
+    eligible_when: "clinician judgment"
+    how_to_start: "Refer to the home dialysis program for a peritoneal or home hemodialysis evaluation."
+    caveats: "Clinical decision with its own requirements (space, supplies, training, support at home). Suggest as a conversation, never as a fix."
+    source_url: null
+    confidence: general
+    verified_by: null
+
+  - id: coordinate_with_existing_visit
+    category: coordinate_with_existing_visit
+    needs: [transport]
+    eligible_when: "patient already travels somewhere regularly"
+    how_to_start: "Schedule the new visit on the same day and campus as an existing one, or use telehealth if an exam isn't needed."
+    caveats: null
+    source_url: null
+    confidence: general
+    verified_by: null
+
+  - id: snap
+    category: snap
+    needs: [food_access, other_cost]
+    eligible_when: "income-based"
+    how_to_start: "Apply through Illinois ABE (abe.illinois.gov)."
+    caveats: "Very low-income households can qualify for expedited benefits (federal rule: within 7 days)."
+    source_url: https://abe.illinois.gov/
+    confidence: source
+    verified_by: null
+
+  - id: food_pantry
+    category: food_pantry
+    needs: [food_access]
+    eligible_when: "open to the public; hours and rules vary by pantry"
+    how_to_start: "Use the Greater Chicago Food Depository locator or a find_resources result; match days to the patient's non-treatment days."
+    caveats: "Pantry food is often not renal-friendly; pair with the renal dietitian."
+    source_url: https://www.chicagosfoodbank.org/food-pantry-near-me-open-on-monday/
+    confidence: source
+    verified_by: null
+
+  - id: renal_dietitian
+    category: renal_dietitian
+    needs: [food_access]
+    eligible_when: "patient receives dialysis"
+    how_to_start: "Ask the dialysis unit dietitian to rebuild the diet around foods the patient can actually get."
+    caveats: null
+    source_url: null
+    confidence: general
+    verified_by: null
+
+  - id: medically_tailored_meals
+    category: medically_tailored_meals
+    needs: [food_access]
+    eligible_when: "some Medicaid MCOs and Medicare Advantage plans offer this; plan-specific"
+    how_to_start: "Check the patient's plan benefits."
+    caveats: "Not universal; say 'check if covered'."
+    source_url: null
+    confidence: general
+    verified_by: null
+
+  - id: liheap
+    category: utility_assistance
+    needs: [utilities, other_cost]
+    eligible_when: "income-based; seasonal application periods"
+    how_to_start: "Cook County: apply through CEDA (see the Cook County utility assistance FAQ)."
+    caveats: "Funding windows open and close; check current dates."
+    source_url: https://www.cookcountyil.gov/sites/g/files/ywwepo161/files/utilityfaqs-final.pdf
+    confidence: source
+    verified_by: null
+
+  - id: utility_medical_certificate
+    category: medical_certificate_utilities
+    needs: [utilities]
+    eligible_when: "a household member's health depends on utility service (e.g. refrigerated insulin, powered equipment)"
+    how_to_start: "Clinician completes the utility's medical certification form to delay disconnection."
+    caveats: "Illinois utility rules allow a medical certification to postpone disconnection for a limited time; verify the current rule and duration."
+    source_url: null
+    confidence: general
+    verified_by: null
+
+  - id: med_cost_help
+    category: med_assistance_program
+    needs: [med_cost]
+    eligible_when: "Medicare Part D: Extra Help (low-income subsidy); others: manufacturer assistance or a formulary switch"
+    how_to_start: "Pharmacy or social work screens for Extra Help; prescriber checks for a cheaper equivalent."
+    caveats: null
+    source_url: null
+    confidence: general
+    verified_by: null
+
+  - id: interpreter
+    category: interpreter
+    needs: [language_literacy]
+    eligible_when: "patient's preferred language is not English, or low health literacy"
+    how_to_start: "Use the hospital's interpreter service and plain-language, translated instructions."
+    caveats: null
+    source_url: null
+    confidence: general
+    verified_by: null

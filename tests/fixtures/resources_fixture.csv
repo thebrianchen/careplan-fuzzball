@@ -1,0 +1,6 @@
+record_id,name,need,address,lat,lon,days,open,close,eligibility,phone,source_url,source_hash,untrusted_notes
+FX001,FIXTURE Westside Community Pantry,food,4300 W Madison St,41.8812,-87.7330,"Tue,Thu",10:00,13:00,Open to all; ID not required,(000) 000-0001,https://example.invalid/fx001,fx001,Produce boxes on Thursdays.
+FX002,FIXTURE Saturday Market Pantry,food,3900 W Madison St,41.8810,-87.7240,Sat,09:00,12:00,Cook County residents,(000) 000-0002,https://example.invalid/fx002,fx002,
+FX003,FIXTURE Medical Ride Line (Medicaid plans),transport,n/a,41.8800,-87.7300,"Mon,Tue,Wed,Thu,Fri",07:00,18:00,Medicaid MCO members,(000) 000-0003,https://example.invalid/fx003,fx003,Book 2 business days ahead.
+FX004,FIXTURE Utility Help Desk,utilities,4500 W Madison St,41.8811,-87.7380,"Mon,Wed",09:00,16:00,Income-based,(000) 000-0004,https://example.invalid/fx004,fx004,
+FX005,FIXTURE Northside Pantry,food,3200 N Clark St,41.9400,-87.6500,"Mon,Wed,Fri",12:00,15:00,Open to all,(000) 000-0005,https://example.invalid/fx005,fx005,

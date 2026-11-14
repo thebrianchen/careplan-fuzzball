@@ -1,0 +1,191 @@
+case_id: D006
+split: dev
+title: Uninsured COPD patient staying with friends
+author: claude-draft
+reviewed_by: null
+written_at: '2026-10-25'
+frozen_sha256: null
+patient:
+  patient_id: P-D006
+  name: Gerald Pruitt
+  dob: '1967-09-17'
+  sex: M
+  language: en
+  mrn: MRN-MVBQML4YPK
+  address: 1200 S Pulaski Rd, Chicago, IL 60623
+  tract_geoid: null
+  coverage:
+    type: none
+    plan: Uninsured (self-pay)
+    transport_benefit: 'no'
+  pcp: Dr. M. Feld (fictional)
+  problems:
+  - ref: prob:1
+    code: J44.9
+    system: ICD-10-CM
+    display: Chronic obstructive pulmonary disease, unspecified
+  - ref: prob:2
+    code: I10
+    system: ICD-10-CM
+    display: Essential hypertension
+  meds:
+  - ref: med:1
+    name: tiotropium inhaler (brand)
+    dose: 18 mcg
+    frequency: daily
+    cost_tier: 5
+    monthly_copay_usd: 420.0
+    refill_gap_days: 45
+  - ref: med:2
+    name: albuterol inhaler
+    dose: 90 mcg
+    frequency: as needed
+    cost_tier: 2
+    monthly_copay_usd: 30.0
+    refill_gap_days: 10
+  - ref: med:3
+    name: amlodipine
+    dose: 5 mg
+    frequency: daily
+    cost_tier: 1
+    monthly_copay_usd: 4.0
+    refill_gap_days: 0
+  appointments:
+  - ref: appt:1
+    date: '2026-10-09'
+    dept: emergency
+    location: Hospital ED
+    status: kept
+  - ref: appt:2
+    date: '2026-10-23'
+    dept: primary_care
+    time: '14:00'
+    location: Clinic
+    status: kept
+  screener:
+    date: '2026-10-09'
+    answers:
+      living_situation: steady_place_worried
+      housing_problems: none
+      food_worry: sometimes_true
+      food_ran_out: never_true
+      transportation: 'no'
+      utilities_shutoff: 'no'
+  notes:
+  - ref: note:1
+    date: '2026-10-09'
+    role: social_work
+    topics:
+    - housing
+    text: 'ED social work: lost apartment in September, staying on a friend''s couch, may need to move again within a month.'
+visit:
+  visit_id: V-D006
+  date: '2026-10-23'
+  setting: ED follow-up in primary care
+  transcript:
+  - ref: turn:T01
+    speaker: doctor
+    text: You came to the ER for a flare two weeks ago. Are you using the daily inhaler?
+  - ref: turn:T02
+    speaker: patient
+    text: Not since August. It's over four hundred dollars without insurance. I just use the rescue one when it gets bad.
+    topics:
+    - med_cost
+    - other_cost
+  - ref: turn:T03
+    speaker: doctor
+    text: I'd also like to check whether you need oxygen at home.
+  - ref: turn:T04
+    speaker: patient
+    text: Home is my buddy's couch right now. I don't know how long I can stay.
+    topics:
+    - housing
+  - ref: turn:T05
+    speaker: doctor
+    text: Are you eating okay?
+  - ref: turn:T06
+    speaker: patient
+    text: Mostly. Some weeks are thin.
+    topics:
+    - food_access
+  - ref: turn:T07
+    speaker: doctor
+    text: Can you get to the hospital lab for a breathing test?
+  - ref: turn:T08
+    speaker: patient
+    text: Yeah, the Pulaski bus goes right there.
+draft_plan:
+- item_id: P1
+  type: medication
+  text: Restart tiotropium 18 mcg daily
+- item_id: P2
+  type: referral
+  text: Pulmonary function testing at the hospital lab within 4 weeks
+- item_id: P3
+  type: referral
+  text: Home oxygen evaluation and, if qualified, home oxygen setup
+- item_id: P4
+  type: medication
+  text: Continue amlodipine 5 mg daily
+planted_conflicts:
+- conflict_id: C1
+  item_id: P1
+  barrier: med_cost
+  expected_status: blocked
+  evidence:
+  - source: transcript
+    ref: turn:T02
+  - source: record
+    ref: med:1
+  acceptable_alternative_categories:
+  - med_assistance_program
+  - generic_or_formulary_switch
+  - community_health_worker
+- conflict_id: C2
+  item_id: P3
+  barrier: housing
+  expected_status: at_risk
+  evidence:
+  - source: transcript
+    ref: turn:T04
+  - source: record
+    ref: note:1
+  - source: record
+    ref: screener:living_situation
+  acceptable_alternative_categories:
+  - housing_assistance
+  - community_health_worker
+- conflict_id: C3
+  item_id: P2
+  barrier: other_cost
+  expected_status: at_risk
+  evidence:
+  - source: transcript
+    ref: turn:T02
+  acceptable_alternative_categories:
+  - community_health_worker
+  - other
+  note: 'Added by hand from Lynna''s review note (2026-11-10): uninsured, so the test and the oxygen setup cost is a barrier;
+    she would work on getting him insurance.'
+- conflict_id: C4
+  item_id: P3
+  barrier: other_cost
+  expected_status: at_risk
+  evidence:
+  - source: transcript
+    ref: turn:T02
+  acceptable_alternative_categories:
+  - community_health_worker
+  - other
+  note: 'Added by hand from Lynna''s review note (2026-11-10): uninsured, so the test and the oxygen setup cost is a barrier;
+    she would work on getting him insurance.'
+decoys:
+- barrier: food_access
+  ref: turn:T06
+  why_irrelevant: Some food insecurity, but the plan has no diet item; it's worth a referral note but not a flag on any plan
+    item.
+- barrier: transport
+  ref: turn:T08
+  why_irrelevant: Bus goes directly to the lab; P2 is fine.
+expected_ok_items:
+- P4

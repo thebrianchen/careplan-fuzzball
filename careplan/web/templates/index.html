@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Care Plan Check · patients{% endblock %}
+{% block content %}
+<h1>Today's visits</h1>
+<p class="muted">Synthetic patients only. Pick one to run the stage view (live visit + card) or open the evidence card.</p>
+<div class="cases">
+{% for c in cases %}
+  <div class="panel">
+    <h3>{{ c.case_id }} <span class="muted">· {{ c.title }}</span></h3>
+    <div class="muted" style="font-size:14px">{{ c.n_items }} plan items · visit {{ c.visit_date }}{% if c.checked %} · <span class="pill {{ 'ok' if c.ok else 'bad' }}" style="margin:0">{{ 'checked' if c.ok else 'failed' }}</span>{% endif %}</div>
+    <div class="links" style="margin-top:8px"><a href="/stage/{{ c.case_id }}">Stage</a><a href="/card/{{ c.case_id }}">Card</a><a href="/summary/{{ c.case_id }}">Patient summary</a></div>
+  </div>
+{% endfor %}
+</div>
+{% endblock %}

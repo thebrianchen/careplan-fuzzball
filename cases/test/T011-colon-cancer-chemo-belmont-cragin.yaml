@@ -1,0 +1,214 @@
+case_id: T011
+split: test
+title: Colon cancer on biweekly FOLFOX; a $1,850 bill per cycle and a pantry list in the navigator's note
+author: claude-draft
+reviewed_by: Lynna Yang (dispute review, 2026-11-10)
+written_at: '2026-10-31'
+frozen_sha256: null
+patient:
+  patient_id: P-T011
+  name: Rosa Villanueva
+  dob: '1974-09-03'
+  sex: F
+  language: en
+  mrn: MRN-WAXW43R33I
+  address: 5600 W Belmont Ave, Chicago, IL 60634
+  tract_geoid: null
+  coverage:
+    type: commercial
+    plan: Spouse's employer PPO (fictional); 20% coinsurance after deductible, $6,500 out-of-pocket maximum not met
+    transport_benefit: 'no'
+  pcp: Dr. I. Bhattacharya, medical oncology (fictional)
+  problems:
+  - ref: prob:1
+    code: C18.7
+    system: ICD-10-CM
+    display: Malignant neoplasm of sigmoid colon
+  - ref: prob:2
+    code: Z51.11
+    system: ICD-10-CM
+    display: Encounter for antineoplastic chemotherapy
+  - ref: prob:3
+    code: Z90.49
+    system: ICD-10-CM
+    display: Acquired absence of other specified parts of digestive tract
+  meds:
+  - ref: med:1
+    name: ondansetron
+    dose: 8 mg
+    frequency: twice daily days 1-3 of each cycle
+    cost_tier: 2
+    monthly_copay_usd: 10.0
+    refill_gap_days: 0
+  - ref: med:2
+    name: dexamethasone
+    dose: 4 mg
+    frequency: twice daily days 2-3 of each cycle
+    cost_tier: 1
+    monthly_copay_usd: 4.0
+    refill_gap_days: 0
+  - ref: med:3
+    name: prochlorperazine
+    dose: 10 mg
+    frequency: every 6 hours as needed for nausea
+    cost_tier: 1
+    monthly_copay_usd: 5.0
+    refill_gap_days: 0
+  appointments:
+  - ref: appt:1
+    date: '2026-09-22'
+    dept: inpatient
+    location: Hospital (laparoscopic sigmoid colectomy, 3 nights)
+    status: kept
+  - ref: appt:2
+    date: '2026-10-13'
+    dept: infusion_center
+    time: 08:30
+    location: Hospital infusion center (cycle 1 day 1)
+    status: kept
+  - ref: appt:3
+    date: '2026-10-15'
+    dept: infusion_center
+    time: 09:00
+    location: Hospital infusion center (pump disconnect)
+    status: kept
+  - ref: appt:4
+    date: '2026-10-27'
+    dept: oncology
+    time: 08:30
+    location: Hospital oncology clinic and infusion center (cycle 2)
+    status: kept
+  screener:
+    date: '2026-10-13'
+    answers:
+      living_situation: steady_place
+      housing_problems: none
+      food_worry: sometimes_true
+      food_ran_out: sometimes_true
+      transportation: 'no'
+      utilities_shutoff: 'no'
+  notes:
+  - ref: note:1
+    date: '2026-10-22'
+    role: financial_counseling
+    topics:
+    - other_cost
+    text: 'Patient called about the first statement for cycle 1: $1,850 patient responsibility (20% coinsurance after deductible;
+      out-of-pocket maximum not met). Asked about a payment plan and said she may need to ''space out'' cycles if the bills
+      keep coming. Charity-care application not started.'
+  - ref: note:2
+    date: '2026-10-13'
+    role: oncology_nurse_navigator
+    topics:
+    - food_access
+    text: Household of five on one income since patient stopped working in September. Reports food ran out twice last month.
+      SNAP application pending; given pantry list.
+visit:
+  visit_id: V-T011
+  date: '2026-10-27'
+  setting: oncology clinic before cycle 2
+  transcript:
+  - ref: turn:T01
+    speaker: doctor
+    text: How did you do after the first cycle?
+  - ref: turn:T02
+    speaker: patient
+    text: Tired for four days. And the cold thing, I couldn't take anything out of the fridge without my fingers tingling.
+  - ref: turn:T03
+    speaker: doctor
+    text: That's the oxaliplatin. We'll watch it. Nausea?
+  - ref: turn:T04
+    speaker: patient
+    text: The first two days. The pills helped.
+  - ref: turn:T05
+    speaker: doctor
+    text: Good. Cycle two today, pump off Thursday, and we keep going every two weeks for twelve cycles. Is the schedule working
+      with your job?
+  - ref: turn:T06
+    speaker: patient
+    text: I'm on leave from the hotel until March. They approved it, so that part's okay.
+    topics:
+    - work_schedule
+  - ref: turn:T07
+    speaker: doctor
+    text: Who brings you on infusion days?
+  - ref: turn:T08
+    speaker: patient
+    text: My husband. He switches to the night shift those days.
+  - ref: turn:T09
+    speaker: doctor
+    text: I want you eating as much protein as you can manage. Eggs, chicken, beans, yogurt. Small meals through the day,
+      especially the week after treatment.
+  - ref: turn:T10
+    speaker: patient
+    text: I'll try.
+  - ref: turn:T11
+    speaker: doctor
+    text: Any mouth sores, fever, numbness in the feet?
+  - ref: turn:T12
+    speaker: patient
+    text: No fever. A little tingling in the toes.
+  - ref: turn:T13
+    speaker: doctor
+    text: Tell the nurse the day that gets worse. Keep a thermometer handy, anything over 100.4 you call us.
+  - ref: turn:T14
+    speaker: patient
+    text: I know.
+draft_plan:
+- item_id: P1
+  type: appointment
+  text: 'FOLFOX every 2 weeks for 12 cycles: infusion Tuesdays 8:30 AM at the hospital infusion center, pump disconnect Thursdays'
+  schedule: Tue 08:30 q2w x12 (+Thu disconnect)
+- item_id: P2
+  type: medication
+  text: 'Antiemetics: ondansetron and dexamethasone days 1-3 of each cycle; prochlorperazine as needed'
+- item_id: P3
+  type: diet
+  text: High-protein diet with small frequent meals through each cycle (eggs, poultry, beans, dairy); protein shakes on low-appetite
+    days
+- item_id: P4
+  type: monitoring
+  text: Daily temperature at home during treatment; call for fever of 100.4 F or higher
+- item_id: P5
+  type: monitoring
+  text: CBC and metabolic panel before each cycle; oncology review each cycle
+planted_conflicts:
+- conflict_id: C1
+  item_id: P1
+  barrier: other_cost
+  expected_status: at_risk
+  evidence:
+  - source: record
+    ref: note:1
+  acceptable_alternative_categories:
+  - other
+  - med_assistance_program
+  - community_health_worker
+  note: 'Record-only: $1,850 per cycle until the out-of-pocket max, and she has already said she might space out cycles. ''other''
+    = charity care / payment plan / oncology financial navigation; foundation copay grants count as med_assistance_program.'
+- conflict_id: C2
+  item_id: P3
+  barrier: food_access
+  expected_status: at_risk
+  evidence:
+  - source: record
+    ref: note:2
+  - source: record
+    ref: screener:food_ran_out
+  - source: record
+    ref: screener:food_worry
+  acceptable_alternative_categories:
+  - snap
+  - food_pantry
+  - medically_tailored_meals
+  - other
+  note: 'Record-only (the tract does not fire food access): protein-dense groceries for a household of five on one income
+    where food ran out twice last month. T10 is untagged on purpose.'
+decoys:
+- barrier: work_schedule
+  ref: turn:T06
+  why_irrelevant: Approved medical leave through March; the biweekly Tuesday schedule does not collide with work.
+expected_ok_items:
+- P2
+- P4
+- P5

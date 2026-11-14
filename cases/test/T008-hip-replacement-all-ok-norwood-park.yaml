@@ -1,0 +1,171 @@
+case_id: T008
+split: test
+title: Two weeks after a right hip replacement; retired wife drives, therapy clinic five minutes away
+author: claude-draft
+reviewed_by: Lynna Yang (dispute review, 2026-11-10)
+written_at: '2026-10-31'
+frozen_sha256: null
+patient:
+  patient_id: P-T008
+  name: Richard Szymanski
+  dob: '1958-04-18'
+  sex: M
+  language: en
+  mrn: MRN-OTD6LEWBX3
+  address: 6000 N Northwest Hwy, Chicago, IL 60631
+  tract_geoid: null
+  coverage:
+    type: medicare
+    plan: Medicare Advantage (fictional Lakeshore Senior HMO); $20 therapy copay
+    transport_benefit: unknown
+  pcp: Dr. M. Kowalczyk (fictional)
+  problems:
+  - ref: prob:1
+    code: Z47.1
+    system: ICD-10-CM
+    display: Aftercare following joint replacement surgery
+  - ref: prob:2
+    code: Z96.641
+    system: ICD-10-CM
+    display: Presence of right artificial hip joint
+  - ref: prob:3
+    code: I10
+    system: ICD-10-CM
+    display: Essential hypertension
+  meds:
+  - ref: med:1
+    name: aspirin
+    dose: 81 mg
+    frequency: twice daily for 4 weeks after surgery
+    cost_tier: 1
+    monthly_copay_usd: 0.0
+    refill_gap_days: 0
+  - ref: med:2
+    name: acetaminophen
+    dose: 1000 mg
+    frequency: three times daily
+    cost_tier: 1
+    monthly_copay_usd: 0.0
+    refill_gap_days: 0
+  - ref: med:3
+    name: oxycodone
+    dose: 5 mg
+    frequency: at bedtime as needed
+    cost_tier: 2
+    monthly_copay_usd: 3.0
+    refill_gap_days: 0
+  - ref: med:4
+    name: lisinopril
+    dose: 20 mg
+    frequency: daily
+    cost_tier: 1
+    monthly_copay_usd: 0.0
+    refill_gap_days: 0
+  appointments:
+  - ref: appt:1
+    date: '2026-10-14'
+    dept: orthopedic_surgery
+    location: Hospital (right total hip arthroplasty, one night)
+    status: kept
+  - ref: appt:2
+    date: '2026-10-16'
+    dept: home_health_physical_therapy
+    location: Home
+    status: kept
+  - ref: appt:3
+    date: '2026-10-23'
+    dept: home_health_physical_therapy
+    location: Home
+    status: kept
+  - ref: appt:4
+    date: '2026-10-28'
+    dept: orthopedic_surgery
+    time: 09:30
+    location: Orthopedic clinic
+    status: kept
+  screener:
+    date: '2026-10-13'
+    answers:
+      living_situation: steady_place
+      housing_problems: none
+      food_worry: never_true
+      food_ran_out: never_true
+      transportation: 'no'
+      utilities_shutoff: 'no'
+  notes:
+  - ref: note:1
+    date: '2026-10-13'
+    role: pre_admission_testing
+    text: Lives with wife in a single-story ranch home. Wife is retired and will drive. Shower chair, raised toilet seat and
+      front-wheeled walker already in the home.
+visit:
+  visit_id: V-T008
+  date: '2026-10-28'
+  setting: orthopedic clinic, two-week post-operative visit; wife present
+  transcript:
+  - ref: turn:T01
+    speaker: doctor
+    text: Two weeks out. How's the pain?
+  - ref: turn:T02
+    speaker: patient
+    text: Down to a four when I walk. I only take the oxycodone at night now.
+  - ref: turn:T03
+    speaker: doctor
+    text: Good. The incision looks clean. I want you in outpatient therapy twice a week for six weeks, starting next week.
+  - ref: turn:T04
+    speaker: patient
+    text: The place on Northwest Highway? That's five minutes from the house.
+  - ref: turn:T05
+    speaker: doctor
+    text: That's the one. You can't drive until I clear you, probably at the six-week visit.
+  - ref: turn:T06
+    speaker: caregiver
+    text: I'm retired. I drive him everywhere anyway.
+  - ref: turn:T07
+    speaker: doctor
+    text: Any stairs at home?
+  - ref: turn:T08
+    speaker: patient
+    text: No, it's a ranch. We set up the shower chair before the surgery.
+  - ref: turn:T09
+    speaker: doctor
+    text: Keep the aspirin twice a day for two more weeks for clots, and the stool softener while you're still on the pain
+      pill.
+  - ref: turn:T10
+    speaker: patient
+    text: Will do.
+  - ref: turn:T11
+    speaker: doctor
+    text: Any calf swelling, chest pain, shortness of breath?
+  - ref: turn:T12
+    speaker: patient
+    text: None of that.
+draft_plan:
+- item_id: P1
+  type: referral
+  text: Outpatient physical therapy twice weekly for 6 weeks at the Northwest Highway therapy clinic
+  schedule: 2x/week x6 weeks
+- item_id: P2
+  type: medication
+  text: Aspirin 81 mg twice daily for 2 more weeks; docusate while taking oxycodone
+- item_id: P3
+  type: activity
+  text: Walk daily with the walker, progressing to a cane as therapy directs; keep hip precautions
+- item_id: P4
+  type: medication
+  text: Scheduled acetaminophen; taper oxycodone off over the next week
+- item_id: P5
+  type: appointment
+  text: Orthopedic follow-up with X-ray at 6 weeks post-op
+  schedule: once, ~2026-11-25
+planted_conflicts: []
+decoys:
+- barrier: transport
+  ref: turn:T06
+  why_irrelevant: He cannot drive for six weeks, but his retired wife drives and the clinic is five minutes away; P1 is fine.
+expected_ok_items:
+- P1
+- P2
+- P3
+- P4
+- P5

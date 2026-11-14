@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Care Plan Check · {{ title }}{% endblock %}
+{% block body_class %}stage{% endblock %}
+{% block content %}
+{# The stage view: visit strip on top, card left, boundary right. JS in /static/stage.js keys off ids + data-case. #}
+<div class="visit" id="visit" data-case="{{ case_id }}">
+  <span class="muted">{{ title }}</span>
+  <button class="talk" data-speaker="doctor" title="click to start/stop, or press D">🎙 Doctor</button>
+  <button class="talk" data-speaker="patient" title="click to start/stop, or press space">🎙 Patient</button>
+  <button id="clip" class="ghost" title="feeds data/audio/&lt;case&gt;/turn_T02.wav through the same ASR path">▶ Recorded line</button>
+  <button id="go" class="primary">Check the plan</button>
+  <button id="replay" class="ghost" title="plays a saved run of this same pipeline, with its real timing">▶ Recorded run</button>
+  <button id="reset" class="ghost">Reset visit</button>
+  <span id="vstat" class="status">audio is transcribed on the private box and never leaves it</span>
+  <span class="recbadge" id="recbadge">RECORDED RUN</span><span class="clock" id="clock">0 s</span>
+</div>
+<div class="turns" id="turns"></div>
+
+<section class="panel">
+  <h2>The plan, checked</h2>
+  <div id="items">
+  {% for it in plan %}
+    <div class="item" id="i-{{ it.item_id }}"><span class="pill wait">checking…</span><b class="plan">{{ it.text }}</b><div class="why"></div><div class="alt"></div></div>
+  {% endfor %}
+  </div>
+  <div id="end"></div>
+</section>
+
+<section class="panel">
+  <h2>The boundary</h2>
+  <div class="count">
+    <div><div class="n" id="ncross">0</div><div class="l">crossings to the public box</div></div>
+    <div><div class="n" id="nfields">—</div><div class="l">fields that ever crossed</div></div>
+    <div><div class="n" id="nlocal">0</div><div class="l">reads that stayed on the private box</div></div>
+  </div>
+  <div id="log"></div>
+  <h2 style="margin-top:22px">Fuzzball</h2>
+  <ul class="fz">
+    <li><span class="tag b2">zone-private</span> planner · llm (Super NVFP4) · postgres (EHR volume held by the private box) · card endpoint</li>
+    <li><span class="tag b1">zone-public</span> gateway · nano · nightly civic task array</li>
+    <li class="faint">Live refusal of a misplaced job: <span id="refusal">Friday night (rehearsal stack until then)</span></li>
+    <li>Red team running as a task array: <b id="rt">—</b></li>
+  </ul>
+</section>
+{% endblock %}
+{% block scripts %}<script src="/static/stage.js"></script>{% endblock %}

@@ -1,0 +1,170 @@
+case_id: D007
+split: dev
+title: Heart failure discharge in Englewood; cardiac rehab, diet and a new costly drug, none discussed
+author: claude-draft
+reviewed_by: Lynna Yang (dispute review, 2026-11-10)
+written_at: '2026-10-25'
+frozen_sha256: null
+patient:
+  patient_id: P-D007
+  name: Loretta Hammond
+  dob: '1959-11-03'
+  sex: F
+  language: en
+  mrn: MRN-D6A7AJXH4E
+  address: 6300 S Halsted St, Chicago, IL 60621
+  tract_geoid: null
+  coverage:
+    type: medicare
+    plan: Original Medicare (Parts A, B, D); no supplemental plan
+    transport_benefit: 'no'
+  pcp: Dr. R. Okafor (fictional)
+  problems:
+  - ref: prob:1
+    code: I50.22
+    system: ICD-10-CM
+    display: Chronic systolic (congestive) heart failure
+  - ref: prob:2
+    code: E11.9
+    system: ICD-10-CM
+    display: Type 2 diabetes mellitus without complications
+  - ref: prob:3
+    code: I10
+    system: ICD-10-CM
+    display: Essential hypertension
+  meds:
+  - ref: med:1
+    name: furosemide
+    dose: 40 mg
+    frequency: daily
+    cost_tier: 1
+    monthly_copay_usd: 2.0
+    refill_gap_days: 0
+  - ref: med:2
+    name: empagliflozin
+    dose: 10 mg
+    frequency: daily
+    cost_tier: 4
+    monthly_copay_usd: 47.0
+    refill_gap_days: 0
+  - ref: med:3
+    name: metoprolol succinate
+    dose: 50 mg
+    frequency: daily
+    cost_tier: 1
+    monthly_copay_usd: 1.5
+    refill_gap_days: 0
+  appointments:
+  - ref: appt:1
+    date: '2026-10-16'
+    dept: inpatient
+    time: '11:00'
+    location: Hospital
+    status: kept
+  - ref: appt:2
+    date: '2026-10-23'
+    dept: primary_care
+    time: 09:00
+    location: Clinic
+    status: kept
+  screener:
+    date: '2026-10-23'
+    answers:
+      living_situation: steady_place
+      housing_problems: none
+      food_worry: never_true
+      food_ran_out: never_true
+      transportation: 'no'
+      utilities_shutoff: 'no'
+  notes:
+  - ref: note:1
+    date: '2026-10-16'
+    role: case_management
+    topics:
+    - caregiving
+    text: Lives with adult grandson who works days. Independent with ADLs.
+visit:
+  visit_id: V-D007
+  date: '2026-10-23'
+  setting: post-discharge primary care visit
+  transcript:
+  - ref: turn:T01
+    speaker: doctor
+    text: Welcome back. How have you felt since you got home from the hospital?
+  - ref: turn:T02
+    speaker: patient
+    text: Better. Less swelling in my ankles, and I can sleep flat again.
+  - ref: turn:T03
+    speaker: doctor
+    text: Good. Are you weighing yourself every morning?
+  - ref: turn:T04
+    speaker: patient
+    text: Every morning. I write it on the calendar on the fridge.
+  - ref: turn:T05
+    speaker: doctor
+    text: Any shortness of breath walking around the house?
+  - ref: turn:T06
+    speaker: patient
+    text: Only on the stairs. I take them slow.
+  - ref: turn:T07
+    speaker: doctor
+    text: Your grandson still living with you?
+  - ref: turn:T08
+    speaker: patient
+    text: He is. He's at work all day but he checks on me at night.
+    topics:
+    - caregiving
+  - ref: turn:T09
+    speaker: doctor
+    text: I want to get you into cardiac rehab and tighten up the diet. Any questions?
+  - ref: turn:T10
+    speaker: patient
+    text: No, doctor. Whatever you think.
+draft_plan:
+- item_id: P1
+  type: referral
+  text: Cardiac rehabilitation at the hospital outpatient center, Monday/Wednesday/Friday 8:00 AM for 12 weeks
+  schedule: MWF 08:00 x12w
+- item_id: P2
+  type: diet
+  text: 2 g sodium heart-healthy diet with fresh vegetables and lean protein; limit processed and canned foods
+- item_id: P3
+  type: medication
+  text: Continue empagliflozin 10 mg daily (started at discharge)
+- item_id: P4
+  type: monitoring
+  text: Daily morning weight on home scale; call if up 3 lb in a day or 5 lb in a week
+planted_conflicts:
+- conflict_id: C1
+  item_id: P1
+  barrier: transport
+  expected_status: at_risk
+  evidence:
+  - source: tract
+    ref: tract:no_vehicle_share
+  - source: tract
+    ref: tract:places_lacktrpt
+  acceptable_alternative_categories:
+  - paratransit
+  - schedule_change
+  - other
+  note: Tract-only. Original Medicare has no routine ride benefit; NEMT suggestions should not count. Home-based cardiac rehab
+    is a valid 'other'.
+- conflict_id: C3
+  item_id: P3
+  barrier: med_cost
+  expected_status: at_risk
+  evidence:
+  - source: record
+    ref: med:2
+  acceptable_alternative_categories:
+  - med_assistance_program
+  - generic_or_formulary_switch
+  note: 'Record-only: tier 4, $47/month on a fixed Medicare income; Extra Help (LIS) screening is the obvious alternative.'
+decoys:
+- barrier: caregiving
+  ref: note:1
+  why_irrelevant: Lives with a grandson who works days, but no plan item needs a caregiver.
+expected_ok_items:
+- P4
+- P2

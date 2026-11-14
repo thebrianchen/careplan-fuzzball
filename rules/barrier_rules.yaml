@@ -1,0 +1,40 @@
+# When does a cited piece of evidence count as supporting a barrier?
+# Used by the scorer's automatic "evidence correct" check (careplan/scoring.py).
+# DRAFT thresholds by Claude, 2026-10-25. Lynna confirms or changes every number.
+version: 0.2-draft
+confirmed_by: null
+
+# 0.2 (2026-10-25): continuous tract signals fire at the Cook County 75th percentile, so ~25% of
+# tracts support each barrier. Recompute with `python -m pipeline.coverage` (prints the p75s).
+# Why: on real data, early_service_stops == 0 holds for only 16% of Cook tracts (most of the city
+# has owl/early buses) and lila_1_10 for 4%, so they rarely fire in Chicago. CDC PLACES social-needs
+# measures exist at tract level and vary widely; they're model-based estimates (disclose that).
+# Early service near home != arriving on time; an arrive-by trip check (GTFS routing) is planned.
+tract_fields:            # ref form: tract:<field>
+  no_vehicle_share:      {supports: [transport], rule: ">= 0.264"}  # ACS 2023 5-yr B08201, Cook p75
+  early_service_stops:   {supports: [transport], rule: "== 0"}      # stops within 800 m with weekday service 04:00-06:00
+  transit_stops_800m:    {supports: [transport], rule: "<= 2"}
+  lila_1_10:             {supports: [food_access], rule: "== 1"}    # USDA low income + low access (1 mi urban / 10 mi rural)
+  lila_half_10:          {supports: [food_access], rule: "== 1"}    # USDA low income + low access (0.5 mi urban)
+  places_lacktrpt:       {supports: [transport], rule: ">= 14.7"}   # PLACES 2025 "lack of reliable transportation" %, Cook p75
+  places_foodinsecu:     {supports: [food_access], rule: ">= 32.8"} # Cook p75
+  places_shututility:    {supports: [utilities], rule: ">= 15.5"}   # Cook p75
+  places_housinsecu:     {supports: [housing], rule: ">= 26.3"}     # Cook p75
+
+screener:                # ref form: screener:<question_id>; answer values from docs/case-guide.md
+  transportation:        {supports: [transport], when_any: ["yes"]}
+  food_worry:            {supports: [food_access], when_any: [often_true, sometimes_true]}
+  food_ran_out:          {supports: [food_access], when_any: [often_true, sometimes_true]}
+  utilities_shutoff:     {supports: [utilities], when_any: ["yes", already_shut_off]}
+  living_situation:      {supports: [housing], when_any: [steady_place_worried, no_steady_place]}
+  housing_problems:      {supports: [housing], when_none_of: [none]}
+
+record:
+  appointment_no_show:   {supports: [transport, caregiving, work_schedule], strength: weak}   # appt:<n> with status no_show
+  med_high_copay:        {supports: [med_cost], rule: "monthly_copay_usd >= 30 or cost_tier >= 4"}
+  med_refill_gap:        {supports: [med_cost, transport], rule: "refill_gap_days >= 7", strength: weak}
+  med_refrigeration:     {supports: [utilities], rule: "needs_refrigeration == true", strength: supporting_only}
+  tagged_note_or_turn:   {supports: any, rule: "the cited note or transcript turn has the barrier in its topics list"}
+
+# A flag is "evidence correct" when every cited ref exists in the case AND at least one
+# non-weak ref supports the flagged barrier under these rules.

@@ -1,0 +1,77 @@
+# HELD-OUT TEST CASE. Drafted by Claude 2026-10-31 for Lynna to review; never edit after freezing.
+# Everything synthetic. ALL-OK case: nothing in the plan should be flagged.
+# Hyde Park tract 17031410800 fires no_vehicle_share (0.563) but PLACES lack-of-transport is 7.0 and
+# every other measure is low; he bikes. ADAP makes the antiretroviral $0 (no cost tier recorded).
+case_id: T009
+split: test
+title: Virally suppressed HIV in a graduate student; routine six-month visit with no barriers
+author: claude-draft
+reviewed_by: null
+written_at: "2026-10-31"
+frozen_sha256: null
+
+patient:
+  patient_id: P-T009
+  name: Theo Marchetti
+  dob: "1997-10-12"
+  sex: M
+  language: en
+  mrn: MRN-RTSIS2LA4F
+  address: "1500 E 53rd St, Chicago, IL 60615"   # commercial corridor, not a residence
+  tract_geoid: null
+  coverage:
+    type: commercial
+    plan: University student health plan (fictional); Illinois ADAP as secondary payer for antiretrovirals
+    transport_benefit: "no"
+  pcp: Dr. L. Abernathy, infectious disease (fictional)
+  problems:
+    - {ref: prob:1, code: B20, system: ICD-10-CM, display: Human immunodeficiency virus (HIV) disease}
+    - {ref: prob:2, code: Z79.899, system: ICD-10-CM, display: Other long term (current) drug therapy}
+  meds:
+    - {ref: med:1, name: bictegravir-emtricitabine-tenofovir alafenamide, dose: 50/200/25 mg, frequency: daily, monthly_copay_usd: 0.00, refill_gap_days: 0}
+  appointments:
+    - {ref: appt:1, date: "2026-04-22", dept: infectious_disease, time: "16:00", location: Hospital ID clinic, status: kept}
+    - {ref: appt:2, date: "2026-10-22", dept: infectious_disease, time: "16:00", location: Hospital ID clinic, status: kept}
+  screener:
+    date: "2026-10-22"
+    answers:
+      living_situation: steady_place
+      housing_problems: none
+      food_worry: never_true
+      food_ran_out: never_true
+      transportation: "no"
+      utilities_shutoff: "no"
+  notes:
+    - {ref: note:1, date: "2026-04-22", role: pharmacy, text: "Enrolled in Illinois ADAP as secondary payer; antiretroviral copay $0 at the pharmacy. 90-day fills."}
+
+visit:
+  visit_id: V-T009
+  date: "2026-10-22"
+  setting: infectious disease clinic, routine follow-up
+  transcript:
+    - {ref: turn:T01, speaker: doctor, text: "Viral load is undetectable again and your CD4 is 710. Any missed doses since April?"}
+    - {ref: turn:T02, speaker: patient, text: "Maybe one all summer. I keep the bottle next to my toothbrush."}
+    - {ref: turn:T03, speaker: doctor, text: "Any side effects, weight change, mood changes?"}
+    - {ref: turn:T04, speaker: patient, text: "Nothing. I've put on a little muscle, I've been lifting."}
+    - {ref: turn:T05, speaker: doctor, text: "Still at the university?"}
+    - {ref: turn:T06, speaker: patient, text: "Second year of the PhD. The student plan plus the ADAP card covers the pill, I don't pay anything."}
+    - {ref: turn:T07, speaker: doctor, text: "Good. How do you get here?"}
+    - {ref: turn:T08, speaker: patient, text: "I bike. Fifteen minutes from campus."}
+    - {ref: turn:T09, speaker: doctor, text: "Let's do the usual labs today plus a lipid panel, the flu shot, and the STI screen."}
+    - {ref: turn:T10, speaker: patient, text: "Sure."}
+    - {ref: turn:T11, speaker: doctor, text: "Seen a dentist this year?"}
+    - {ref: turn:T12, speaker: patient, text: "In September. All clear."}
+
+draft_plan:
+  - {item_id: P1, type: medication, text: "Continue bictegravir-emtricitabine-tenofovir alafenamide one tablet daily"}
+  - {item_id: P2, type: monitoring, text: "HIV viral load, CD4 count, metabolic panel and lipid panel today and in 6 months"}
+  - {item_id: P3, type: medication, text: "Influenza vaccine today; updated COVID-19 vaccine today"}
+  - {item_id: P4, type: monitoring, text: "Syphilis serology and three-site gonorrhea/chlamydia screening today and every 3 to 6 months"}
+  - {item_id: P5, type: appointment, text: "Infectious disease follow-up in 6 months", schedule: "once, ~2027-04"}
+
+planted_conflicts: []
+
+decoys:
+  - {barrier: transport, ref: turn:T08, why_irrelevant: "Tract no-vehicle share is 0.563 but he is car-free by choice and bikes 15 minutes; PLACES lack-of-transport is 7.0."}
+
+expected_ok_items: [P1, P2, P3, P4, P5]

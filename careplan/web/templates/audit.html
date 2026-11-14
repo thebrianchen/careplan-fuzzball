@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Audit · Care Plan Check{% endblock %}
+{% block content %}
+<h1>Audit trail</h1>
+<p class="muted">What crossed to the public zone this session, and every clinician decision. Both logs live on the private box.</p>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+  <section class="panel">
+    <h2>Crossings to the public box ({{ crossings | length }})</h2>
+    <table>
+      <tr><th>Case</th><th>Tract</th><th>Need</th><th>Days</th><th>Time</th><th>Caller</th></tr>
+      {% for c in crossings %}
+      <tr><td>{{ c.case_id }}</td><td class="mono">{{ c.tract_id }}</td><td>{{ c.need }}</td><td>{{ c.days or 'any' }}</td><td>{{ c.time or 'any' }}</td><td class="mono">{{ c.caller }}</td></tr>
+      {% else %}
+      <tr><td colspan="6" class="muted">none yet</td></tr>
+      {% endfor %}
+    </table>
+    <p class="faint" style="font-size:13px;margin-top:10px">Only these five fields can leave the private box; free text is rejected by schema. Caller identity is the signed header from the Fuzzball endpoint proxy (rehearsal: stand-in proxy).</p>
+  </section>
+  <section class="panel">
+    <h2>Clinician decisions ({{ feedback | length }})</h2>
+    <table>
+      <tr><th>When</th><th>Case</th><th>Item</th><th>Decision</th><th>Note</th></tr>
+      {% for f in feedback %}
+      <tr><td class="mono">{{ f.ts }}</td><td>{{ f.case_id }}</td><td>{{ f.item_id }}</td><td>{{ f.decision }}</td><td>{{ f.note or '' }}</td></tr>
+      {% else %}
+      <tr><td colspan="5" class="muted">none yet</td></tr>
+      {% endfor %}
+    </table>
+    <p class="faint" style="font-size:13px;margin-top:10px">These rows become tonight's training examples for the fast local model (nightly-train workflow). Nothing here identifies a patient.</p>
+  </section>
+</div>
+{% endblock %}

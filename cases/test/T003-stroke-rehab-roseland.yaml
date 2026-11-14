@@ -1,0 +1,244 @@
+case_id: T003
+split: test
+title: Right-sided weakness after stroke; outpatient therapy three days a week with no way to get there
+author: claude-draft
+reviewed_by: Lynna Yang (dispute review, 2026-11-10)
+written_at: '2026-10-31'
+frozen_sha256: null
+patient:
+  patient_id: P-T003
+  name: Geraldine Mapps
+  dob: '1954-02-11'
+  sex: F
+  language: en
+  mrn: MRN-LJHC2N2D64
+  address: 11100 S Michigan Ave, Chicago, IL 60628
+  tract_geoid: null
+  coverage:
+    type: medicare
+    plan: Original Medicare (Parts A, B, D); no supplemental plan
+    transport_benefit: 'no'
+  pcp: Dr. C. Baptiste (fictional)
+  problems:
+  - ref: prob:1
+    code: I69.351
+    system: ICD-10-CM
+    display: Hemiplegia following cerebral infarction affecting right dominant side
+  - ref: prob:2
+    code: I48.91
+    system: ICD-10-CM
+    display: Unspecified atrial fibrillation
+  - ref: prob:3
+    code: I10
+    system: ICD-10-CM
+    display: Essential hypertension
+  - ref: prob:4
+    code: E78.5
+    system: ICD-10-CM
+    display: Hyperlipidemia, unspecified
+  meds:
+  - ref: med:1
+    name: apixaban
+    dose: 5 mg
+    frequency: twice daily
+    cost_tier: 3
+    monthly_copay_usd: 12.0
+    refill_gap_days: 0
+  - ref: med:2
+    name: atorvastatin
+    dose: 80 mg
+    frequency: nightly
+    cost_tier: 1
+    monthly_copay_usd: 2.0
+    refill_gap_days: 0
+  - ref: med:3
+    name: lisinopril
+    dose: 10 mg
+    frequency: daily
+    cost_tier: 1
+    monthly_copay_usd: 1.5
+    refill_gap_days: 0
+  appointments:
+  - ref: appt:1
+    date: '2026-10-02'
+    dept: inpatient
+    location: Hospital (acute stroke admission 10-02 to 10-06)
+    status: kept
+  - ref: appt:2
+    date: '2026-10-06'
+    dept: inpatient_rehabilitation
+    location: Hospital inpatient rehab unit (10-06 to 10-20)
+    status: kept
+  - ref: appt:3
+    date: '2026-10-27'
+    dept: neurology
+    time: '10:00'
+    location: Hospital neurology clinic
+    status: kept
+  screener:
+    date: '2026-10-03'
+    answers:
+      living_situation: steady_place
+      housing_problems: none
+      food_worry: never_true
+      food_ran_out: never_true
+      transportation: 'yes'
+      utilities_shutoff: 'no'
+  notes:
+  - ref: note:1
+    date: '2026-10-20'
+    role: rehabilitation_case_management
+    topics:
+    - digital_access
+    text: 'Discharge planning: no internet service at home; patient uses a basic flip phone and has never used video calls.
+      Daughter has a smartphone but works 07:00-17:00. Outpatient speech therapy still to be arranged.'
+  - ref: note:2
+    date: '2026-10-20'
+    role: social_work
+    topics:
+    - caregiving
+    text: Lives with adult daughter, who works full-time days and helps with bathing in the evenings. Patient ambulates with
+      a hemi-walker. No home health aide hours approved yet.
+visit:
+  visit_id: V-T003
+  date: '2026-10-27'
+  setting: neurology post-discharge visit
+  transcript:
+  - ref: turn:T01
+    speaker: doctor
+    text: You've been home a week from rehab. How are the right arm and leg?
+  - ref: turn:T02
+    speaker: patient
+    text: The leg's coming back. The arm's still weak, I drop things.
+  - ref: turn:T03
+    speaker: doctor
+    text: The rehab team wants you in outpatient therapy three days a week at the hospital rehab center. Can you get here
+      that often?
+  - ref: turn:T04
+    speaker: patient
+    text: Not on my own. I can't drive now, and my daughter works seven to five. She took today off to bring me.
+    topics:
+    - transport
+  - ref: turn:T05
+    speaker: doctor
+    text: What about the bus?
+  - ref: turn:T06
+    speaker: patient
+    text: With the walker? From 111th it's the Michigan bus and then a transfer. I'm not steady enough for that yet.
+    topics:
+    - transport
+  - ref: turn:T07
+    speaker: doctor
+    text: Understood. For speech, the therapist can see you by video twice a week from home.
+  - ref: turn:T08
+    speaker: patient
+    text: If you say so.
+  - ref: turn:T09
+    speaker: doctor
+    text: Any trouble with the bills from the hospital stay?
+  - ref: turn:T10
+    speaker: patient
+    text: They sent one for the rehab, twenty percent of something. I'm on a fixed income. I haven't opened the second one
+      yet.
+    topics:
+    - other_cost
+  - ref: turn:T11
+    speaker: doctor
+    text: I'll have the financial counselor call you. Are you taking the apixaban morning and night?
+  - ref: turn:T12
+    speaker: patient
+    text: Every morning and every night. My daughter set up the pill box.
+  - ref: turn:T13
+    speaker: doctor
+    text: Good. Check your blood pressure every morning and write it down for me.
+  - ref: turn:T14
+    speaker: patient
+    text: I can do that.
+draft_plan:
+- item_id: P1
+  type: referral
+  text: Outpatient physical and occupational therapy at the hospital rehabilitation center, Monday/Wednesday/Friday 9:00 AM
+    for 8 weeks
+  schedule: MWF 09:00 x8 weeks
+- item_id: P2
+  type: referral
+  text: Speech-language therapy by video visit twice weekly for 6 weeks
+  schedule: 2x/week x6 weeks
+- item_id: P3
+  type: medication
+  text: Continue apixaban 5 mg twice daily, atorvastatin 80 mg nightly, lisinopril 10 mg daily
+- item_id: P4
+  type: monitoring
+  text: Home blood pressure each morning, written log; goal under 130/80
+- item_id: P5
+  type: appointment
+  text: Neurology follow-up in 3 months
+  schedule: once, ~2027-01
+planted_conflicts:
+- conflict_id: C1
+  item_id: P1
+  barrier: transport
+  expected_status: blocked
+  evidence:
+  - source: transcript
+    ref: turn:T04
+  - source: transcript
+    ref: turn:T06
+  - source: record
+    ref: screener:transportation
+  - source: tract
+    ref: tract:no_vehicle_share
+  - source: tract
+    ref: tract:places_lacktrpt
+  acceptable_alternative_categories:
+  - paratransit
+  - schedule_change
+  - other
+  note: 'Original Medicare: NEMT suggestions should not count. Pace ADA paratransit (she uses a hemi-walker after a stroke)
+    or home-health PT/OT (''other'') are the realistic fixes; an evening/Saturday slot the daughter can drive to is schedule_change.'
+- conflict_id: C2
+  item_id: P1
+  barrier: other_cost
+  expected_status: at_risk
+  evidence:
+  - source: transcript
+    ref: turn:T10
+  acceptable_alternative_categories:
+  - other
+  - community_health_worker
+  note: 20% Part B coinsurance on 24 therapy visits with no Medigap, on a fixed income. 'other' = financial counseling / Medicare
+    Savings Program screening.
+- conflict_id: C3
+  item_id: P2
+  barrier: digital_access
+  expected_status: blocked
+  evidence:
+  - source: record
+    ref: note:1
+  acceptable_alternative_categories:
+  - other
+  - schedule_change
+  - coordinate_with_existing_visit
+  note: 'Record-only: no internet and a flip phone; video therapy cannot happen as written. ''other'' = in-person speech therapy
+    bundled with the PT/OT days or home-health SLP; schedule_change = evening sessions on the daughter''s smartphone.'
+- conflict_id: C4
+  item_id: P5
+  barrier: transport
+  expected_status: at_risk
+  evidence:
+  - source: transcript
+    ref: turn:T04
+  - source: transcript
+    ref: turn:T06
+  acceptable_alternative_categories:
+  - nemt
+  - paratransit
+  note: 'Added from Lynna''s dispute review: the system raised it, the key had missed it.'
+decoys:
+- barrier: caregiving
+  ref: note:2
+  why_irrelevant: She receives care from her daughter; she is not caring for anyone, so no plan item is blocked by caregiving
+    duties. The daughter's work hours matter for transport (C1), not caregiving.
+expected_ok_items:
+- P3
+- P4

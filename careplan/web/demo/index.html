@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Care Plan Check: demo</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="brand">Care Plan Check</div>
+  <div class="tags"><span class="tag">made-up patient</span><span class="tag mode" id="mode"></span></div>
+</header>
+
+<main>
+  <!-- LEFT: what the doctor already has -->
+  <section class="col">
+    <div class="card" id="patient"></div>
+    <div class="card">
+      <h2>What he said in the visit</h2>
+      <div id="visit"></div>
+    </div>
+    <div class="card">
+      <h2>The doctor's plan</h2>
+      <ol id="plan"></ol>
+      <button id="review" class="primary">Review the plan</button>
+      <span id="clock" class="muted"></span>
+    </div>
+  </section>
+
+  <!-- RIGHT: what the review finds -->
+  <section class="col">
+    <div class="card">
+      <h2>What the review is doing</h2>
+      <ul id="steps" class="steps"><li class="muted">Press "Review the plan".</li></ul>
+    </div>
+    <div id="summary" class="summary" hidden></div>
+    <div id="findings"></div>
+    <div class="card" id="boundary" hidden>
+      <h2>What left the private box</h2>
+      <p class="muted">Everything else stayed on the box that holds the patient. Only this crossed to the box that reads the web:</p>
+      <table><thead><tr><th>Neighborhood (census tract)</th><th>Kind of need</th><th>Days</th></tr></thead><tbody id="crossings"></tbody></table>
+    </div>
+  </section>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

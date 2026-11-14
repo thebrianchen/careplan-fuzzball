@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Care Plan Check</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="#/">
+    <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect width="24" height="24" rx="6" fill="currentColor"/><path d="M6.5 12.5l3.6 3.6 7.4-8" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span>Care Plan Check</span>
+  </a>
+  <nav aria-label="Views">
+    <a href="#/" data-nav="visits">Visits</a>
+    <a href="#/system" data-nav="system">System</a>
+  </nav>
+  <div class="top-right">
+    <span class="tag" title="Every patient in this app is invented. No real patient data is used anywhere.">Made-up patients</span>
+    <span class="tag planner" id="planner" hidden></span>
+  </div>
+</header>
+<main id="view"></main>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

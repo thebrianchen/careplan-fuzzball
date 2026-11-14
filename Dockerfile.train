@@ -1,0 +1,16 @@
+# Training image for the night workflow (fuzzball/nightly-train.fz.yaml, job `train`): LoRA on Nemotron Nano BF16.
+# Build on an arm64 GB10 box:  docker build -f Dockerfile.train -t careplan-train:dev .
+# Run needs the GPU and the model volume:  docker run --gpus all -v ~/models:/models careplan-train:dev python training/train_lora.py ...
+FROM python:3.12-slim
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+WORKDIR /app
+COPY requirements.txt ./requirements.txt
+COPY training/requirements.txt ./training/requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt -r training/requirements.txt
+COPY careplan ./careplan
+COPY training ./training
+COPY config ./config
+COPY rules ./rules
+COPY schemas ./schemas
+COPY prompts ./prompts
+CMD ["python", "training/train_lora.py", "--help"]

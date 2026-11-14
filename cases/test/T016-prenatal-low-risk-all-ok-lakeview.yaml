@@ -1,0 +1,136 @@
+case_id: T016
+split: test
+title: Low-risk first pregnancy at 20 weeks; remote worker who walks to the clinic
+author: claude-draft
+reviewed_by: Lynna Yang (dispute review, 2026-11-10)
+written_at: '2026-10-31'
+frozen_sha256: null
+patient:
+  patient_id: P-T016
+  name: Claire Donnelly
+  dob: '1994-06-08'
+  sex: F
+  language: en
+  mrn: MRN-SNAALQ2NF2
+  address: 3400 N Southport Ave, Chicago, IL 60657
+  tract_geoid: null
+  coverage:
+    type: commercial
+    plan: Employer PPO (fictional)
+    transport_benefit: 'no'
+  pcp: Dr. R. Achebe, OB/GYN (fictional)
+  problems:
+  - ref: prob:1
+    code: Z34.02
+    system: ICD-10-CM
+    display: Encounter for supervision of normal first pregnancy, second trimester
+  meds:
+  - ref: med:1
+    name: prenatal multivitamin with DHA
+    dose: 1 tablet
+    frequency: daily
+    cost_tier: 1
+    monthly_copay_usd: 0.0
+    refill_gap_days: 0
+  appointments:
+  - ref: appt:1
+    date: '2026-09-02'
+    dept: obstetrics
+    time: 08:00
+    location: Women's health clinic
+    status: kept
+  - ref: appt:2
+    date: '2026-09-30'
+    dept: obstetrics
+    time: 08:00
+    location: Women's health clinic
+    status: kept
+  - ref: appt:3
+    date: '2026-10-28'
+    dept: obstetrics
+    time: 08:00
+    location: Women's health clinic
+    status: kept
+  screener:
+    date: '2026-10-28'
+    answers:
+      living_situation: steady_place
+      housing_problems: none
+      food_worry: never_true
+      food_ran_out: never_true
+      transportation: 'no'
+      utilities_shutoff: 'no'
+  notes:
+  - ref: note:1
+    date: '2026-09-02'
+    role: nursing
+    text: 'New OB intake: works remotely as a product designer; husband is a nurse on weekday shifts. Lives in a second-floor
+      condo six blocks from the clinic.'
+visit:
+  visit_id: V-T016
+  date: '2026-10-28'
+  setting: prenatal visit, 20 weeks
+  transcript:
+  - ref: turn:T01
+    speaker: doctor
+    text: Twenty weeks, and the anatomy scan looked normal. How are you feeling?
+  - ref: turn:T02
+    speaker: patient
+    text: Good. My energy's back and I'm feeling the kicks now.
+  - ref: turn:T03
+    speaker: doctor
+    text: Blood pressure is fine and weight is on track. I'll see you in four weeks, then every two weeks from twenty-eight.
+  - ref: turn:T04
+    speaker: patient
+    text: Mornings work. I work from home and my team's on the West Coast, so nothing starts before eleven.
+  - ref: turn:T05
+    speaker: doctor
+    text: The glucose test is due between twenty-four and twenty-eight weeks. You can do it in the clinic lab the morning
+      of your next visit.
+  - ref: turn:T06
+    speaker: patient
+    text: Perfect.
+  - ref: turn:T07
+    speaker: doctor
+    text: The hospital's childbirth class runs four Saturday mornings. There's an online version too.
+  - ref: turn:T08
+    speaker: patient
+    text: Saturdays are fine. My husband's off weekends.
+  - ref: turn:T09
+    speaker: doctor
+    text: Flu shot and the Tdap today. Any questions about the vitamin?
+  - ref: turn:T10
+    speaker: patient
+    text: No. I take it with breakfast.
+  - ref: turn:T11
+    speaker: doctor
+    text: How do you get here?
+  - ref: turn:T12
+    speaker: patient
+    text: We walk. It's six blocks.
+draft_plan:
+- item_id: P1
+  type: appointment
+  text: Prenatal visit in 4 weeks, then every 2 weeks from 28 weeks, Wednesdays 8:00 AM
+  schedule: Wed 08:00; q4w then q2w
+- item_id: P2
+  type: monitoring
+  text: 1-hour glucose challenge test at the clinic lab at the 24-week visit
+- item_id: P3
+  type: education
+  text: Childbirth education class, 4 Saturday mornings at the hospital
+  schedule: Sat x4
+- item_id: P4
+  type: medication
+  text: Influenza and Tdap vaccines today; continue prenatal vitamin daily
+- item_id: P5
+  type: education
+  text: Fetal movement awareness; call for bleeding, leaking fluid, severe headache or visual changes
+planted_conflicts: []
+decoys: []
+expected_ok_items:
+- P1
+- P2
+- P3
+- P4
+- P5

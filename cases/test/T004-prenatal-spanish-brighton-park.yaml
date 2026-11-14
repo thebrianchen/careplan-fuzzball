@@ -1,0 +1,218 @@
+case_id: T004
+split: test
+title: Third-trimester prenatal visits every two weeks for a candy-factory packer on a 6 AM shift
+author: claude-draft
+reviewed_by: Lynna Yang (dispute review, 2026-11-10)
+written_at: '2026-10-31'
+frozen_sha256: null
+patient:
+  patient_id: P-T004
+  name: Araceli Mendoza
+  dob: '1999-03-17'
+  sex: F
+  language: es
+  mrn: MRN-7PZH7T5SZ6
+  address: 4000 S Archer Ave, Chicago, IL 60632
+  tract_geoid: null
+  coverage:
+    type: medicaid
+    plan: HealthChoice Illinois (fictional Lakeshore Community Health Plan)
+    transport_benefit: 'yes'
+  pcp: Dr. P. Guzman, OB/GYN (fictional)
+  problems:
+  - ref: prob:1
+    code: Z34.83
+    system: ICD-10-CM
+    display: Encounter for supervision of normal pregnancy, third trimester
+  - ref: prob:2
+    code: O99.013
+    system: ICD-10-CM
+    display: Anemia complicating pregnancy, third trimester
+  meds:
+  - ref: med:1
+    name: prenatal multivitamin
+    dose: 1 tablet
+    frequency: daily
+    cost_tier: 1
+    monthly_copay_usd: 0.0
+    refill_gap_days: 0
+  - ref: med:2
+    name: ferrous sulfate
+    dose: 325 mg
+    frequency: daily with dinner
+    cost_tier: 1
+    monthly_copay_usd: 0.0
+    refill_gap_days: 0
+  appointments:
+  - ref: appt:1
+    date: '2026-09-15'
+    dept: obstetrics
+    time: '10:00'
+    location: Hospital women's clinic
+    status: kept
+  - ref: appt:2
+    date: '2026-10-13'
+    dept: obstetrics
+    time: '10:00'
+    location: Hospital women's clinic
+    status: no_show
+  - ref: appt:3
+    date: '2026-10-20'
+    dept: obstetrics
+    time: '10:00'
+    location: Hospital women's clinic
+    status: kept
+  - ref: appt:4
+    date: '2026-10-27'
+    dept: obstetrics
+    time: '10:00'
+    location: Hospital women's clinic
+    status: kept
+  screener:
+    date: '2026-09-15'
+    answers:
+      living_situation: steady_place
+      housing_problems: none
+      food_worry: sometimes_true
+      food_ran_out: never_true
+      transportation: 'no'
+      utilities_shutoff: 'no'
+  notes:
+  - ref: note:1
+    date: '2026-09-15'
+    role: nursing
+    topics:
+    - language_literacy
+    text: Preferred language Spanish; phone interpreter used. Patient reads and writes Spanish well. Limited spoken English;
+      does not read English.
+  - ref: note:2
+    date: '2026-10-20'
+    role: nursing
+    topics:
+    - food_access
+    text: WIC enrollment not completed (missed intake appointment). Patient reports meals are mostly rice, beans and tortillas
+      in the last week of the month. Hemoglobin 10.2.
+visit:
+  visit_id: V-T004
+  date: '2026-10-27'
+  setting: prenatal visit, 28 weeks, with phone interpreter
+  transcript:
+  - ref: turn:T01
+    speaker: doctor
+    text: You're twenty-eight weeks today. From now on I need to see you every two weeks, and every week after thirty-six.
+  - ref: turn:T02
+    speaker: interpreter
+    text: Every two weeks is hard. I missed the visit two weeks ago because I couldn't leave work. I pack at a candy factory
+      on Kedzie, six to two-thirty. They allow two unexcused absences and after that they let you go.
+    topics:
+    - work_schedule
+  - ref: turn:T03
+    speaker: doctor
+    text: Could you come after your shift, say three o'clock?
+  - ref: turn:T04
+    speaker: interpreter
+    text: After work would be fine. The ten o'clock is the problem.
+    topics:
+    - work_schedule
+  - ref: turn:T05
+    speaker: doctor
+    text: I also need the glucose test. You drink the sugar drink and we draw blood one hour later.
+  - ref: turn:T06
+    speaker: interpreter
+    text: Can I do that here, today?
+  - ref: turn:T07
+    speaker: doctor
+    text: Yes, right here in the clinic lab. And there's a childbirth class I'd like you to sign up for.
+  - ref: turn:T08
+    speaker: interpreter
+    text: Okay.
+  - ref: turn:T09
+    speaker: doctor
+    text: How do you get here?
+  - ref: turn:T10
+    speaker: interpreter
+    text: My husband drops me off on his way to work, or I take the Archer bus. It's not far.
+  - ref: turn:T11
+    speaker: doctor
+    text: How is the iron pill sitting with you?
+  - ref: turn:T12
+    speaker: interpreter
+    text: It upsets my stomach a little, but I take it with dinner like you said.
+draft_plan:
+- item_id: P1
+  type: appointment
+  text: Prenatal visits every 2 weeks, Tuesdays 10:00 AM, then weekly from 36 weeks
+  schedule: Tue 10:00 q2w, then weekly
+- item_id: P2
+  type: monitoring
+  text: 1-hour glucose challenge test in the clinic lab today
+- item_id: P3
+  type: education
+  text: 'Childbirth education series: 4 Saturday sessions at the hospital, 9:00 AM'
+  schedule: Sat 09:00 x4
+- item_id: P4
+  type: medication
+  text: Continue prenatal vitamin daily and ferrous sulfate 325 mg with dinner; recheck hemoglobin at 32 weeks
+- item_id: P5
+  type: diet
+  text: 'Iron-rich diet: lean meat, beans and leafy greens daily, fresh fruit and vegetables at each meal, vitamin C with
+    iron-rich foods'
+planted_conflicts:
+- conflict_id: C1
+  item_id: P1
+  barrier: work_schedule
+  expected_status: at_risk
+  evidence:
+  - source: transcript
+    ref: turn:T02
+  - source: transcript
+    ref: turn:T04
+  - source: record
+    ref: appt:2
+  acceptable_alternative_categories:
+  - flexible_scheduling
+  - schedule_change
+  note: 'She has kept 3 of 4 but says a third absence costs her the job; an afternoon slot fixes it. Lynna: at_risk or blocked
+    for the 10:00 slot?'
+- conflict_id: C2
+  item_id: P3
+  barrier: language_literacy
+  expected_status: at_risk
+  evidence:
+  - source: record
+    ref: note:1
+  acceptable_alternative_categories:
+  - interpreter
+  - plain_language_materials
+  - other
+  note: 'Record-only: preferred language Spanish, does not read English; the hospital series and its handouts need a Spanish-language
+    section or interpreter. The transcript shows an interpreter but no turn is tagged.'
+- conflict_id: C3
+  item_id: P5
+  barrier: food_access
+  expected_status: at_risk
+  evidence:
+  - source: record
+    ref: note:2
+  - source: record
+    ref: screener:food_worry
+  - source: tract
+    ref: tract:places_foodinsecu
+  - source: tract
+    ref: tract:lila_half_10
+  acceptable_alternative_categories:
+  - snap
+  - food_pantry
+  - other
+  - community_health_worker
+  needs_tract_check: false
+  note: Record + tract only; nothing spoken. 'other' = completing WIC enrollment. Tract confirmed with pipeline.lookup on
+    2026-10-31.
+decoys:
+- barrier: transport
+  ref: turn:T10
+  why_irrelevant: Husband drives her or she takes the Archer bus a short distance; Medicaid NEMT is also available. The tract
+    does not fire transport.
+expected_ok_items:
+- P2
+- P4

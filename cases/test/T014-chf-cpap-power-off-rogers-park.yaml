@@ -1,0 +1,256 @@
+case_id: T014
+split: test
+title: Heart failure discharge; CPAP with the power cut off, cardiac rehab around an adult son who cannot be alone
+author: claude-draft
+reviewed_by: Lynna Yang (dispute review, 2026-11-10)
+written_at: '2026-10-31'
+frozen_sha256: null
+patient:
+  patient_id: P-T014
+  name: Lorraine Petrakis
+  dob: '1956-11-20'
+  sex: F
+  language: en
+  mrn: MRN-VR723KOUTD
+  address: 7000 N Clark St, Chicago, IL 60626
+  tract_geoid: null
+  coverage:
+    type: dual
+    plan: Medicare + Illinois Medicaid (fictional Lakeshore MMAI plan)
+    transport_benefit: 'yes'
+  pcp: Dr. D. Halvorsen (fictional)
+  problems:
+  - ref: prob:1
+    code: I50.22
+    system: ICD-10-CM
+    display: Chronic systolic (congestive) heart failure
+  - ref: prob:2
+    code: G47.33
+    system: ICD-10-CM
+    display: Obstructive sleep apnea
+  - ref: prob:3
+    code: I10
+    system: ICD-10-CM
+    display: Essential hypertension
+  meds:
+  - ref: med:1
+    name: sacubitril-valsartan
+    dose: 49/51 mg
+    frequency: twice daily
+    cost_tier: 3
+    monthly_copay_usd: 4.9
+    refill_gap_days: 0
+  - ref: med:2
+    name: carvedilol
+    dose: 12.5 mg
+    frequency: twice daily
+    cost_tier: 1
+    monthly_copay_usd: 1.6
+    refill_gap_days: 0
+  - ref: med:3
+    name: empagliflozin
+    dose: 10 mg
+    frequency: daily
+    cost_tier: 3
+    monthly_copay_usd: 4.9
+    refill_gap_days: 0
+  - ref: med:4
+    name: furosemide
+    dose: 40 mg
+    frequency: daily
+    cost_tier: 1
+    monthly_copay_usd: 1.6
+    refill_gap_days: 0
+  appointments:
+  - ref: appt:1
+    date: '2026-10-11'
+    dept: emergency
+    time: 02:15
+    location: Hospital ED
+    status: kept
+  - ref: appt:2
+    date: '2026-10-11'
+    dept: inpatient
+    location: Hospital (acute decompensated heart failure, 10-11 to 10-15)
+    status: kept
+  - ref: appt:3
+    date: '2026-10-23'
+    dept: cardiology
+    time: '14:00'
+    location: Hospital cardiology clinic
+    status: kept
+  - ref: appt:4
+    date: '2026-10-30'
+    dept: primary_care
+    time: '10:00'
+    location: Clinic
+    status: kept
+  screener:
+    date: '2026-10-30'
+    answers:
+      living_situation: steady_place
+      housing_problems: none
+      food_worry: never_true
+      food_ran_out: never_true
+      transportation: 'no'
+      utilities_shutoff: already_shut_off
+  notes:
+  - ref: note:1
+    date: '2026-10-15'
+    role: case_management
+    topics:
+    - digital_access
+    text: 'Discharge: patient has a flip phone and no home internet. Declined the remote-monitoring tablet offered at discharge
+      (''wouldn''t know what to do with it''). Agreed to daily weights written on a calendar.'
+  - ref: note:2
+    date: '2026-10-15'
+    role: social_work
+    topics:
+    - caregiving
+    text: Lives with adult son (34) with autism and intellectual disability who cannot be left alone. He attends a day program
+      09:00-14:00 weekdays; patient walks him to the program bus at 08:30. Patient is his sole caregiver; sister in Skokie
+      helps occasionally.
+visit:
+  visit_id: V-T014
+  date: '2026-10-30'
+  setting: post-discharge primary care visit
+  transcript:
+  - ref: turn:T01
+    speaker: doctor
+    text: Two weeks home from the hospital. How's the breathing?
+  - ref: turn:T02
+    speaker: patient
+    text: Better. I can lie down with two pillows now.
+  - ref: turn:T03
+    speaker: doctor
+    text: Cardiology wants you in cardiac rehab in about a month, three mornings a week.
+  - ref: turn:T04
+    speaker: patient
+    text: Three mornings. Danny's program runs nine to two. If rehab is at nine, who walks him to the bus at eight-thirty?
+      I'm the only one.
+    topics:
+    - caregiving
+  - ref: turn:T05
+    speaker: doctor
+    text: Is there anyone else who could?
+  - ref: turn:T06
+    speaker: patient
+    text: My sister in Skokie, once in a while. Not three days a week.
+    topics:
+    - caregiving
+  - ref: turn:T07
+    speaker: doctor
+    text: Let's talk about the sleep machine. Are you using it every night?
+  - ref: turn:T08
+    speaker: patient
+    text: I was. The power's been off since Monday, ComEd cut it. I've been sleeping sitting up in the chair.
+    topics:
+    - utilities
+  - ref: turn:T09
+    speaker: doctor
+    text: Since Monday? Do you have heat?
+  - ref: turn:T10
+    speaker: patient
+    text: The gas is on. Lights and the fridge are off. I'm paying what I can on Friday and they say Tuesday to turn it back
+      on.
+    topics:
+    - utilities
+  - ref: turn:T11
+    speaker: doctor
+    text: I'm getting the social worker in here today. How are you getting to your appointments?
+  - ref: turn:T12
+    speaker: patient
+    text: The Clark bus stops right in front. It's easy.
+  - ref: turn:T13
+    speaker: doctor
+    text: Weighing yourself every morning?
+  - ref: turn:T14
+    speaker: patient
+    text: Every morning. I write it on the calendar.
+draft_plan:
+- item_id: P1
+  type: referral
+  text: Cardiac rehabilitation at the hospital, Monday/Wednesday/Friday 9:00 AM for 12 weeks, to begin once stable in about
+    4 weeks
+  schedule: MWF 09:00 x12 weeks, start ~2026-11-30
+- item_id: P2
+  type: monitoring
+  text: 'Remote monitoring: Bluetooth scale and blood pressure cuff with daily upload through the heart failure app'
+- item_id: P3
+  type: medication
+  text: CPAP nightly for obstructive sleep apnea
+- item_id: P4
+  type: medication
+  text: Continue sacubitril-valsartan, carvedilol, empagliflozin and furosemide 40 mg daily
+- item_id: P5
+  type: diet
+  text: 2 g sodium diet; fluid limit 1.5 L/day
+planted_conflicts:
+- conflict_id: C1
+  item_id: P1
+  barrier: caregiving
+  expected_status: at_risk
+  evidence:
+  - source: transcript
+    ref: turn:T04
+  - source: transcript
+    ref: turn:T06
+  - source: record
+    ref: note:2
+  acceptable_alternative_categories:
+  - caregiver_support
+  - schedule_change
+  - other
+  note: A 10 AM start after the son's 8:30 bus is schedule_change; respite or an aide through the son's waiver is caregiver_support;
+    home-based rehab is 'other'.
+- conflict_id: C2
+  item_id: P2
+  barrier: digital_access
+  expected_status: blocked
+  evidence:
+  - source: record
+    ref: note:1
+  acceptable_alternative_categories:
+  - phone_followup
+  - other
+  note: 'Record-only: flip phone, no internet, already declined the tablet. Paper weights with a nurse phone call is the realistic
+    version.'
+- conflict_id: C3
+  item_id: P3
+  barrier: utilities
+  expected_status: blocked
+  evidence:
+  - source: transcript
+    ref: turn:T08
+  - source: transcript
+    ref: turn:T10
+  - source: record
+    ref: screener:utilities_shutoff
+  acceptable_alternative_categories:
+  - medical_certificate_utilities
+  - utility_assistance
+  note: Power is off today; CPAP cannot run. Illinois medical-certificate reconnection for a life-sustaining device plus LIHEAP/hardship
+    funds.
+- conflict_id: C4
+  item_id: P2
+  barrier: utilities
+  expected_status: at_risk
+  evidence:
+  - source: transcript
+    ref: turn:T08
+  - source: record
+    ref: screener:utilities_shutoff
+  acceptable_alternative_categories:
+  - utility_assistance
+  - medical_certificate_utilities
+  - phone_followup
+  note: 'A Bluetooth scale, cuff and app all need power and connectivity; the outage is expected to end Tuesday, so at_risk
+    rather than blocked. Lynna: keep, or fold into C2 as a single P2 flag?'
+decoys:
+- barrier: transport
+  ref: turn:T12
+  why_irrelevant: Tract no-vehicle share is 0.295 but the Clark bus stops in front of her building and dual coverage includes
+    NEMT; the rehab problem is her son, not the ride.
+expected_ok_items:
+- P4
+- P5
