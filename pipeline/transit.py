@@ -104,11 +104,12 @@ class Router:
             best[s] = depart_s + int(do[s] / WALK_MPS)
         dd = _dist_m(dlat, dlon, self.lat, self.lon)
         targets = np.nonzero(dd <= MAX_WALK_M)[0]
+        last_walk = (dd[targets] / WALK_MPS).astype(int)
         walk_only = depart_s + int(_dist_m(olat, olon, np.array([dlat]), np.array([dlon]))[0] / WALK_MPS)
         target_best = walk_only if walk_only - depart_s <= MAX_WALK_M * 2 / WALK_MPS else np.iinfo(np.int32).max
         start = np.searchsorted(self.dep, depart_s)
         for i in range(start, len(self.dep)):
-            if self.dep[i] >= target_best:
+            if self.dep[i] >= target_best:              # nothing that leaves this late can arrive earlier
                 break
             t = self.trip[i]
             if on_trip[t] or best[self.frm[i]] <= self.dep[i]:
@@ -118,8 +119,10 @@ class Router:
                     best[s] = a
                     near, secs = self._transfers(s)
                     np.minimum.at(best, near, a + secs)
+                    if len(targets):
+                        target_best = min(target_best, int(np.min(best[targets] + last_walk)))
         if len(targets):
-            target_best = min(target_best, int(np.min(best[targets] + (dd[targets] / WALK_MPS).astype(int))))
+            target_best = min(target_best, int(np.min(best[targets] + last_walk)))
         ok = target_best < np.iinfo(np.int32).max
         return {"arrival_s": int(target_best) if ok else None, "minutes": round((target_best - depart_s) / 60) if ok else None,
                 "origin_stops_in_walk": int((do <= MAX_WALK_M).sum()), "dest_stops_in_walk": int(len(targets))}
