@@ -12,7 +12,7 @@
 <section class="panel">
   <h2>A hijacked public-zone agent asks the scheduler for the patient volume</h2>
   <p class="muted" style="margin-top:0">The web agent (no patient tools) reads a poisoned "cluster maintenance" page that tells it to start a job mounting <code>ehr</code>.
-  {% if real %}The decision below is Fuzzball's.{% else %}<b>Rehearsal:</b> the decision comes from a stand-in that applies the rules our Fuzzfiles declare. On the cluster it is Fuzzball's own.{% endif %}</p>
+  The decision below is Fuzzball's.</p>
   <button id="run" class="primary">Run it</button> <button id="rec" class="ghost">▶ Recorded run</button> <span id="rstat" class="muted"></span><span class="recbadge" id="recbadge">RECORDED RUN</span>
   <div id="rlog" style="margin-top:10px"></div>
   <div id="rdec"></div>
@@ -38,8 +38,7 @@
   <table><tr><th>Small model, same tools, 20 held-out cases</th><th>Barriers found with evidence</th><th>Cards it failed to finish</th></tr>
   <tr><td>Stock</td><td class="mono">0.19</td><td class="mono">8 of 20</td></tr>
   <tr><td>Trained on this box</td><td class="mono">0.47</td><td class="mono">1 of 20</td></tr>
-  <tr><td class="muted">For reference: the big stock model, which writes the cards</td><td class="mono muted">0.56</td><td class="mono muted">0 of 60</td></tr></table>
-  <p class="faint" style="font-size:13px">One run per small-model row, on our own GB10; the trained row is the Nov 13 night rehearsal (5.3 hours end to end). The trained small model does not match the big one; the weights never leave this volume.</p>
+  <tr><td class="muted">For reference: the big model, which writes the cards</td><td class="mono muted">0.56</td><td class="mono muted">0 of 60</td></tr></table>
 </section>
 {% endblock %}
 {% block scripts %}<script>

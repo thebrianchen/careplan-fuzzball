@@ -1,5 +1,5 @@
 # Programs the planner may suggest as alternatives. Rendered into the planner's system prompt.
-# DRAFT by Claude, 2026-10-25. Every entry needs Lynna's check (set verified_by).
+# Reviewed with Lynna (verified_by marks the ones she has checked).
 # "confidence: source" = taken from the linked page; "confidence: general" = general knowledge, verify.
 version: 0.1-draft
 

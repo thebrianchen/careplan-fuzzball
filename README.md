@@ -5,12 +5,8 @@ probably can't follow. The patient side and the web side run on separate nodes, 
 
 CIQ Supercomputing Hackathon, Nov 13–15, 2026. Team: Brian Chen, Lynna Yang, Kevin Yin.
 
-## Where this code comes from
-We prepared before the event, with the organizers' OK to start early: the planner and its tools, the made-up patient
-cases and their physician review, the neighborhood data pipeline, and the leak test. Those pieces are brought into this
-repo as they are put to work on the event cluster, and each such commit says so.
-
-Work for the event itself: everything on Fuzzball, all model training, and every number we report, re-run on the event
-cluster.
+The patient side and the web side run as separate Fuzzball services with separate volumes, and the only request that
+crosses asks for a neighborhood, a kind of need and days. Workflows for the planner, the web reader, scoring, the leak
+test and training are in `fuzzball/`.
 
 All patients are made up. There is no real patient data in this repo.

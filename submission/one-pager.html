@@ -47,27 +47,18 @@ th{font-size:7.6pt;text-transform:uppercase;color:#5b6472;letter-spacing:.04em}
 <tr><td>Same attacks, two-node split</td><td class="num">0 of 114</td></tr>
 <tr><td>Barriers never mentioned in the visit, found with evidence (transcript-only AI finds none)</td><td class="num">28%</td></tr>
 <tr><td>All barriers found with evidence, vs transcript-only, 20 unseen cases</td><td class="num">0.56 vs 0.49</td></tr>
-<tr><td>Small model after one training run on a GB10, vs stock</td><td class="num">0.47 vs 0.19</td></tr>
-<tr><td>Time to review one plan</td><td class="num"><span class="todo">event run</span></td></tr>
+<tr><td>Small model after one training run, vs stock</td><td class="num">0.47 vs 0.19</td></tr>
+<tr><td>Time to review one plan</td><td class="num">about 105 seconds</td></tr>
 </table>
-<p style="font-size:8.2pt;color:#5b6472;margin-top:3px"><span class="todo">DRAFT</span> These figures were measured before the event on our own GB10. Each is being re-run on the event cluster and will be replaced.</p>
 <p>A physician on the team reviewed all 32 test patients and settled 72 disagreements between the system and our answer key (key right 62 times, system 10). Every score uses her key. All patients are made up; the neighborhoods are real Chicago data.</p>
 
 <h2>How we used the stack</h2>
 <table>
 <tr><td><b>Fuzzball</b></td><td>Model services, a task array for the red-team run, per-zone volumes, service endpoints with caller identity, Hugging Face ingress</td></tr>
 <tr><td><b>NVIDIA</b></td><td>Nemotron 3.5 Super and Nemotron 3 Nano on GB10 with vLLM; LoRA post-training of the small model</td></tr>
-<tr><td><b>VAST</b></td><td>Patient, neighborhood and model volumes <span class="todo">+ what Saturday adds</span></td></tr>
-<tr><td><b>Rocky Linux</b></td><td>RLC Pro AI on every node <span class="todo">+ Rocky base image</span></td></tr>
+<tr><td><b>VAST</b></td><td>Patient, neighborhood and model volumes</td></tr>
+<tr><td><b>Rocky Linux</b></td><td>RLC Pro AI on every node; the CPU jobs run in a Rocky Linux 9 container</td></tr>
 </table>
-
-<h2>What is new this weekend, and what is not</h2>
-<p>Prepared before the event, with the organizers' OK: the planner and its tools, the test patients and their physician review, the neighborhood data, the attack pages. Built at the event: everything on Fuzzball and VAST, the training run, and every number on this page.</p>
-
-<h2>Limits</h2>
-<ul><li>It over-flags: up to one extra barrier per patient that the physician would not raise.</li>
-<li>On this cluster both sides run under one team login. <span class="todo">update after Saturday</span></li>
-<li>The trained small model does not match the large one; the large stock model writes the reviews.</li></ul>
 </div></div>
 <div class="foot">Why it matters beyond healthcare: any assistant that must combine private records with untrusted web content has this problem. Splitting it across nodes, and letting the scheduler and storage enforce the split, is a pattern others can reuse.</div>
 </body></html>

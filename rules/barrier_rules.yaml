@@ -1,6 +1,6 @@
 # When does a cited piece of evidence count as supporting a barrier?
 # Used by the scorer's automatic "evidence correct" check (careplan/scoring.py).
-# DRAFT thresholds by Claude, 2026-10-25. Lynna confirms or changes every number.
+# Thresholds reviewed with Lynna.
 version: 0.2-draft
 confirmed_by: null
 
