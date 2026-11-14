@@ -309,6 +309,8 @@
       "address": "1230 S Millard Ave, Chicago, IL 60623",
       "hours": "Mon 13:00-15:00",
       "phone": "773-522-1138",
+      "lat": 41.865343189435,
+      "lon": -87.716686660714,
       "miles_from_home": 1.6
      }
     },
@@ -327,6 +329,8 @@
       "address": "3757 W Douglas Blvd, Chicago, IL 60623",
       "hours": "Fri 10:00-12:00",
       "phone": "773-277-1700",
+      "lat": 41.862309270485,
+      "lon": -87.718024394622,
       "miles_from_home": 1.7
      }
     }

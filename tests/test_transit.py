@@ -2,7 +2,7 @@
 import copy
 import unittest
 
-from careplan import ROOT
+from careplan import ROOT, transit_tool
 from careplan.cases import Case, build_ref_index, load_case
 from careplan.data import ResourceTable, TractTable
 from careplan.scoring import check_evidence
@@ -38,6 +38,18 @@ class TransitToolTests(unittest.TestCase):
         self.assertFalse(out["feasible"])
         chk = check_evidence(self.case, "transport", [f"transit:{self.ref}"], self.tracts.get("17031260300"))
         self.assertTrue(chk.ok)
+
+    def test_the_rides_drawn_on_the_map_are_the_trip_the_tool_reports(self):
+        t = self.tracts.get("17031260300")
+        home = (t["intpt_lat"], t["intpt_lon"], MT_SINAI, "06:00")
+        trip, rides = transit_tool.trip(*home), transit_tool.rides(*home)
+        self.assertTrue(rides)
+        self.assertGreaterEqual(rides[0]["board"], trip["latest_departure"])
+        self.assertLessEqual(rides[-1]["alight"], trip["arrival"])
+        times = [x for r in rides for x in (r["board"], r["alight"])]
+        self.assertEqual(times, sorted(times))                               # one ride after another
+        self.assertTrue(all(len(r["path"]) >= 2 for r in rides))
+        self.assertEqual(transit_tool.rides(t["intpt_lat"], t["intpt_lon"], MT_SINAI, "03:30"), [])     # no on-time trip, nothing to draw
 
     def test_no_facility_is_a_tool_error(self):
         del self.case.refs[self.ref]["facility_ccn"]

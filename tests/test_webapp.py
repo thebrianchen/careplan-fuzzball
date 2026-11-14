@@ -171,6 +171,30 @@ class WebAppTests(unittest.TestCase):
         crossings = [s["label"] for s in evs[-1]["doc"]["steps"] if s["kind"] == "crossing"]
         self.assertEqual(crossings, ["Asked the public side for transport help near home", "Asked the public side for food help near home"])
 
+    def test_a_visit_says_where_things_are_and_how_the_neighborhood_compares(self):
+        chart = self.get("case/D001")["chart"]
+        self.assertEqual(chart["home"]["tract_id"], "17031260300")
+        place = {a["dept"]: a["place"] for a in chart["appointments"]}
+        self.assertEqual(place["dialysis"]["name"], "Davita Park Manor Dialysis")
+        self.assertGreater(place["dialysis"]["miles_from_home"], 10)
+        trip = place["dialysis"]["trip"]                                   # None without the schedule cache on this machine
+        self.assertTrue(trip is None or trip["minutes"] > 0)
+        self.assertIsNone(place["nephrology"])                             # no facility on record: nothing to place
+        fact = {f["ref"]: f for f in chart["neighborhood"]["facts"]}
+        food = fact["tract:places_foodinsecu"]
+        self.assertLess(food["county"]["median"], food["county"]["p75"])
+        self.assertGreaterEqual(food["number"], food["county"]["p75"])
+        self.assertIsNone(fact["tract:lila_half_10"]["county"])            # a yes/no flag has no scale
+        items = self.review("mode=recorded&speed=1000")[-1]["doc"]["items"]
+        pantry = next(a["resource"] for i in items for a in i["alternatives"] if a["resource"])
+        self.assertTrue(41 < pantry["lat"] < 43 and -89 < pantry["lon"] < -87)
+
+    def test_the_map_backdrop_is_public_points_and_nothing_else(self):
+        city = self.get("city")
+        self.assertEqual(set(city), {"tracts", "stops"})
+        self.assertEqual(len(city["tracts"]["lat"]), len(city["tracts"]["lon"]))
+        self.assertGreater(len(city["tracts"]["lat"]), 1000)
+
     def test_pages_are_served_and_nothing_outside_them(self):
         with urllib.request.urlopen(f"{self.url}/app/") as r:
             self.assertIn("Care Plan Check", r.read().decode())

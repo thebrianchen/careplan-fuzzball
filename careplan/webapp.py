@@ -9,6 +9,7 @@ GET  /api/app/review/<id>     event stream of a review. ?mode=recorded replays a
 POST /api/app/decision/<id>   {item_id, decision: accept|edit|dismiss, note}: the clinician's call on one flagged item
 POST /api/app/reset/<id>      forget this visit's review and its decisions on screen (the decision log keeps its rows)
 GET  /api/app/system          the operator's view: planner, reviews, crossings, decisions, activity. Case ids only, no patient fields.
+GET  /api/app/city            the backdrop of the visit page's maps: tract centers and transit stops. Public data, no patient fields.
 
 A review is shown the same way whether it is live or a saved run: start, step*, item*, end (with the whole document).
 The document is careplan.demo's shape plus `chart`, `decisions` and `handout`.
@@ -17,14 +18,17 @@ from __future__ import annotations
 
 import collections
 import copy
+import functools
 import ipaddress
 import json
+import statistics
 import time
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
-from . import demo
+from . import demo, transit_tool
 from .card import FIELD_LABEL, _evidence
+from .data import haversine_km
 from .summary import LANG
 
 WEB_APP = Path(__file__).parent / "web" / "app"
@@ -50,7 +54,40 @@ def _hosted(host: str) -> bool:
         return "." in host and not host.endswith((".local", ".internal", ".svc", ".lan", ".ts.net"))
 
 
-def chart(case, tract: dict | None) -> dict:
+def _shown(key: str, value: float) -> str:
+    return f"{value:.0%}" if key == "no_vehicle_share" else f"{value:g}"
+
+
+def county(tracts) -> dict[str, dict]:
+    """Where the county's tracts stand on each neighborhood figure, so one tract's value can be drawn against them."""
+    out = {}
+    for key in FIELD_LABEL:
+        if key.startswith("lila_"):                          # yes/no flags have no scale
+            continue
+        values = sorted(v for r in tracts.rows.values() if isinstance(v := r.get(key), (int, float)))
+        if len(values) >= 4:
+            _, median, p75 = statistics.quantiles(values, n=4)
+            out[key] = {"median": median, "p75": p75, "max": values[-1], "median_text": _shown(key, median)}
+    return out
+
+
+def _place(appt: dict, tract: dict | None) -> dict | None:
+    """Where an appointment happens and how far it is from the home tract. `trip` is the last transit trip that arrives in
+    time, with the stops its rides pass, or None when the schedule cache is not on this machine."""
+    fac = transit_tool._facilities().get(appt.get("facility_ccn") or "")
+    if not (fac and tract):
+        return None
+    lat, lon = float(fac["lat"]), float(fac["lon"])
+    home = (tract["intpt_lat"], tract["intpt_lon"], appt["facility_ccn"], appt.get("time"))
+    trip = transit_tool.trip(*home) if appt.get("time") else {"error": "no time"}
+    return {"name": fac["name"], "address": fac["address"], "lat": lat, "lon": lon,
+            "miles_from_home": round(haversine_km(tract["intpt_lat"], tract["intpt_lon"], lat, lon) * 0.621371, 1),
+            "trip": None if "error" in trip else {"feasible": trip["feasible"], "leave_by": trip["latest_departure"], "arrive": trip["arrival"],
+                                                  "minutes": trip["trip_minutes"], "assumes": trip["assumes"],
+                                                  "rides": transit_tool.rides(*home)}}
+
+
+def chart(case, tract: dict | None, county: dict[str, dict]) -> dict:
     """What the doctor already has on the private side, each row carrying the ref the review cites."""
     p = case.patient
     scr = p.get("screener") or {}
@@ -60,11 +97,14 @@ def chart(case, tract: dict | None) -> dict:
             value, _, note = _evidence(case, f"tract:{key}", tract)[1].partition(": ")[2].partition(" (")
             if key.startswith("lila_"):
                 value = "yes" if tract[key] else "no"
-            hood.append({"ref": f"tract:{key}", "label": label, "value": value, "note": note.rstrip(")")})
+            hood.append({"ref": f"tract:{key}", "label": label, "value": value, "note": note.rstrip(")"),
+                         "number": tract[key] if key in county else None, "county": county.get(key)})
     return {
+        "home": {"tract_id": case.tract_geoid, "lat": tract["intpt_lat"], "lon": tract["intpt_lon"]} if tract else None,
         "problems": [{"ref": x["ref"], "display": x["display"]} for x in p.get("problems", [])],
         "meds": [{k: m.get(k) for k in ("ref", "name", "dose", "frequency", "monthly_copay_usd", "refill_gap_days")} for m in p.get("meds", [])],
-        "appointments": [{k: a.get(k) for k in ("ref", "date", "time", "dept", "location", "status")} for a in p.get("appointments", [])],
+        "appointments": [{**{k: a.get(k) for k in ("ref", "date", "time", "dept", "location", "status")}, "place": _place(a, tract)}
+                         for a in p.get("appointments", [])],
         "screener": {"date": scr.get("date"), "answers": [{"ref": f"screener:{q}", "question": SCREENER.get(q, q.replace("_", " ")), "answer": str(a).replace("_", " ")}
                                                           for q, a in (scr.get("answers") or {}).items()]},
         "notes": [{k: n.get(k) for k in ("ref", "date", "role", "text")} for n in p.get("notes", [])],
@@ -80,6 +120,18 @@ class Clinic:
         self.runs: collections.deque = collections.deque(maxlen=200)
         self.activity: collections.deque = collections.deque(maxlen=200)
         self._probe: tuple[float, str | None] = (0.0, None)  # when the endpoint was last probed, and why it did not answer
+        self.county = county(app.tracts)
+
+    @functools.cached_property
+    def city(self) -> dict:
+        """The backdrop of the visit page's maps: every tract's center and, when the schedule cache is on this machine, every
+        transit stop (they trace the street grid). Public tables only."""
+        def points(lats, lons) -> dict:
+            return {"lat": [round(float(x), 4) for x in lats], "lon": [round(float(x), 4) for x in lons]}
+        rows = [r for r in self.app.tracts.rows.values() if isinstance(r.get("intpt_lat"), float)]
+        router = transit_tool._router()
+        return {"tracts": points([r["intpt_lat"] for r in rows], [r["intpt_lon"] for r in rows]),
+                "stops": points(router.lat, router.lon) if router else None}
 
     def note(self, event: str, case_id: str | None = None, **detail) -> None:
         self.activity.append({"ts": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "event": event, "case_id": case_id, **detail})
@@ -137,7 +189,7 @@ class Clinic:
         code = (case.patient.get("language") or "en").lower()
         doc["patient"] = {**doc["patient"], "language": LANGUAGE.get(code, code), "handout_language": LANG.get(code, "English"),
                           "pcp": case.patient.get("pcp")}
-        doc["chart"] = chart(case, app.tracts.get(case.tract_geoid))
+        doc["chart"] = chart(case, app.tracts.get(case.tract_geoid), self.county)
         doc["decisions"] = dict((app.results.get(cid) or {}).get("decisions") or {}) if s else {}
         doc["handout"] = app.summaries.get(cid) if s else None
         doc["has_recording"] = self.recording(cid).is_file()
@@ -327,6 +379,8 @@ def handle(app, h, method: str, path: str, query: str) -> None:
         return js(200, c.cases())
     if method == "GET" and route == "system":
         return js(200, c.system())
+    if method == "GET" and route == "city":
+        return js(200, c.city)
     if method == "GET" and route == "case" and cid:
         return js(200, c.case(cid))
     if method == "GET" and route == "review" and cid:

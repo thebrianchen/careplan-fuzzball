@@ -46,6 +46,20 @@ def trip(home_lat: float, home_lon: float, ccn: str, arrive_by: str) -> dict:
             "assumes": "weekday CTA+Pace schedules, walking up to 800 m each end, transfers within 250 m"}
 
 
+@lru_cache(maxsize=256)
+def rides(home_lat: float, home_lon: float, ccn: str, arrive_by: str) -> list[dict]:
+    """The rides of the trip that `trip` reports, for drawing it: board and alight times and the stops each ride passes.
+    Empty when there is no on-time trip or it is a walk."""
+    from pipeline.transit import hhmm
+    found = trip(home_lat, home_lon, ccn, arrive_by)
+    if not found.get("feasible"):
+        return []
+    fac = _facilities()[ccn]
+    h, m = map(int, found["latest_departure"].split(":"))
+    journey = _router().journey(home_lat, home_lon, float(fac["lat"]), float(fac["lon"]), h * 3600 + m * 60)
+    return [{"board": hhmm(r["board_s"]), "alight": hhmm(r["alight_s"]), "path": r["path"]} for r in (journey or {}).get("rides", [])]
+
+
 def supports_transport(case, appt_ref: str, tract_row: dict | None) -> bool | None:
     """Scoring: True if the record + schedules show no on-time transit trip; None if unverifiable."""
     appt = case.refs.get(appt_ref)

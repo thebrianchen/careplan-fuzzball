@@ -67,7 +67,7 @@ def resolve_item(case: Case, it: dict, t: float | None, tract: dict | None, reso
     alts = []
     for alt in it.get("alternatives", []) or []:
         r = resources.by_id.get(alt.get("resource_record_id") or "")
-        res = r and {"name": r.name, "address": r.address, "hours": r.hours_text(), "phone": r.phone,
+        res = r and {"name": r.name, "address": r.address, "hours": r.hours_text(), "phone": r.phone, "lat": r.lat, "lon": r.lon,
                      "miles_from_home": round(haversine_km(tract["intpt_lat"], tract["intpt_lon"], r.lat, r.lon) * 0.621371, 1) if tract else None}
         alts.append({"category": alt["category"], "label": alt["category"].replace("_", " "), "text": alt["text"], "resource": res or None})
     return {"item_id": it["item_id"], "plan_text": plan.get(it["item_id"], {}).get("text", it["item_id"]), "t": t,

@@ -168,6 +168,53 @@ class Router:
                 hi = mid - 1
         return found or {"depart_s": None, "arrival_s": None}
 
+    def journey(self, olat, olon, dlat, dlon, depart_s: int) -> dict | None:
+        """The rides of the earliest-arrival trip that leaves the origin at depart_s: for each ride its board and alight
+        times and the stops it passes, in order. The same scan as earliest_arrival, remembering how each stop was reached.
+        None when no ride reaches the destination."""
+        inf = np.iinfo(np.int32).max
+        best = np.full(len(self.lat), inf, dtype=np.int64)
+        reached: dict[int, tuple] = {}            # stop -> ("ride", trip, its last connection) or ("walk", from stop)
+        boarded: dict[int, int] = {}              # trip -> the connection where it was boarded
+        do = _dist_m(olat, olon, self.lat, self.lon)
+        for s in np.nonzero(do <= MAX_WALK_M)[0]:
+            best[s] = depart_s + int(do[s] / WALK_MPS)
+        dd = _dist_m(dlat, dlon, self.lat, self.lon)
+        targets = np.nonzero(dd <= MAX_WALK_M)[0]
+        if not len(targets):
+            return None
+        last_walk = (dd[targets] / WALK_MPS).astype(int)
+        arrival = inf
+        for i in range(np.searchsorted(self.dep, depart_s), len(self.dep)):
+            if self.dep[i] >= arrival:
+                break
+            t = int(self.trip[i])
+            if t in boarded or best[self.frm[i]] <= self.dep[i]:
+                boarded.setdefault(t, i)
+                a, s = int(self.arr[i]), int(self.to[i])
+                if a < best[s]:
+                    best[s], reached[s] = a, ("ride", t, i)
+                    near, secs = self._transfers(s)
+                    for n, sec in zip(near.tolist(), secs.tolist()):
+                        if a + sec < best[n]:
+                            best[n], reached[n] = a + sec, ("walk", s)
+                    arrival = int(np.min(best[targets] + last_walk))
+        s = int(targets[np.argmin(best[targets] + last_walk)])
+        rides = []
+        while s in reached:
+            how = reached[s]
+            if how[0] == "walk":
+                s = how[1]
+                continue
+            _, t, last = how
+            first = boarded[t]
+            conns = first + np.nonzero(self.trip[first:last + 1] == t)[0]
+            stops = [int(self.frm[conns[0]]), *self.to[conns].tolist()]
+            rides.append({"board_s": int(self.dep[first]), "alight_s": int(self.arr[last]),
+                          "path": [[round(float(self.lat[k]), 5), round(float(self.lon[k]), 5)] for k in stops]})
+            s = int(self.frm[first])
+        return {"arrival_s": arrival, "rides": rides[::-1]} if rides else None
+
 
 def hhmm(s: int | None) -> str:
     return "none" if s is None else f"{s // 3600:02d}:{s % 3600 // 60:02d}"
