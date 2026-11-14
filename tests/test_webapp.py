@@ -269,6 +269,21 @@ class WebAppTests(unittest.TestCase):
         t = p["tracts"][0]
         self.assertTrue(41 < t["lat"] < 43 and t["facts"] and set(t["places_near"]) == {"food_access", "utilities", "med_cost"})
         self.assertEqual(set(t) & {"name", "mrn", "dob", "address", "patient_id"}, set())  # counts and public figures only
+        self.assertEqual(sum(t["kinds_near"]["food_access"].values()), t["places_near"]["food_access"])
+        self.assertLessEqual(len(t["nearest"]["food_access"]), 3)
+        self.assertTrue(set(t["public_points_to"]) <= set(p["public_kinds"]) == {"food_access", "housing", "transport", "utilities"})
+        self.assertIn("how_to_start", p["programs"]["transport"][0])
+
+    def test_panel_counts_written_by_an_older_aggregates_are_not_shown(self):
+        from careplan import webapp
+        old = Path(self.tmp.name) / "old_counts.json"
+        old.write_text(json.dumps({"built": "x", "k": 5, "tracts_suppressed_under_k": 0,
+                                   "tracts": [{"tract_geoid": "17031260300", "patients": 9, "appointments": 1, "no_shows": 0, "flagged_items": 3, "barriers": {}}]}))
+        real, webapp.PANEL["reviews"] = webapp.PANEL["reviews"], old
+        try:
+            self.assertIsNone(self.get("panel")["panel"])
+        finally:
+            webapp.PANEL["reviews"] = real
 
     def test_pages_are_served_and_nothing_outside_them(self):
         with urllib.request.urlopen(f"{self.url}/app/") as r:

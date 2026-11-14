@@ -28,11 +28,15 @@ import os
 import statistics
 import time
 import types
+
+import yaml
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 from . import ROOT, demo, sample, transit_tool
 from .card import FIELD_LABEL, _evidence
+from .planner import PROGRAMS_PATH
+from .scoring import RULES, _cmp
 from .data import haversine_km
 from .summary import LANG
 
@@ -109,6 +113,7 @@ def hood_facts(tract: dict | None, county: dict[str, dict]) -> list[dict]:
 
 
 PANEL = {"reviews": ROOT / "reports" / "panel_aggregates.json", "sample": ROOT / "reports" / "panel_aggregates_sample.json"}
+PANEL_COUNTS = ("patients", "reviewed", "flagged_patients", "flagged_items", "appointments", "no_shows", "barriers")
 PANEL_CLINIC = "17031260300"                      # scripts/panel.py draws the panel from the tracts nearest this one
 HELP_KM = 1.6                                     # "near" a neighborhood: within a mile of its center
 PANEL_EDGE = 0.012                                # degrees beyond the outermost neighborhood centers that the map still shows
@@ -117,27 +122,52 @@ PANEL_EDGE = 0.012                                # degrees beyond the outermost
 def panel(tracts, resources, county: dict[str, dict], samples: bool) -> dict | None:
     """The published counts by neighborhood, each joined with its place on the map, its public figures and how many places
     that could help are near. The reviews' file wins; the answer-key stand-in is used only when samples are on."""
-    f = PANEL["reviews"] if PANEL["reviews"].is_file() else PANEL["sample"] if samples and PANEL["sample"].is_file() else None
-    if f is None:
+    agg = None
+    for f in [PANEL["reviews"]] + ([PANEL["sample"]] if samples else []):
+        if f.is_file():
+            agg = json.loads(f.read_text())
+            if all(k in r for r in agg["tracts"] for k in PANEL_COUNTS):
+                break
+            agg = None                            # counts written by an older careplan.aggregates: not shown
+    if agg is None:
         return None
-    agg = json.loads(f.read_text())
+    need_of = {need: barrier for barrier, (need, _) in sample.PLACES.items()}
+    helpers = [x for x in resources.resources if x.need in need_of]
     rows, totals = [], collections.Counter()
     for r in agg["tracts"]:
         t = tracts.get(r["tract_geoid"])
         if not t:
             continue
         totals.update(r["barriers"])
-        near = collections.Counter(barrier for barrier, (need, _) in sample.PLACES.items() for x in resources.resources
-                                   if x.need == need and haversine_km(t["intpt_lat"], t["intpt_lon"], x.lat, x.lon) <= HELP_KM)
-        rows.append({"tract_id": r["tract_geoid"], "lat": t["intpt_lat"], "lon": t["intpt_lon"],
-                     **{k: r[k] for k in ("patients", "reviewed", "flagged_patients", "flagged_items", "appointments", "no_shows", "barriers")},
-                     "places_near": {barrier: near[barrier] for barrier in sample.PLACES}, "facts": hood_facts(t, county)})
+        near: dict[str, list] = {barrier: [] for barrier in sample.PLACES}
+        for x in helpers:
+            d = haversine_km(t["intpt_lat"], t["intpt_lon"], x.lat, x.lon)
+            if d <= HELP_KM:
+                near[need_of[x.need]].append((d, x))
+        rows.append({"tract_id": r["tract_geoid"], "lat": t["intpt_lat"], "lon": t["intpt_lon"], **{k: r[k] for k in PANEL_COUNTS},
+                     "places_near": {barrier: len(found) for barrier, found in near.items()},
+                     "kinds_near": {barrier: dict(collections.Counter(x.kind for _, x in found)) for barrier, found in near.items()},
+                     "nearest": {barrier: [{"name": x.name, "kind": x.kind, "miles": round(d * 0.621371, 1), "address": x.address,
+                                            "hours": x.hours_text(), "phone": x.phone} for d, x in sorted(found, key=lambda f: f[0])[:3]]
+                                 for barrier, found in near.items()},
+                     "public_points_to": sorted({b for key, rule in RULES["tract_fields"].items() if _cmp(t.get(key), rule["rule"]) for b in rule["supports"]}),
+                     "facts": hood_facts(t, county)})
     clinic = tracts.get(PANEL_CLINIC)
     lats, lons = [r["lat"] for r in rows], [r["lon"] for r in rows]
     inside = lambda x: min(lats) - PANEL_EDGE <= x.lat <= max(lats) + PANEL_EDGE and min(lons) - PANEL_EDGE <= x.lon <= max(lons) + PANEL_EDGE
-    places = {barrier: [{"name": x.name, "lat": x.lat, "lon": x.lon} for x in resources.resources if x.need == need and inside(x)]
+    places = {barrier: [{"id": x.record_id, "name": x.name, "kind": x.kind, "lat": x.lat, "lon": x.lon, "address": x.address,
+                         "hours": x.hours_text(), "phone": x.phone, "eligibility": x.eligibility}
+                        for x in resources.resources if x.need == need and inside(x)]
               for barrier, (need, _) in sample.PLACES.items()} if rows else {}
-    return {"places": places, "source": "sample" if agg.get("source") == "answer_key" else "reviews", "built": agg["built"], "k": agg["k"],
+    programs: dict[str, list] = collections.defaultdict(list)
+    for prog in yaml.safe_load(PROGRAMS_PATH.read_text())["programs"]:
+        for barrier in prog["needs"]:
+            programs[barrier].append({k: prog.get(k) for k in ("id", "category", "eligible_when", "how_to_start", "caveats", "source_url", "confidence")})
+    return {"places": places, "programs": programs,
+            "public_kinds": sorted({b for rule in RULES["tract_fields"].values() for b in rule["supports"]}),
+            "public_refs": {b: [f"tract:{key}" for key, rule in RULES["tract_fields"].items() if b in rule["supports"] and key in FIELD_LABEL]
+                            for b in sorted({b for rule in RULES["tract_fields"].values() for b in rule["supports"]})},
+            "source": "sample" if agg.get("source") == "answer_key" else "reviews", "built": agg["built"], "k": agg["k"],
             "patients": agg["patients"], "reviewed": agg["reviewed"], "hidden_tracts": agg["tracts_suppressed_under_k"],
             "clinic": {"tract_id": PANEL_CLINIC, "lat": clinic["intpt_lat"], "lon": clinic["intpt_lon"]} if clinic else None,
             "barriers": [{"barrier": b, "label": b.replace("_", " "), "flags": n, "places": b in sample.PLACES} for b, n in totals.most_common()],
