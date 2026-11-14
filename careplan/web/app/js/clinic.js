@@ -1,6 +1,6 @@
 // The clinic manager's view: every plan in the panel checked, counted by the patient's neighborhood (census tract).
 // Counts only: no patient reaches this page, and a neighborhood with fewer than k patients is not in the data at all.
-//   GET /api/app/panel -> {panel: null | P}     GET /api/app/basemap -> {basemap: null | B} (drawn by clinic_map.js)
+//   GET /api/app/panel -> {panel: null | P}     GET /api/app/basemap -> {basemap: null | B, wide: null | W} (drawn by clinic_map.js)
 // The view lives in the address: #/clinic?b=<barrier>&order=share&t=<tract>&p=<place>, kept current with replaceState.
 // The map's center and zoom are the map's own and stay out of the address.
 import { $, api, cap, date, h, plural } from './ui.js';
@@ -71,11 +71,11 @@ function shades(P, barrier) {
 }
 const measureText = barrier => barrier ? 'flags per reviewed patient' : 'reviewed patients with any flag';
 
-let basemapData = null;                              // the street map (~2 MB), fetched once per page load
-const basemap = () => basemapData || (basemapData = api('basemap').then(d => d.basemap, err => {
+let basemapData = null;                              // the street maps (~2.5 MB), fetched once per page load
+const basemap = () => basemapData || (basemapData = api('basemap').then(d => ({ B: d.basemap ?? null, W: d.wide ?? null }), err => {
   console.warn(`The street map could not load, so neighborhoods are drawn as dots: ${err.message}`);
   basemapData = null;
-  return null;
+  return { B: null, W: null };
 }));
 
 function legend(P, state, hidden) {
@@ -165,7 +165,7 @@ function head(P) {
 }
 
 export async function clinic(root, query) {
-  const [{ panel: P }, B] = await Promise.all([api('panel'), basemap()]);
+  const [{ panel: P }, { B, W }] = await Promise.all([api('panel'), basemap()]);
   if (!P) {
     root.innerHTML = h`<div class="page narrow"><div class="page-head"><h1>Clinic</h1></div>
       <div class="notice"><b>This server has no panel results.</b><div class="muted">The clinic view counts reviews over the whole panel. None have been published on this server yet.</div></div></div>`;
@@ -176,7 +176,7 @@ export async function clinic(root, query) {
     <div class="cgrid">
       <section class="card cbars"><h2>Barriers flagged</h2><p class="hint">Flags across ${P.reviewed} reviewed plans. Choose one to see where it clusters.</p><div id="bars"></div></section>
       <section class="card cmapcard"><h2 id="map-title"></h2><p class="csays" id="says"></p>
-        <figure class="cmap"><div class="cmap-stack"></div>${B ? h`<figcaption class="cmap-src">Map: ${B.source}</figcaption>` : ''}</figure>
+        <figure class="cmap"><div class="cmap-stack"></div>${B || W ? h`<figcaption class="cmap-src">Map: ${(B || W).source}</figcaption>` : ''}</figure>
         <div class="legend" id="legend"></div>
         <p class="cfrom">This map is built from what clinicians' plans ran into in visits, not from public data alone. Only counts left the patient side, and a neighborhood with fewer than ${P.k} patients is withheld.</p></section>
       <section class="card crank"><h2 id="rank-title"></h2><div id="rank"></div></section>
@@ -192,7 +192,7 @@ export async function clinic(root, query) {
   const hidden = new Set();                            // kinds of place the manager switched off in the legend, for this visit only
   let state = readAddress(P, query);
   const set = patch => { state = fix(P, { ...state, ...patch }, hidden); paint(); };
-  const map = clinicMap(el('.cmap-stack'), { basemap: B, tracts: P.tracts, clinic: P.clinic, pick: tract => set({ tract }), place: place => set({ place }) });
+  const map = clinicMap(el('.cmap-stack'), { basemap: B, wide: W, tracts: P.tracts, clinic: P.clinic, pick: tract => set({ tract }), place: place => set({ place }) });
   const tip = id => {
     const t = byId[id], m = measure(t, state.barrier), chosen = P.barriers.find(x => x.barrier === state.barrier);
     return h`<b>${tractName(id)}</b> · ${who(t)}<br>${chosen ? nameOf(chosen) : 'Any flag'}: <b>${m.n} of ${m.of}</b> (${pct(m.share)})`;

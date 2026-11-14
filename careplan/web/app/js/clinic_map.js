@@ -1,16 +1,22 @@
 // The clinic page's map: the panel's neighborhoods as their census-tract outlines over a quiet street map, with pins
 // for the places that could help. It owns only the view (center and zoom); everything it shows comes from the page.
-//   const map = clinicMap(stack, {basemap, tracts, clinic, pick, place})   stack: an empty element sized by CSS
-//     basemap  B from GET /api/app/basemap, or null (each neighborhood is then a small circle at its center)
+//   const map = clinicMap(stack, {basemap, wide, tracts, clinic, pick, place})   stack: an empty element sized by CSS
+//     basemap  B from GET /api/app/basemap: the streets around the clinic, or null
+//     wide     W from the same call: the city around it, simplified, with no local streets, or null
+//              (with neither, each neighborhood is a small circle at its center)
 //     pick(id) the manager chose a neighborhood on the map; place(id | null) a pin's card was opened or closed
 //   map.update({bins, ranks, selected, places, place, tip})   after every page paint
 //     bins {tract_id: 0..4}; ranks: tract ids in rank order; places: the pins to show; tip(tract_id) -> h`...`
 //   map.destroy()
-// View: {x, y, k} is the center in km east and south of the box's middle, and px per km. Screen = size/2 + (km - center) * k.
+// View: {x, y, k} is the center in km east and south of the middle of B's box, and px per km. Screen = size/2 + (km - center) * k.
+// The view ranges over W's box. W is drawn everywhere; inside B's box, B's finer layers take over between HANDOVER's stops.
 import { $, $$, cap, h, hours, raw } from './ui.js';
 import { PLACE_KINDS, tractName } from './clinic_words.js';
 
-const KM = 111.32, K_MAX = 1400, PAD = 18, TINY = 18;
+const KM = 111.32, PAD = 18, TINY = 18;
+const SPAN = 0.8;          // km: zoomed all the way in the view still spans about four blocks, so a neighborhood reads as one
+const NEAR = 30;           // px per km: below this a neighborhood is a few px across, so rank badges and pins hide
+const CELL = { wide: 6, basemap: 1.5 };    // km per grid cell; W is sparse and wide, B dense and small
 const ease = t => t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2;
 // A style value that changes with zoom, linear in log(k) between stops [[k, value], ...].
 const ramp = stops => k => {
@@ -21,23 +27,38 @@ const ramp = stops => k => {
   }
   return stops.at(-1)[1];
 };
+const HANDOVER = ramp([[22, 0], [30, 1]]);       // how much of B shows inside its box; W gives way by the same amount
 
-// Bottom to top. `from` picks the basemap's features; `keep` filters them; `min` is the zoom (px per km) a layer starts at. A `label` names a street where its straight stretch
-// on screen is at least `need(k)` times the name plus `room`, so at low zoom only the long through streets get names.
+// W and B share a style per kind of feature, so the hand-over is only a change of detail, never of look.
+const STYLE = {
+  water: { from: 'water', fill: '#d4e3eb' },
+  tracts: { from: 'tracts', stroke: '#d9dee3', width: ramp([[12, 0.5], [60, 0.6], [600, 1]]), alpha: ramp([[12, 0.5], [30, 1]]) },
+  rail: { from: 'rail', stroke: '#a9b0b8', width: ramp([[12, 0.6], [60, 0.9], [600, 1.6]]), alpha: ramp([[12, 0.55], [40, 1]]), dash: [5, 4] },
+  arterials: { from: 'arterials', stroke: '#b9c1c9', width: ramp([[12, 1.1], [60, 1.6], [300, 2.6], [1200, 6]]),
+    label: { order: 1, win: true, font: '600 11px', color: '#56616d', room: 40, need: () => 1.4 } },
+  highways: { from: 'highways', casing: '#aeb6bf', stroke: '#fff', width: ramp([[12, 1.8], [60, 2.6], [300, 4.5], [1200, 9]]),
+    label: { order: 0, win: true, font: '600 11.5px', color: '#4a5562', room: 40, need: ramp([[12, 1.15], [60, 1.4]]) } },
+};
+// Bottom to top within a set. `from` picks the set's features; `keep` filters them; `min` is the zoom (px per km) a layer starts at.
+// A `label` names a line where its straight stretch on screen is at least `need(k)` times the name plus `room`, so at low zoom only
+// the long through streets get names; `order` says who claims room first, and `win` lets a name sit over a pin.
 const LAYERS = [
-  { name: 'water', from: 'water', fill: '#d8e5ec' },
-  { name: 'tracts', from: 'tracts', stroke: '#d9dee3', width: ramp([[60, 0.6], [600, 1]]) },
-  { name: 'lanes', from: 'streets', keep: f => !f.name || f.name === 'Alley', min: 150, stroke: '#e1e5e9', width: ramp([[60, 0.35], [300, 0.8], [1200, 2.5]]), alpha: ramp([[60, 0.5], [250, 1]]) },
-  { name: 'streets', from: 'streets', keep: f => f.name && f.name !== 'Alley', stroke: '#cfd5db', width: ramp([[60, 0.5], [300, 1.3], [1200, 4]]), alpha: ramp([[60, 0.7], [250, 1]]),
-    label: { font: '10.5px', color: '#68737f', room: 26, need: ramp([[70, 4.5], [230, 1.6], [460, 1]]) } },
-  { name: 'rail', from: 'rail', stroke: '#a9b0b8', width: ramp([[60, 0.9], [600, 1.6]]), dash: [5, 4] },
-  { name: 'arterials', from: 'arterials', stroke: '#b9c1c9', width: ramp([[60, 1.6], [300, 2.6], [1200, 6]]),
-    label: { font: '600 11px', color: '#56616d', room: 40, need: () => 1.4 } },
-  { name: 'highways', from: 'highways', casing: '#aeb6bf', stroke: '#fff', width: ramp([[60, 2.6], [300, 4.5], [1200, 9]]),
-    label: { font: '600 11.5px', color: '#4a5562', room: 40, need: () => 1.4 } },
+  ...['water', 'tracts', 'rail', 'arterials', 'highways'].map(kind => ({ set: 'wide', ...STYLE[kind] })),
+  { set: 'basemap', ...STYLE.water },
+  { set: 'basemap', ...STYLE.tracts },
+  { set: 'basemap', from: 'streets', keep: f => !f.name || f.name === 'Alley', min: 150, stroke: '#e1e5e9', width: ramp([[60, 0.35], [300, 0.8], [1200, 2.5]]), alpha: ramp([[60, 0.5], [250, 1]]) },
+  { set: 'basemap', from: 'streets', keep: f => f.name && f.name !== 'Alley', stroke: '#cfd5db', width: ramp([[60, 0.5], [300, 1.3], [1200, 4]]), alpha: ramp([[40, 0], [62, 0.7], [250, 1]]),
+    label: { order: 2, font: '10.5px', color: '#68737f', room: 26, need: ramp([[70, 4.5], [230, 1.6], [460, 1]]) } },
+  { set: 'basemap', ...STYLE.rail },
+  { set: 'basemap', ...STYLE.arterials },
+  { set: 'basemap', ...STYLE.highways },
 ];
+const LABELLED = LAYERS.map((L, i) => [L, i]).filter(([L]) => L.label).sort(([a, i], [b, j]) => a.label.order - b.label.order || j - i).map(([, i]) => i);
 const FADE = ramp([[180, 1], [700, 0.62]]);      // zoomed in to a few blocks, the streets matter more than the shade
 const FONT = '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+const SCALE = [[100, 'ft'], [200, 'ft'], [500, 'ft'], [1000, 'ft'], [0.5, 'mi'], [1, 'mi'], [2, 'mi'], [5, 'mi'], [10, 'mi']];
+const KM_PER = { ft: 0.0003048, mi: 1.609344 };
+const lakeName = name => /^Lk /.test(name) && `Lake ${name.slice(3)}`;   // only lakes are named: TIGER's channel shapes reach into the lake
 
 // Pin glyphs centered on the place, about 10 px across at scale 1. Filled and hollow pairs share a barrier.
 const GLYPH = {
@@ -63,10 +84,11 @@ const norm = name => name.replace(/^I- /, 'I-');
 const sameStreet = name => norm(name).replace(/^[NSEW] /, '');   // "N Cicero Ave" and "Cicero Ave" are one street
 const hide = name => /^State Rte /.test(name);                    // the route number of a street already named
 
-// The basemap in km: each feature's points as a flat array, its bounds, and the straight runs a name can sit on.
-function prepare(B, tracts) {
-  const lat0 = B ? (B.box.south + B.box.north) / 2 : tracts.reduce((s, t) => s + t.lat, 0) / tracts.length;
-  const lon0 = B ? (B.box.west + B.box.east) / 2 : tracts.reduce((s, t) => s + t.lon, 0) / tracts.length;
+// The map data in km: each feature's points as a flat array, its bounds, and the straight runs a name can sit on.
+function prepare(B, W, tracts) {
+  const frame = (B || W)?.box;
+  const lat0 = frame ? (frame.south + frame.north) / 2 : tracts.reduce((s, t) => s + t.lat, 0) / tracts.length;
+  const lon0 = frame ? (frame.west + frame.east) / 2 : tracts.reduce((s, t) => s + t.lon, 0) / tracts.length;
   const cos = Math.cos(lat0 * Math.PI / 180);
   const km = (lat, lon) => [(lon - lon0) * cos * KM, -(lat - lat0) * KM];
   const flat = pts => { const a = new Float32Array(pts.length * 2); pts.forEach(([la, lo], i) => { [a[2 * i], a[2 * i + 1]] = km(la, lo); }); return a; };
@@ -74,30 +96,44 @@ function prepare(B, tracts) {
     for (const a of arrs) for (let i = 0; i < a.length; i += 2) { b[0] = Math.min(b[0], a[i]); b[1] = Math.min(b[1], a[i + 1]); b[2] = Math.max(b[2], a[i]); b[3] = Math.max(b[3], a[i + 1]); }
     return b; };
   const pathOf = rings => rings.map(a => { let s = ''; for (let i = 0; i < a.length; i += 2) s += `${i ? 'L' : 'M'}${a[i].toFixed(3)} ${a[i + 1].toFixed(3)}`; return s + 'Z'; }).join('');
+  const boxOf = b => [...km(b.north, b.west), ...km(b.south, b.east)];
 
   const shapes = tracts.map(t => {
-    const c = km(t.lat, t.lon), outline = B?.tracts[t.tract_id];
+    const c = km(t.lat, t.lon), outline = B?.tracts[t.tract_id] || W?.tracts[t.tract_id];
     const rings = outline ? outline.map(flat)
       : [Float32Array.from({ length: 48 }, (_, i) => c[i % 2] + 0.17 * (i % 2 ? Math.sin(i * Math.PI / 24) : Math.cos(i * Math.PI / 24)))];
     return { id: t.tract_id, c, rings, d: pathOf(rings), b: bounds(rings), outline: !!outline };
   });
-  const box = B ? [...km(B.box.north, B.box.west), ...km(B.box.south, B.box.east)]
-    : (b => [b[0] - 0.6, b[1] - 0.6, b[2] + 0.6, b[3] + 0.6])(bounds(shapes.flatMap(s => s.rings)));
+  const box = (W || B) ? boxOf((W || B).box) : (b => [b[0] - 0.6, b[1] - 0.6, b[2] + 0.6, b[3] + 0.6])(bounds(shapes.flatMap(s => s.rings)));
 
+  const sets = { wide: W, basemap: B };
   const layers = LAYERS.map(L => {
-    const src = !B ? [] : L.from === 'tracts' ? Object.entries(B.tracts).map(([id, rings]) => ({ name: id, rings }))
-      : L.from === 'water' ? B.water : B[L.from].filter(f => !L.keep || L.keep(f));
+    const D = sets[L.set];
+    const src = !D ? [] : L.from === 'tracts' ? Object.entries(D.tracts).map(([id, rings]) => ({ name: id, rings }))
+      : L.from === 'water' ? D.water : D[L.from].filter(f => !L.keep || L.keep(f));
     const feats = src.map(f => { const parts = (f.rings || [f.line]).map(flat); return { name: f.name, parts, b: bounds(parts) }; });
-    return { ...L, tiles: tile(feats, L.fill), runs: L.label ? feats.flatMap(runsOf) : [] };
+    return { ...L, tiles: tile(feats, L.fill, CELL[L.set]), runs: L.label ? feats.flatMap(runsOf) : [] };
   });
-  return { km, shapes, box, layers };
+  // Lakes, one entry per name across both sets, biggest first: the name is written inside where it fits. TIGER cuts
+  // the lake into named and unnamed pieces, so a name's middle and ends must be in its own water and its corners in any water.
+  const waters = new Map(), wet = [];
+  for (const f of [...(W?.water || []), ...(B?.water || [])]) {
+    const parts = f.rings.map(flat);
+    wet.push({ parts, b: bounds(parts) });
+    const text = lakeName(f.name || '');
+    if (!text) continue;
+    const g = waters.get(text) || waters.set(text, { text, parts: [] }).get(text);
+    g.parts.push(...parts);
+  }
+  for (const g of waters.values()) { g.b = bounds(g.parts); g.size = (g.b[2] - g.b[0]) * (g.b[3] - g.b[1]); }
+  return { km, shapes, box, detail: B && boxOf(B.box), wide: !!W, layers, wet, waters: [...waters.values()].sort((a, b) => b.size - a.size) };
 }
 
 // Features grouped into a coarse grid by their middle, one Path2D per cell, so a frame strokes only the cells in view.
-function tile(feats, closed) {
+function tile(feats, closed, size) {
   const cells = new Map();
   for (const f of feats) {
-    const key = `${Math.floor((f.b[0] + f.b[2]) / 2 / 1.5)},${Math.floor((f.b[1] + f.b[3]) / 2 / 1.5)}`;
+    const key = `${Math.floor((f.b[0] + f.b[2]) / 2 / size)},${Math.floor((f.b[1] + f.b[3]) / 2 / size)}`;
     const c = cells.get(key) || cells.set(key, { path: new Path2D(), b: [Infinity, Infinity, -Infinity, -Infinity] }).get(key);
     for (const a of f.parts) {
       for (let i = 0; i < a.length; i += 2) c.path[i ? 'lineTo' : 'moveTo'](a[i], a[i + 1]);
@@ -132,7 +168,7 @@ function runsOf(f) {
 }
 
 let cached = null;
-const prepared = (B, tracts) => cached && cached.B === B && cached.tracts === tracts ? cached.m : (cached = { B, tracts, m: prepare(B, tracts) }).m;
+const prepared = (B, W, tracts) => cached && cached.B === B && cached.W === W && cached.tracts === tracts ? cached.m : (cached = { B, W, tracts, m: prepare(B, W, tracts) }).m;
 
 const overlaps = (a, b) => a[0] < b[2] && b[0] < a[2] && a[1] < b[3] && b[1] < a[3];
 // The part of segment p-q inside the rectangle r, as parameters [t0, t1] along it, or null.
@@ -153,22 +189,36 @@ const crosses = ([x1, y1, x2, y2], b) => {
   return !!clip(x1, y1, x2, y2, b);
 };
 
-export function clinicMap(stack, { basemap, tracts, clinic, pick, place }) {
-  const M = prepared(basemap, tracts), byId = Object.fromEntries(M.shapes.map(s => [s.id, s]));
-  const clinicAt = clinic && M.km(clinic.lat, clinic.lon);
+const meet = (a, b) => { const r = [Math.max(a[0], b[0]), Math.max(a[1], b[1]), Math.min(a[2], b[2]), Math.min(a[3], b[3])]; return r[0] < r[2] && r[1] < r[3] ? r : null; };
+const contains = (o, r) => r[0] >= o[0] && r[1] >= o[1] && r[2] <= o[2] && r[3] <= o[3];
+// Whether point (x, y) is inside the rings (even-odd, flat km arrays).
+function within(x, y, parts) {
+  let n = false;
+  for (const a of parts) for (let i = 0, j = a.length - 2; i < a.length; j = i, i += 2)
+    if ((a[i + 1] > y) !== (a[j + 1] > y) && x < (a[j] - a[i]) * (y - a[i + 1]) / (a[j + 1] - a[i + 1]) + a[i]) n = !n;
+  return n;
+}
+
+export function clinicMap(stack, { basemap, wide, tracts, clinic, pick, place }) {
+  const M = prepared(basemap, wide, tracts), byId = Object.fromEntries(M.shapes.map(s => [s.id, s]));
+  const clinicAt = clinic && M.km(clinic.lat, clinic.lon), farText = `The clinic's panel: ${tracts.length} neighborhoods`;
   stack.innerHTML = h`<canvas class="cmap-base" aria-hidden="true"></canvas>
     <svg class="cmap-fills" role="group" aria-label="Neighborhoods of the panel"><g class="km">${M.shapes.map(s =>
       h`<path class="hood${s.outline ? '' : ' dot'}" data-hood="${s.id}" d="${s.d}" tabindex="0" role="button" aria-label="${tractName(s.id)}"/>`)}</g></svg>
     <canvas class="cmap-names" aria-hidden="true"></canvas>
     <svg class="cmap-marks"><g class="km"><path class="sel-halo"/><path class="sel"/></g><g class="pins"></g><g class="ranks"></g>
       ${clinicAt ? h`<g class="clinic" aria-hidden="true"><rect x="-6" y="-6" width="12" height="12" rx="3"/><path d="M0-3.3v6.6M-3.3 0h6.6"/><text>Clinic</text></g>` : ''}</svg>
-    <div class="cmap-ctl"><button type="button" data-zoom="in" aria-label="Zoom in">+</button><button type="button" data-zoom="out" aria-label="Zoom out">−</button><button type="button" data-zoom="fit" class="fit" title="Back to the whole panel">Fit</button></div>
-    <div class="cmap-tip" role="status" hidden></div>
-    <div class="cmap-card" role="dialog" hidden></div>`;
+    <div class="cmap-ctl"><button type="button" data-zoom="in" aria-label="Zoom in">+</button><button type="button" data-zoom="out" aria-label="Zoom out">−</button><button type="button" data-zoom="fit" class="fit" title="Back to the whole panel">Fit</button>${M.wide ? h`<button type="button" data-zoom="city" class="fit" title="Out to the whole city">City</button>` : ''}</div>
+    <div class="cmap-scale" aria-hidden="true"><span></span><i></i></div>
+    <div class="cmap-tip" role="status" hidden></div>`;
+  // The card is the stack's sibling so that on a phone it can open as a sheet under the map instead of over it.
+  const card = document.createElement('div');
+  card.className = 'cmap-card'; card.setAttribute('role', 'dialog'); card.hidden = true;
+  stack.after(card);
   stack.tabIndex = 0;
   stack.setAttribute('aria-label', 'Map. Arrow keys pan, plus and minus zoom.');
   const base = $('.cmap-base', stack), names = $('.cmap-names', stack), fills = $('.cmap-fills', stack), marks = $('.cmap-marks', stack);
-  const tip = $('.cmap-tip', stack), card = $('.cmap-card', stack), hoods = Object.fromEntries($$('.hood', stack).map(n => [n.dataset.hood, n]));
+  const tip = $('.cmap-tip', stack), scale = $('.cmap-scale', stack), hoods = Object.fromEntries($$('.hood', stack).map(n => [n.dataset.hood, n]));
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   let w = 0, ht = 0, view = null, home = null, touched = false, frame = 0, flight = null, model = null, shown = {}, fromMap = null;
   let pins = [], pinKeyNow = '';
@@ -177,26 +227,31 @@ export function clinicMap(stack, { basemap, tracts, clinic, pick, place }) {
   const toKm = (px, py, v = view) => [v.x + (px - w / 2) / v.k, v.y + (py - ht / 2) / v.k];
   const bw = M.box[2] - M.box[0], bh = M.box[3] - M.box[1];
   const kMin = () => Math.min(w / bw, ht / bh);
-  // The view never leaves the box: along an axis where the view is narrower than the box it stays inside, otherwise it centers.
+  const kMax = () => Math.max(kMin(), Math.min(w, ht) / SPAN);
+  // Along an axis where the view is narrower than the box it stays inside it, otherwise the whole box stays in view. Zoomed in,
+  // the view may also run past the box's edge by up to half of itself, a share that shrinks to nothing at the city zoom, so wheeling out about
+  // a place near the edge keeps that place under the pointer, and all the way out the box fits exactly.
   function clamp(v) {
-    const k = Math.min(K_MAX, Math.max(kMin(), v.k)), hw = w / 2 / k, hh = ht / 2 / k;
-    const fit = (c, lo, hi, half) => hi - lo <= 2 * half ? (lo + hi) / 2 : Math.min(hi - half, Math.max(lo + half, c));
+    const k = Math.min(kMax(), Math.max(kMin(), v.k)), hw = w / 2 / k, hh = ht / 2 / k, give = Math.min(1, 2 * (1 - kMin() / k));
+    const fit = (c, lo, hi, half) => { lo -= give * half; hi += give * half; return Math.min(Math.max(lo + half, hi - half), Math.max(Math.min(lo + half, hi - half), c)); };
     return { x: fit(v.x, M.box[0], M.box[2], hw), y: fit(v.y, M.box[1], M.box[3], hh), k };
   }
   const fitTo = (b, pad = PAD) => clamp({ x: (b[0] + b[2]) / 2, y: (b[1] + b[3]) / 2, k: Math.min((w - 2 * pad) / (b[2] - b[0] || 1e-3), (ht - 2 * pad) / (b[3] - b[1] || 1e-3)) });
-  const panelBounds = () => M.shapes.reduce((b, s) => [Math.min(b[0], s.b[0]), Math.min(b[1], s.b[1]), Math.max(b[2], s.b[2]), Math.max(b[3], s.b[3])], clinicAt ? [...clinicAt, ...clinicAt] : [Infinity, Infinity, -Infinity, -Infinity]);
+  const hull = (b, s) => [Math.min(b[0], s[0]), Math.min(b[1], s[1]), Math.max(b[2], s[2]), Math.max(b[3], s[3])];
+  const panel = M.shapes.reduce((b, s) => hull(b, s.b), [Infinity, Infinity, -Infinity, -Infinity]);
+  const panelBounds = () => clinicAt ? hull(panel, [...clinicAt, ...clinicAt]) : panel;
 
   const schedule = () => { if (!frame) frame = requestAnimationFrame(draw); };
   const setView = v => { view = clamp(v); schedule(); };
-  function fly(to, ms = 380) {
+  function fly(to, ms) {
     to = clamp(to);
     if (reduced.matches || !view) { flight = null; setView(to); return; }
-    flight = { from: view, to, t0: performance.now(), ms };
+    flight = { from: view, to, t0: performance.now(), ms: ms ?? Math.min(650, 380 + 90 * Math.abs(Math.log2(to.k / view.k))) };
     schedule();
   }
   const stop = () => { flight = null; touched = true; };
   function zoomAt(px, py, k, animate) {
-    const [x, y] = toKm(px, py), k2 = Math.min(K_MAX, Math.max(kMin(), k));
+    const [x, y] = toKm(px, py), k2 = Math.min(kMax(), Math.max(kMin(), k));
     const to = { x: x - (px - w / 2) / k2, y: y - (py - ht / 2) / k2, k: k2 };
     touched = true;
     if (animate) fly(to, 260); else { flight = null; setView(to); }
@@ -205,11 +260,23 @@ export function clinicMap(stack, { basemap, tracts, clinic, pick, place }) {
   function reveal(b, animate) {
     const [x0, y0] = toPx([b[0], b[1]]), [x1, y1] = toPx([b[2], b[3]]), m = 10;
     const inside = x0 >= m && y0 >= m && x1 <= w - m && y1 <= ht - m, tiny = b[2] > b[0] && Math.max(x1 - x0, y1 - y0) < TINY;
-    if (inside && !tiny) return;
-    const big = b[2] - b[0] > 0, k = !big ? view.k : tiny ? Math.min(w, ht) * 0.35 / Math.max(b[2] - b[0], b[3] - b[1])
+    if (inside && !tiny && (b[2] > b[0] || view.k >= NEAR)) return;
+    const big = b[2] - b[0] > 0, k = !big ? Math.max(view.k, NEAR) : tiny ? Math.min(w, ht) * 0.35 / Math.max(b[2] - b[0], b[3] - b[1])
       : Math.min(view.k, (w - 4 * PAD) / (b[2] - b[0]), (ht - 4 * PAD) / (b[3] - b[1]));
     const to = { x: (b[0] + b[2]) / 2, y: (b[1] + b[3]) / 2, k };
     if (animate) fly(to); else setView(to);
+  }
+
+  function paint(ctx, L, r, a, k) {
+    const alpha = a * (L.alpha ? L.alpha(k) : 1);
+    const cells = alpha > 0 && k >= (L.min || 0) ? L.tiles.filter(c => overlaps(c.b, r)) : [];
+    if (!cells.length) return;
+    ctx.globalAlpha = alpha;
+    if (L.fill) { ctx.fillStyle = L.fill; cells.forEach(c => ctx.fill(c.path)); return; }
+    const width = L.width(k) / k;
+    ctx.setLineDash(L.dash ? L.dash.map(d => d / k) : []);
+    if (L.casing) { ctx.strokeStyle = L.casing; ctx.lineWidth = width + 2 / k; cells.forEach(c => ctx.stroke(c.path)); }
+    ctx.strokeStyle = L.stroke; ctx.lineWidth = width; cells.forEach(c => ctx.stroke(c.path));
   }
 
   function draw(now) {
@@ -222,6 +289,7 @@ export function clinicMap(stack, { basemap, tracts, clinic, pick, place }) {
     }
     const v = view, dpr = window.devicePixelRatio || 1, tx = w / 2 - v.x * v.k, ty = ht / 2 - v.y * v.k;
     const r = [v.x - w / 2 / v.k, v.y - ht / 2 / v.k, v.x + w / 2 / v.k, v.y + ht / 2 / v.k];
+    const t = M.wide ? HANDOVER(v.k) : 1, d = M.detail;
     const ctx = base.getContext('2d');
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.fillStyle = '#eef1f3'; ctx.fillRect(0, 0, w, ht);
@@ -229,34 +297,46 @@ export function clinicMap(stack, { basemap, tracts, clinic, pick, place }) {
     ctx.save();
     ctx.beginPath(); ctx.rect(M.box[0], M.box[1], bw, bh); ctx.fillStyle = '#fafbfb'; ctx.fill(); ctx.clip();
     ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-    for (const L of M.layers) {
-      const cells = v.k >= (L.min || 0) ? L.tiles.filter(c => overlaps(c.b, r)) : [];
-      if (!cells.length) continue;
-      ctx.globalAlpha = L.alpha ? L.alpha(v.k) : 1;
-      if (L.fill) { ctx.fillStyle = L.fill; cells.forEach(c => ctx.fill(c.path)); continue; }
-      const width = L.width(v.k) / v.k;
-      ctx.setLineDash(L.dash ? L.dash.map(d => d / v.k) : []);
-      if (L.casing) { ctx.strokeStyle = L.casing; ctx.lineWidth = width + 2 / v.k; cells.forEach(c => ctx.stroke(c.path)); }
-      ctx.strokeStyle = L.stroke; ctx.lineWidth = width; cells.forEach(c => ctx.stroke(c.path));
+    // W outside B's box; inside it, W at 1 - t under B at t.
+    const passes = d ? [['wide', 'out', 1], ['wide', 'in', 1 - t], ['basemap', 'in', t]] : [['wide', null, 1]];
+    for (const [set, where, a] of passes) {
+      const rr = where === 'in' ? meet(r, d) : r;
+      if (a <= 0 || !rr || (where === 'out' && contains(d, r))) continue;
+      ctx.save();
+      if (where) { ctx.beginPath(); if (where === 'out') ctx.rect(M.box[0], M.box[1], bw, bh); ctx.rect(d[0], d[1], d[2] - d[0], d[3] - d[1]); ctx.clip('evenodd'); }
+      for (const L of M.layers) if (L.set === set) paint(ctx, L, rr, a, v.k);
+      ctx.restore();
     }
     ctx.restore();
     const m = `matrix(${v.k} 0 0 ${v.k} ${tx} ${ty})`;
     fills.firstElementChild.setAttribute('transform', m);
     fills.style.setProperty('--fo', FADE(v.k).toFixed(2));
     marks.firstElementChild.setAttribute('transform', m);
-    const taken = placeMarks();
-    label(r, taken, dpr);
+    const far = v.k < NEAR;
+    stack.classList.toggle('far', far);
+    scaleBar();
+    const { hard, soft } = placeMarks(far);
+    label(r, hard, soft, dpr, t);
     placeCard();
     stack.dataset.view = `${v.x.toFixed(3)},${v.y.toFixed(3)},${v.k.toFixed(1)}`;
   }
 
-  // Rank badges, pins and the clinic in screen px. Returns the boxes street names must keep clear of.
-  function placeMarks() {
-    const taken = [];
-    const ctl = $('.cmap-ctl', stack);
-    taken.push([ctl.offsetLeft - 4, ctl.offsetTop - 4, ctl.offsetLeft + ctl.offsetWidth + 4, ctl.offsetTop + ctl.offsetHeight + 4]);
+  // A round distance, at most about 100 px long, drawn to the view's scale.
+  function scaleBar() {
+    const room = Math.min(100, w * 0.28), [n, u] = SCALE.findLast(([n, u]) => n * KM_PER[u] * view.k <= room) || SCALE[0];
+    const km = n * KM_PER[u], text = `${n.toLocaleString('en-US')} ${u}`;
+    $('i', scale).style.width = `${(km * view.k).toFixed(1)}px`;
+    if (scale.dataset.km !== String(km)) { scale.dataset.km = km; $('span', scale).textContent = text; }
+  }
+
+  // Rank badges, pins and the clinic in screen px. Returns the boxes street names must keep clear of: `hard` ones always,
+  // `soft` ones (pins) unless the name is an expressway's or an arterial's.
+  const textWidths = {};
+  function placeMarks(far) {
+    const box = el => [el.offsetLeft - 4, el.offsetTop - 4, el.offsetLeft + el.offsetWidth + 4, el.offsetTop + el.offsetHeight + 4];
+    const hard = [box($('.cmap-ctl', stack)), box(scale)];
     const c = clinicAt && toPx(clinicAt), badges = [];
-    $$('.ranks .rk', marks).forEach(g => {
+    if (!far) $$('.ranks .rk', marks).forEach(g => {
       const [x0, y0] = toPx(byId[g.dataset.rk].c), clear = ([px, py]) => (!c || Math.hypot(px - c[0], py - c[1]) >= 16) && badges.every(o => Math.hypot(px - o[0] - 9, py - o[1] - 9) >= 17);
       const [x, y] = [[0, 0], [0, -17], [0, 17], [17, 0], [-17, 0], [13, -13], [-13, -13]].map(([dx, dy]) => [x0 + dx, y0 + dy]).find(clear) || [x0, y0];
       g.setAttribute('transform', `translate(${x.toFixed(1)} ${y.toFixed(1)})`);
@@ -264,68 +344,108 @@ export function clinicMap(stack, { basemap, tracts, clinic, pick, place }) {
     });
     const s = Math.min(1.15, Math.max(0.72, 0.72 + 0.2 * Math.log2(view.k / 70)));
     marks.style.setProperty('--ps', s.toFixed(2));
-    const dots = pins.map(p => { const [x, y] = toPx(p.at); p.g.setAttribute('transform', `translate(${x.toFixed(1)} ${y.toFixed(1)})`); return [x - 6 * s, y - 6 * s, x + 6 * s, y + 6 * s]; });
+    const dots = far ? [] : pins.map(p => { const [x, y] = toPx(p.at); p.g.setAttribute('transform', `translate(${x.toFixed(1)} ${y.toFixed(1)})`); return [x - 6 * s, y - 6 * s, x + 6 * s, y + 6 * s]; });
     if (c) {
-      const g = $('.clinic', marks), t = $('text', g), tw = 38, th = 15;
+      const g = $('.clinic', marks), t = $('text', g), text = far ? farText : 'Clinic', th = 15;
+      if (t.textContent !== text) t.textContent = text;
+      const tw = textWidths[text] ||= Math.ceil(t.getComputedTextLength()) || 38;
       g.setAttribute('transform', `translate(${c[0].toFixed(1)} ${c[1].toFixed(1)})`);
-      const spots = [[10, -th / 2], [-10 - tw, -th / 2], [-tw / 2, -10 - th], [-tw / 2, 10], [9, -th - 4], [-9 - tw, -th - 4], [9, 4], [-9 - tw, 4]];
+      // Zoomed out the label names the whole cluster, so it sits beside the panel's outline rather than beside the clinic.
+      const [p0, p1] = [toPx([panel[0], panel[1]]), toPx([panel[2], panel[3]])], my = (p0[1] + p1[1]) / 2 - c[1] - th / 2, mx = (p0[0] + p1[0]) / 2 - c[0] - tw / 2;
+      const spots = far ? [[p1[0] - c[0] + 8, my], [p0[0] - c[0] - 8 - tw, my], [mx, p0[1] - c[1] - 6 - th], [mx, p1[1] - c[1] + 6]]
+        : [[10, -th / 2], [-10 - tw, -th / 2], [-tw / 2, -10 - th], [-tw / 2, 10], [9, -th - 4], [-9 - tw, -th - 4], [9, 4], [-9 - tw, 4]];
       const score = ([dx, dy]) => { const b = [c[0] + dx, c[1] + dy, c[0] + dx + tw, c[1] + dy + th];
-        const out = b[0] < 2 || b[1] < 2 || b[2] > w - 2 || b[3] > ht - 2;
-        return 4 * badges.filter(o => overlaps(o, b)).length + dots.filter(o => overlaps(o, b)).length + (out ? 99 : 0); };
+        const out = b[0] < 4 || b[1] < 4 || b[2] > w - 4 || b[3] > ht - 4;
+        return 4 * badges.filter(o => overlaps(o, b)).length + dots.filter(o => overlaps(o, b)).length + 8 * hard.filter(o => overlaps(o, b)).length + (out ? 99 : 0); };
       const best = spots.reduce((a, q) => score(q) < score(a) ? q : a);
-      t.setAttribute('x', best[0]); t.setAttribute('y', best[1] + 11.5);
-      taken.push([c[0] - 8, c[1] - 8, c[0] + 8, c[1] + 8], [c[0] + best[0] - 3, c[1] + best[1] - 2, c[0] + best[0] + tw + 3, c[1] + best[1] + th + 2]);
+      t.setAttribute('x', best[0].toFixed(1)); t.setAttribute('y', (best[1] + 11.5).toFixed(1));
+      hard.push([c[0] - 8, c[1] - 8, c[0] + 8, c[1] + 8], [c[0] + best[0] - 3, c[1] + best[1] - 2, c[0] + best[0] + tw + 3, c[1] + best[1] + th + 2]);
     }
-    return taken.concat(badges, dots);
+    return { hard: hard.concat(badges), soft: dots };
   }
 
   const widths = new Map();
-  // Each street's name once, along the longest stretch of it on screen, upright, skipped where it would touch a name already written.
-  function label(r, taken, dpr) {
+  const write = (ctx, text, color, x, y, ang = 0) => {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(ang);
+    ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(250,251,251,.92)'; ctx.strokeText(text, 0, 0.5);
+    ctx.fillStyle = color; ctx.fillText(text, 0, 0.5);
+    ctx.restore();
+  };
+  const wet = (x, y) => M.wet.some(f => x >= f.b[0] && x <= f.b[2] && y >= f.b[1] && y <= f.b[3] && within(x, y, f.parts));
+  // A lake's name, inside it where the whole name fits, on one line or else a word per line. The spots sit on a grid fixed to the
+  // map, so the name stays put while the map pans.
+  function waterNames(ctx, inner, taken, drawn) {
+    const v = view, step = 30 / v.k, LH = 14;
+    ctx.font = `italic 600 12px ${FONT}`;
+    for (const g of M.waters) {
+      const room = meet(inner, g.b);
+      if (!room || drawn.length >= 2) continue;
+      for (const lines of g.text.includes(' ') ? [[g.text], g.text.split(' ')] : [[g.text]]) {
+        const tw = Math.max(...lines.map(l => ctx.measureText(l).width)), hw = (tw / 2 + 4) / v.k, hh = (lines.length * LH / 2 + 2) / v.k;
+        if (room[2] - room[0] < 2 * hw || room[3] - room[1] < 2 * hh) continue;
+        const cx = (room[0] + room[2]) / 2, cy = (room[1] + room[3]) / 2, spots = [];
+        for (let x = Math.ceil((room[0] + hw) / step) * step; x <= room[2] - hw; x += step)
+          for (let y = Math.ceil((room[1] + hh) / step) * step; y <= room[3] - hh; y += step) spots.push([x, y]);
+        spots.sort((a, b) => Math.hypot(a[0] - cx, a[1] - cy) - Math.hypot(b[0] - cx, b[1] - cy));
+        const at = spots.find(([x, y]) => [0, -hw, hw].every(dx => within(x + dx, y, g.parts)) && [[-hw, -hh], [hw, -hh], [-hw, hh], [hw, hh]].every(([dx, dy]) => wet(x + dx, y + dy))
+          && !taken.some(o => overlaps(o, [...toPx([x - hw, y - hh]), ...toPx([x + hw, y + hh])])));
+        if (!at) continue;
+        const [x, y] = toPx(at);
+        taken.push([x - hw * v.k, y - hh * v.k, x + hw * v.k, y + hh * v.k]); drawn.push(g.text);
+        lines.forEach((l, i) => write(ctx, l, '#5f8399', x, y + (i - (lines.length - 1) / 2) * LH));
+        break;
+      }
+    }
+  }
+
+  // Each line's name once, along the longest stretch of it on screen, upright, skipped where it would touch a name already written.
+  // B's names stay in B's box and only once B has taken over; W's names keep out of it from then on.
+  function label(r, hard, soft, dpr, t) {
     const ctx = names.getContext('2d'), v = view, drawn = [], seen = new Set();
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, w, ht);
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.lineJoin = 'round';
-    const inner = [r[0] + 6 / v.k, r[1] + 6 / v.k, r[2] - 6 / v.k, r[3] - 6 / v.k];
+    const inner = [r[0] + 6 / v.k, r[1] + 6 / v.k, r[2] - 6 / v.k, r[3] - 6 / v.k], d = M.detail;
+    const dpx = d && t >= 0.5 && [...toPx([d[0], d[1]]), ...toPx([d[2], d[3]])];
     const sel = byId[model?.selected], edges = [];
     if (sel && overlaps(sel.b, r)) for (const a of sel.rings) for (let i = 2; i < a.length; i += 2) edges.push([...toPx([a[i - 2], a[i - 1]]), ...toPx([a[i], a[i + 1]])]);
-    for (const L of [...M.layers].reverse()) {          // highways claim their room first
-      if (!L.label) continue;
-      const spec = L.label;
+    waterNames(ctx, inner, hard, drawn);
+    for (const i of LABELLED) {
+      const L = M.layers[i], spec = L.label, own = L.set === 'basemap';
+      const room = own ? t >= 0.5 && d && meet(inner, d) : inner, keepOut = !own && dpx;
+      if (!room) continue;
       ctx.font = `${spec.font} ${FONT}`;
       const need = spec.need(v.k);
       const cands = [];
       for (const run of L.runs) {
         if (seen.has(run.key) || run.len * v.k < 40) continue;
-        const t = clip(run.x1, run.y1, run.x2, run.y2, inner);
-        if (!t) continue;
-        const len = (t[1] - t[0]) * run.len * v.k;
+        const c = clip(run.x1, run.y1, run.x2, run.y2, room);
+        if (!c) continue;
+        const len = (c[1] - c[0]) * run.len * v.k;
         let tw = widths.get(spec.font + run.text);
         if (tw == null) widths.set(spec.font + run.text, tw = ctx.measureText(run.text).width);
         if (len < (tw + spec.room) * need) continue;
-        cands.push({ run, t, len, tw });
+        cands.push({ run, c, len, tw });
       }
       cands.sort((a, b) => b.len - a.len);
-      for (const { run, t, len, tw } of cands) {
+      for (const { run, c, tw } of cands) {
         if (seen.has(run.key)) continue;
-        const full = run.len * v.k, step = Math.max(tw * 3, 180), a0 = t[0] * full + tw / 2 + 6, a1 = t[1] * full - tw / 2 - 6;
+        const full = run.len * v.k, step = Math.max(tw * 3, 180), a0 = c[0] * full + tw / 2 + 6, a1 = c[1] * full - tw / 2 - 6;
         const mid = (a0 + a1) / 2, snap = Math.round(mid / step) * step;
         let ang = Math.atan2(run.y2 - run.y1, run.x2 - run.x1);
         if (ang > Math.PI / 2) ang -= Math.PI; else if (ang <= -Math.PI / 2) ang += Math.PI;
         if (ang > Math.PI / 2 - 0.17) ang -= Math.PI;        // near-vertical names all read bottom to top
         const cx = Math.abs(Math.cos(ang)), sy = Math.abs(Math.sin(ang)), hw = (tw * cx + 13 * sy) / 2 + 3, hh = (tw * sy + 13 * cx) / 2 + 2;
         // the snapped middle keeps a name still while the map pans; the other spots are for when something is in the way
-        const spot = [snap >= a0 && snap <= a1 ? snap : mid, a0 + (a1 - a0) * 0.25, a0 + (a1 - a0) * 0.75, a0, a1].map(at => {
+        const spots = [snap >= a0 && snap <= a1 ? snap : mid, a0 + (a1 - a0) * 0.25, a0 + (a1 - a0) * 0.75, a0, a1].map(at => {
           const f = at / full, x = w / 2 + (run.x1 + (run.x2 - run.x1) * f - v.x) * v.k, y = ht / 2 + (run.y1 + (run.y2 - run.y1) * f - v.y) * v.k;
           return { x, y, box: [x - hw, y - hh, x + hw, y + hh] };
-        }).find(({ box }) => !taken.some(o => overlaps(o, box)) && !edges.some(e => crosses(e, box)));
+        });
+        const clear = ({ box }) => !hard.some(o => overlaps(o, box)) && !edges.some(e => crosses(e, box)) && !(keepOut && overlaps(keepOut, box));
+        const spot = spots.find(s => clear(s) && !soft.some(o => overlaps(o, s.box))) || (spec.win && spots.find(clear));
         if (!spot) continue;
-        const { x, y, box } = spot;
-        taken.push(box); seen.add(run.key); drawn.push(run.text);
-        ctx.save(); ctx.translate(x, y); ctx.rotate(ang);
-        ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(250,251,251,.92)'; ctx.strokeText(run.text, 0, 0.5);
-        ctx.fillStyle = spec.color; ctx.fillText(run.text, 0, 0.5);
-        ctx.restore();
+        hard.push(spot.box); seen.add(run.key); drawn.push(run.text);
+        write(ctx, run.text, spec.color, spot.x, spot.y, ang);
       }
     }
     names.dataset.labels = drawn.join('|');      // what the canvas wrote, for anyone checking the map from the page
@@ -335,8 +455,12 @@ export function clinicMap(stack, { basemap, tracts, clinic, pick, place }) {
     if (card.hidden || !view) return;
     const p = pins.find(q => q.id === card.dataset.id);
     if (!p) return;
+    if (getComputedStyle(card).position !== 'absolute') {       // the phone's sheet under the map
+      card.style.left = card.style.top = card.style.visibility = ''; card.dataset.side = 'sheet';
+      return false;
+    }
     const [x, y] = toPx(p.at), cw = card.offsetWidth, ch = card.offsetHeight, gap = 12;
-    const off = x < 0 || y < 0 || x > w || y > ht;
+    const off = x < 0 || y < 0 || x > w || y > ht || view.k < NEAR;
     card.style.visibility = off ? 'hidden' : '';
     const above = y - gap - ch >= 4, below = y + gap + ch <= ht - 4;
     const side = !above && !below;
@@ -344,7 +468,8 @@ export function clinicMap(stack, { basemap, tracts, clinic, pick, place }) {
     if (side) { left = x + gap + cw <= w - 4 ? x + gap : x - gap - cw; top = Math.min(Math.max(4, y - ch / 2), ht - ch - 4); }
     else { left = Math.min(Math.max(4, x - cw / 2), w - cw - 4); top = above ? y - gap - ch : y + gap; }
     left = Math.min(Math.max(4, left), w - cw - 4);
-    card.style.left = `${Math.round(left)}px`; card.style.top = `${Math.round(top)}px`;
+    const ox = stack.offsetLeft + stack.clientLeft, oy = stack.offsetTop + stack.clientTop;
+    card.style.left = `${Math.round(left + ox)}px`; card.style.top = `${Math.round(top + oy)}px`;
     card.style.setProperty('--ax', `${Math.round(x - left)}px`); card.style.setProperty('--ay', `${Math.round(y - top)}px`);
     card.dataset.side = side ? (left > x ? 'right' : 'left') : above ? 'above' : 'below';
     return side && x > left - 2 && x < left + cw + 2;      // in a short or narrow box the card would sit on its own pin
@@ -359,7 +484,7 @@ export function clinicMap(stack, { basemap, tracts, clinic, pick, place }) {
     card.setAttribute('aria-label', p.name);
     const tel = p.phone && p.phone.replace(/[^\d+]/g, '');
     card.innerHTML = h`<button type="button" class="x" data-close aria-label="Close">×</button>
-      <b class="nm">${p.name}</b><small class="kd">${placeKind(p.kind)}</small>
+      <b class="nm" title="${p.name}">${p.name}</b><small class="kd">${placeKind(p.kind)}</small>
       <p class="ad">${p.address}</p><p class="hr">${openHours(p.hours)}</p>
       ${tel ? h`<a class="tel" href="tel:${tel}">${p.phone}</a>` : ''}
       ${p.eligibility ? h`<p class="el">${p.eligibility}</p>` : ''}`;
@@ -404,19 +529,21 @@ export function clinicMap(stack, { basemap, tracts, clinic, pick, place }) {
     })),
     on(stack, 'pointerleave', () => { tip.hidden = true; }),
     on(stack, 'click', e => { if (dragged) { e.stopPropagation(); e.preventDefault(); dragged = false; } }, true),
-    on(stack, 'wheel', e => {
-      if (!view) return;
+    ...[stack, card].map(el => on(el, 'wheel', e => {
+      if (!view || (el === card && card.dataset.side === 'sheet')) return;
       e.preventDefault();
       const dy = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? ht : 1);
       stop(); tip.hidden = true;
       zoomAt(...local(e), view.k * Math.exp(-dy * (e.ctrlKey ? 0.01 : 0.0018)));
-    }, { passive: false }),
+    }, { passive: false })),
     on(stack, 'dblclick', e => { if (!e.target.closest('.cmap-ctl,.cmap-card')) zoomAt(...local(e), view.k * 2, true); }),
     on(stack, 'click', e => {
       const z = e.target.closest('[data-zoom]'), pin = e.target.closest('.pin'), hood = e.target.closest('.hood');
-      if (z) { const d = z.dataset.zoom; touched = d !== 'fit'; if (d === 'fit') fly(home); else zoomAt(w / 2, ht / 2, view.k * (d === 'in' ? 2 : 0.5), true); }
-      else if (e.target.closest('[data-close]')) { place(null); stack.focus(); }
-      else if (pin) place(pin.dataset.place === card.dataset.id ? null : pin.dataset.place);
+      if (z) {
+        const d = z.dataset.zoom;
+        touched = d !== 'fit';
+        if (d === 'fit') fly(home); else if (d === 'city') fly({ x: (M.box[0] + M.box[2]) / 2, y: (M.box[1] + M.box[3]) / 2, k: 0 }); else zoomAt(w / 2, ht / 2, view.k * (d === 'in' ? 2 : 0.5), true);
+      } else if (pin) place(pin.dataset.place === card.dataset.id ? null : pin.dataset.place);
       else if (hood) { fromMap = hood.dataset.hood; pick(hood.dataset.hood); }
     }),
     on(stack, 'focusin', e => {
@@ -440,6 +567,7 @@ export function clinicMap(stack, { basemap, tracts, clinic, pick, place }) {
       else if (e.key === '-' || e.key === '_') { e.preventDefault(); zoomAt(w / 2, ht / 2, view.k / 2, true); }
       else if (e.key === '0') { e.preventDefault(); touched = false; fly(home); }
     }),
+    on(card, 'click', e => { if (e.target.closest('[data-close]')) { place(null); stack.focus({ preventScroll: true }); } }),
     on(document, 'keydown', e => { if (e.key === 'Escape' && !card.hidden) { const id = card.dataset.id; place(null); $(`.pin[data-place="${id}"]`, stack)?.focus(); } }),
     on(document, 'click', e => { if (!card.hidden && !e.target.closest('.cmap-card,.pin,.cmap-ctl')) place(null); }),
   ];
@@ -486,6 +614,6 @@ export function clinicMap(stack, { basemap, tracts, clinic, pick, place }) {
       shown = { selected: m.selected, place: m.place, ranks: m.ranks, pk };
       schedule();
     },
-    destroy() { offs.forEach(f => f()); sized.disconnect(); cancelAnimationFrame(frame); },
+    destroy() { offs.forEach(f => f()); sized.disconnect(); cancelAnimationFrame(frame); card.remove(); },
   };
 }
