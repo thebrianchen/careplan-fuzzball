@@ -1,0 +1,24 @@
+# Puts our code and its offline Python packages on a persistent volume, then runs the unit tests there.
+# Before starting:  fuzzball volume create team4 code --size 5GB
+#                   fuzzball object put careplan-bundle.tgz fb://group/careplan-bundle.tgz
+version: v4
+volumes:
+  code:
+    use: team4
+    name: code
+    ingress:
+      - source: {uri: "fb://group/careplan-bundle.tgz"}
+        destination: {uri: "file://careplan-bundle.tgz"}
+jobs:
+  unpack:
+    image: {uri: docker://python:3.12-slim}
+    mounts: {/code: code}
+    script: |
+      #!/bin/sh
+      set -e
+      cd /code && rm -rf bundle && tar -xzf careplan-bundle.tgz && ls bundle
+      pip install -q --no-index --find-links /code/bundle/wheels -r /code/bundle/app/requirements.txt --target /code/site
+      cd /code/bundle/app && PYTHONPATH=/code/site python -m careplan validate cases/ | tail -1
+    resource:
+      cpu: {cores: 4}
+      memory: {size: 8GB}
