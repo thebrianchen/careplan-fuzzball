@@ -53,11 +53,12 @@ services:
       failure-threshold: 240
 jobs:
   bench:
-    image: {uri: docker://python:3.12-slim}
+    image: {uri: docker://rockylinux/rockylinux:9}
     mounts: {/code: code}
     cwd: /code/app
     env:
       - PYTHONPATH=/code/site
+      - PATH=/code/python/bin:/usr/local/bin:/usr/bin:/bin
       - PLANNER_URL=http://planner:8000/v1
       - VLLM_API_KEY=none
     script: |
