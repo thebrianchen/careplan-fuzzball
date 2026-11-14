@@ -1,0 +1,22 @@
+# Lists the organizers' shared volume so we know which models and datasets are already on the cluster.
+version: v4
+volumes:
+  shared:
+    use: shared
+    name: datasets
+jobs:
+  list:
+    image:
+      uri: docker://alpine:3.20
+    mounts:
+      /datasets: shared
+    script: |
+      #!/bin/sh
+      echo "== top level"; ls -la /datasets
+      echo "== sizes"; du -sh /datasets/* 2>/dev/null | sort -h | tail -40
+      echo "== three levels"; find /datasets -maxdepth 3 2>/dev/null | head -150
+    resource:
+      cpu:
+        cores: 1
+      memory:
+        size: 1GB
