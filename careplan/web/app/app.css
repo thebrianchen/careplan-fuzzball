@@ -310,6 +310,7 @@ table.grid td.mono{white-space:nowrap}
   .banner{grid-template-columns:1fr}.back{grid-row:auto;border:0;padding:0}.problems{grid-column:1}
   .row{grid-template-columns:1fr}.row>span:nth-child(3){display:none}
   .pitem-body{margin-left:0}.runclock{font-size:17px}
+  .alts .res .far{float:none;display:block;font-weight:500}
   input[type=search]{width:100%}.page-tools{width:100%;flex-wrap:wrap}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
