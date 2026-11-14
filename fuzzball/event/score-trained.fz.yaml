@@ -1,7 +1,7 @@
 # Does training help? The small model (Nemotron 3 Nano 30B) with the add-on trained at the event by train.fz.yaml, against
 # the same model without it, on the 20 held-out patients with the physician-reviewed keys. One vLLM serves both: the
 # base model under its own name and the add-on as the LoRA module "planner" (profiles nano-base-vllm and nano-lora-vllm,
-# which read READER_URL). Same recipe as spark/score_lora.sh on our own GB10 (0.37 against 0.18 there).
+# which read READER_URL).
 #   - start it only after train.fz.yaml has finished: it needs the GPU that training holds and the finished add-on
 #   - progress: the job prints "reviews N of 40 (P%)" once a minute
 # Results on the "code" volume: results/trained_<TAG>_test.json and results/stock_<TAG>_test.json; runs/*_<TAG>_trained, *_<TAG>_stock.
