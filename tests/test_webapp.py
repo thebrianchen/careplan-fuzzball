@@ -287,8 +287,12 @@ class WebAppTests(unittest.TestCase):
             p = self.get("panel")["panel"]
         finally:
             self.clinic.samples, webapp.PANEL["reviews"] = False, real
-        self.assertEqual((p["source"], p["patients"], p["k"]), ("sample", 600, 5))
-        self.assertTrue(all(t["patients"] >= p["k"] for t in p["tracts"]))                 # the rule of five
+        self.assertEqual((p["source"], p["patients"]), ("sample", 600))
+        self.assertTrue(all(t["patients"] >= p["k"] for t in p["tracts"]))                 # nothing under the threshold is published
+        clinic = next(t for t in p["tracts"] if t["tract_id"] == p["clinic"]["tract_id"])
+        self.assertEqual(clinic["area"], "West Garfield Park")
+        self.assertEqual(sum(a["patients"] for a in p["areas"]), sum(t["patients"] for t in p["tracts"]))
+        self.assertEqual(sum(a["tracts"] for a in p["areas"]), len(p["tracts"]))
         self.assertEqual(sum(b["flags"] for b in p["barriers"]), sum(sum(t["barriers"].values()) for t in p["tracts"]))
         t = p["tracts"][0]
         self.assertTrue(41 < t["lat"] < 43 and t["facts"] and set(t["places_near"]) == {"food_access", "utilities", "med_cost"})
@@ -325,6 +329,7 @@ class WebAppTests(unittest.TestCase):
         wide, box = self.get("basemap")["wide"], base["box"]
         self.assertTrue(wide["box"]["south"] < box["south"] and wide["box"]["north"] > box["north"] and wide["box"]["east"] > box["east"])
         self.assertTrue(any(w["name"] == "Lk Michigan" for w in wide["water"]))
+        self.assertEqual(len(wide["areas"]), 77)
 
     def test_pages_are_served_and_nothing_outside_them(self):
         with urllib.request.urlopen(f"{self.url}/app/") as r:

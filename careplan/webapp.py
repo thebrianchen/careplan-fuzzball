@@ -123,6 +123,29 @@ HELP_KM = 1.6                                     # "near" a neighborhood: withi
 PANEL_EDGE = 0.012                                # degrees beyond the outermost neighborhood centers that the map still shows
 
 
+@functools.cache
+def _areas() -> list[dict]:
+    """Chicago's community areas (the neighborhoods people name), from the city-wide basemap; empty without that file."""
+    return json.loads(BASEMAP_WIDE.read_text()).get("areas", []) if BASEMAP_WIDE.is_file() else []
+
+
+def area_of(lat: float, lon: float) -> str | None:
+    """The neighborhood a point is in. The outlines are simplified, so a point that falls in a sliver between two of them
+    gets the one whose outline comes nearest."""
+    def inside(ring: list) -> bool:
+        hit = False
+        for (y1, x1), (y2, x2) in zip(ring, ring[1:] + ring[:1]):
+            if (y1 > lat) != (y2 > lat) and lon < (x2 - x1) * (lat - y1) / (y2 - y1) + x1:
+                hit = not hit
+        return hit
+    areas = _areas()
+    for a in areas:
+        if any(inside(r) for r in a["rings"]):
+            return a["name"]
+    near = min(areas, key=lambda a: min((y - lat) ** 2 + (x - lon) ** 2 for r in a["rings"] for y, x in r), default=None)
+    return near and near["name"]
+
+
 def _nearest_of_each_kind(found: list, each: int = 2) -> list:
     """The nearest places of every kind, nearest first: a pantry is not crowded out by three closer groceries."""
     kept, seen = [], collections.Counter()
@@ -158,7 +181,8 @@ def panel(tracts, resources, county: dict[str, dict], samples: bool) -> dict | N
             d = haversine_km(t["intpt_lat"], t["intpt_lon"], x.lat, x.lon)
             if d <= HELP_KM:
                 near[need_of[x.need]].append((d, x))
-        rows.append({"tract_id": r["tract_geoid"], "lat": t["intpt_lat"], "lon": t["intpt_lon"], **{k: r[k] for k in PANEL_COUNTS},
+        rows.append({"tract_id": r["tract_geoid"], "area": area_of(t["intpt_lat"], t["intpt_lon"]),
+                     "lat": t["intpt_lat"], "lon": t["intpt_lon"], **{k: r[k] for k in PANEL_COUNTS},
                      "places_near": {barrier: len(found) for barrier, found in near.items()},
                      "kinds_near": {barrier: dict(collections.Counter(x.kind for _, x in found)) for barrier, found in near.items()},
                      "nearest": {barrier: [{"name": x.name, "kind": x.kind, "miles": round(d * 0.621371, 1), "address": x.address,
@@ -178,7 +202,16 @@ def panel(tracts, resources, county: dict[str, dict], samples: bool) -> dict | N
     for prog in sorted(yaml.safe_load(PROGRAMS_PATH.read_text())["programs"], key=lambda g: "dialysis" in g["eligible_when"]):
         for barrier in prog["needs"]:
             programs[barrier].append({k: prog.get(k) for k in ("id", "category", "eligible_when", "how_to_start", "caveats", "source_url", "confidence")})
+    by_area: dict[str, dict] = {}
+    for r in rows:
+        if r["area"]:
+            a = by_area.setdefault(r["area"], {"name": r["area"], "tracts": 0, "patients": 0, "reviewed": 0, "flagged_patients": 0, "barriers": collections.Counter()})
+            a["tracts"] += 1
+            for k in ("patients", "reviewed", "flagged_patients"):
+                a[k] += r[k]
+            a["barriers"].update(r["barriers"])
     return {"places": places, "programs": programs,
+            "areas": sorted(({**a, "barriers": dict(a["barriers"])} for a in by_area.values()), key=lambda a: -a["patients"]),
             "public_kinds": sorted({b for rule in RULES["tract_fields"].values() for b in rule["supports"]}),
             "public_refs": {b: [f"tract:{key}" for key, rule in RULES["tract_fields"].items() if b in rule["supports"] and key in FIELD_LABEL]
                             for b in sorted({b for rule in RULES["tract_fields"].values() for b in rule["supports"]})},
