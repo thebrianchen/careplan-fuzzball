@@ -1,6 +1,12 @@
-# Puts our code and its offline Python packages on a persistent volume, then runs the unit tests there.
-# Before starting:  fuzzball volume create team4 code --size 5GB
-#                   fuzzball object put careplan-bundle.tgz fb://group/careplan-bundle.tgz
+# Puts our code on the persistent "code" volume and checks it there. Three uploads, so a code change is a
+# small upload and the Python packages are installed once:
+#   careplan-bundle.tgz   offline Python packages (wheels), training examples, a baseline copy of the code
+#   app.tgz               the current code, cases and neighborhood data (scripts/mkapp.sh)
+#   vllm-cache.tgz        kernels compiled on our own GB10 with the same vLLM image, so the planner's first start
+#                         on the cluster does not spend 15 to 40 minutes compiling them
+# Before starting:
+#   fuzzball volume create team4 code --size 20GiB
+#   fuzzball object put --force careplan-bundle.tgz fb://group/careplan-bundle.tgz     (and the other two)
 version: v4
 volumes:
   code:
@@ -9,16 +15,38 @@ volumes:
     ingress:
       - source: {uri: "fb://group/careplan-bundle.tgz"}
         destination: {uri: "file://careplan-bundle.tgz"}
+      - source: {uri: "fb://group/app.tgz"}
+        destination: {uri: "file://app.tgz"}
+      - source: {uri: "fb://group/vllm-cache.tgz"}
+        destination: {uri: "file://vllm-cache.tgz"}
+  models: {use: team4, name: models}
 jobs:
   unpack:
     image: {uri: docker://python:3.12-slim}
-    mounts: {/code: code}
+    mounts: {/code: code, /models: models}
     script: |
       #!/bin/sh
       set -e
-      cd /code && rm -rf bundle && tar -xzf careplan-bundle.tgz && ls bundle
-      pip install -q --no-index --find-links /code/bundle/wheels -r /code/bundle/app/requirements.txt --target /code/site
-      cd /code/bundle/app && PYTHONPATH=/code/site python -m careplan validate cases/ | tail -1
+      cd /code
+      if [ ! -d bundle/wheels ] || [ careplan-bundle.tgz -nt bundle/.unpacked ]; then
+        rm -rf bundle && tar -xzf careplan-bundle.tgz && touch bundle/.unpacked
+      fi
+      rm -rf app.new && mkdir app.new && tar -xzf app.tgz -C app.new --strip-components 1
+      mkdir -p runs results app.new/data/synth
+      cp -r bundle/app/data/synth/. app.new/data/synth/
+      rm -rf app.new/runs && ln -s /code/runs app.new/runs
+      rm -rf app.old; [ -d app ] && mv app app.old; mv app.new app; rm -rf app.old
+      if ! cmp -s app/requirements.txt site/.requirements 2>/dev/null; then
+        rm -rf site && pip install -q --no-index --find-links bundle/wheels -r app/requirements.txt --target site
+        cp app/requirements.txt site/.requirements
+      fi
+      if [ ! -d /models/home/.cache/flashinfer ]; then
+        mkdir -p /models/home && tar -xzf vllm-cache.tgz -C /models/home && echo "compiled kernels unpacked"
+      fi
+      cd /code/app && export PYTHONPATH=/code/site
+      python -m careplan validate cases/ | tail -1
+      python -m unittest discover -s tests 2>&1 | grep -E "^(Ran|OK|FAILED)"
+      cat VERSION 2>/dev/null; du -sh /code/site /code/app /models/home/.cache 2>/dev/null
     resource:
       cpu: {cores: 4}
       memory: {size: 8GB}
