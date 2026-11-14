@@ -2,17 +2,20 @@
 //   #/                 the day's visits (doctor)
 //   #/visit/<case>     one visit: review the plan, inspect the evidence, decide
 //   #/handout/<case>   the patient handout built from the reviewed plan
+//   #/clinic           the whole panel by neighborhood (clinic manager)
 //   #/system           what the operator sees: planner, boundary, reviews, decisions
 import { $, $$, h } from './ui.js';
 import { worklist } from './worklist.js';
 import { visit } from './visit.js';
 import { handout } from './handout.js';
 import { system } from './system.js';
+import { clinic } from './clinic.js';
 
 const ROUTES = [
   [/^#\/?$/, worklist, 'visits'],
   [/^#\/visit\/([\w-]+)$/, visit, 'visits'],
   [/^#\/handout\/([\w-]+)$/, handout, 'visits'],
+  [/^#\/clinic$/, clinic, 'clinic'],
   [/^#\/system$/, system, 'system'],
 ];
 let cleanup = null, turn = 0;

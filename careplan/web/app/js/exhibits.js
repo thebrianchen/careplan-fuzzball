@@ -12,14 +12,16 @@ const W = 360, H = 240;                    // the map's core in px; a wider box 
 const PAD_X = 48, PAD_Y = 38, MIN_KM = 4;  // MIN_KM: the closest view still shows enough street grid to read as a map
 const r1 = v => Math.round(v * 10) / 10;
 
-function viewOf(points) {
+export function viewOf(points, { w = W, h = H, padX = PAD_X, padY = PAD_Y, minKm = MIN_KM } = {}) {
   const lats = points.map(p => p.lat), lons = points.map(p => p.lon);
   const lat0 = (Math.min(...lats) + Math.max(...lats)) / 2, lon0 = (Math.min(...lons) + Math.max(...lons)) / 2;
   const cos = Math.cos(lat0 * Math.PI / 180);
   const spanX = (Math.max(...lons) - Math.min(...lons)) * cos * KM, spanY = (Math.max(...lats) - Math.min(...lats)) * KM;
-  return { lat0, lon0, cos, k: Math.min((W - 2 * PAD_X) / spanX, (H - 2 * PAD_Y) / spanY, H / MIN_KM) };   // k: px per km
+  return { lat0, lon0, cos, w, h, k: Math.min((w - 2 * padX) / spanX, (h - 2 * padY) / spanY, h / minKm) };   // k: px per km
 }
-const at = (v, p) => [W / 2 + (p.lon - v.lon0) * v.cos * KM * v.k, H / 2 - (p.lat - v.lat0) * KM * v.k];
+export const at = (v, p) => [v.w / 2 + (p.lon - v.lon0) * v.cos * KM * v.k, v.h / 2 - (p.lat - v.lat0) * KM * v.k];
+// The canvas's data-view for a view with its own core; backdrop() reads a missing core size as the visit map's.
+export const viewAttr = v => [v.lat0, v.lon0, v.k, v.w, v.h].join(',');
 
 const anchorAt = x => x < W * 0.28 ? 'start' : x > W * 0.72 ? 'end' : 'middle';
 function label(x, y, text, above, cls) {
@@ -119,8 +121,8 @@ export function map({ id, status, home, places, resources, animate = false }) {
 function backdrop(canvas, city) {
   const w = canvas.clientWidth, ht = canvas.clientHeight;
   if (!w || !ht) return;
-  const [lat0, lon0, k] = canvas.dataset.view.split(',').map(Number);
-  const s = Math.min(w / W, ht / H) * k, cos = Math.cos(lat0 * Math.PI / 180), dpr = window.devicePixelRatio || 1;
+  const [lat0, lon0, k, cw = W, ch = H] = canvas.dataset.view.split(',').map(Number);
+  const s = Math.min(w / cw, ht / ch) * k, cos = Math.cos(lat0 * Math.PI / 180), dpr = window.devicePixelRatio || 1;
   canvas.width = Math.round(w * dpr); canvas.height = Math.round(ht * dpr);
   const ctx = canvas.getContext('2d');
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
