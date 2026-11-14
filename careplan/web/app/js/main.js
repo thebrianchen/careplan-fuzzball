@@ -2,7 +2,7 @@
 //   #/                 the day's visits (doctor)
 //   #/visit/<case>     one visit: review the plan, inspect the evidence, decide
 //   #/handout/<case>   the patient handout built from the reviewed plan
-//   #/clinic           the whole panel by neighborhood (clinic manager)
+//   #/clinic?b=&order=&t=  the whole panel by neighborhood (clinic manager); the query is optional
 //   #/system           what the operator sees: planner, boundary, reviews, decisions
 import { $, $$, h } from './ui.js';
 import { worklist } from './worklist.js';
@@ -15,7 +15,7 @@ const ROUTES = [
   [/^#\/?$/, worklist, 'visits'],
   [/^#\/visit\/([\w-]+)$/, visit, 'visits'],
   [/^#\/handout\/([\w-]+)$/, handout, 'visits'],
-  [/^#\/clinic$/, clinic, 'clinic'],
+  [/^#\/clinic(?:\?(.*))?$/, clinic, 'clinic'],
   [/^#\/system$/, system, 'system'],
 ];
 let cleanup = null, turn = 0;
