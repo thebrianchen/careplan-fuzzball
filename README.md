@@ -70,7 +70,6 @@ The result files name these folders as `runs/...`, their path on the cluster.
 | `gateway-1210` | Ran the gateway behind a Fuzzball endpoint. It admits a caller only when the endpoint's signed identity checks out | `fuzzball/event/gateway.fz.yaml` | `results/event/workflows/gateway-1210.yaml` |
 | `splitcost-1336` | Reviewed the development patients again with every resource lookup crossing the gateway | `fuzzball/event/splitcost.fz.yaml` | `results/event/workflows/splitcost-1336.yaml` |
 | `train-1344` | Trained a LoRA add-on for Nemotron 3 Nano on one GB10 | `fuzzball/event/train.fz.yaml` | `results/event/workflows/train-1344.yaml` |
-| `panel-1447` | Reviewed 100 patients of a clinic's panel as a four-task array, through the planner's endpoint | `fuzzball/event/panel.fz.yaml` | `results/event/workflows/panel-1447.yaml` |
 
 The files under `results/event/workflows/` are the output of `fuzzball workflow get` for each run.
 
