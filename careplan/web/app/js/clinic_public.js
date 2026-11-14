@@ -3,7 +3,7 @@
 // Buttons carry data-go-barrier / data-go-tract; the page handles the clicks.
 import { h, plural } from './ui.js';
 import { countyBar } from './exhibits.js';
-import { andList, kindName, pct, tractName } from './clinic_words.js';
+import { andList, hoodName, kindName, pct, tractName } from './clinic_words.js';
 
 const TOP = 5;
 const lower = k => kindName(k).toLowerCase();
@@ -43,7 +43,7 @@ function spreadText(S) {
   const lo = widest.rates[0], hi = widest.rates.at(-1);
   const same = S.alike > 1 ? `The public figures point to all ${S.measured.length} of these in ${S.alike} of the ${S.hoods} neighborhoods, so they rank those neighborhoods alike.` : '';
   const visits = hi.share > lo.share
-    ? `${same ? 'The visits do not: ' : 'In the visits, '}${lower(widest.kind)} ranges from ${lo.n} of ${lo.of} reviewed patients in ${tractName(lo.t.tract_id)} to ${hi.n} of ${hi.of} in ${tractName(hi.t.tract_id)}.`
+    ? `${same ? 'The visits do not: ' : 'In the visits, '}${lower(widest.kind)} ranges from ${lo.n} of ${lo.of} reviewed patients in ${hoodName(lo.t)} to ${hi.n} of ${hi.of} in ${hoodName(hi.t)}.`
     : '';
   return [same, visits].filter(Boolean).join(' ');
 }
@@ -99,7 +99,7 @@ function hood(d, P, state) {
     return fs.length ? fs.map(f => h`<div class="pfig"><span>${f.label}</span> <b>${f.value}</b>${countyBar(f, { compact: true })}</div>`)
       : h`<div class="pfig hint">The figure our rules read for this is not listed here.</div>`;
   };
-  return h`<h3>${tractName(sel)} <span class="hint">${plural(t.reviewed, 'reviewed patient')}</span></h3>
+  return h`<h3>${hoodName(t)} <span class="hint">${plural(t.reviewed, 'reviewed patient')}</span></h3>
     <p class="psay" data-case="${d.case}">${hoodText(d)}</p>
     <div class="phood">
       <div class="pcol pub"><span class="k">Public figures point to</span>

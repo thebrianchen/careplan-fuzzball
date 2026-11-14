@@ -5,7 +5,7 @@
 // The map's center and zoom are the map's own and stay out of the address.
 import { $, api, cap, date, h, plural } from './ui.js';
 import { countyBar } from './exhibits.js';
-import { HELPS, PLACE_KINDS, nameOf, pct, tractName } from './clinic_words.js';
+import { HELPS, PLACE_KINDS, hoodName, nameOf, pct, tractName } from './clinic_words.js';
 import { clinicMap, pinKey, placeKind } from './clinic_map.js';
 import { gaps } from './clinic_gaps.js';
 import { publicView } from './clinic_public.js';
@@ -82,7 +82,7 @@ function legend(P, state, hidden) {
   const b = state.barrier, sh = shades(P, b), pts = placesFor(P, b), chosen = P.barriers.find(x => x.barrier === b);
   const kinds = pts ? Object.keys(PLACE_KINDS).map(k => [k, pts.filter(p => p.kind === k).length]).filter(([, n]) => n) : [];
   return h`<div class="lg-shade-row"><span class="k">Shade: share, ${b ? `${nameOf(chosen).toLowerCase()} ` : ''}${measureText(b)}</span>
-      <span class="lg-shade">${sh.labels.map((l, i) => i || sh.none ? h`<span><i class="b${i}"></i>${l}</span>` : '')}<span class="lg-out"><i></i>No shading: outside the panel, or fewer than ${P.k} patients</span></span></div>
+      <span class="lg-shade">${sh.labels.map((l, i) => i || sh.none ? h`<span><i class="b${i}"></i>${l}</span>` : '')}<span class="lg-out"><i></i>No shading: outside the panel</span></span></div>
     ${kinds.length ? h`<div class="lg-pins"><span class="k">${plural(pts.length, 'place')} that could help with ${HELPS[b]}</span>
       <span class="lg-kinds">${kinds.map(([k, n]) => h`<button type="button" data-kind="${k}" aria-pressed="${String(!hidden.has(k))}" title="${hidden.has(k) ? 'Show' : 'Hide'} these on the map">${pinKey(k)}${placeKind(k)} <b>${n}</b></button>`)}</span></div>` : ''}
     <div class="lg-keys"><span><b class="rank-key">1</b>Top ${Math.min(TOP, P.tracts.length)} in the list, by ${ORDERS[state.order].toLowerCase()}</span>
@@ -100,17 +100,25 @@ function rankList(P, state, sel) {
   const b = state.barrier, rows = ranked(P, b, state.order), near = placesFor(P, b) && b;
   const shown = rows.slice(0, TOP), pos = rows.findIndex(x => x.t.tract_id === sel);
   const row = ({ t, m }, i) => h`<li><button type="button" class="rrow${t.tract_id === sel ? ' on' : ''}" data-tract="${t.tract_id}" aria-pressed="${String(t.tract_id === sel)}">
-    <span class="rn">${i + 1}</span><span class="rt">${tractName(t.tract_id)}
-      <small>${who(t)}${state.order === 'share' && t.reviewed < FEW ? h`<em class="few">few patients</em>` : ''}${near ? h`<span class="near${t.places_near[near] ? '' : ' none'}">${nearText(t.places_near[near])}</span>` : ''}</small></span>
+    <span class="rn">${i + 1}</span><span class="rt">${t.area || tractName(t.tract_id)}
+      <small>${t.area ? `${tractName(t.tract_id)} · ` : ''}${who(t)}${state.order === 'share' && t.reviewed < FEW ? h`<em class="few">few patients</em>` : ''}${near ? h`<span class="near${t.places_near[near] ? '' : ' none'}">${nearText(t.places_near[near])}</span>` : ''}</small></span>
     <span class="rc"><b>${m.n} of ${m.of}</b> ${pct(m.share)}</span><span class="rb"><i style="width:${(m.share * 100).toFixed(1)}%"></i></span></button></li>`;
   const sizes = P.tracts.map(t => t.reviewed), what = b ? 'flags' : 'patients with a flag';
   const how = state.order === 'count'
-    ? `Ranked by the number of ${what}; ties go to the higher share. Neighborhoods have ${Math.min(...sizes)} to ${Math.max(...sizes)} reviewed patients, so the larger ones gather more ${b ? 'flags' : 'of them'}.`
-    : `Ranked by share; ties go to the larger neighborhood. "Few patients" marks a neighborhood with fewer than ${FEW} reviewed, where a few ${b ? 'flags' : 'patients'} make a high share.`;
+    ? `Each row is a census tract. Ranked by the number of ${what}; tracts have ${Math.min(...sizes)} to ${Math.max(...sizes)} reviewed patients, so the larger ones gather more ${b ? 'flags' : 'of them'}.`
+    : `Each row is a census tract. Ranked by share; "few patients" marks a tract with fewer than ${FEW} reviewed, where a few ${b ? 'flags' : 'patients'} make a high share.`;
   return h`<div class="seg rorder" role="group" aria-label="Rank by">${Object.entries(ORDERS).map(([k, l]) =>
       h`<button type="button" data-order="${k}" class="${k === state.order ? 'on' : ''}" aria-pressed="${String(k === state.order)}">${l}</button>`)}</div>
     <ol class="rank">${shown.map(row)}${pos >= TOP ? h`<li class="gap" aria-hidden="true">…</li>${row(rows[pos], pos)}` : ''}</ol>
     <p class="hint">${how}${b ? ' A patient can carry more than one flag.' : ''}</p>`;
+}
+
+// The panel by neighborhood, for the current barrier: the line a presenter can say aloud.
+function areaStrip(P, barrier) {
+  const of = a => barrier ? a.barriers[barrier] || 0 : a.flagged_patients;
+  const most = Math.max(0, ...(P.areas || []).map(of));
+  return h`${(P.areas || []).map(a => h`<span class="carea${of(a) === most && most ? ' top' : ''}"><b>${a.name}</b>
+    <span>${barrier ? `${plural(of(a), 'flag')} · ${plural(a.reviewed, 'patient')}` : `${of(a)} of ${a.reviewed} with a flag`}</span></span>`)}`;
 }
 
 // What the map shows for the current barrier and order, in numbers taken straight from the panel.
@@ -118,7 +126,7 @@ function says(P, state) {
   const b = state.barrier, rows = ranked(P, b, state.order), [{ t, m }] = rows;
   const key = state.order === 'count' ? x => x.m.n : x => x.m.share;
   const tied = rows.filter(x => key(x) === key(rows[0])).length - 1;
-  const lead = `${tractName(t.tract_id)} has the ${state.order === 'count' ? 'most' : 'highest share of'}`, tie = tied ? `, tied with ${plural(tied, 'other neighborhood')}` : '';
+  const lead = `${hoodName(t)} has the ${state.order === 'count' ? 'most' : 'highest share of'}`, tie = tied ? `, tied with ${plural(tied, 'other tract')}` : '';
   if (!b) {
     const top = P.barriers.reduce((a, x) => x.flags > a.flags ? x : a);
     return `${nameOf(top)} is the barrier flagged most: ${top.flags} flags across ${P.reviewed} reviewed plans. ${lead} patients with a flag${tie}: ${m.n} of ${m.of} reviewed (${pct(m.share)}).`;
@@ -137,7 +145,7 @@ function detail(P, state, sel) {
   const facts = [...t.facts.filter(f => firstFacts.includes(f.ref)), ...t.facts.filter(f => !firstFacts.includes(f.ref))];
   const helps = order.filter(b => b.places && t.places_near[b.barrier] != null);
   const any = measure(t, null);
-  return h`<div class="dhead"><div><h2>${tractName(t.tract_id)}</h2><small>Census tract ${t.tract_id}</small></div>
+  return h`<div class="dhead"><div><h2>${t.area || tractName(t.tract_id)}</h2><small>${t.area ? `${tractName(t.tract_id)} · ` : ''}Census tract ${t.tract_id}</small></div>
       ${state.tract ? h`<button type="button" class="link" data-clear title="Go back to the top of the list">Clear</button>` : h`<small>Top of the list</small>`}</div>
     <div class="dcounts">
       <span><b>${t.patients}</b>patients</span>
@@ -160,7 +168,7 @@ function head(P) {
     : h`<span class="runtag reviews">${P.reviewed} of ${P.patients} plans reviewed</span><span>Counted ${date(P.built)}, ${new Date(P.built).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}.</span>`;
   return h`<div class="page-head clinic-head"><div><h1>Clinic</h1>
       <p class="muted">Every care plan in the clinic's panel, checked and counted by the patient's neighborhood, to show where plans fail and why. No patient is shown.</p>
-      <p class="cfacts"><b>${P.patients}</b> made-up patients · <b>${P.reviewed}</b> reviewed · <b>${P.tracts.length}</b> neighborhoods shown · ${plural(P.hidden_tracts, 'neighborhood')} with fewer than ${P.k} patients ${P.hidden_tracts === 1 ? 'is' : 'are'} not shown</p></div>
+      <p class="cfacts"><b>${P.patients}</b> made-up patients · <b>${P.reviewed}</b> reviewed · <b>${P.tracts.length}</b> census tracts${P.areas?.length ? h` in <b>${P.areas.length}</b> neighborhoods` : ''}</p></div>
     <div class="runline csource">${tag}</div></div>`;
 }
 
@@ -175,10 +183,10 @@ export async function clinic(root, query) {
     ${head(P)}
     <div class="cgrid">
       <section class="card cbars"><h2>Barriers flagged</h2><p class="hint">Flags across ${P.reviewed} reviewed plans. Choose one to see where it clusters.</p><div id="bars"></div></section>
-      <section class="card cmapcard"><h2 id="map-title"></h2><p class="csays" id="says"></p>
+      <section class="card cmapcard"><h2 id="map-title"></h2><p class="csays" id="says"></p><div class="careas" id="areas"></div>
         <figure class="cmap"><div class="cmap-stack"></div>${B || W ? h`<figcaption class="cmap-src">Map: ${(B || W).source}</figcaption>` : ''}</figure>
         <div class="legend" id="legend"></div>
-        <p class="cfrom">This map is built from what clinicians' plans ran into in visits, not from public data alone. Only counts left the patient side, and a neighborhood with fewer than ${P.k} patients is withheld.</p></section>
+        <p class="cfrom">This map is built from what clinicians' plans ran into in visits, not from public data alone. Only counts left the patient side.</p></section>
       <section class="card crank"><h2 id="rank-title"></h2><div id="rank"></div></section>
       <section class="card cdetail" id="detail" aria-live="polite"></section>
     </div>
@@ -195,7 +203,7 @@ export async function clinic(root, query) {
   const map = clinicMap(el('.cmap-stack'), { basemap: B, wide: W, tracts: P.tracts, clinic: P.clinic, pick: tract => set({ tract }), place: place => set({ place }) });
   const tip = id => {
     const t = byId[id], m = measure(t, state.barrier), chosen = P.barriers.find(x => x.barrier === state.barrier);
-    return h`<b>${tractName(id)}</b> · ${who(t)}<br>${chosen ? nameOf(chosen) : 'Any flag'}: <b>${m.n} of ${m.of}</b> (${pct(m.share)})`;
+    return h`<b>${t.area ? `${t.area} · ` : ''}${tractName(id)}</b> · ${who(t)}<br>${chosen ? nameOf(chosen) : 'Any flag'}: <b>${m.n} of ${m.of}</b> (${pct(m.share)})`;
   };
 
   function paint() {
@@ -204,6 +212,7 @@ export async function clinic(root, query) {
     el('#bars').innerHTML = barChart(P, b);
     el('#map-title').textContent = chosen ? `${nameOf(chosen)}: where flags fall` : 'Where flagged plans live';
     el('#says').textContent = says(P, state);
+    el('#areas').innerHTML = areaStrip(P, b);
     el('#rank-title').textContent = chosen ? `Where ${nameOf(chosen).toLowerCase()} clusters` : 'Where flagged patients cluster';
     map.update({
       bins: Object.fromEntries(P.tracts.map(t => [t.tract_id, sh.bin(measure(t, b))])),
