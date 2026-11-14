@@ -38,6 +38,7 @@ def main(argv=None) -> int:
     ap.add_argument("--tracts", type=int, default=48, help="how many of the nearest tracts make up the catchment")
     ap.add_argument("--clinic-tract", default="17031260300")
     ap.add_argument("--seed", type=int, default=2026)
+    ap.add_argument("--reach-km", type=float, default=1.5, help="how fast the clinic's draw fades with distance")
     ap.add_argument("--streams", type=int, default=3)
     ap.add_argument("--chunk", type=int, default=50)
     ap.add_argument("--out", type=Path, default=Path("data/panel"))
@@ -47,11 +48,15 @@ def main(argv=None) -> int:
     rows = [r for r in table.rows.values() if r.get("intpt_lat") is not None]
     rows.sort(key=lambda r: km(home["intpt_lat"], home["intpt_lon"], r["intpt_lat"], r["intpt_lon"]))
     near = rows[:a.tracts]
-    catchment = TractTable({r["tract_geoid"]: r for r in near}, table.source)
+    # Where a patient lives is drawn first: more households and a shorter way to the clinic mean more patients. The generator
+    # then gets that one tract, because given a choice it sends every patient whose plan has no barrier to a tract with no
+    # risk figures, and a catchment can have only one of those.
+    weight = [(r.get("households") or 0) * math.exp(-km(home["intpt_lat"], home["intpt_lon"], r["intpt_lat"], r["intpt_lon"]) / a.reach_km) for r in near]
     rng, cases, bad, i = random.Random(a.seed), [], 0, 0
     while len(cases) < a.n and i < a.n * 3:
         i += 1
-        case = generate(rng, 10000 + i, catchment)
+        lives = rng.choices(near, weights=weight)[0]
+        case = generate(rng, 10000 + i, TractTable({lives["tract_geoid"]: lives}, table.source))
         if validate_case(case):
             bad += 1
             continue
