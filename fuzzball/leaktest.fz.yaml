@@ -1,10 +1,9 @@
-# Every number we report, measured on the event cluster in one workflow:
-#   - leak test as a task array: each attack page against the single-agent design and the split design
-#   - case scores: transcript-only and Care Plan Check, on the dev cases and the held-out cases
-# The planner comes up as a service, the jobs reach it by name on the workflow network, and it stops when they finish.
-# Results land on the persistent "code" volume under runs/ and results/.
+# The leak test, measured on the event cluster as a Fuzzball task array: every attack page against the single-agent
+# design and against the split design. The planner comes up as a service on one GB10, the array's tasks reach it by
+# name on the workflow network, a last job merges the shards, and the planner stops when they finish.
 # The CPU jobs run in a Rocky Linux 9 container with the Python and packages that code.fz.yaml put on the volume.
-#   fuzzball workflow start measure.fz.yaml --name measure-1
+# Results: runs/ and results/leaktest_<TAG>.json on the persistent "code" volume.
+#   fuzzball workflow start leaktest.fz.yaml --name leaktest-1
 version: v4
 volumes:
   models: {use: team4, name: models}
@@ -90,28 +89,3 @@ jobs:
     resource:
       cpu: {cores: 1}
       memory: {size: 1GB}
-  scores:
-    image: {uri: docker://rockylinux/rockylinux:9}
-    mounts: {/code: code}
-    cwd: /code/app
-    env:
-      - PYTHONPATH=/code/site
-      - PATH=/code/python/bin:/usr/local/bin:/usr/bin:/bin
-      - PLANNER_URL=http://planner:8000/v1
-      - VLLM_API_KEY=none
-      - PROFILE=super35-vllm
-      - TAG=event1
-      - REPS=3
-    script: |
-      #!/bin/sh
-      for set in test dev; do
-        python3 -m careplan run --cases cases/$set --conditions C0,C2 --reps $REPS --signals --allow-unfrozen \
-          --profile C0=$PROFILE --profile C2=$PROFILE --tag ${TAG}_$set > /code/results/scores_${TAG}_$set.log 2>&1
-        python3 scripts/h1_report.py $(ls -dt runs/*_${TAG}_$set | head -1) --cases cases/$set --out /code/results/scores_${TAG}_$set.json | tail -3
-      done
-    depends-on:
-      - {name: planner, status: RUNNING}
-    policy: {timeout: {execute: 4h}}
-    resource:
-      cpu: {cores: 1}
-      memory: {size: 2GB}
