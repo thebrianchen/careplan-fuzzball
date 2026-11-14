@@ -322,6 +322,9 @@ class WebAppTests(unittest.TestCase):
         lat, lon = base["tracts"][panel["clinic"]["tract_id"]][0][0]
         self.assertTrue(41 < lat < 43 and -89 < lon < -87)
         self.assertGreater(len(base["streets"]), 1000)
+        wide, box = self.get("basemap")["wide"], base["box"]
+        self.assertTrue(wide["box"]["south"] < box["south"] and wide["box"]["north"] > box["north"] and wide["box"]["east"] > box["east"])
+        self.assertTrue(any(w["name"] == "Lk Michigan" for w in wide["water"]))
 
     def test_pages_are_served_and_nothing_outside_them(self):
         with urllib.request.urlopen(f"{self.url}/app/") as r:

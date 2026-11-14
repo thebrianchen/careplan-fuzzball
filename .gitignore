@@ -17,6 +17,7 @@ data/processed/*
 !data/processed/tracts.csv
 !data/processed/transit_wed.npz
 !data/processed/basemap_westside.json
+!data/processed/basemap_chicago.json
 data/panel/
 data/raw/
 data/synth/
