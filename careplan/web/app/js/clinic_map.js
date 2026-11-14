@@ -2,7 +2,8 @@
 // for the places that could help. It owns only the view (center and zoom); everything it shows comes from the page.
 //   const map = clinicMap(stack, {basemap, wide, tracts, clinic, pick, place})   stack: an empty element sized by CSS
 //     basemap  B from GET /api/app/basemap: the streets around the clinic, or null
-//     wide     W from the same call: the city around it, simplified, with no local streets, or null
+//     wide     W from the same call: the city around it, simplified, with no local streets, or null; its `areas` (the
+//              community areas, outlined and named) may be missing
 //              (with neither, each neighborhood is a small circle at its center)
 //     pick(id) the manager chose a neighborhood on the map; place(id | null) a pin's card was opened or closed
 //   map.update({bins, ranks, selected, places, place, tip})   after every page paint
@@ -52,8 +53,12 @@ const LAYERS = [
   { set: 'basemap', ...STYLE.rail },
   { set: 'basemap', ...STYLE.arterials },
   { set: 'basemap', ...STYLE.highways },
+  // Chicago's community areas, the names people know. Painted once over both sets, since the hand-over would fade W out over the panel.
+  { set: 'wide', from: 'areas', over: true, stroke: '#8f99a4', width: ramp([[12, 0.8], [120, 1.1]]), alpha: ramp([[12, 0.5], [40, 0.9], [160, 0.9], [420, 0]]), dash: [1, 3.5],
+    names: { order: 1.5, font: '500 10px', spacing: '1.6px', color: '#6b7682', line: 12 } },
 ];
-const LABELLED = LAYERS.map((L, i) => [L, i]).filter(([L]) => L.label).sort(([a, i], [b, j]) => a.label.order - b.label.order || j - i).map(([, i]) => i);
+const AREAS = LAYERS.find(L => L.from === 'areas');
+const LABELLED = LAYERS.map((L, i) => [L, i]).filter(([L]) => L.label || L.names).sort(([a, i], [b, j]) => (a.label || a.names).order - (b.label || b.names).order || j - i).map(([, i]) => i);
 const FADE = ramp([[180, 1], [700, 0.62]]);      // zoomed in to a few blocks, the streets matter more than the shade
 const FONT = '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 const SCALE = [[100, 'ft'], [200, 'ft'], [500, 'ft'], [1000, 'ft'], [0.5, 'mi'], [1, 'mi'], [2, 'mi'], [5, 'mi'], [10, 'mi']];
@@ -110,7 +115,7 @@ function prepare(B, W, tracts) {
   const layers = LAYERS.map(L => {
     const D = sets[L.set];
     const src = !D ? [] : L.from === 'tracts' ? Object.entries(D.tracts).map(([id, rings]) => ({ name: id, rings }))
-      : L.from === 'water' ? D.water : D[L.from].filter(f => !L.keep || L.keep(f));
+      : L.from === 'water' ? D.water : (D[L.from] || []).filter(f => !L.keep || L.keep(f));
     const feats = src.map(f => { const parts = (f.rings || [f.line]).map(flat); return { name: f.name, parts, b: bounds(parts) }; });
     return { ...L, tiles: tile(feats, L.fill, CELL[L.set]), runs: L.label ? feats.flatMap(runsOf) : [] };
   });
@@ -126,7 +131,29 @@ function prepare(B, W, tracts) {
     g.parts.push(...parts);
   }
   for (const g of waters.values()) { g.b = bounds(g.parts); g.size = (g.b[2] - g.b[0]) * (g.b[3] - g.b[1]); }
-  return { km, shapes, box, detail: B && boxOf(B.box), wide: !!W, layers, wet, waters: [...waters.values()].sort((a, b) => b.size - a.size) };
+  const areas = (W?.areas || []).map(a => {
+    const parts = a.rings.map(flat), b = bounds(parts), text = a.name.toUpperCase(), words = text.split(' ');
+    const splits = words.slice(1).map((_, i) => [words.slice(0, i + 1).join(' '), words.slice(i + 1).join(' ')]);
+    const two = splits.sort((p, q) => Math.max(...p.map(l => l.length)) - Math.max(...q.map(l => l.length)))[0];
+    return { name: a.name, parts, b, at: middle(parts, b), lines: two ? [[text], two] : [[text]], size: (b[2] - b[0]) * (b[3] - b[1]) };
+  }).sort((a, b) => b.size - a.size);
+  return { km, shapes, box, detail: B && boxOf(B.box), wide: !!W, layers, wet, waters: [...waters.values()].sort((a, b) => b.size - a.size), areas };
+}
+
+// The inside point farthest from the outline, sampled on a grid: an L-shaped area's box middle can fall outside it.
+function middle(parts, b) {
+  let best = [(b[0] + b[2]) / 2, (b[1] + b[3]) / 2], far = -1;
+  for (let i = 0.5; i < 20; i++) for (let j = 0.5; j < 20; j++) {
+    const x = b[0] + (b[2] - b[0]) * i / 20, y = b[1] + (b[3] - b[1]) * j / 20;
+    if (!within(x, y, parts)) continue;
+    let d = Infinity;
+    for (const a of parts) for (let n = 0, m = a.length - 2; n < a.length; m = n, n += 2) {
+      const dx = a[n] - a[m], dy = a[n + 1] - a[m + 1], t = Math.max(0, Math.min(1, ((x - a[m]) * dx + (y - a[m + 1]) * dy) / (dx * dx + dy * dy || 1)));
+      d = Math.min(d, Math.hypot(x - a[m] - t * dx, y - a[m + 1] - t * dy));
+    }
+    if (d > far) { far = d; best = [x, y]; }
+  }
+  return best;
 }
 
 // Features grouped into a coarse grid by their middle, one Path2D per cell, so a frame strokes only the cells in view.
@@ -201,7 +228,7 @@ function within(x, y, parts) {
 
 export function clinicMap(stack, { basemap, wide, tracts, clinic, pick, place }) {
   const M = prepared(basemap, wide, tracts), byId = Object.fromEntries(M.shapes.map(s => [s.id, s]));
-  const clinicAt = clinic && M.km(clinic.lat, clinic.lon), farText = `The clinic's panel: ${tracts.length} neighborhoods`;
+  const clinicAt = clinic && M.km(clinic.lat, clinic.lon), farText = `The clinic's panel: ${tracts.length} census tracts`;
   stack.innerHTML = h`<canvas class="cmap-base" aria-hidden="true"></canvas>
     <svg class="cmap-fills" role="group" aria-label="Neighborhoods of the panel"><g class="km">${M.shapes.map(s =>
       h`<path class="hood${s.outline ? '' : ' dot'}" data-hood="${s.id}" d="${s.d}" tabindex="0" role="button" aria-label="${tractName(s.id)}"/>`)}</g></svg>
@@ -304,9 +331,10 @@ export function clinicMap(stack, { basemap, wide, tracts, clinic, pick, place })
       if (a <= 0 || !rr || (where === 'out' && contains(d, r))) continue;
       ctx.save();
       if (where) { ctx.beginPath(); if (where === 'out') ctx.rect(M.box[0], M.box[1], bw, bh); ctx.rect(d[0], d[1], d[2] - d[0], d[3] - d[1]); ctx.clip('evenodd'); }
-      for (const L of M.layers) if (L.set === set) paint(ctx, L, rr, a, v.k);
+      for (const L of M.layers) if (L.set === set && !L.over) paint(ctx, L, rr, a, v.k);
       ctx.restore();
     }
+    for (const L of M.layers) if (L.over) paint(ctx, L, r, 1, v.k);
     ctx.restore();
     const m = `matrix(${v.k} 0 0 ${v.k} ${tx} ${ty})`;
     fills.firstElementChild.setAttribute('transform', m);
@@ -398,6 +426,37 @@ export function clinicMap(stack, { basemap, wide, tracts, clinic, pick, place })
     }
   }
 
+  // Each community area's name once, inside it where the whole name fits, on one line or else two, as near its middle as is clear.
+  // Like a lake's name, the spots sit on a grid fixed to the map.
+  function areaNames(ctx, inner, taken, soft, edges, drawn) {
+    const v = view, spec = AREAS.names, step = 24 / v.k;
+    // A faded halo smears on the dark shades, so the names go once the outlines are half faded, a few blocks across.
+    if (AREAS.alpha(v.k) < 0.4 || !M.areas.length) return;
+    ctx.font = `${spec.font} ${FONT}`; ctx.letterSpacing = spec.spacing;
+    for (const g of M.areas) {
+      const room = meet(inner, g.b);
+      if (!room) continue;
+      for (const lines of g.lines) {
+        const tw = Math.max(...lines.map(l => { let n = widths.get('area' + l); if (n == null) widths.set('area' + l, n = ctx.measureText(l).width); return n; }));
+        const hw = (tw / 2 + 3) / v.k, hh = (lines.length * spec.line / 2 + 2) / v.k, [cx, cy] = g.at, spots = [];
+        if (room[2] - room[0] < 2 * hw || room[3] - room[1] < 2 * hh) continue;
+        for (let x = cx + Math.ceil((room[0] + hw - cx) / step) * step; x <= room[2] - hw; x += step)
+          for (let y = cy + Math.ceil((room[1] + hh - cy) / step) * step; y <= room[3] - hh; y += step) spots.push([x, y]);
+        spots.sort((p, q) => Math.hypot(p[0] - cx, p[1] - cy) - Math.hypot(q[0] - cx, q[1] - cy));
+        const fits = ([x, y]) => [-hw, -hw / 2, 0, hw / 2, hw].every(dx => [-hh, 0, hh].every(dy => within(x + dx, y + dy, g.parts)));
+        const boxAt = ([x, y]) => [...toPx([x - hw, y - hh]), ...toPx([x + hw, y + hh])];
+        const clear = s => { const b = boxAt(s); return !taken.some(o => overlaps(o, b)) && !edges.some(e => crosses(e, b)) && fits(s); };
+        const at = spots.find(s => clear(s) && !soft.some(o => overlaps(o, boxAt(s)))) || spots.find(clear);
+        if (!at) continue;
+        const [x, y] = toPx(at), b = boxAt(at);
+        taken.push(b); drawn.push([g.name, ...b.map(Math.round)]);
+        lines.forEach((l, i) => write(ctx, l, spec.color, x, y + (i - (lines.length - 1) / 2) * spec.line));
+        break;
+      }
+    }
+    ctx.letterSpacing = '0px';
+  }
+
   // Each line's name once, along the longest stretch of it on screen, upright, skipped where it would touch a name already written.
   // B's names stay in B's box and only once B has taken over; W's names keep out of it from then on.
   function label(r, hard, soft, dpr, t) {
@@ -410,8 +469,10 @@ export function clinicMap(stack, { basemap, wide, tracts, clinic, pick, place })
     const sel = byId[model?.selected], edges = [];
     if (sel && overlaps(sel.b, r)) for (const a of sel.rings) for (let i = 2; i < a.length; i += 2) edges.push([...toPx([a[i - 2], a[i - 1]]), ...toPx([a[i], a[i + 1]])]);
     waterNames(ctx, inner, hard, drawn);
+    const areas = [];
     for (const i of LABELLED) {
       const L = M.layers[i], spec = L.label, own = L.set === 'basemap';
+      if (L.names) { areaNames(ctx, inner, hard, soft, edges, areas); continue; }
       const room = own ? t >= 0.5 && d && meet(inner, d) : inner, keepOut = !own && dpx;
       if (!room) continue;
       ctx.font = `${spec.font} ${FONT}`;
@@ -449,6 +510,7 @@ export function clinicMap(stack, { basemap, wide, tracts, clinic, pick, place })
       }
     }
     names.dataset.labels = drawn.join('|');      // what the canvas wrote, for anyone checking the map from the page
+    names.dataset.areas = JSON.stringify(areas);   // [[name, left, top, right, bottom], ...] in px
   }
 
   function placeCard() {

@@ -197,6 +197,7 @@ export async function clinic(root, query) {
   const el = sel => $(sel, root);
   const byId = Object.fromEntries(P.tracts.map(t => [t.tract_id, t]));
   const hidden = new Set();                            // kinds of place the manager switched off in the legend, for this visit only
+  const unfolded = new Set();                          // the cards under the map that the manager opened in full
   let state = readAddress(P, query);
   const set = patch => { state = fix(P, { ...state, ...patch }, hidden); paint(); };
   const map = clinicMap(el('.cmap-stack'), { basemap: B, wide: W, tracts: P.tracts, clinic: P.clinic, pick: tract => set({ tract }), place: place => set({ place }) });
@@ -221,8 +222,11 @@ export async function clinic(root, query) {
     el('#legend').innerHTML = legend(P, state, hidden);
     el('#rank').innerHTML = rankList(P, state, sel);
     el('#detail').innerHTML = detail(P, state, sel);
-    el('#gaps').innerHTML = gaps(P, state, sel);
-    el('#public').innerHTML = publicView(P, state, sel);
+    for (const [id, html] of [['gaps', gaps(P, state, sel)], ['public', publicView(P, state, sel)]]) {
+      const more = unfolded.has(id);
+      el(`#${id}`).classList.toggle('folded', !more);
+      el(`#${id}`).innerHTML = h`${html}<button type="button" class="link cmore" data-more="${id}" aria-expanded="${String(more)}">${more ? 'Show less' : 'Show more'}</button>`;
+    }
     el('.page').classList.toggle('one-barrier', !!b);
   }
 
@@ -238,6 +242,7 @@ export async function clinic(root, query) {
       set({});
     } else if (bar) set({ barrier: bar.dataset.barrier && bar.dataset.barrier !== state.barrier ? bar.dataset.barrier : null });
     else if (order) set({ order: order.dataset.order });
+    else if (e.target.closest('[data-more]')) { const id = e.target.closest('[data-more]').dataset.more; unfolded.has(id) ? unfolded.delete(id) : unfolded.add(id); paint(); }
     else if (e.target.closest('[data-clear]')) set({ tract: null });
     else if (hood) set({ tract: hood.dataset.tract });
   });

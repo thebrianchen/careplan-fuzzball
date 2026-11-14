@@ -415,3 +415,8 @@ html.stage .cbar-track{background:var(--line2)}html.stage .cbar-zone{background:
 .chip.dec{background:var(--ink2);color:#fff}.chip.dec.accept{background:var(--ok)}.chip.dec.edit{background:var(--brand)}
 .pitem[data-decision=dismiss] .chip.dec{text-decoration:none;background:var(--ink2);color:#fff}
 @media (max-width:620px){.brief{margin-left:0}}
+
+/* ---- the two cards under the clinic map fold to their headline and first rows */
+.cmore{display:block;margin-top:10px}
+.cgaps.folded .cgaps-row:nth-child(n+4),.cgaps.folded>.hint{display:none}
+.cpublic.folded #public-spread,.cpublic.folded #public-hood,.cpublic.folded>.hint{display:none}
