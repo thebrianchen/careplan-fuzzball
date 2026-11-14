@@ -238,6 +238,22 @@ class WebAppTests(unittest.TestCase):
         self.assertTrue(any(a["resource"] for a in flagged["P1"]["alternatives"]))            # a real place from the resource table
         self.assertEqual([c["need"] for c in doc["crossings"]], ["utilities"])
 
+    def test_the_panel_is_counts_by_neighborhood_and_the_stand_in_is_shown_only_when_samples_are_on(self):
+        from careplan import webapp
+        real, webapp.PANEL["reviews"] = webapp.PANEL["reviews"], Path(self.tmp.name) / "no_reviews_yet.json"
+        try:
+            self.assertIsNone(self.get("panel")["panel"])
+            self.clinic.samples = True
+            p = self.get("panel")["panel"]
+        finally:
+            self.clinic.samples, webapp.PANEL["reviews"] = False, real
+        self.assertEqual((p["source"], p["patients"], p["k"]), ("sample", 600, 5))
+        self.assertTrue(all(t["patients"] >= p["k"] for t in p["tracts"]))                 # the rule of five
+        self.assertEqual(sum(b["flags"] for b in p["barriers"]), sum(sum(t["barriers"].values()) for t in p["tracts"]))
+        t = p["tracts"][0]
+        self.assertTrue(41 < t["lat"] < 43 and t["facts"] and set(t["places_near"]) == {"food_access", "utilities", "med_cost"})
+        self.assertEqual(set(t) & {"name", "mrn", "dob", "address", "patient_id"}, set())  # counts and public figures only
+
     def test_pages_are_served_and_nothing_outside_them(self):
         with urllib.request.urlopen(f"{self.url}/app/") as r:
             self.assertIn("Care Plan Check", r.read().decode())

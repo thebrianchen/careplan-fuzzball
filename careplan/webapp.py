@@ -10,6 +10,8 @@ GET  /api/app/review/<id>     event stream of a review. ?mode=recorded replays a
 POST /api/app/decision/<id>   {item_id, decision: accept|edit|dismiss, note}: the clinician's call on one flagged item
 POST /api/app/reset/<id>      forget this visit's review and its decisions on screen (the decision log keeps its rows)
 GET  /api/app/system          the operator's view: planner, reviews, crossings, decisions, activity. Case ids only, no patient fields.
+GET  /api/app/panel           the clinic manager's view: counts by neighborhood from the reviews of a whole panel (careplan.aggregates).
+                              Counts only; neighborhoods with fewer than k patients are not in it.
 GET  /api/app/city            the backdrop of the visit page's maps: tract centers and transit stops. Public data, no patient fields.
 
 A review is shown the same way whether it is live or a saved run: start, step*, item*, end (with the whole document).
@@ -25,10 +27,11 @@ import json
 import os
 import statistics
 import time
+import types
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
-from . import demo, sample, transit_tool
+from . import ROOT, demo, sample, transit_tool
 from .card import FIELD_LABEL, _evidence
 from .data import haversine_km
 from .summary import LANG
@@ -89,18 +92,58 @@ def _place(appt: dict, tract: dict | None) -> dict | None:
                                                   "rides": transit_tool.rides(*home)}}
 
 
+NO_CASE = types.SimpleNamespace(refs={})          # a tract figure reads the same for every patient
+
+
+def hood_facts(tract: dict | None, county: dict[str, dict]) -> list[dict]:
+    """A neighborhood's public figures, each with where the county stands on it."""
+    facts = []
+    for key, label in FIELD_LABEL.items():
+        if tract and key in tract:
+            value, _, note = _evidence(NO_CASE, f"tract:{key}", tract)[1].partition(": ")[2].partition(" (")
+            if key.startswith("lila_"):
+                value = "yes" if tract[key] else "no"
+            facts.append({"ref": f"tract:{key}", "label": label, "value": value, "note": note.rstrip(")"),
+                          "number": tract[key] if key in county else None, "county": county.get(key)})
+    return facts
+
+
+PANEL = {"reviews": ROOT / "reports" / "panel_aggregates.json", "sample": ROOT / "reports" / "panel_aggregates_sample.json"}
+PANEL_CLINIC = "17031260300"                      # scripts/panel.py draws the panel from the tracts nearest this one
+HELP_KM = 1.6                                     # "near" a neighborhood: within a mile of its center
+
+
+def panel(tracts, resources, county: dict[str, dict], samples: bool) -> dict | None:
+    """The published counts by neighborhood, each joined with its place on the map, its public figures and how many places
+    that could help are near. The reviews' file wins; the answer-key stand-in is used only when samples are on."""
+    f = PANEL["reviews"] if PANEL["reviews"].is_file() else PANEL["sample"] if samples and PANEL["sample"].is_file() else None
+    if f is None:
+        return None
+    agg = json.loads(f.read_text())
+    rows, totals = [], collections.Counter()
+    for r in agg["tracts"]:
+        t = tracts.get(r["tract_geoid"])
+        if not t:
+            continue
+        totals.update(r["barriers"])
+        near = collections.Counter(barrier for barrier, (need, _) in sample.PLACES.items() for x in resources.resources
+                                   if x.need == need and haversine_km(t["intpt_lat"], t["intpt_lon"], x.lat, x.lon) <= HELP_KM)
+        rows.append({"tract_id": r["tract_geoid"], "lat": t["intpt_lat"], "lon": t["intpt_lon"],
+                     **{k: r[k] for k in ("patients", "reviewed", "flagged_patients", "flagged_items", "appointments", "no_shows", "barriers")},
+                     "places_near": {barrier: near[barrier] for barrier in sample.PLACES}, "facts": hood_facts(t, county)})
+    clinic = tracts.get(PANEL_CLINIC)
+    return {"source": "sample" if agg.get("source") == "answer_key" else "reviews", "built": agg["built"], "k": agg["k"],
+            "patients": agg["patients"], "reviewed": agg["reviewed"], "hidden_tracts": agg["tracts_suppressed_under_k"],
+            "clinic": {"tract_id": PANEL_CLINIC, "lat": clinic["intpt_lat"], "lon": clinic["intpt_lon"]} if clinic else None,
+            "barriers": [{"barrier": b, "label": b.replace("_", " "), "flags": n, "places": b in sample.PLACES} for b, n in totals.most_common()],
+            "tracts": rows}
+
+
 def chart(case, tract: dict | None, county: dict[str, dict]) -> dict:
     """What the doctor already has on the private side, each row carrying the ref the review cites."""
     p = case.patient
     scr = p.get("screener") or {}
-    hood = []
-    for key, label in FIELD_LABEL.items():
-        if tract and key in tract:
-            value, _, note = _evidence(case, f"tract:{key}", tract)[1].partition(": ")[2].partition(" (")
-            if key.startswith("lila_"):
-                value = "yes" if tract[key] else "no"
-            hood.append({"ref": f"tract:{key}", "label": label, "value": value, "note": note.rstrip(")"),
-                         "number": tract[key] if key in county else None, "county": county.get(key)})
+    hood = hood_facts(tract, county)
     return {
         "home": {"tract_id": case.tract_geoid, "lat": tract["intpt_lat"], "lon": tract["intpt_lon"]} if tract else None,
         "problems": [{"ref": x["ref"], "display": x["display"]} for x in p.get("problems", [])],
@@ -405,6 +448,8 @@ def handle(app, h, method: str, path: str, query: str) -> None:
         return js(200, c.system())
     if method == "GET" and route == "city":
         return js(200, c.city)
+    if method == "GET" and route == "panel":
+        return js(200, {"panel": panel(app.tracts, app.resources, c.county, c.samples)})
     if method == "GET" and route == "case" and cid:
         return js(200, c.case(cid))
     if method == "GET" and route == "review" and cid:
