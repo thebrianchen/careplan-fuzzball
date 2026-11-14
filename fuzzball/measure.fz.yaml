@@ -14,6 +14,7 @@ services:
     mounts: {/models: models}
     env:
       - HOME=/models/home
+      - USER=careplan
       - XDG_CACHE_HOME=/models/home/.cache
       - HF_HUB_OFFLINE=1
       - MAX_JOBS=2
