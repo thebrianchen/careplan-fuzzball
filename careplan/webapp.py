@@ -4,7 +4,8 @@ system page. JSON routes and one event stream, all riding on the App in careplan
 GET  /app/                    the pages (plain static files, no build step)
 GET  /api/app/cases           the day's visits: who, what setting, whether a review exists
 GET  /api/app/case/<id>       one visit: patient, chart, visit, plan, and the review if there is one
-GET  /api/app/review/<id>     event stream of a review. ?mode=recorded replays a saved real run (&speed=N); ?mode=live runs the planner now
+GET  /api/app/review/<id>     event stream of a review. ?mode=recorded replays a saved real run (&speed=N); ?mode=live runs the planner now;
+                              ?mode=sample plays a stand-in built from the answer key, only when the server runs with CAREPLAN_SAMPLE=1
                               (&record=1 keeps a finished live run as this visit's saved run, if it has none; a saved run is never overwritten)
 POST /api/app/decision/<id>   {item_id, decision: accept|edit|dismiss, note}: the clinician's call on one flagged item
 POST /api/app/reset/<id>      forget this visit's review and its decisions on screen (the decision log keeps its rows)
@@ -27,7 +28,7 @@ import time
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
-from . import demo, transit_tool
+from . import demo, sample, transit_tool
 from .card import FIELD_LABEL, _evidence
 from .data import haversine_km
 from .summary import LANG
@@ -122,6 +123,7 @@ class Clinic:
         self.activity: collections.deque = collections.deque(maxlen=200)
         self._probe: tuple[float, int, list] = (0.0, 0, [])   # when the endpoints were last probed, for which profile, and what was passed over
         self._own_url: dict[int, str] = {}
+        self.samples = os.environ.get("CAREPLAN_SAMPLE") == "1"       # stand-in reviews for page work; off unless asked for
         self.fallbacks = [u.strip() for u in os.environ.get("CAREPLAN_PLANNER_FALLBACKS", "").split(",") if u.strip()]
         self.county = county(app.tracts)
 
@@ -199,7 +201,7 @@ class Clinic:
                         "language": LANGUAGE.get((p.get("language") or "en").lower(), p.get("language")),
                         "setting": v.get("setting"), "date": v.get("date"), "problems": [x.get("display") for x in p.get("problems", [])][:2],
                         "plan_items": len(c.plan), "has_recording": self.recording(cid).is_file(), "review": self.state(cid)})
-        return {"cases": out, "planner": self.planner()}
+        return {"cases": out, "planner": self.planner(), "samples": self.samples}
 
     def case(self, cid: str) -> dict:
         app, case = self.app, self.app.cases[cid]
@@ -212,6 +214,7 @@ class Clinic:
         doc["decisions"] = dict((app.results.get(cid) or {}).get("decisions") or {}) if s else {}
         doc["handout"] = app.summaries.get(cid) if s else None
         doc["has_recording"] = self.recording(cid).is_file()
+        doc["can_sample"] = self.samples
         doc["planner"] = self.planner()
         return doc
 
@@ -261,13 +264,15 @@ class Clinic:
                 send({"type": "rewrite", "t": t})
 
         try:
-            if mode == "recorded":
+            if mode in ("recorded", "sample"):
                 f = self.recording(cid)
-                if not f.is_file():
+                if mode == "sample" and not self.samples:
+                    return send({"type": "end", "ok": False, "error": "Sample reviews are off on this server."})
+                if mode == "recorded" and not f.is_file():
                     return send({"type": "end", "ok": False, "error": "There is no saved run for this visit."})
-                data = json.loads(f.read_text())
-                rec = data["rec"]
-                send({"type": "start", "source": "recorded", "saved": data.get("saved"), "profile": data.get("profile"),
+                data = sample.run(case, tract, app.resources) if mode == "sample" else json.loads(f.read_text())
+                rec, speed = data["rec"], 1.0 if mode == "sample" else speed
+                send({"type": "start", "source": mode, "saved": data.get("saved"), "profile": data.get("profile"),
                       "model": demo.model_name(data.get("profile")), "seconds": rec.get("wall_s"), "speed": speed})
                 t0 = time.time()
                 for off, ev in data["events"]:
@@ -275,7 +280,7 @@ class Clinic:
                     if delay > 0:
                         time.sleep(delay)
                     relay(off, ev)
-                doc = demo.build(case, rec, data["events"], app.tracts, app.resources, "recorded", data.get("saved"))
+                doc = demo.build(case, rec, data["events"], app.tracts, app.resources, mode, data.get("saved"))
             else:
                 pl = self.planner(fresh=True)
                 if not pl["answers"]:
@@ -407,7 +412,7 @@ def handle(app, h, method: str, path: str, query: str) -> None:
             speed = min(1000.0, max(1.0, float(q.get("speed", 1))))
         except ValueError:
             speed = 1.0
-        return c.review(h, cid, "live" if q.get("mode") == "live" else "recorded", speed, record=q.get("record") == "1")
+        return c.review(h, cid, q.get("mode") if q.get("mode") in ("live", "sample") else "recorded", speed, record=q.get("record") == "1")
     if method == "POST" and route == "decision" and cid:
         try:
             body = json.loads(h.rfile.read(int(h.headers.get("Content-Length") or 0)) or b"{}")

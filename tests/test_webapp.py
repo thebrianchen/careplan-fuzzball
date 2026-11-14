@@ -217,6 +217,27 @@ class WebAppTests(unittest.TestCase):
         self.assertEqual(len(city["tracts"]["lat"]), len(city["tracts"]["lon"]))
         self.assertGreater(len(city["tracts"]["lat"]), 1000)
 
+    def test_a_sample_review_follows_the_answer_key_says_it_is_a_sample_and_is_off_unless_asked_for(self):
+        off = self.review("mode=sample")
+        self.assertEqual((len(off), off[0]["ok"]), (1, False))
+        self.assertFalse(self.get("case/D002")["can_sample"])
+        self.clinic.samples = True
+        try:
+            with urllib.request.urlopen(f"{self.url}/api/app/review/D002?mode=sample") as r:
+                evs = [json.loads(line[6:]) for line in r.read().decode().splitlines() if line.startswith("data: ")]
+        finally:
+            self.clinic.samples = False
+            self.post("reset/D002", {})
+        doc = evs[-1]["doc"]
+        self.assertEqual((evs[0]["source"], doc["meta"]["source"], doc["meta"]["model"]), ("sample", "sample", "sample"))
+        key = self.app.cases["D002"].data["planted_conflicts"]
+        flagged = {i["item_id"]: i for i in doc["items"] if i["status"] != "likely_ok"}
+        self.assertEqual(set(flagged), {c["item_id"] for c in key})
+        self.assertEqual(flagged["P4"]["status"], "blocked")
+        self.assertEqual({b["barrier"] for b in flagged["P1"]["barriers"]}, {"utilities"})
+        self.assertTrue(any(a["resource"] for a in flagged["P1"]["alternatives"]))            # a real place from the resource table
+        self.assertEqual([c["need"] for c in doc["crossings"]], ["utilities"])
+
     def test_pages_are_served_and_nothing_outside_them(self):
         with urllib.request.urlopen(f"{self.url}/app/") as r:
             self.assertIn("Care Plan Check", r.read().decode())

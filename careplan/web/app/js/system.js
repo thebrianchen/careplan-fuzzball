@@ -6,7 +6,7 @@ import { $, api, cap, date, h, plural, secs, setPlanner, timeOfDay } from './ui.
 const median = xs => { const s = [...xs].sort((a, b) => a - b); return s.length ? s[Math.floor((s.length - 1) / 2)] : null; };
 const num = n => n == null ? '—' : Number(n).toLocaleString();
 const uptime = s => s < 90 ? `${s} s` : s < 5400 ? `${Math.round(s / 60)} min` : `${(s / 3600).toFixed(1)} h`;
-const SOURCE = { live: 'Live', recorded: 'Saved run' };
+const SOURCE = { live: 'Live', recorded: 'Saved run', sample: 'Sample' };
 
 function tiles(s) {
   const ok = s.runs.filter(r => r.ok), live = ok.filter(r => r.source === 'live'), failed = s.runs.filter(r => !r.ok).length;

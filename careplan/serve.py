@@ -16,6 +16,7 @@ POST /check/<case_id>  run again; returns the result JSON
 Environment (all optional):
   CAREPLAN_PROFILE        model profile in config/models.yaml (default super35-vllm-think: the event planner, at PLANNER_URL
                           or http://localhost:8000/v1)
+  CAREPLAN_SAMPLE         if set to 1, the clinic app offers sample reviews built from the answer key (careplan/sample.py), for page work
   CAREPLAN_PLANNER_FALLBACKS  the clinic app's other planner endpoints, comma-separated, tried in order when the first does not answer
   CAREPLAN_MODEL_BASE_URL override the profile's base URL (e.g. http://llm:8000/v1 for on-box vLLM)
   CAREPLAN_MODEL_API_KEY_ENV  env var holding the model key (default: the profile's)

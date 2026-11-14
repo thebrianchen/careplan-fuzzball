@@ -129,8 +129,10 @@ export async function visit(root, id) {
   let doc = await api(`case/${id}`);
   setPlanner(doc.planner);
   let es = null, tick = null, running = false, savedAt = {}, onlyUnsaid = false;
-  const canRun = m => m === 'recorded' ? doc.has_recording : doc.planner.answers;
-  let mode = doc.has_recording && !(localStorage.getItem('cp.mode') === 'live' && canRun('live')) ? 'recorded' : 'live';
+  const MODES = ['recorded', 'sample', 'live'];        // in the order a visit falls back to them
+  const canRun = m => m === 'recorded' ? doc.has_recording : m === 'sample' ? doc.can_sample : doc.planner.answers;
+  const kept = localStorage.getItem('cp.mode');
+  let mode = MODES.includes(kept) && canRun(kept) ? kept : MODES.find(canRun) || 'live';
   let speed = SPEEDS.includes(+localStorage.getItem('cp.speed')) ? +localStorage.getItem('cp.speed') : 8;
   const p = doc.patient, el = sel => $(sel, root);
   const rows = Object.fromEntries([...doc.chart.appointments, ...doc.chart.screener.answers].map(r => [r.ref, r]));
@@ -150,6 +152,7 @@ export async function visit(root, id) {
           <div class="actions">
             <div class="seg" role="group" aria-label="Where the review comes from">
               <button type="button" data-mode="recorded" ${doc.has_recording ? '' : 'disabled'} title="${doc.has_recording ? 'Replay a real run of this review that was saved earlier' : 'No run has been saved for this visit'}">Saved run</button>
+              ${doc.can_sample ? h`<button type="button" data-mode="sample" title="Play a stand-in built from this visit's answer key. Not a model run.">Sample</button>` : ''}
               <button type="button" data-mode="live" title="Run the planner now">Live</button>
             </div>
             <select id="speed" aria-label="Playback speed of the saved run" title="Playback speed of the saved run">${SPEEDS.map(s => h`<option value="${s}">${s === 1 ? 'Real time' : `${s}× speed`}</option>`)}</select>
@@ -203,10 +206,10 @@ export async function visit(root, id) {
     line.hidden = src === 'none';
     if (line.hidden) return;
     el('#runtag').className = `runtag ${src}`;
-    el('#runtag').textContent = src === 'recorded' ? 'Saved run' : 'Live';
+    el('#runtag').textContent = { recorded: 'Saved run', sample: 'Sample', live: 'Live' }[src];
     const when = info.saved || m.saved, model = info.model || m.model, profile = info.profile || m.profile;
     el('#runtext').title = profile ? `Profile ${profile} in config/models.yaml` : '';
-    el('#runtext').textContent = src === 'recorded'
+    el('#runtext').textContent = src === 'sample' ? 'A stand-in built from this visit\'s answer key, for work on the pages. Not a model run.' : src === 'recorded'
       ? (state === 'running' ? `A real run saved on ${date(when)}, shown ${info.speed > 1 ? `at ${info.speed}× speed` : 'in real time'}` : `A real run saved on ${date(when)}. It took ${secs(m.seconds)} on ${model}.`)
       : (state === 'running' ? `The planner (${model}) is reviewing this plan now` : `Reviewed just now by the planner (${model}) in ${secs(m.seconds)}.`);
     if (state !== 'running') el('#runclock').textContent = '';
