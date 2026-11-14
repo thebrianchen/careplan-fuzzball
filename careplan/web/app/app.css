@@ -386,3 +386,19 @@ table.grid td.mono{white-space:nowrap}
 .carea{display:inline-flex;align-items:baseline;gap:7px;padding:3px 10px;border:1px solid var(--line);border-radius:999px;font-size:13px;color:var(--ink2);white-space:nowrap}
 .carea b{font-weight:600;color:var(--ink)}
 .carea.top{border-color:var(--brand);background:var(--brand-soft)}
+
+/* ---- projector mode (html.stage): a washed-out projector eats light greys and thin text, so greys go darker, borders
+   stronger and the smallest text larger. Overall size is the browser's zoom, which also scales the map correctly. */
+.stage-toggle{font-size:12.5px;font-weight:500;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:3px 11px;background:none}
+.stage-toggle[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:#fff}
+html.stage{--bg:#fff;--ink:#0a1118;--ink2:#18222c;--muted:#3a4654;--line:#9aa7b4;--line2:#c9d2db;
+  --brand:#075e57;--brand-ink:#04433e;--brand-soft:#cbe7e3;--ok:#0e5c37;--ok-soft:#cdebd9;--risk:#6b4700;--risk-soft:#f8e3a8;--risk-line:#c9920a;
+  --stop:#8f1d17;--stop-soft:#f7cfcb;--mark:#3327b0;--mark-soft:#dcd9fa;--shadow:none}
+html.stage body{font-size:16px}
+html.stage small,html.stage .hint,html.stage .pane-note,html.stage .tag,html.stage .chip,html.stage .unsaid,html.stage .src,html.stage .k{font-size:13.5px}
+html.stage .card,html.stage .pitem,html.stage .banner,html.stage .context,html.stage .list,html.stage .tile,html.stage .boundary{border-color:var(--line)}
+html.stage .turn.doctor p{color:var(--ink2)}
+html.stage .chip,html.stage .unsaid,html.stage .runtag{font-weight:700}
+html.stage .step{border-color:var(--line)}
+html.stage .summary span{color:#e6ebf0}
+html.stage .cbar-track{background:var(--line2)}html.stage .cbar-zone{background:#9aa7b4}

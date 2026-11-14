@@ -37,5 +37,14 @@ async function route() {
       <div class="muted">The app needs its server: <code>python -m careplan.serve</code>, then open <code>/app/</code>.</div></div></div>`;
   }
 }
+// Projector mode: a class on <html> that the stylesheets and the map read. Kept across reloads.
+function stage(on) {
+  document.documentElement.classList.toggle('stage', on);
+  $('#stage').setAttribute('aria-pressed', String(on));
+  localStorage.setItem('cp.stage', on ? '1' : '');
+  window.dispatchEvent(new Event('cp:stage'));
+}
+$('#stage').addEventListener('click', () => stage(!document.documentElement.classList.contains('stage')));
+stage(localStorage.getItem('cp.stage') === '1');
 window.addEventListener('hashchange', route);
 route();

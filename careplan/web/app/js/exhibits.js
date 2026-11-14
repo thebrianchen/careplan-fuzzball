@@ -128,7 +128,8 @@ function backdrop(canvas, city) {
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   const pts = city.stops || city.tracts;                // tract centers are far sparser, so they get bigger dots
   const r = city.stops ? Math.min(1.25, 0.5 + s / 80) : Math.min(3, 1.3 + s / 45);
-  ctx.fillStyle = city.stops ? 'rgba(57,70,86,.30)' : 'rgba(57,70,86,.26)';
+  const stage = document.documentElement.classList.contains('stage');        // projector mode: the street grid must survive a washed-out image
+  ctx.fillStyle = `rgba(57,70,86,${stage ? 0.6 : city.stops ? 0.3 : 0.26})`;
   ctx.beginPath();
   for (let i = 0; i < pts.lat.length; i++) {
     const x = w / 2 + (pts.lon[i] - lon0) * cos * KM * s, y = ht / 2 - (pts.lat[i] - lat0) * KM * s;
