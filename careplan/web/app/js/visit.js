@@ -3,6 +3,7 @@
 //   GET /api/app/review/<case>?mode=recorded|live   ->  start, step*, item*, [rewrite], end {ok, doc | error}
 // Decisions are saved with POST /api/app/decision/<case>; nothing is kept only on the page.
 import { $, $$, api, cap, clock, date, h, hours, plural, secs, setPlanner, timeOfDay } from './ui.js';
+import { countyBar, linkResources, map, mount, visitStrip } from './exhibits.js';
 
 const SPEEDS = [1, 4, 8, 20];
 const srcKind = e => e.said_in_visit ? 'visit' : e.source === 'Neighborhood' ? 'hood' : e.source === 'Transit schedules' ? 'transit' : 'chart';
@@ -15,6 +16,8 @@ function evidenceText(e, rows) {                     // appointments and screene
   return cap(e.text);
 }
 const flaggedOf = doc => doc.items.filter(i => i.status !== 'likely_ok');
+let cityData = null;                                 // the maps' backdrop (~0.5 MB), fetched once per page load and only when a map appears
+const city = () => cityData || (cityData = api('city'));
 
 function context(doc) {
   const c = doc.chart, hood = c.neighborhood;
@@ -39,21 +42,55 @@ function context(doc) {
   </div>
   <div class="pane" data-pane="hood" hidden>
     <p class="pane-note">Census tract ${hood.tract_id || 'unknown'}. These figures describe the neighborhood, not this patient: a reason to ask, not a finding.</p>
-    ${hood.facts.map(f => h`<div class="rowline kv" data-ref="${f.ref}"><span>${cap(f.label)}${f.note ? h`<small class="warn">${f.note}</small>` : ''}</span><b>${f.value}</b></div>`)}
+    ${hood.facts.map(f => h`<div class="rowline kv" data-ref="${f.ref}"><span>${cap(f.label)}${f.note ? h`<small class="warn">${f.note}</small>` : ''}</span><b>${f.value}</b>${countyBar(f, { compact: true })}</div>`)}
     ${hood.vintage ? h`<p class="pane-note">Sources: ${hood.vintage}</p>` : ''}
   </div>`;
 }
 
-function finding(it, rows) {
+// Which exhibits a finding gets, decided here only, from the refs its evidence cites and what the chart holds for them:
+// two or more cited appointments in one barrier -> a strip of that department's visits; a cited tract fact with a county
+// scale -> a bar; a cited appointment with a place, or an alternative with a located resource -> the map.
+function exhibitsOf(it, chart) {
+  const appt = Object.fromEntries(chart.appointments.map(a => [a.ref, a]));
+  const fact = Object.fromEntries(chart.neighborhood.facts.map(f => [f.ref, f]));
+  const barriers = it.barriers.map(b => {
+    const cited = [...new Set(b.evidence.map(e => e.ref).filter(r => appt[r]))];
+    const depts = [...new Set(cited.map(r => appt[r].dept))];
+    const strip = cited.length >= 2 && { cited: new Set(cited), depts,
+      appts: chart.appointments.filter(a => depts.includes(a.dept)).sort((x, y) => `${x.date} ${x.time}`.localeCompare(`${y.date} ${y.time}`)) };
+    const rows = b.evidence.flatMap(e => !strip || !appt[e.ref] ? [{ e, bar: fact[e.ref] }] : e.ref === cited[0] ? [{ e, strip }] : []);
+    return { ...b, rows };
+  });
+  const places = new Map();
+  for (const e of it.barriers.flatMap(b => b.evidence)) {
+    const a = appt[target(e.ref)], p = a && a.place;
+    if (p && !places.has(`${p.lat},${p.lon}`)) places.set(`${p.lat},${p.lon}`, { ...p, ref: a.ref, time: a.time });
+  }
+  let n = 0;
+  const alts = it.alternatives.map(a => ({ ...a, n: a.resource && a.resource.lat != null ? ++n : null }));
+  const resources = alts.filter(a => a.n).map(a => ({ ...a.resource, n: a.n }));
+  const located = places.size || resources.length ? { id: it.item_id, status: it.status, home: chart.home, places: [...places.values()], resources } : null;
+  return { barriers, alts, map: located };
+}
+
+const unsaid = e => e.said_in_visit ? '' : h`<span class="unsaid">not said in the visit</span>`;
+function evidenceRow({ e, strip, bar }, rows) {
+  if (strip) return h`<li><div class="ev strip-row"><span class="src ${srcKind(e)}">${e.source}</span><span class="ev-text">${visitStrip(strip)}</span>${unsaid(e)}</div></li>`;
+  return h`<li><button type="button" class="ev" data-ref="${e.ref}" title="Show where this comes from">
+    <span class="src ${srcKind(e)}">${e.source}</span><span class="ev-text">${evidenceText(e, rows)}${bar ? countyBar(bar) : ''}</span>${unsaid(e)}</button></li>`;
+}
+
+function finding(it, rows, chart, animate) {
   if (it.status === 'likely_ok') return h`<p class="okline">No barrier found for this patient.</p>`;
-  return h`${it.barriers.map(b => h`<div class="barrier">
+  const ex = exhibitsOf(it, chart);
+  return h`${ex.barriers.map(b => h`<div class="barrier">
       <p class="why"><b>${cap(b.label)}.</b> ${cap(b.reason)}</p>
-      <ul class="evidence">${b.evidence.map(e => h`<li><button type="button" class="ev" data-ref="${e.ref}" title="Show where this comes from">
-        <span class="src ${srcKind(e)}">${e.source}</span><span class="ev-text">${evidenceText(e, rows)}</span>${e.said_in_visit ? '' : h`<span class="unsaid">not said in the visit</span>`}</button></li>`)}</ul>
+      <ul class="evidence">${b.rows.map(r => evidenceRow(r, rows))}</ul>
     </div>`)}
-    ${it.alternatives.length ? h`<div class="alts"><h4>What could work instead</h4><ul>${it.alternatives.map(a => {
+    ${ex.map ? map({ ...ex.map, animate }) : ''}
+    ${ex.alts.length ? h`<div class="alts"><h4>What could work instead</h4><ul>${ex.alts.map(a => {
       const r = a.resource;
-      return h`<li><span class="cat">${category(a.label)}</span><span>${a.text}${r ? h`<small class="res">${[r.name, hours(r.hours), r.miles_from_home != null && `${r.miles_from_home} mi from home`, r.phone].filter(Boolean).join(' · ')}</small>` : ''}</span></li>`;
+      return h`<li${a.n ? h` data-res="${a.n}" tabindex="0"` : ''}><span class="cat">${category(a.label)}</span><span>${a.text}${r ? h`<small class="res">${a.n ? h`<span class="resnum">${a.n}</span>` : ''}${[r.name, hours(r.hours), r.miles_from_home != null && `${r.miles_from_home} mi from home`, r.phone].filter(Boolean).join(' · ')}</small>` : ''}</span></li>`;
     })}</ul></div>` : ''}`;
 }
 
@@ -142,7 +179,8 @@ export async function visit(root, id) {
     node.style.animationDelay = animate && delay ? `${delay}ms` : '';
     node.dataset.decision = dec ? dec.decision : '';
     $('.slot', node).innerHTML = h`<span class="chip ${it.status}">${it.status_label}</span>`;
-    $('.pitem-body', node).innerHTML = h`${finding(it, rows)}${decidable && it.status !== 'likely_ok' ? decideBar(it, dec, savedAt[it.item_id]) : ''}`;
+    $('.pitem-body', node).innerHTML = h`${finding(it, rows, doc.chart, animate)}${decidable && it.status !== 'likely_ok' ? decideBar(it, dec, savedAt[it.item_id]) : ''}`;
+    mount(node, city);
   }
   function clearItems(state) {                       // '' = as written, 'checking' = waiting for the review
     $$('.pitem', root).forEach(n => {
@@ -307,12 +345,12 @@ export async function visit(root, id) {
   const page = el('.page');                          // listeners live on this view's own node, so they go when the view goes
   page.addEventListener('click', async e => {
     const t = e.target;
-    const tab = t.closest('.tabs button'), seg = t.closest('.seg button'), ev = t.closest('.ev'), d = t.closest('.decide-btns button');
+    const tab = t.closest('.tabs button'), seg = t.closest('.seg button'), cites = t.closest('.review [data-ref]'), d = t.closest('.decide-btns button');
     if (tab) return openTab(tab.dataset.tab);
     if (seg) { mode = seg.dataset.mode; localStorage.setItem('cp.mode', mode); return paintControls(); }
     if (t.closest('#go')) return start(mode);
     if (t.closest('#fallback')) return start('recorded');
-    if (ev) return showSource(ev.dataset.ref);
+    if (cites) return showSource(cites.dataset.ref);
     if (d) {
       const bar = d.closest('.decide'), box = $('.editbox', bar);
       if (d.dataset.d !== 'edit') return save(bar, d.dataset.d);
@@ -327,6 +365,7 @@ export async function visit(root, id) {
     const bar = e.target.closest('.decide'), note = $('textarea', e.target).value.trim();
     if (bar && note) save(bar, 'edit', note);
   });
+  ['mouseover', 'mouseout', 'focusin', 'focusout'].forEach(type => page.addEventListener(type, linkResources));
   const onSpeed = e => { speed = +e.target.value; localStorage.setItem('cp.speed', String(speed)); };
   el('#speed').addEventListener('change', onSpeed);
 
