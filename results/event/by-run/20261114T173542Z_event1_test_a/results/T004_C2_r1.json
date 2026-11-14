@@ -1,0 +1,385 @@
+{
+  "case_id": "T004",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "10:00 AM prenatal visits conflict with her 6:00-2:30 PM factory shift; she already no-showed a 10:00 OB visit for this reason and risks job loss after two unexcused absences. After-shift (3:00 PM) works for her.",
+            "evidence": [
+              "turn:T02",
+              "turn:T04",
+              "appt:2"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Ask the OB clinic to move prenatal visits to after her 2:30 PM shift (around 3:00 PM) or to a day that fits her ride, to protect her job.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "food_access",
+            "reason": "She sometimes worries about food and lives in a low-income, low-access tract with high food insecurity, making daily lean meat, leafy greens, and fresh produce at each meal hard to sustain.",
+            "evidence": [
+              "screener:food_worry",
+              "tract:lila_half_10",
+              "tract:places_foodinsecu"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "snap",
+            "text": "Apply for SNAP through Illinois ABE (abe.illinois.gov) to help afford iron-rich foods; expedited benefits may arrive within 7 days.",
+            "resource_record_id": null
+          },
+          {
+            "category": "food_pantry",
+            "text": "Use the New Life Community Church - Brighton Park pantry (0.14 miles) or Immaculate Conception pantry (Spanish services, 0.3 miles); call ahead for hours.",
+            "resource_record_id": "PLa1ea5afb"
+          }
+        ]
+      }
+    ]
+  },
+  "error": null,
+  "steps": 3,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T004"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T004"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T004"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T004"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T004"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031330100"
+      },
+      "ok": false
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031580600"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_transit_trip",
+      "args": {
+        "appt_ref": "appt:2",
+        "arrive_by": "10:00"
+      },
+      "ok": false
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031580600",
+        "need": "transport",
+        "days": [
+          "Tue"
+        ],
+        "start": "14:30",
+        "end": "17:00"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031580600",
+        "need": "food",
+        "days": [
+          "Sat"
+        ]
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 18172,
+    "completion_tokens": 3739
+  },
+  "latency_ms": 190627,
+  "wall_s": 190.68,
+  "log": [
+    {
+      "prompt_sha256": "60b7e4c6bb4435d0d995a88cd47ca35a7a5147b2129e035c34d6efcdf86aef15",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 9993,
+      "usage": {
+        "prompt_tokens": 4750,
+        "total_tokens": 4977,
+        "completion_tokens": 227,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 31
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I'll start by pulling the patient's full record and social context in parallel.",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T004"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T004"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T004"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T004"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T004"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031330100"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 21445,
+      "usage": {
+        "prompt_tokens": 5808,
+        "total_tokens": 6278,
+        "completion_tokens": 470,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 245
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031580600"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_transit_trip",
+          "args": {
+            "appt_ref": "appt:2",
+            "arrive_by": "10:00"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031580600",
+            "need": "transport",
+            "days": [
+              "Tue"
+            ],
+            "start": "14:30",
+            "end": "17:00"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031580600",
+            "need": "food",
+            "days": [
+              "Sat"
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 159189,
+      "usage": {
+        "prompt_tokens": 7614,
+        "total_tokens": 10656,
+        "completion_tokens": 3042,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 2513
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "10:00 AM prenatal visits conflict with her 6:00-2:30 PM factory shift; she already no-showed a 10:00 OB visit for this reason and risks job loss after two unexcused absences. After-shift (3:00 PM) works for her.",
+                    "evidence": [
+                      "turn:T02",
+                      "turn:T04",
+                      "appt:2"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask the OB clinic to move prenatal visits to after her 2:30 PM shift (around 3:00 PM) or to a day that fits her ride, to protect her job.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "She sometimes worries about food and lives in a low-income, low-access tract with high food insecurity, making daily lean meat, leafy greens, and fresh produce at each meal hard to sustain.",
+                    "evidence": [
+                      "screener:food_worry",
+                      "tract:lila_half_10",
+                      "tract:places_foodinsecu"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "snap",
+                    "text": "Apply for SNAP through Illinois ABE (abe.illinois.gov) to help afford iron-rich foods; expedited benefits may arrive within 7 days.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "food_pantry",
+                    "text": "Use the New Life Community Church - Brighton Park pantry (0.14 miles) or Immaculate Conception pantry (Spanish services, 0.3 miles); call ahead for hours.",
+                    "resource_record_id": "PLa1ea5afb"
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,200 @@
+{
+  "case_id": "D002",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "utilities",
+            "reason": "Repeated power shutoffs mean the patient cannot reliably keep insulin refrigerated as required.",
+            "evidence": [
+              "turn:T02",
+              "turn:T03",
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "medical_certificate_utilities",
+            "text": "Complete the utility medical certification form because the patient's insulin depends on refrigeration, to delay disconnection.",
+            "resource_record_id": null
+          },
+          {
+            "category": "utility_assistance",
+            "text": "Refer the patient to CEDA / Cook County LIHEAP to apply for utility bill assistance during the current funding window.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "A Tuesday 10:00 AM endocrinology visit falls during the patient's 6 AM\u20132 PM warehouse shift, and missing a shift costs wages with no sick days.",
+            "evidence": [
+              "turn:T05",
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Ask endocrinology for an appointment after the shift ends or on a day off, or convert the follow-up to telehealth if no exam is needed.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "Weekly Thursday 2:00 PM classes start as the patient's shift ends and recur for four weeks, with no sick days to cover attendance.",
+            "evidence": [
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Ask the diabetes education program for an evening or weekend session, or a self-paced/telehealth option that fits after the warehouse shift.",
+            "resource_record_id": null
+          }
+        ]
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 2946,
+    "completion_tokens": 1577
+  },
+  "latency_ms": 78940,
+  "wall_s": 78.97,
+  "log": [
+    {
+      "prompt_sha256": "fa5ed884bdcfafce59144fad7d929314d24250043ac4bd8437ce0c2c06229b81",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 78940,
+      "usage": {
+        "prompt_tokens": 2946,
+        "total_tokens": 4523,
+        "completion_tokens": 1577,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1074
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "utilities",
+                    "reason": "Repeated power shutoffs mean the patient cannot reliably keep insulin refrigerated as required.",
+                    "evidence": [
+                      "turn:T02",
+                      "turn:T03",
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "medical_certificate_utilities",
+                    "text": "Complete the utility medical certification form because the patient's insulin depends on refrigeration, to delay disconnection.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "utility_assistance",
+                    "text": "Refer the patient to CEDA / Cook County LIHEAP to apply for utility bill assistance during the current funding window.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "A Tuesday 10:00 AM endocrinology visit falls during the patient's 6 AM\u20132 PM warehouse shift, and missing a shift costs wages with no sick days.",
+                    "evidence": [
+                      "turn:T05",
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask endocrinology for an appointment after the shift ends or on a day off, or convert the follow-up to telehealth if no exam is needed.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Weekly Thursday 2:00 PM classes start as the patient's shift ends and recur for four weeks, with no sick days to cover attendance.",
+                    "evidence": [
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask the diabetes education program for an evening or weekend session, or a self-paced/telehealth option that fits after the warehouse shift.",
+                    "resource_record_id": null
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

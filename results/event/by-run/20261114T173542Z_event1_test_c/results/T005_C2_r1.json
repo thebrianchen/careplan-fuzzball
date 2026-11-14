@@ -1,0 +1,389 @@
+{
+  "case_id": "T005",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "caregiving",
+            "reason": "Infant with no morning childcare; cannot attend a 9 AM downtown visit.",
+            "evidence": [
+              "turn:T08",
+              "turn:T10",
+              "appt:2"
+            ]
+          },
+          {
+            "barrier": "transport",
+            "reason": "Main-campus 9 AM trip; high no-vehicle share and limited transit access.",
+            "evidence": [
+              "tract:no_vehicle_share",
+              "tract:places_lacktrpt",
+              "appt:2"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the allergy clinic for a later weekday slot or a day that fits childcare and the bus."
+          },
+          {
+            "category": "medicaid_nemt",
+            "resource_record_id": null,
+            "text": "Medicaid covers NEMT; call the MCO number on the plan card to book a ride."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "housing",
+            "reason": "Mold and roaches persist; landlord unresponsive after two requests.",
+            "evidence": [
+              "turn:T06",
+              "screener:housing_problems",
+              "tract:places_housinsecu"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "housing",
+            "resource_record_id": null,
+            "text": "Provide the landlord letter; if no repair, contact code enforcement or legal aid."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 4,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T005"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T005"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T005"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T005"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T005"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031830700"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031843000"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_transit_trip",
+      "args": {
+        "appt_ref": "appt:2",
+        "arrive_by": "09:00"
+      },
+      "ok": false
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031843000",
+        "need": "housing"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 26091,
+    "completion_tokens": 5753
+  },
+  "latency_ms": 300770,
+  "wall_s": 300.82,
+  "log": [
+    {
+      "prompt_sha256": "93a770383a96cd8c333abe3c581f20b77f793301458b14d476e4ed58fd3ea3e5",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 22952,
+      "usage": {
+        "prompt_tokens": 4780,
+        "total_tokens": 5254,
+        "completion_tokens": 474,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 271
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I'll gather the patient record, appointments, medications, screener, and neighborhood data to assess each plan item.",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T005"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T005"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T005"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T005"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T005"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031830700"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 8747,
+      "usage": {
+        "prompt_tokens": 6506,
+        "total_tokens": 6718,
+        "completion_tokens": 212,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 128
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031843000"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_transit_trip",
+          "args": {
+            "appt_ref": "appt:2",
+            "arrive_by": "09:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 87271,
+      "usage": {
+        "prompt_tokens": 7359,
+        "total_tokens": 8866,
+        "completion_tokens": 1507,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1436
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I have enough evidence for most items. Let me get housing resources for the mold/pest issue (P3).",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031843000",
+            "need": "housing"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 181800,
+      "usage": {
+        "prompt_tokens": 7446,
+        "total_tokens": 11006,
+        "completion_tokens": 3560,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 2869
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I have all the evidence I need. Here's my assessment:\n\n- **P1 (meds):** All drugs are tier 1 with $0 copay, no refill gaps, on Medicaid; caregiver already uses spacer twice daily (turn:T04). No barrier.\n- **P2 (allergy referral, 9 AM main campus):** Already missed the 9 AM October visit (appt:2 no_show) because the 4-month-old has no morning childcare (turn:T08, turn:T10). Main-campus 9 AM trip is hard given high no-vehicle share/low transit access in the home tract. Medicaid transport benefit exists.\n- **P3 (trigger reduction):** Black mold and roaches persist; landlord refused twice (turn:T06); screener confirms pests/mold; tract housing insecurity is high.\n- **P4 (school action plan):** Form already obtained and brought (turn:T14) \u2014 done today.\n- **P5 (pediatric follow-up):** Same neighborhood clinic; Roosevelt bus is easy/10 min (turn:T12); prior visit kept (appt:3).",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "caregiving",
+                    "reason": "Infant with no morning childcare; cannot attend a 9 AM downtown visit.",
+                    "evidence": [
+                      "turn:T08",
+                      "turn:T10",
+                      "appt:2"
+                    ]
+                  },
+                  {
+                    "barrier": "transport",
+                    "reason": "Main-campus 9 AM trip; high no-vehicle share and limited transit access.",
+                    "evidence": [
+                      "tract:no_vehicle_share",
+                      "tract:places_lacktrpt",
+                      "appt:2"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the allergy clinic for a later weekday slot or a day that fits childcare and the bus."
+                  },
+                  {
+                    "category": "medicaid_nemt",
+                    "resource_record_id": null,
+                    "text": "Medicaid covers NEMT; call the MCO number on the plan card to book a ride."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "housing",
+                    "reason": "Mold and roaches persist; landlord unresponsive after two requests.",
+                    "evidence": [
+                      "turn:T06",
+                      "screener:housing_problems",
+                      "tract:places_housinsecu"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "housing",
+                    "resource_record_id": null,
+                    "text": "Provide the landlord letter; if no repair, contact code enforcement or legal aid."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

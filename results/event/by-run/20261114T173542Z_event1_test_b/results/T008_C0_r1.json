@@ -1,0 +1,112 @@
+{
+  "case_id": "T008",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 2999,
+    "completion_tokens": 478
+  },
+  "latency_ms": 19806,
+  "wall_s": 19.83,
+  "log": [
+    {
+      "prompt_sha256": "b7f41147cfb5d1f95db0d7a918ec8b3c17dda8f748a0bc9d71bae0c11d277b82",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 19806,
+      "usage": {
+        "prompt_tokens": 2999,
+        "total_tokens": 3477,
+        "completion_tokens": 478,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 322
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

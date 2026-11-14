@@ -1,0 +1,274 @@
+{
+  "case_id": "D011",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "blocked",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "Tuesday 10 AM class conflicts with teaching fourth grade until 3:30 PM; patient said weekdays before four are hard.",
+            "evidence": [
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the diabetes education program for an evening, weekend, or virtual session that fits after school hours."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "med_cost",
+            "reason": "Semaglutide is tier 4 at $250/month with deductible not met, plus a 14-day refill gap.",
+            "evidence": [
+              "med:2",
+              "turn:T03",
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "med_assistance_program",
+            "resource_record_id": null,
+            "text": "Screen for manufacturer copay assistance or ask the prescriber about a lower-cost GLP-1/formulary alternative."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 3,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-D011"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-D011"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-D011"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-D011"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-D011"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 16353,
+    "completion_tokens": 2029
+  },
+  "latency_ms": 101922,
+  "wall_s": 101.95,
+  "log": [
+    {
+      "prompt_sha256": "075bf56873e9d740eb6f5769886af5bff99cef0336bbd95c4044b99cd3859b85",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 8175,
+      "usage": {
+        "prompt_tokens": 4548,
+        "total_tokens": 4723,
+        "completion_tokens": 175,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 13
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I'll gather the patient's record and related evidence in parallel before assessing the plan.",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-D011"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-D011"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-D011"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-D011"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-D011"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 72390,
+      "usage": {
+        "prompt_tokens": 5434,
+        "total_tokens": 6793,
+        "completion_tokens": 1359,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 793
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I have all the evidence I need. Let me summarize my assessment:\n\n- **P1 (education, Tue 10 AM):** The patient teaches fourth grade until 3:30 PM and said weekdays are hard before 4 (turn:T06). A 10:00 AM Tuesday class directly conflicts with her work schedule. Transport is not the issue (she said the Brown Line is easy), so this is a work_schedule conflict \u2192 **blocked**.\n- **P2 (metformin ER):** Tier 1, $4/month, no refill gaps, tolerated with dinner \u2192 **likely_ok**.\n- **P3 (semaglutide):** Tier 4, $250/month, deductible not met, plus a 14-day refill gap (med:2 signals) \u2192 **at_risk** for med_cost.\n- **P4 (fingersticks + app logging):** No food-worry or digital-access barriers reported (screener food_worry never_true, no digital signal) \u2192 **likely_ok**.\n\nNow I'll submit.",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "[{\"item_id\": \"P1\", \"status\": \"blocked\", \"barriers\": [{\"barrier\": \"work_schedule\", \"reason\": \"Tuesday 10 AM class conflicts with teaching fourth grade until 3:30 PM; patient said weekdays before four are hard.\", \"evidence\": [\"turn:T06\"]}], \"alternatives\": [{\"category\": \"schedule_change\", \"resource_record_id\": null, \"text\": \"Ask the diabetes education program for an evening, weekend, or virtual session that fits after school hours.\"}]}, {\"item_id\": \"P2\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}, {\"item_id\": \"P3\", \"status\": \"at_risk\", \"barriers\": [{\"barrier\": \"med_cost\", \"reason\": \"Semaglutide is tier 4 at $250/month with deductible not met, plus a 14-day refill gap.\", \"evidence\": [\"med:2\", \"turn:T03\", \"turn:T04\"]}], \"alternatives\": [{\"category\": \"med_assistance_program\", \"resource_record_id\": null, \"text\": \"Screen for manufacturer copay assistance or ask the prescriber about a lower-cost GLP-1/formulary alternative.\"]}]}, {\"item_id\": \"P4\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}]"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 21357,
+      "usage": {
+        "prompt_tokens": 6371,
+        "total_tokens": 6866,
+        "completion_tokens": 495,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 157
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "blocked",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Tuesday 10 AM class conflicts with teaching fourth grade until 3:30 PM; patient said weekdays before four are hard.",
+                    "evidence": [
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the diabetes education program for an evening, weekend, or virtual session that fits after school hours."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "med_cost",
+                    "reason": "Semaglutide is tier 4 at $250/month with deductible not met, plus a 14-day refill gap.",
+                    "evidence": [
+                      "med:2",
+                      "turn:T03",
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "med_assistance_program",
+                    "resource_record_id": null,
+                    "text": "Screen for manufacturer copay assistance or ask the prescriber about a lower-cost GLP-1/formulary alternative."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

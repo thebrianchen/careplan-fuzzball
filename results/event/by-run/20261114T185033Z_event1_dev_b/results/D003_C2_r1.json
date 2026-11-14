@@ -1,0 +1,331 @@
+{
+  "case_id": "D003",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "Patient cannot drive, relies on costly cab, Medicare has no transport benefit, and rehab requires travel 3x/week at 9 AM; neighborhood has high no-vehicle share and low transit access.",
+            "evidence": [
+              "turn:T06",
+              "turn:T02",
+              "screener:transportation",
+              "tract:no_vehicle_share",
+              "tract:places_lacktrpt"
+            ]
+          },
+          {
+            "barrier": "caregiving",
+            "reason": "Harold cannot be left alone and the neighbor can only watch him for two hours, conflicting with repeated rehab sessions.",
+            "evidence": [
+              "turn:T02",
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "paratransit",
+            "resource_record_id": null,
+            "text": "Apply for ADA Paratransit certification via Northern Illinois Transit Authority (312-663-HELP, weekdays 8:30 AM-5 PM); note certification takes time and rides run only when fixed-route service runs."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask cardiac rehab for a later session time or a day that fits an available ride and caregiving coverage; chair/slot times are limited so frame as a request."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "Follow-up would require another cab ride the patient must pay out of pocket; Original Medicare covers no routine non-emergency transport and she cannot drive.",
+            "evidence": [
+              "turn:T06",
+              "screener:transportation",
+              "turn:T02"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the cardiology clinic to time the follow-up so it can share a ride or trip with another errand, reducing repeated cab cost."
+          }
+        ]
+      }
+    ]
+  },
+  "error": null,
+  "steps": 3,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-D003"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-D003"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-D003"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-D003"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-D003"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031440201"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_transit_trip",
+      "args": {
+        "appt_ref": "appt:2",
+        "arrive_by": "11:00"
+      },
+      "ok": false
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 16363,
+    "completion_tokens": 3341
+  },
+  "latency_ms": 167336,
+  "wall_s": 167.38,
+  "log": [
+    {
+      "prompt_sha256": "a82e42420f37bb983a06ffec67f7e1764fd7686b10bb91af57603c3be9a275ff",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 5280,
+      "usage": {
+        "prompt_tokens": 4592,
+        "total_tokens": 4750,
+        "completion_tokens": 158,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 12
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-D003"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-D003"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-D003"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-D003"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-D003"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 34319,
+      "usage": {
+        "prompt_tokens": 5448,
+        "total_tokens": 6126,
+        "completion_tokens": 678,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 594
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031440201"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_transit_trip",
+          "args": {
+            "appt_ref": "appt:2",
+            "arrive_by": "11:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 127737,
+      "usage": {
+        "prompt_tokens": 6323,
+        "total_tokens": 8828,
+        "completion_tokens": 2505,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1975
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Patient cannot drive, relies on costly cab, Medicare has no transport benefit, and rehab requires travel 3x/week at 9 AM; neighborhood has high no-vehicle share and low transit access.",
+                    "evidence": [
+                      "turn:T06",
+                      "turn:T02",
+                      "screener:transportation",
+                      "tract:no_vehicle_share",
+                      "tract:places_lacktrpt"
+                    ]
+                  },
+                  {
+                    "barrier": "caregiving",
+                    "reason": "Harold cannot be left alone and the neighbor can only watch him for two hours, conflicting with repeated rehab sessions.",
+                    "evidence": [
+                      "turn:T02",
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "paratransit",
+                    "resource_record_id": null,
+                    "text": "Apply for ADA Paratransit certification via Northern Illinois Transit Authority (312-663-HELP, weekdays 8:30 AM-5 PM); note certification takes time and rides run only when fixed-route service runs."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask cardiac rehab for a later session time or a day that fits an available ride and caregiving coverage; chair/slot times are limited so frame as a request."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Follow-up would require another cab ride the patient must pay out of pocket; Original Medicare covers no routine non-emergency transport and she cannot drive.",
+                    "evidence": [
+                      "turn:T06",
+                      "screener:transportation",
+                      "turn:T02"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the cardiology clinic to time the follow-up so it can share a ride or trip with another errand, reducing repeated cab cost."
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

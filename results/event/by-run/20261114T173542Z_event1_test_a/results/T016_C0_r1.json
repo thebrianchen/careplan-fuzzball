@@ -1,0 +1,150 @@
+{
+  "case_id": "T016",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "The patient works from home for a West Coast team and said nothing starts before 11 AM, so a Wednesday 8:00 AM prenatal visit conflicts with her workday.",
+            "evidence": [
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Ask the clinic for a later Wednesday appointment (after 11 AM) or a different day that fits her work-from-home schedule.",
+            "resource_record_id": null
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "text": "Combine prenatal labs or visits on the same day/campus to reduce separate morning trips.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3004,
+    "completion_tokens": 909
+  },
+  "latency_ms": 45552,
+  "wall_s": 45.58,
+  "log": [
+    {
+      "prompt_sha256": "7882b290fd82983456072a9ded21b89d85326e1ea7e358ace22889b3f26c0c90",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 45552,
+      "usage": {
+        "prompt_tokens": 3004,
+        "total_tokens": 3913,
+        "completion_tokens": 909,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 602
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "The patient works from home for a West Coast team and said nothing starts before 11 AM, so a Wednesday 8:00 AM prenatal visit conflicts with her workday.",
+                    "evidence": [
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask the clinic for a later Wednesday appointment (after 11 AM) or a different day that fits her work-from-home schedule.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "text": "Combine prenatal labs or visits on the same day/campus to reduce separate morning trips.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

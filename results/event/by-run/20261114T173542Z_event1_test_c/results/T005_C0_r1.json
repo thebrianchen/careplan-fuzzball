@@ -1,0 +1,198 @@
+{
+  "case_id": "T005",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "caregiving",
+            "reason": "The caregiver has no morning childcare for the 4-month-old infant and cannot bring the baby to a 9 AM downtown visit lasting two hours; her sister works mornings.",
+            "evidence": [
+              "turn:T08",
+              "turn:T10"
+            ]
+          },
+          {
+            "barrier": "transport",
+            "reason": "The main-campus allergist visit is a weekday 9 AM downtown trip; the patient previously missed the October allergist appointment, and the easy Roosevelt bus applies to the local clinic, not necessarily downtown.",
+            "evidence": [
+              "turn:T07",
+              "turn:T08",
+              "turn:T12"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the allergy clinic for a later start time or a different weekday that fits an available ride and when the sister is not working, since the infant cannot attend a 9 AM downtown visit."
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "Book the allergy evaluation on the same day/campus as another visit, or ask whether any portion can be handled by telehealth to reduce required trips."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "housing",
+            "reason": "Mold remediation and pest control depend on the landlord, who has been unresponsive after two requests and only offers to paint over the mold, so the caregiver cannot reliably complete trigger reduction.",
+            "evidence": [
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "housing",
+            "resource_record_id": null,
+            "text": "Have the clinician sign the landlord remediation letter, request a written response and deadline, and escalate to city housing/code enforcement or legal aid if the landlord does not act."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3103,
+    "completion_tokens": 1987
+  },
+  "latency_ms": 106100,
+  "wall_s": 106.13,
+  "log": [
+    {
+      "prompt_sha256": "1bc385220992651d49b07cf99558bbcc1274fcb9cd1a6cd5fc16c69e20791c60",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 106100,
+      "usage": {
+        "prompt_tokens": 3103,
+        "total_tokens": 5090,
+        "completion_tokens": 1987,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1451
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "caregiving",
+                    "reason": "The caregiver has no morning childcare for the 4-month-old infant and cannot bring the baby to a 9 AM downtown visit lasting two hours; her sister works mornings.",
+                    "evidence": [
+                      "turn:T08",
+                      "turn:T10"
+                    ]
+                  },
+                  {
+                    "barrier": "transport",
+                    "reason": "The main-campus allergist visit is a weekday 9 AM downtown trip; the patient previously missed the October allergist appointment, and the easy Roosevelt bus applies to the local clinic, not necessarily downtown.",
+                    "evidence": [
+                      "turn:T07",
+                      "turn:T08",
+                      "turn:T12"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the allergy clinic for a later start time or a different weekday that fits an available ride and when the sister is not working, since the infant cannot attend a 9 AM downtown visit."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Book the allergy evaluation on the same day/campus as another visit, or ask whether any portion can be handled by telehealth to reduce required trips."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "housing",
+                    "reason": "Mold remediation and pest control depend on the landlord, who has been unresponsive after two requests and only offers to paint over the mold, so the caregiver cannot reliably complete trigger reduction.",
+                    "evidence": [
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "housing",
+                    "resource_record_id": null,
+                    "text": "Have the clinician sign the landlord remediation letter, request a written response and deadline, and escalate to city housing/code enforcement or legal aid if the landlord does not act."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,158 @@
+jobs:
+  bench:
+    cwd: /code/app
+    depends-on:
+    - name: planner
+      status: RUNNING
+    env:
+    - PYTHONPATH=/code/site
+    - PATH=/code/python/bin:/usr/local/bin:/usr/bin:/bin
+    - PLANNER_URL=http://planner:8000/v1
+    - VLLM_API_KEY=none
+    image:
+      uri: docker://rockylinux/rockylinux:9
+    mounts:
+      /code:
+        volume: code
+    policy:
+      timeout:
+        execute: 12h
+    resource:
+      cpu:
+        cores: 1
+      memory:
+        size: 1GB
+    script: |
+      #!/bin/sh
+      sleep 43200
+  splitcost:
+    cwd: /code/app
+    depends-on:
+    - name: planner
+      status: RUNNING
+    env:
+    - PYTHONPATH=/code/site
+    - PATH=/code/python/bin:/usr/local/bin:/usr/bin:/bin
+    - PLANNER_URL=http://planner:8000/v1
+    - VLLM_API_KEY=none
+    - PROFILE=super35-vllm-think
+    - TAG=event1
+    - BEAT=60
+    - CAREPLAN_GATEWAY_URL=https://endpoint-a247f18b95d614f6bc5ea8937293b1bbfcf296df.endpoints.fb-hack.civilfritz.net
+    - CAREPLAN_GATEWAY_TOKEN=secret://user/gateway-token
+    - REQUESTS_CA_BUNDLE=/run/fuzzball-substrate/trusted-certs/root-ca.crt
+    image:
+      uri: docker://rockylinux/rockylinux:9
+    mounts:
+      /code:
+        volume: code
+    policy:
+      timeout:
+        execute: 3h
+    resource:
+      cpu:
+        cores: 2
+      memory:
+        size: 2GB
+    script: |
+      #!/bin/sh
+      # Progress goes to this job's own log once a minute: reviews N of M (P%), failures, time in, time left.
+      T0=$(date +%s)
+      say() { echo "[$(date -u +%H:%M:%S) UTC, $(( ($(date +%s) - T0) / 60 )) min in] split cost: $*"; }
+      N=$(ls cases/dev/*.yaml | wc -l); M=$((N * 3)); mkdir -p /code/results
+      say "started on $(hostname); the planner is serving. $N dev cases x 3 runs = $M reviews, every resource lookup through the gateway"
+      python3 - <<'PY' || { say "FAILED: the gateway does not answer this job; no review was run"; exit 1; }
+      from careplan.planner import _env_gateway
+      rows = _env_gateway()({'tract_id': '17031260300', 'need': 'food'})
+      print('gateway check:', len(rows), 'listings back for a food question')
+      PY
+      say "phase 1 of 2: reviews started, three at once"
+      S0=$(date +%s); pids=""
+      for r in a b c; do
+        python3 -m careplan run --cases cases/dev --conditions C2 --reps 1 --signals --allow-unfrozen \
+          --profile C2=$PROFILE --tag ${TAG}_split_$r > /code/results/split_${TAG}_dev_$r.log 2>&1 &
+        pids="$pids $!"
+      done
+      progress() {
+        n=$(ls runs/*_${TAG}_split_?/results/*.json 2>/dev/null | wc -l)
+        bad=$(grep -L '"error": null' runs/*_${TAG}_split_?/results/*.json 2>/dev/null | wc -l)
+      }
+      ( while sleep $BEAT; do
+          progress; el=$(( $(date +%s) - S0 ))
+          if [ "$n" -gt 0 ]; then left="about $(( el * (M - n) / n / 60 )) min left"; else left="no review finished yet (the first takes 2 to 5 min)"; fi
+          say "reviews $n of $M ($(( 100 * n / M ))%), $bad failed, $left"
+        done ) &
+      HB=$!
+      wait $pids; kill $HB 2>/dev/null
+      progress; say "phase 1 finished: $n of $M reviews in $(( ($(date +%s) - S0) / 60 )) min, $bad failed"
+      say "phase 2 of 2: scoring against the physician-reviewed keys"
+      python3 scripts/h1_report.py $(ls -dt runs/*_${TAG}_split_? | head -3) --cases cases/dev \
+        --out /code/results/split_${TAG}_dev.json | tail -3
+      python3 scripts/run_detail.py $(ls -dt runs/*_${TAG}_split_? | head -1) --cases cases/dev | tail -3
+      say "report written: /code/results/split_${TAG}_dev.json (no-crossing comparison: scores_${TAG}_dev.json). SPLIT COST DONE; the planner stays up"
+services:
+  planner:
+    env:
+    - HOME=/models/home
+    - USER=careplan
+    - XDG_CACHE_HOME=/models/home/.cache
+    - HF_HUB_OFFLINE=1
+    - MAX_JOBS=2
+    - NVCC_THREADS=1
+    - SEQS=3
+    image:
+      uri: docker://vllm/vllm-openai:v0.32.0
+    mounts:
+      /models:
+        volume: models
+    network:
+      endpoints:
+      - name: planner
+        port-name: openai
+        protocol: http
+        scope: group
+        type: subdomain
+      ports:
+      - name: openai
+        port: 8000
+        protocol: tcp
+    persist: true
+    readiness-probe:
+      failure-threshold: 240
+      http-get:
+        path: /health
+        port: 8000
+        scheme: HTTP
+      initial-delay-seconds: 60
+      period-seconds: 15
+      timeout-seconds: 5
+    resource:
+      cpu:
+        cores: 12
+      devices:
+        nvidia.com/gpu: 1
+      memory:
+        size: 110GB
+    script: |
+      #!/bin/bash
+      mkdir -p "$XDG_CACHE_HOME"
+      M=/models/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-NVFP4
+      exec vllm serve $M --served-model-name nemotron-3.5-super-vl \
+        --max-num-seqs ${SEQS:-1} --trust-remote-code --gpu-memory-utilization 0.75 --max-num-batched-tokens 8192 \
+        --speculative_config.model $M-LiLiCorr \
+        --speculative_config.num_speculative_tokens 7 --speculative_config.method dflash \
+        --mamba-backend flashinfer --mamba-ssm-cache-dtype float16 --enable-mamba-cache-stochastic-rounding \
+        --mamba-cache-philox-rounds 5 --enable-mamba-shared-prefix-checkpoint \
+        --video-pruning-rate 0.5 --media-io-kwargs '{"video": {"fps": 2, "num_frames": 256}}' \
+        --block-size 64 --prefix-match-unit 64 \
+        --enable-auto-tool-choice --tool-call-parser qwen3_coder --reasoning-parser nemotron_v3 \
+        --host 0.0.0.0 --port 8000
+version: v4
+volumes:
+  code:
+    name: code
+    use: team4
+  models:
+    name: models
+    use: team4
+

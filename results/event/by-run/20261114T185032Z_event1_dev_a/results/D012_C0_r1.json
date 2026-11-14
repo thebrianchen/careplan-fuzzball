@@ -1,0 +1,150 @@
+{
+  "case_id": "D012",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "The patient previously missed podiatry and only committed to \u201ctry\u201d to attend the next visit, indicating probable difficulty getting to a 9 AM hospital-clinic appointment.",
+            "evidence": [
+              "turn:T05",
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Ask the podiatry clinic for a later chair/clinic time or a different day that fits the patient\u2019s ride.",
+            "resource_record_id": null
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "text": "Schedule podiatry on the same day/campus as another existing visit to reduce separate trips.",
+            "resource_record_id": null
+          },
+          {
+            "category": "ada_paratransit",
+            "text": "If the patient\u2019s condition prevents using fixed-route buses/trains, apply for ADA Paratransit certification (312-663-HELP); note certification is not immediate.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 2831,
+    "completion_tokens": 3570
+  },
+  "latency_ms": 216898,
+  "wall_s": 216.92,
+  "log": [
+    {
+      "prompt_sha256": "34b68fa95851d6100632ab803996d3ca1cf8ec2cefd0a72cd7e42f7d00babe33",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 216898,
+      "usage": {
+        "prompt_tokens": 2831,
+        "total_tokens": 6401,
+        "completion_tokens": 3570,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 3226
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "The patient previously missed podiatry and only committed to \u201ctry\u201d to attend the next visit, indicating probable difficulty getting to a 9 AM hospital-clinic appointment.",
+                    "evidence": [
+                      "turn:T05",
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask the podiatry clinic for a later chair/clinic time or a different day that fits the patient\u2019s ride.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "text": "Schedule podiatry on the same day/campus as another existing visit to reduce separate trips.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "ada_paratransit",
+                    "text": "If the patient\u2019s condition prevents using fixed-route buses/trains, apply for ADA Paratransit certification (312-663-HELP); note certification is not immediate.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

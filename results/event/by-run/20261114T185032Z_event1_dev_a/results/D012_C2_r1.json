@@ -1,0 +1,529 @@
+{
+  "case_id": "D012",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "housing",
+            "reason": "Sheltered homelessness may mean no reliable refrigerator or power to store unopened insulin pens as required.",
+            "evidence": [
+              "prob:2",
+              "med:1",
+              "turn:T01",
+              "turn:T02"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "medical_certificate_utilities",
+            "resource_record_id": null,
+            "text": "Complete the utility medical certification form if power loss is a risk, to delay shutoff and protect refrigerated insulin."
+          },
+          {
+            "category": "housing",
+            "resource_record_id": null,
+            "text": "Ask the shelter or caseworker about a secure place to store medication; once in use, an insulin pen can be kept at room temperature for about 28 days."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "housing",
+            "reason": "Mail-order 90-day supplies need a stable mailing address; sheltered homelessness makes reliable delivery unlikely.",
+            "evidence": [
+              "prob:2",
+              "screener:living_situation"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "housing",
+            "resource_record_id": null,
+            "text": "Keep using a local retail pharmacy near the shelter and ask the social worker or caseworker to coordinate pickup and refill reminders."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "High no-vehicle share and limited transit access, plus a prior podiatry no-show, make a 9 AM hospital clinic trip uncertain.",
+            "evidence": [
+              "appt:1",
+              "turn:T06",
+              "tract:no_vehicle_share",
+              "tract:places_lacktrpt",
+              "prob:2"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "nemt",
+            "resource_record_id": null,
+            "text": "Medicaid covers non-emergency medical transport; managed-care members call the number on the back of the plan card to book (advance booking varies)."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the podiatry clinic for a later appointment time or a day that matches an available ride."
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "Schedule podiatry on the same day and campus as another existing visit, or use telehealth if a foot exam is not required."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 5,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-D012"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-D012"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-D012"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-D012"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-D012"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031230500"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_transit_trip",
+      "args": {
+        "appt_ref": "appt:1",
+        "arrive_by": "09:00"
+      },
+      "ok": false
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031230500",
+        "need": "transport",
+        "days": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri"
+        ]
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 29553,
+    "completion_tokens": 3878
+  },
+  "latency_ms": 115809,
+  "wall_s": 115.86,
+  "log": [
+    {
+      "prompt_sha256": "212d1d3207974e9b0311196e362683baa8a44c3a23c9b50c941d063ee75337d5",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 3056,
+      "usage": {
+        "prompt_tokens": 4508,
+        "total_tokens": 4660,
+        "completion_tokens": 152,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 6
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-D012"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-D012"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-D012"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-D012"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-D012"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 8431,
+      "usage": {
+        "prompt_tokens": 5407,
+        "total_tokens": 5662,
+        "completion_tokens": 255,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 171
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031230500"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_transit_trip",
+          "args": {
+            "appt_ref": "appt:1",
+            "arrive_by": "09:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 43113,
+      "usage": {
+        "prompt_tokens": 6260,
+        "total_tokens": 7450,
+        "completion_tokens": 1190,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1117
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031230500",
+            "need": "transport",
+            "days": [
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri"
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 43276,
+      "usage": {
+        "prompt_tokens": 6349,
+        "total_tokens": 7748,
+        "completion_tokens": 1399,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 791
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "housing",
+                    "reason": "Sheltered homelessness may mean no reliable refrigerator or power to store unopened insulin pens as required.",
+                    "evidence": [
+                      "prob:2",
+                      "med:1",
+                      "turn:T01",
+                      "turn:T02"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "medical_certificate_utilities",
+                    "resource_record_id": null,
+                    "text": "Complete the utility medical certification form if power loss is a risk, to delay shutoff and protect refrigerated insulin."
+                  },
+                  {
+                    "category": "housing",
+                    "resource_record_id": null,
+                    "text": "Ask the shelter or caseworker about a secure place to store medication; once in use, an insulin pen can be kept at room temperature for about 28 days."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "housing",
+                    "reason": "Mail-order 90-day supplies need a stable mailing address; sheltered homelessness makes reliable delivery unlikely.",
+                    "evidence": [
+                      "prob:2"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "housing",
+                    "resource_record_id": null,
+                    "text": "Keep using a local retail pharmacy near the shelter and ask the social worker or caseworker to coordinate pickup and refill reminders."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "High no-vehicle share and limited transit access, plus a prior podiatry no-show, make a 9 AM hospital clinic trip uncertain.",
+                    "evidence": [
+                      "appt:1",
+                      "turn:T06",
+                      "tract:no_vehicle_share",
+                      "tract:places_lacktrpt",
+                      "prob:2"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Medicaid covers non-emergency medical transport; managed-care members call the number on the back of the plan card to book (advance booking varies)."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the podiatry clinic for a later appointment time or a day that matches an available ride."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Schedule podiatry on the same day and campus as another existing visit, or use telehealth if a foot exam is not required."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 5,
+      "latency_ms": 17933,
+      "usage": {
+        "prompt_tokens": 7029,
+        "total_tokens": 7911,
+        "completion_tokens": 882,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 263
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "housing",
+                    "reason": "Sheltered homelessness may mean no reliable refrigerator or power to store unopened insulin pens as required.",
+                    "evidence": [
+                      "prob:2",
+                      "med:1",
+                      "turn:T01",
+                      "turn:T02"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "medical_certificate_utilities",
+                    "resource_record_id": null,
+                    "text": "Complete the utility medical certification form if power loss is a risk, to delay shutoff and protect refrigerated insulin."
+                  },
+                  {
+                    "category": "housing",
+                    "resource_record_id": null,
+                    "text": "Ask the shelter or caseworker about a secure place to store medication; once in use, an insulin pen can be kept at room temperature for about 28 days."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "housing",
+                    "reason": "Mail-order 90-day supplies need a stable mailing address; sheltered homelessness makes reliable delivery unlikely.",
+                    "evidence": [
+                      "prob:2",
+                      "screener:living_situation"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "housing",
+                    "resource_record_id": null,
+                    "text": "Keep using a local retail pharmacy near the shelter and ask the social worker or caseworker to coordinate pickup and refill reminders."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "High no-vehicle share and limited transit access, plus a prior podiatry no-show, make a 9 AM hospital clinic trip uncertain.",
+                    "evidence": [
+                      "appt:1",
+                      "turn:T06",
+                      "tract:no_vehicle_share",
+                      "tract:places_lacktrpt",
+                      "prob:2"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Medicaid covers non-emergency medical transport; managed-care members call the number on the back of the plan card to book (advance booking varies)."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the podiatry clinic for a later appointment time or a day that matches an available ride."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Schedule podiatry on the same day and campus as another existing visit, or use telehealth if a foot exam is not required."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+services:
+  gateway:
+    cwd: /public/code/app
+    env:
+    - PYTHONPATH=/public/code/site
+    - PATH=/public/code/python/bin:/usr/local/bin:/usr/bin:/bin
+    - GATEWAY_ALLOWED_SUBS=3bf9469b-e11f-4da9-a9bc-bc041a31f341
+    - GATEWAY_ALLOWED_ACCOUNTS=3bf9469b-e11f-4da9-a9bc-bc041a31f341
+    - GATEWAY_RATE_PER_MINUTE=120
+    - GATEWAY_LOG=/public/gateway-log.jsonl
+    image:
+      uri: docker://rockylinux/rockylinux:9
+    mounts:
+      /public:
+        volume: public
+    network:
+      endpoints:
+      - name: gateway
+        port-name: http
+        protocol: http
+        scope: group
+        type: subdomain
+      ports:
+      - name: http
+        port: 8090
+        protocol: tcp
+    persist: true
+    readiness-probe:
+      http-get:
+        path: /healthz
+        port: 8090
+        scheme: HTTP
+      initial-delay-seconds: 3
+      period-seconds: 10
+    resource:
+      cpu:
+        cores: 2
+      memory:
+        size: 4GB
+    script: |
+      #!/bin/sh
+      echo "mounted volumes: $(ls -d /code /patient /models /public 2>/dev/null | tr '\n' ' ')"
+      unset FB_TOKEN
+      exec python3 -m careplan.gateway
+version: v4
+volumes:
+  public:
+    name: public
+    use: team4
+

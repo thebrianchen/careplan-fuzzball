@@ -1,0 +1,168 @@
+{
+  "case_id": "T018",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "The patient cannot drive, lives alone with no local caregiver, and says the bus is not manageable with the walker and apartment stairs, so recurring travel to the hospital rehab center three times a week is not feasible as written.",
+            "evidence": [
+              "turn:T03",
+              "turn:T04",
+              "turn:T05",
+              "turn:T06",
+              "turn:T02"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "paratransit",
+            "text": "Refer the patient to apply for ADA Paratransit certification through the Northern Illinois Transit Authority (312-663-HELP) for door-to-door rides, since the walker and stairs make fixed-route bus use not feasible now.",
+            "resource_record_id": null
+          },
+          {
+            "category": "schedule_change",
+            "text": "Ask the physical therapy clinic for a later chair time or a different day that matches an available ride, framing it as a request given limited chair times.",
+            "resource_record_id": null
+          },
+          {
+            "category": "nemt",
+            "text": "If the patient has Medicaid or dual coverage, check the plan card for managed-care NEMT scheduling or Transdev for fee-for-service, and confirm recurring standing trips can be set up; do not promise a ride without confirming coverage.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3110,
+    "completion_tokens": 1873
+  },
+  "latency_ms": 96716,
+  "wall_s": 96.74,
+  "log": [
+    {
+      "prompt_sha256": "608c3251c0badfddc612528346f230baeb579ade5d3e3ebbaa6f311ffbb82690",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 96716,
+      "usage": {
+        "prompt_tokens": 3110,
+        "total_tokens": 4983,
+        "completion_tokens": 1873,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1431
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "The patient cannot drive, lives alone with no local caregiver, and says the bus is not manageable with the walker and apartment stairs, so recurring travel to the hospital rehab center three times a week is not feasible as written.",
+                    "evidence": [
+                      "turn:T03",
+                      "turn:T04",
+                      "turn:T05",
+                      "turn:T06",
+                      "turn:T02"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "paratransit",
+                    "text": "Refer the patient to apply for ADA Paratransit certification through the Northern Illinois Transit Authority (312-663-HELP) for door-to-door rides, since the walker and stairs make fixed-route bus use not feasible now.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask the physical therapy clinic for a later chair time or a different day that matches an available ride, framing it as a request given limited chair times.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "nemt",
+                    "text": "If the patient has Medicaid or dual coverage, check the plan card for managed-care NEMT scheduling or Transdev for fee-for-service, and confirm recurring standing trips can be set up; do not promise a ride without confirming coverage.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

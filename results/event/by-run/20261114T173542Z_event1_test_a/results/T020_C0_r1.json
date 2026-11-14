@@ -1,0 +1,202 @@
+{
+  "case_id": "T020",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "A 5:30 AM in-center start likely precedes fixed-route bus/rail service, and the patient is already weak/tired and has missed four sessions this month; ADA paratransit cannot cover trips earlier than fixed-route hours and requires certification first.",
+            "evidence": [
+              "turn:T01",
+              "turn:T02",
+              "turn:T08"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Ask the dialysis unit for a later chair time or a different day that matches an available ride, framing it as a request given limited chair times.",
+            "resource_record_id": null
+          },
+          {
+            "category": "paratransit",
+            "text": "Assess eligibility and apply for ADA Paratransit certification (Northern Illinois Transit Authority, 312-663-HELP); note it is not immediate and cannot serve a 5:30 AM trip if no fixed route runs then.",
+            "resource_record_id": null
+          },
+          {
+            "category": "dialysis_social_worker",
+            "text": "Have the unit social worker (already asked to check in) help arrange transport and benefits for in-center dialysis.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "language_literacy",
+            "reason": "The diet handout is in English while the patient needs Polish; the daughter in Arizona reads it by phone but works, so translated support is unreliable.",
+            "evidence": [
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "interpreter",
+            "text": "Use the hospital interpreter service and provide plain-language, translated (Polish) renal diet instructions.",
+            "resource_record_id": null
+          },
+          {
+            "category": "renal_dietitian",
+            "text": "Ask the dialysis unit dietitian to rebuild the low-potassium diet around foods the patient can actually obtain and provide Polish-language materials.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3123,
+    "completion_tokens": 2266
+  },
+  "latency_ms": 104986,
+  "wall_s": 105.01,
+  "log": [
+    {
+      "prompt_sha256": "639a7248c8f3b4d871a55adeb23696c2f2e41fc04bb5f8f966958d0fdd3a3981",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 104986,
+      "usage": {
+        "prompt_tokens": 3123,
+        "total_tokens": 5389,
+        "completion_tokens": 2266,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1705
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "A 5:30 AM in-center start likely precedes fixed-route bus/rail service, and the patient is already weak/tired and has missed four sessions this month; ADA paratransit cannot cover trips earlier than fixed-route hours and requires certification first.",
+                    "evidence": [
+                      "turn:T01",
+                      "turn:T02",
+                      "turn:T08"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask the dialysis unit for a later chair time or a different day that matches an available ride, framing it as a request given limited chair times.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "paratransit",
+                    "text": "Assess eligibility and apply for ADA Paratransit certification (Northern Illinois Transit Authority, 312-663-HELP); note it is not immediate and cannot serve a 5:30 AM trip if no fixed route runs then.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "dialysis_social_worker",
+                    "text": "Have the unit social worker (already asked to check in) help arrange transport and benefits for in-center dialysis.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "language_literacy",
+                    "reason": "The diet handout is in English while the patient needs Polish; the daughter in Arizona reads it by phone but works, so translated support is unreliable.",
+                    "evidence": [
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "interpreter",
+                    "text": "Use the hospital interpreter service and provide plain-language, translated (Polish) renal diet instructions.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "renal_dietitian",
+                    "text": "Ask the dialysis unit dietitian to rebuild the low-potassium diet around foods the patient can actually obtain and provide Polish-language materials.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

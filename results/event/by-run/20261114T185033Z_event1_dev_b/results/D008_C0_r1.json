@@ -1,0 +1,116 @@
+{
+  "case_id": "D008",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "The patient works overnight security from 11 PM to 7 AM and sleeps in the morning, so an 8 AM weekday appointment conflicts with both their work shift and sleep schedule.",
+            "evidence": [
+              "turn:T03",
+              "turn:T04"
+            ]
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 2893,
+    "completion_tokens": 321
+  },
+  "latency_ms": 19280,
+  "wall_s": 19.3,
+  "log": [
+    {
+      "prompt_sha256": "94a384bd8f0f1d752d77060a18ab1aa60a9640f88f3c203616c6cadc46257ebc",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 19280,
+      "usage": {
+        "prompt_tokens": 2893,
+        "total_tokens": 3214,
+        "completion_tokens": 321,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 125
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "The patient works overnight security from 11 PM to 7 AM and sleeps in the morning, so an 8 AM weekday appointment conflicts with both their work shift and sleep schedule.",
+                    "evidence": [
+                      "turn:T03",
+                      "turn:T04"
+                    ]
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

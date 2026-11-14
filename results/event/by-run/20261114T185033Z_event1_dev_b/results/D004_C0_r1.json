@@ -1,0 +1,230 @@
+{
+  "case_id": "D004",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "language_literacy",
+            "reason": "The titration schedule is printed in English, but the patient needed his son to read English papers last time and his son is now away at school, so he may not understand how to adjust losartan.",
+            "evidence": [
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "interpreter",
+            "resource_record_id": null,
+            "text": "Provide the losartan titration schedule in Spanish through the hospital interpreter service, with plain-language translated instructions."
+          },
+          {
+            "category": "language_literacy",
+            "resource_record_id": null,
+            "text": "Review the schedule aloud with a Spanish interpreter at the visit and confirm teach-back before the patient leaves."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "digital_access",
+            "reason": "The patient has the portal app but it is entirely in English and he does not know where to type blood pressure numbers, so weekly portal submission may not work.",
+            "evidence": [
+              "turn:T06"
+            ]
+          },
+          {
+            "barrier": "language_literacy",
+            "reason": "Portal content is English-only and the patient cannot navigate it without translated help; his usual translator (his son) is away.",
+            "evidence": [
+              "turn:T06",
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "interpreter",
+            "resource_record_id": null,
+            "text": "Give Spanish-language, plain-language instructions for entering BP readings into the portal, walked through with an interpreter."
+          },
+          {
+            "category": "digital_access",
+            "resource_record_id": null,
+            "text": "Accept a paper BP log or phone-in readings instead of portal entry until a workable submission method is in place."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "language_literacy",
+            "reason": "The kidney-friendly eating handout is in English, but the patient cannot read English materials and his son, who previously translated, is away at school.",
+            "evidence": [
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "interpreter",
+            "resource_record_id": null,
+            "text": "Provide the kidney-friendly eating handout in Spanish through translated materials or the interpreter service."
+          },
+          {
+            "category": "renal_dietitian",
+            "resource_record_id": null,
+            "text": "Ask the renal dietitian to tailor sodium guidance to foods the patient can obtain and explain it in Spanish."
+          }
+        ]
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 2902,
+    "completion_tokens": 2247
+  },
+  "latency_ms": 103140,
+  "wall_s": 103.16,
+  "log": [
+    {
+      "prompt_sha256": "b34428901cdeb9c199cdf503e00d94de719410c738865161ab7a9c1a8936761c",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 103140,
+      "usage": {
+        "prompt_tokens": 2902,
+        "total_tokens": 5149,
+        "completion_tokens": 2247,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1628
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "language_literacy",
+                    "reason": "The titration schedule is printed in English, but the patient needed his son to read English papers last time and his son is now away at school, so he may not understand how to adjust losartan.",
+                    "evidence": [
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "interpreter",
+                    "resource_record_id": null,
+                    "text": "Provide the losartan titration schedule in Spanish through the hospital interpreter service, with plain-language translated instructions."
+                  },
+                  {
+                    "category": "language_literacy",
+                    "resource_record_id": null,
+                    "text": "Review the schedule aloud with a Spanish interpreter at the visit and confirm teach-back before the patient leaves."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "digital_access",
+                    "reason": "The patient has the portal app but it is entirely in English and he does not know where to type blood pressure numbers, so weekly portal submission may not work.",
+                    "evidence": [
+                      "turn:T06"
+                    ]
+                  },
+                  {
+                    "barrier": "language_literacy",
+                    "reason": "Portal content is English-only and the patient cannot navigate it without translated help; his usual translator (his son) is away.",
+                    "evidence": [
+                      "turn:T06",
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "interpreter",
+                    "resource_record_id": null,
+                    "text": "Give Spanish-language, plain-language instructions for entering BP readings into the portal, walked through with an interpreter."
+                  },
+                  {
+                    "category": "digital_access",
+                    "resource_record_id": null,
+                    "text": "Accept a paper BP log or phone-in readings instead of portal entry until a workable submission method is in place."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "language_literacy",
+                    "reason": "The kidney-friendly eating handout is in English, but the patient cannot read English materials and his son, who previously translated, is away at school.",
+                    "evidence": [
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "interpreter",
+                    "resource_record_id": null,
+                    "text": "Provide the kidney-friendly eating handout in Spanish through translated materials or the interpreter service."
+                  },
+                  {
+                    "category": "renal_dietitian",
+                    "resource_record_id": null,
+                    "text": "Ask the renal dietitian to tailor sodium guidance to foods the patient can obtain and explain it in Spanish."
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

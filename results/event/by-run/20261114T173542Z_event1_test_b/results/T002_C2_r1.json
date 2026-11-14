@@ -1,0 +1,451 @@
+{
+  "case_id": "T002",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "Two-bus ride with oxygen takes ~1.5 hours and leaves patient exhausted; nephew only sometimes available to drive.",
+            "evidence": [
+              "turn:T04",
+              "turn:T06",
+              "tract:no_vehicle_share",
+              "tract:places_lacktrpt",
+              "screener:transportation"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "nemt",
+            "text": "Dual coverage qualifies for Medicaid NEMT; call the number on the back of the plan card to book rides to rehab.",
+            "resource_record_id": null
+          },
+          {
+            "category": "paratransit",
+            "text": "Oxygen dependence may qualify for ADA paratransit; apply via Northern Illinois Transit Authority 312-663-HELP.",
+            "resource_record_id": null
+          },
+          {
+            "category": "schedule_change",
+            "text": "Ask the rehab center for a later session time or a day that matches an available ride.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "food_access",
+            "reason": "Screener shows food worry and food running out; tract is low-income/low-access; protein at each meal plus supplement may be unaffordable.",
+            "evidence": [
+              "screener:food_worry",
+              "screener:food_ran_out",
+              "tract:lila_half_10",
+              "tract:places_foodinsecu"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "snap",
+            "text": "Apply for SNAP through Illinois ABE (abe.illinois.gov); expedited benefits within 7 days if very low income.",
+            "resource_record_id": null
+          },
+          {
+            "category": "food_pantry",
+            "text": "Helping Our People Excel food pantry, 5912 W Iowa St (0.18 mi); call ahead for hours.",
+            "resource_record_id": "PL3136f0b4"
+          },
+          {
+            "category": "medically_tailored_meals",
+            "text": "Check whether the Medicaid MCO or Medicare Advantage plan covers medically tailored meals.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 4,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T002"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T002"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T002"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T002"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T002"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031251300"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_transit_trip",
+      "args": {
+        "appt_ref": "appt:4",
+        "arrive_by": "10:00"
+      },
+      "ok": false
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031251300",
+        "need": "transport",
+        "days": [
+          "Tue",
+          "Thu"
+        ]
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031251300",
+        "need": "food",
+        "days": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri",
+          "Sat",
+          "Sun"
+        ]
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031251300",
+        "need": "utilities"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 26827,
+    "completion_tokens": 3772
+  },
+  "latency_ms": 186962,
+  "wall_s": 187.03,
+  "log": [
+    {
+      "prompt_sha256": "e29d08872508522e3d885b252d3761137d2c47c1e0f5004eeeb055a725d3c395",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 8227,
+      "usage": {
+        "prompt_tokens": 4791,
+        "total_tokens": 5008,
+        "completion_tokens": 217,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 71
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T002"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T002"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T002"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T002"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T002"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 14919,
+      "usage": {
+        "prompt_tokens": 6023,
+        "total_tokens": 6317,
+        "completion_tokens": 294,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 210
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031251300"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_transit_trip",
+          "args": {
+            "appt_ref": "appt:4",
+            "arrive_by": "10:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 55504,
+      "usage": {
+        "prompt_tokens": 6873,
+        "total_tokens": 7809,
+        "completion_tokens": 936,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 751
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031251300",
+            "need": "transport",
+            "days": [
+              "Tue",
+              "Thu"
+            ]
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031251300",
+            "need": "food",
+            "days": [
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri",
+              "Sat",
+              "Sun"
+            ]
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031251300",
+            "need": "utilities"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 108312,
+      "usage": {
+        "prompt_tokens": 9140,
+        "total_tokens": 11465,
+        "completion_tokens": 2325,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1721
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Two-bus ride with oxygen takes ~1.5 hours and leaves patient exhausted; nephew only sometimes available to drive.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T06",
+                      "tract:no_vehicle_share",
+                      "tract:places_lacktrpt",
+                      "screener:transportation"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "text": "Dual coverage qualifies for Medicaid NEMT; call the number on the back of the plan card to book rides to rehab.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "paratransit",
+                    "text": "Oxygen dependence may qualify for ADA paratransit; apply via Northern Illinois Transit Authority 312-663-HELP.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask the rehab center for a later session time or a day that matches an available ride.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "Screener shows food worry and food running out; tract is low-income/low-access; protein at each meal plus supplement may be unaffordable.",
+                    "evidence": [
+                      "screener:food_worry",
+                      "screener:food_ran_out",
+                      "tract:lila_half_10",
+                      "tract:places_foodinsecu"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "snap",
+                    "text": "Apply for SNAP through Illinois ABE (abe.illinois.gov); expedited benefits within 7 days if very low income.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "food_pantry",
+                    "text": "Helping Our People Excel food pantry, 5912 W Iowa St (0.18 mi); call ahead for hours.",
+                    "resource_record_id": "PL3136f0b4"
+                  },
+                  {
+                    "category": "medically_tailored_meals",
+                    "text": "Check whether the Medicaid MCO or Medicare Advantage plan covers medically tailored meals.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,250 @@
+{
+  "case_id": "T011",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "Infusion is Tuesdays at 8:30 AM and the patient relies on a husband who switches to the night shift on infusion days, so an early morning ride may not be available or reliable each cycle.",
+            "evidence": [
+              "turn:T07",
+              "turn:T08"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Ask the infusion unit for a later Tuesday chair time or a cycle day that fits the husband's shifted schedule."
+          },
+          {
+            "category": "ada_paratransit",
+            "text": "If a health condition prevents using fixed-route buses/trains, apply for ADA Paratransit certification (312-663-HELP); note it is not immediate and runs only when fixed-route service runs."
+          },
+          {
+            "category": "nemt",
+            "text": "Check coverage: if Medicaid/dual, arrange managed-care NEMT through the plan card or Transdev for fee-for-service; if Medicare-only, only confirm a ride if a Medicare Advantage transportation benefit exists\u2014do not promise original Medicare coverage."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "Pre-cycle labs and oncology review require travel every two weeks on the same husband-dependent ride schedule that may fail for early morning appointments.",
+            "evidence": [
+              "turn:T07",
+              "turn:T08"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "coordinate_with_existing_visit",
+            "text": "Schedule lab draws on the same day/campus as the Tuesday infusion, or use telehealth for review when no exam is needed."
+          },
+          {
+            "category": "schedule_change",
+            "text": "Request lab/appointment times that align with when the husband is available to drive."
+          },
+          {
+            "category": "ada_paratransit",
+            "text": "If eligible, pursue ADA Paratransit certification for recurring medical trips, understanding certification must be completed first."
+          }
+        ]
+      }
+    ]
+  },
+  "error": null,
+  "steps": 3,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 13029,
+    "completion_tokens": 3201
+  },
+  "latency_ms": 141141,
+  "wall_s": 141.17,
+  "log": [
+    {
+      "prompt_sha256": "420fe4f97473f33fc6c430a5812b4bd4742c050b1796f910b139fb31a540cdb2",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 67661,
+      "usage": {
+        "prompt_tokens": 3093,
+        "total_tokens": 4520,
+        "completion_tokens": 1427,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 822
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "[{\"item_id\": \"P1\", \"status\": \"at_risk\", \"barriers\": [{\"barrier\": \"transport\", \"reason\": \"Infusion is Tuesdays at 8:30 AM and the patient relies on a husband who switches to the night shift on infusion days, so an early morning ride may not be available or reliable each cycle.\", \"evidence\": [\"turn:T07\", \"turn:T08\"]}], \"alternatives\": [{\"category\": \"schedule_change\", \"resource_record_id\": null, \"text\": \"Ask the infusion unit for a later Tuesday chair time or a cycle day that fits the husband's shifted schedule.\"}, {\"category\": \"ada_paratransit\", \"resource_record_id\": null, \"text\": \"If a health condition prevents using fixed-route buses/trains, apply for ADA Paratransit certification (312-663-HELP); note it is not immediate and runs only when fixed-route service runs.\"}, {\"category\": \"nemt\", \"resource_record_id\": null, \"text\": \"Check coverage: if Medicaid/dual, arrange managed-care NEMT through the plan card or Transdev for fee-for-service; if Medicare-only, only confirm a ride if a Medicare Advantage transportation benefit exists\u2014do not promise original Medicare coverage.\"}]}, {\"item_id\": \"P2\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}, {\"item_id\": \"P3\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}, {\"item_id\": \"P4\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}, {\"item_id\": \"P5\", \"status\": \"at_risk\", \"barriers\": [{\"barrier\": \"transport\", \"reason\": \"Pre-cycle labs and oncology review require travel every two weeks on the same husband-dependent ride schedule that may fail for early morning appointments.\", \"evidence\": [\"turn:T07\", \"turn:T08\"]}], \"alternatives\": [{\"category\": \"coordinate_with_existing_visit\", \"resource_record_id\": null, \"text\": \"Schedule lab draws on the same day/campus as the Tuesday infusion, or use telehealth for review when no exam is needed.\"}, {\"category\": \"schedule_change\", \"resource_record_id\": null, \"text\": \"Request lab/appointment times that align with when the husband is available to drive.\"}, {\"category\": \"ada_paratransit\", \"resource_record_id\": null, \"text\": \"If eligible, pursue ADA Paratransit certification for recurring medical trips, understanding certification must be completed first.\"]}]}"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 23590,
+      "usage": {
+        "prompt_tokens": 4343,
+        "total_tokens": 5029,
+        "completion_tokens": 686,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 80
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "[{\"item_id\": \"P1\", \"status\": \"at_risk\", \"barriers\": [{\"barrier\": \"transport\", \"reason\": \"Infusion is Tuesdays at 8:30 AM and the patient relies on a husband who switches to the night shift on infusion days, so an early morning ride may not be available or reliable each cycle.\", \"evidence\": [\"turn:T07\", \"turn:T08\"]}], \"alternatives\": [{\"category\": \"schedule_change\", \"resource_record_id\": None, \"text\": \"Ask the infusion unit for a later Tuesday chair time or a cycle day that fits the husband's shifted schedule.\"}, {\"category\": \"ada_paratransit\", \"resource_record_id\": None, \"text\": \"If a health condition prevents using fixed-route buses/trains, apply for ADA Paratransit certification (312-663-HELP); note it is not immediate and runs only when fixed-route service runs.\"}, {\"category\": \"nemt\", \"resource_record_id\": None, \"text\": \"Check coverage: if Medicaid/dual, arrange managed-care NEMT through the plan card or Transdev for fee-for-service; if Medicare-only, only confirm a ride if a Medicare Advantage transportation benefit exists\u2014do not promise original Medicare coverage.\"}]}, {\"item_id\": \"P2\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}, {\"item_id\": \"P3\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}, {\"item_id\": \"P4\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}, {\"item_id\": \"P5\", \"status\": \"at_risk\", \"barriers\": [{\"barrier\": \"transport\", \"reason\": \"Pre-cycle labs and oncology review require travel every two weeks on the same husband-dependent ride schedule that may fail for early morning appointments.\", \"evidence\": [\"turn:T07\", \"turn:T08\"]}], \"alternatives\": [{\"category\": \"coordinate_with_existing_visit\", \"resource_record_id\": None, \"text\": \"Schedule lab draws on the same day/campus as the Tuesday infusion, or use telehealth for review when no exam is needed.\"}, {\"category\": \"schedule_change\", \"resource_record_id\": None, \"text\": \"Request lab/appointment times that align with when the husband is available to drive.\"}, {\"category\": \"ada_paratransit\", \"resource_record_id\": None, \"text\": \"If eligible, pursue ADA Paratransit certification for recurring medical trips, understanding certification must be completed first.\"}]}]"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 49890,
+      "usage": {
+        "prompt_tokens": 5593,
+        "total_tokens": 6681,
+        "completion_tokens": 1088,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 524
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Infusion is Tuesdays at 8:30 AM and the patient relies on a husband who switches to the night shift on infusion days, so an early morning ride may not be available or reliable each cycle.",
+                    "evidence": [
+                      "turn:T07",
+                      "turn:T08"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask the infusion unit for a later Tuesday chair time or a cycle day that fits the husband's shifted schedule."
+                  },
+                  {
+                    "category": "ada_paratransit",
+                    "text": "If a health condition prevents using fixed-route buses/trains, apply for ADA Paratransit certification (312-663-HELP); note it is not immediate and runs only when fixed-route service runs."
+                  },
+                  {
+                    "category": "nemt",
+                    "text": "Check coverage: if Medicaid/dual, arrange managed-care NEMT through the plan card or Transdev for fee-for-service; if Medicare-only, only confirm a ride if a Medicare Advantage transportation benefit exists\u2014do not promise original Medicare coverage."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Pre-cycle labs and oncology review require travel every two weeks on the same husband-dependent ride schedule that may fail for early morning appointments.",
+                    "evidence": [
+                      "turn:T07",
+                      "turn:T08"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "text": "Schedule lab draws on the same day/campus as the Tuesday infusion, or use telehealth for review when no exam is needed."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "text": "Request lab/appointment times that align with when the husband is available to drive."
+                  },
+                  {
+                    "category": "ada_paratransit",
+                    "text": "If eligible, pursue ADA Paratransit certification for recurring medical trips, understanding certification must be completed first."
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

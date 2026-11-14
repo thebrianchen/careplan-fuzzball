@@ -1,0 +1,339 @@
+{
+  "case_id": "T004",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "Works 6 AM\u20132:30 PM; 10 AM Tuesday visits clash with shift and risk job loss after 2 unexcused absences.",
+            "evidence": [
+              "turn:T02",
+              "turn:T04",
+              "appt:2"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask OB clinic for an afternoon prenatal slot (after 3 PM) or a day that fits her factory shift."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "food_access",
+            "reason": "Sometimes worries about food; lives in low-income/low-access tract with high food insecurity; daily fresh produce may be hard to afford.",
+            "evidence": [
+              "screener:food_worry",
+              "tract:lila_half_10",
+              "tract:places_foodinsecu"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "snap",
+            "resource_record_id": "SNAP296074",
+            "text": "Apply for SNAP via Illinois ABE (abe.illinois.gov); EBT accepted at Supermercado El Guero 10 nearby."
+          },
+          {
+            "category": "food_pantry",
+            "resource_record_id": "PLd67e8d02",
+            "text": "Use Immaculate Conception food pantry (Spanish services, 0.3 mi); call ahead for hours."
+          }
+        ]
+      }
+    ]
+  },
+  "error": null,
+  "steps": 3,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T004"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T004"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T004"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T004"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T004"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_transit_trip",
+      "args": {
+        "appt_ref": "appt:4",
+        "arrive_by": "10:00"
+      },
+      "ok": false
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031580600"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031580600",
+        "need": "food"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 17921,
+    "completion_tokens": 3714
+  },
+  "latency_ms": 187133,
+  "wall_s": 187.18,
+  "log": [
+    {
+      "prompt_sha256": "60b7e4c6bb4435d0d995a88cd47ca35a7a5147b2129e035c34d6efcdf86aef15",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 10083,
+      "usage": {
+        "prompt_tokens": 4750,
+        "total_tokens": 5019,
+        "completion_tokens": 269,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 123
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T004"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T004"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T004"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T004"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T004"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 34435,
+      "usage": {
+        "prompt_tokens": 5733,
+        "total_tokens": 6304,
+        "completion_tokens": 571,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 442
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_transit_trip",
+          "args": {
+            "appt_ref": "appt:4",
+            "arrive_by": "10:00"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031580600"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031580600",
+            "need": "food"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 142615,
+      "usage": {
+        "prompt_tokens": 7438,
+        "total_tokens": 10312,
+        "completion_tokens": 2874,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 2415
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Works 6 AM\u20132:30 PM; 10 AM Tuesday visits clash with shift and risk job loss after 2 unexcused absences.",
+                    "evidence": [
+                      "turn:T02",
+                      "turn:T04",
+                      "appt:2"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask OB clinic for an afternoon prenatal slot (after 3 PM) or a day that fits her factory shift."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "Sometimes worries about food; lives in low-income/low-access tract with high food insecurity; daily fresh produce may be hard to afford.",
+                    "evidence": [
+                      "screener:food_worry",
+                      "tract:lila_half_10",
+                      "tract:places_foodinsecu"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "snap",
+                    "resource_record_id": "SNAP296074",
+                    "text": "Apply for SNAP via Illinois ABE (abe.illinois.gov); EBT accepted at Supermercado El Guero 10 nearby."
+                  },
+                  {
+                    "category": "food_pantry",
+                    "resource_record_id": "PLd67e8d02",
+                    "text": "Use Immaculate Conception food pantry (Spanish services, 0.3 mi); call ahead for hours."
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,430 @@
+{
+  "case_id": "D006",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "med_cost",
+            "reason": "Uninsured; tiotropium is tier 5 at $420/month and patient stopped it in August due to cost.",
+            "evidence": [
+              "med:1",
+              "turn:T02"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "med_cost_help",
+            "resource_record_id": null,
+            "text": "Enroll in tiotropium manufacturer patient-assistance program or switch to a lower-cost inhaled alternative."
+          },
+          {
+            "category": "med_cost_help",
+            "resource_record_id": "HC15236",
+            "text": "ACCESS Westside FQHC sliding-fee clinic, ~52 h/wk, call 773-762-2435."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "housing",
+            "reason": "Patient is couch-surfing with uncertain tenure; home oxygen setup needs stable housing and power.",
+            "evidence": [
+              "turn:T04",
+              "screener:living_situation",
+              "tract:places_housinsecu"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "housing",
+            "resource_record_id": null,
+            "text": "Confirm stable housing and electricity before oxygen setup; refer to social work for housing assessment."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 5,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-D006"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-D006"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-D006"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-D006"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-D006"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031290900"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031290900",
+        "need": "med_cost"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031290900",
+        "need": "housing"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 31419,
+    "completion_tokens": 3401
+  },
+  "latency_ms": 169942,
+  "wall_s": 169.99,
+  "log": [
+    {
+      "prompt_sha256": "63008d265e4e73d521dea179717923b50c2363ee5252be8e973c185cc017bd2c",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 6821,
+      "usage": {
+        "prompt_tokens": 4502,
+        "total_tokens": 4666,
+        "completion_tokens": 164,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 18
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-D006"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-D006"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-D006"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-D006"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-D006"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 25450,
+      "usage": {
+        "prompt_tokens": 5490,
+        "total_tokens": 5898,
+        "completion_tokens": 408,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 370
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031290900"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 25007,
+      "usage": {
+        "prompt_tokens": 6302,
+        "total_tokens": 6833,
+        "completion_tokens": 531,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 436
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031290900",
+            "need": "med_cost"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031290900",
+            "need": "housing"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 97935,
+      "usage": {
+        "prompt_tokens": 7319,
+        "total_tokens": 9177,
+        "completion_tokens": 1858,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1462
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "med_cost",
+                    "reason": "Uninsured; tiotropium is tier 5 at $420/month and patient stopped it in August due to cost.",
+                    "evidence": [
+                      "med:1",
+                      "turn:T02",
+                      "patient coverage: none"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "med_cost_help",
+                    "resource_record_id": null,
+                    "text": "Enroll in tiotropium manufacturer patient-assistance program or switch to a lower-cost inhaled alternative."
+                  },
+                  {
+                    "category": "med_cost_help",
+                    "resource_record_id": "HC15236",
+                    "text": "ACCESS Westside FQHC sliding-fee clinic, ~52 h/wk, call 773-762-2435."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "housing",
+                    "reason": "Patient is couch-surfing with uncertain tenure; home oxygen setup needs stable housing and power.",
+                    "evidence": [
+                      "turn:T04",
+                      "screener:living_situation",
+                      "tract:places_housinsecu"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "housing",
+                    "resource_record_id": null,
+                    "text": "Confirm stable housing and electricity before oxygen setup; refer to social work for housing assessment."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 5,
+      "latency_ms": 14729,
+      "usage": {
+        "prompt_tokens": 7806,
+        "total_tokens": 8246,
+        "completion_tokens": 440,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 50
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "med_cost",
+                    "reason": "Uninsured; tiotropium is tier 5 at $420/month and patient stopped it in August due to cost.",
+                    "evidence": [
+                      "med:1",
+                      "turn:T02"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "med_cost_help",
+                    "resource_record_id": null,
+                    "text": "Enroll in tiotropium manufacturer patient-assistance program or switch to a lower-cost inhaled alternative."
+                  },
+                  {
+                    "category": "med_cost_help",
+                    "resource_record_id": "HC15236",
+                    "text": "ACCESS Westside FQHC sliding-fee clinic, ~52 h/wk, call 773-762-2435."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "housing",
+                    "reason": "Patient is couch-surfing with uncertain tenure; home oxygen setup needs stable housing and power.",
+                    "evidence": [
+                      "turn:T04",
+                      "screener:living_situation",
+                      "tract:places_housinsecu"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "housing",
+                    "resource_record_id": null,
+                    "text": "Confirm stable housing and electricity before oxygen setup; refer to social work for housing assessment."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

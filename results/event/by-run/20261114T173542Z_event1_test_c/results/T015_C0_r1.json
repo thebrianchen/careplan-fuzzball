@@ -1,0 +1,168 @@
+{
+  "case_id": "T015",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "A Wednesday 1:00 PM educator visit falls during the patient's warehouse shift (7:00-3:30) and would cost half a shift plus a write-up; the patient is only free after 4:00 PM or Saturday morning.",
+            "evidence": [
+              "turn:T04",
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Ask the diabetes educator for a chair time after 4:00 PM on a weekday or a Saturday morning appointment, matching the patient's stated availability."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "food_access",
+            "reason": "On workdays the patient eats coffee and gas-station food between the warehouse and Uber driving, with little time to pack meals, so a carb-consistent three-meal plan is hard to follow as written.",
+            "evidence": [
+              "turn:T04",
+              "turn:T08"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "renal_dietitian",
+            "text": "Ask the dialysis/renal dietitian to rebuild the meal plan around foods the patient can actually get on workdays (gas-station and convenience options) rather than assuming packed lunches."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3051,
+    "completion_tokens": 1043
+  },
+  "latency_ms": 47892,
+  "wall_s": 47.92,
+  "log": [
+    {
+      "prompt_sha256": "487506c4f07f44cacb1a5e8999cec020499b21eb3b34a0afc912c7b049537cc4",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 47892,
+      "usage": {
+        "prompt_tokens": 3051,
+        "total_tokens": 4094,
+        "completion_tokens": 1043,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 626
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "A Wednesday 1:00 PM educator visit falls during the patient's warehouse shift (7:00-3:30) and would cost half a shift plus a write-up; the patient is only free after 4:00 PM or Saturday morning.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask the diabetes educator for a chair time after 4:00 PM on a weekday or a Saturday morning appointment, matching the patient's stated availability."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "On workdays the patient eats coffee and gas-station food between the warehouse and Uber driving, with little time to pack meals, so a carb-consistent three-meal plan is hard to follow as written.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T08"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "renal_dietitian",
+                    "text": "Ask the dialysis/renal dietitian to rebuild the meal plan around foods the patient can actually get on workdays (gas-station and convenience options) rather than assuming packed lunches."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

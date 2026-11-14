@@ -1,0 +1,205 @@
+{
+  "case_id": "D005",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "likely_ok"
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok"
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok"
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok"
+      }
+    ]
+  },
+  "error": null,
+  "steps": 3,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-D005"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-D005"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-D005"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-D005"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-D005"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031241400"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 15396,
+    "completion_tokens": 1587
+  },
+  "latency_ms": 83019,
+  "wall_s": 83.06,
+  "log": [
+    {
+      "prompt_sha256": "9ea75a1304c35907f415aa9b9f8c9ed97b8b4f3217ce045ff94cc5198297bad6",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 9592,
+      "usage": {
+        "prompt_tokens": 4470,
+        "total_tokens": 4688,
+        "completion_tokens": 218,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 57
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I'll gather the patient's record and relevant data to assess each plan item.",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-D005"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-D005"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-D005"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-D005"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-D005"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 20010,
+      "usage": {
+        "prompt_tokens": 5133,
+        "total_tokens": 5401,
+        "completion_tokens": 268,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 230
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031241400"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 53417,
+      "usage": {
+        "prompt_tokens": 5793,
+        "total_tokens": 6894,
+        "completion_tokens": 1101,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 794
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I have all the evidence I need. Let me summarize the assessment:\n\n- **P1 (medication):** Patient explicitly says the inhaler is fine with insurance, no refill gaps, $25 copay. No cost or access barrier. \u2192 likely_ok\n- **P2 (education, written action plan):** English-speaking, no literacy/language flags. \u2192 likely_ok\n- **P3 (follow-up in 3 months, morning slot):** Patient bikes or takes the Blue Line (two stops), transportation screener = \"no\" problem, tract has strong transit (60 stops within 800m, 56 early-service stops), and the patient already kept today's 8:30 AM appointment. Commercial coverage has no transport benefit, but the patient doesn't need one. \u2192 likely_ok\n- **P4 (flu vaccine today):** Being administered during today's visit. \u2192 likely_ok\n\nNo social-needs screeners are positive (food, housing, utilities, transportation all negative), and the patient's circumstances don't conflict with any plan item.",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok"
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

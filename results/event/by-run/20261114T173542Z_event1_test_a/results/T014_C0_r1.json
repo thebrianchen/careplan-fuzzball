@@ -1,0 +1,222 @@
+{
+  "case_id": "T014",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "caregiving",
+            "reason": "Rehab at 9:00 AM three mornings a week conflicts with the patient's only available childcare: no one can walk Danny to the bus at 8:30 AM, and the sister in Skokie can only help once in a while, not three days a week.",
+            "evidence": [
+              "turn:T04",
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Ask the cardiac rehab program for a later start time or different days so rehab does not conflict with the 8:30 AM bus drop-off.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "utilities",
+            "reason": "ComEd cut power since Monday; lights and fridge are off, so the patient cannot charge a Bluetooth scale/BP cuff or upload daily readings through the app.",
+            "evidence": [
+              "turn:T08",
+              "turn:T10"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "utility_medical_certificate",
+            "text": "Complete the utility medical certification form so power is restored promptly, since the patient's health (CPAP, refrigerated medications, remote monitoring) depends on electricity.",
+            "resource_record_id": null
+          },
+          {
+            "category": "liheap",
+            "text": "Refer to CEDA/Cook County LIHEAP for utility payment assistance to restore and maintain power.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "utilities",
+            "reason": "Nightly CPAP requires electricity, but power has been off since Monday, so the patient cannot use it as prescribed.",
+            "evidence": [
+              "turn:T07",
+              "turn:T08"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "utility_medical_certificate",
+            "text": "Submit a medical certification to ComEd to delay disconnection/restore service because the patient's CPAP therapy depends on power.",
+            "resource_record_id": null
+          },
+          {
+            "category": "liheap",
+            "text": "Connect the patient to LIHEAP/CEDA utility assistance to cover the outstanding balance and restore power.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3091,
+    "completion_tokens": 1228
+  },
+  "latency_ms": 61899,
+  "wall_s": 61.92,
+  "log": [
+    {
+      "prompt_sha256": "46dd8b85247a501997964f8ca7165e86b65a0a4978589aaf7c43bcf40f45a556",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 61899,
+      "usage": {
+        "prompt_tokens": 3091,
+        "total_tokens": 4319,
+        "completion_tokens": 1228,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 628
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "caregiving",
+                    "reason": "Rehab at 9:00 AM three mornings a week conflicts with the patient's only available childcare: no one can walk Danny to the bus at 8:30 AM, and the sister in Skokie can only help once in a while, not three days a week.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask the cardiac rehab program for a later start time or different days so rehab does not conflict with the 8:30 AM bus drop-off.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "utilities",
+                    "reason": "ComEd cut power since Monday; lights and fridge are off, so the patient cannot charge a Bluetooth scale/BP cuff or upload daily readings through the app.",
+                    "evidence": [
+                      "turn:T08",
+                      "turn:T10"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "utility_medical_certificate",
+                    "text": "Complete the utility medical certification form so power is restored promptly, since the patient's health (CPAP, refrigerated medications, remote monitoring) depends on electricity.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "liheap",
+                    "text": "Refer to CEDA/Cook County LIHEAP for utility payment assistance to restore and maintain power.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "utilities",
+                    "reason": "Nightly CPAP requires electricity, but power has been off since Monday, so the patient cannot use it as prescribed.",
+                    "evidence": [
+                      "turn:T07",
+                      "turn:T08"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "utility_medical_certificate",
+                    "text": "Submit a medical certification to ComEd to delay disconnection/restore service because the patient's CPAP therapy depends on power.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "liheap",
+                    "text": "Connect the patient to LIHEAP/CEDA utility assistance to cover the outstanding balance and restore power.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

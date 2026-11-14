@@ -1,0 +1,236 @@
+{
+  "case_id": "T010",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "The 8:00 AM weekday DOT time conflicts with the patient's work van pickup at 6:00 AM; missing work means losing a full day's pay, so weekday 8 AM visits are hard to sustain for 8 weeks.",
+            "evidence": [
+              "turn:T02"
+            ]
+          },
+          {
+            "barrier": "transport",
+            "reason": "The patient relies on a work van that leaves at 6:00 AM on Lawrence and has no described separate way to reach the clinic by 8:00 AM without missing work.",
+            "evidence": [
+              "turn:T02"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the TB clinic for a later weekday appointment time or a fixed day that fits after the work van route, to avoid losing a day's pay."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Use video-observed doses via the patient's existing smartphone/WhatsApp for some doses, since the patient already uses it daily with family."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Cluster any required in-person visits on the same day/campus to minimize separate trips and lost work days."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "Monthly labs are tied to DOT encounters at 8:00 AM weekdays, which conflict with the 6:00 AM work van and lost pay.",
+            "evidence": [
+              "turn:T02"
+            ]
+          },
+          {
+            "barrier": "transport",
+            "reason": "Each lab draw requires an additional clinic trip the patient may not be able to make without missing work.",
+            "evidence": [
+              "turn:T02"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Schedule the monthly lab draw on the same day as a scheduled DOT encounter and request a time after the morning work van."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask whether sputum can be collected at a more convenient site/time or combined with other visits to reduce trips."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Confirm the exact lab schedule with the TB program social worker so it fits the patient's work days."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3093,
+    "completion_tokens": 1383
+  },
+  "latency_ms": 74519,
+  "wall_s": 74.57,
+  "log": [
+    {
+      "prompt_sha256": "61aa5922b96e9261f435c9eb6b92d5814eb826b7c6362acf8550a0035f823bc0",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 74519,
+      "usage": {
+        "prompt_tokens": 3093,
+        "total_tokens": 4476,
+        "completion_tokens": 1383,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 721
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "The 8:00 AM weekday DOT time conflicts with the patient's work van pickup at 6:00 AM; missing work means losing a full day's pay, so weekday 8 AM visits are hard to sustain for 8 weeks.",
+                    "evidence": [
+                      "turn:T02"
+                    ]
+                  },
+                  {
+                    "barrier": "transport",
+                    "reason": "The patient relies on a work van that leaves at 6:00 AM on Lawrence and has no described separate way to reach the clinic by 8:00 AM without missing work.",
+                    "evidence": [
+                      "turn:T02"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the TB clinic for a later weekday appointment time or a fixed day that fits after the work van route, to avoid losing a day's pay."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Use video-observed doses via the patient's existing smartphone/WhatsApp for some doses, since the patient already uses it daily with family."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Cluster any required in-person visits on the same day/campus to minimize separate trips and lost work days."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Monthly labs are tied to DOT encounters at 8:00 AM weekdays, which conflict with the 6:00 AM work van and lost pay.",
+                    "evidence": [
+                      "turn:T02"
+                    ]
+                  },
+                  {
+                    "barrier": "transport",
+                    "reason": "Each lab draw requires an additional clinic trip the patient may not be able to make without missing work.",
+                    "evidence": [
+                      "turn:T02"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Schedule the monthly lab draw on the same day as a scheduled DOT encounter and request a time after the morning work van."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask whether sputum can be collected at a more convenient site/time or combined with other visits to reduce trips."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Confirm the exact lab schedule with the TB program social worker so it fits the patient's work days."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

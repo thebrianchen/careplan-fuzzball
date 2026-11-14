@@ -1,0 +1,389 @@
+{
+  "case_id": "D012",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "housing",
+            "reason": "No steady place makes reliable refrigeration of unopened insulin pens uncertain.",
+            "evidence": [
+              "med:1",
+              "screener:living_situation",
+              "prob:2"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "housing",
+            "resource_record_id": null,
+            "text": "Ask shelter staff or social work about a refrigerator for insulin; the in-use pen can stay at room temperature for 28 days."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "Already no-showed a 9 AM podiatry visit; high no-vehicle share and weak early transit near home.",
+            "evidence": [
+              "appt:1",
+              "tract:no_vehicle_share",
+              "tract:places_lacktrpt",
+              "screener:living_situation"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "nemt",
+            "resource_record_id": null,
+            "text": "Medicaid covers non-emergency medical rides; call the MCO number on the plan card to schedule transport."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask podiatry for a later appointment time that fits an available ride."
+          },
+          {
+            "category": "paratransit",
+            "resource_record_id": null,
+            "text": "If neuropathy prevents bus use, apply for ADA paratransit certification at 312-663-4357."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 4,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-D012"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-D012"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-D012"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-D012"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-D012"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031230500"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_transit_trip",
+      "args": {
+        "appt_ref": "appt:1",
+        "arrive_by": "09:00"
+      },
+      "ok": false
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031230500",
+        "need": "transport"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031230500",
+        "need": "food"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031230500",
+        "need": "housing"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 23417,
+    "completion_tokens": 4646
+  },
+  "latency_ms": 243708,
+  "wall_s": 243.85,
+  "log": [
+    {
+      "prompt_sha256": "212d1d3207974e9b0311196e362683baa8a44c3a23c9b50c941d063ee75337d5",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 7862,
+      "usage": {
+        "prompt_tokens": 4508,
+        "total_tokens": 4703,
+        "completion_tokens": 195,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 38
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I'll gather the patient's record and neighborhood data first.",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-D012"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-D012"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-D012"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-D012"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-D012"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 17380,
+      "usage": {
+        "prompt_tokens": 5418,
+        "total_tokens": 5731,
+        "completion_tokens": 313,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 229
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031230500"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_transit_trip",
+          "args": {
+            "appt_ref": "appt:1",
+            "arrive_by": "09:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 79567,
+      "usage": {
+        "prompt_tokens": 6271,
+        "total_tokens": 7602,
+        "completion_tokens": 1331,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1192
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031230500",
+            "need": "transport"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031230500",
+            "need": "food"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031230500",
+            "need": "housing"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 138899,
+      "usage": {
+        "prompt_tokens": 7220,
+        "total_tokens": 10027,
+        "completion_tokens": 2807,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 2371
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "housing",
+                    "reason": "No steady place makes reliable refrigeration of unopened insulin pens uncertain.",
+                    "evidence": [
+                      "med:1",
+                      "screener:living_situation",
+                      "prob:2"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "housing",
+                    "resource_record_id": null,
+                    "text": "Ask shelter staff or social work about a refrigerator for insulin; the in-use pen can stay at room temperature for 28 days."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Already no-showed a 9 AM podiatry visit; high no-vehicle share and weak early transit near home.",
+                    "evidence": [
+                      "appt:1",
+                      "tract:no_vehicle_share",
+                      "tract:places_lacktrpt",
+                      "screener:living_situation"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Medicaid covers non-emergency medical rides; call the MCO number on the plan card to schedule transport."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask podiatry for a later appointment time that fits an available ride."
+                  },
+                  {
+                    "category": "paratransit",
+                    "resource_record_id": null,
+                    "text": "If neuropathy prevents bus use, apply for ADA paratransit certification at 312-663-4357."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

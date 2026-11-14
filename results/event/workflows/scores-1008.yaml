@@ -1,0 +1,102 @@
+jobs:
+  scores:
+    cwd: /code/app
+    depends-on:
+    - name: planner
+      status: RUNNING
+    env:
+    - PYTHONPATH=/code/site
+    - PATH=/code/python/bin:/usr/local/bin:/usr/bin:/bin
+    - PLANNER_URL=http://planner:8000/v1
+    - VLLM_API_KEY=none
+    - PROFILE=super35-vllm-think
+    - TAG=event1
+    image:
+      uri: docker://rockylinux/rockylinux:9
+    mounts:
+      /code:
+        volume: code
+    policy:
+      timeout:
+        execute: 6h
+    resource:
+      cpu:
+        cores: 2
+      memory:
+        size: 2GB
+    script: |
+      #!/bin/sh
+      # first, one card on the dialysis case: the day's first sign that planner, code and volumes work together
+      mkdir -p /code/one /code/results && cp cases/dev/D001-dialysis.yaml /code/one/
+      python3 -m careplan run --cases /code/one --conditions C2 --reps 1 --signals --allow-unfrozen \
+        --profile C2=$PROFILE --tag ${TAG}_first | tail -2
+      python3 scripts/run_detail.py $(ls -dt runs/*_${TAG}_first | head -1) --cases /code/one | tail -3
+      # three runs of each case set at once: the planner serves three requests at a time
+      for set in test dev; do
+        for r in a b c; do
+          python3 -m careplan run --cases cases/$set --conditions C0,C2 --reps 1 --signals --allow-unfrozen \
+            --profile C0=$PROFILE --profile C2=$PROFILE --tag ${TAG}_${set}_$r > /code/results/scores_${TAG}_${set}_$r.log 2>&1 &
+        done
+        wait
+        python3 scripts/h1_report.py $(ls -dt runs/*_${TAG}_${set}_? | head -3) --cases cases/$set \
+          --out /code/results/scores_${TAG}_$set.json | tail -3
+      done
+services:
+  planner:
+    env:
+    - HOME=/models/home
+    - USER=careplan
+    - XDG_CACHE_HOME=/models/home/.cache
+    - HF_HUB_OFFLINE=1
+    - MAX_JOBS=2
+    - NVCC_THREADS=1
+    - SEQS=3
+    image:
+      uri: docker://vllm/vllm-openai:v0.32.0
+    mounts:
+      /models:
+        volume: models
+    network:
+      ports:
+      - name: openai
+        port: 8000
+        protocol: tcp
+    readiness-probe:
+      failure-threshold: 240
+      http-get:
+        path: /health
+        port: 8000
+        scheme: HTTP
+      initial-delay-seconds: 60
+      period-seconds: 15
+      timeout-seconds: 5
+    resource:
+      cpu:
+        cores: 12
+      devices:
+        nvidia.com/gpu: 1
+      memory:
+        size: 110GB
+    script: |
+      #!/bin/bash
+      mkdir -p "$XDG_CACHE_HOME"
+      M=/models/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-NVFP4
+      exec vllm serve $M --served-model-name nemotron-3.5-super-vl \
+        --max-num-seqs ${SEQS:-1} --trust-remote-code --gpu-memory-utilization 0.75 --max-num-batched-tokens 8192 \
+        --speculative_config.model $M-LiLiCorr \
+        --speculative_config.num_speculative_tokens 7 --speculative_config.method dflash \
+        --mamba-backend flashinfer --mamba-ssm-cache-dtype float16 --enable-mamba-cache-stochastic-rounding \
+        --mamba-cache-philox-rounds 5 --enable-mamba-shared-prefix-checkpoint \
+        --video-pruning-rate 0.5 --media-io-kwargs '{"video": {"fps": 2, "num_frames": 256}}' \
+        --block-size 64 --prefix-match-unit 64 \
+        --enable-auto-tool-choice --tool-call-parser qwen3_coder --reasoning-parser nemotron_v3 \
+        --host 0.0.0.0 --port 8000
+version: v4
+volumes:
+  code:
+    name: code
+    use: team4
+  models:
+    name: models
+    use: team4
+

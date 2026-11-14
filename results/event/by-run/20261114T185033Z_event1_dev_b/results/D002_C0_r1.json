@@ -1,0 +1,228 @@
+{
+  "case_id": "D002",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "utilities",
+            "reason": "Patient reports the power was off twice this month for a day each time and is unsure refrigerated insulin stayed cold, so nightly insulin glargine storage is at risk.",
+            "evidence": [
+              "turn:T02",
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "medical_certificate_utilities",
+            "resource_record_id": null,
+            "text": "Complete the utility medical certification form to delay disconnection while refrigerated insulin is needed (limited duration; verify current rule)."
+          },
+          {
+            "category": "utility_assistance",
+            "resource_record_id": null,
+            "text": "Screen for LIHEAP utility assistance through CEDA/Cook County to help restore and maintain power; check current funding window."
+          },
+          {
+            "category": "med_assistance_program",
+            "resource_record_id": null,
+            "text": "Ask the pharmacy about insulin storage options or a lower-cost equivalent if refrigeration remains unreliable."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "A Tuesday 10:00 AM endocrinology visit conflicts with warehouse work 6 AM\u20132 PM and the patient loses hours with no sick days, so they may miss it again.",
+            "evidence": [
+              "turn:T05",
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask endocrinology for a later morning or evening appointment that does not conflict with the 6 AM\u20132 PM shift."
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "If the patient has another recurring medical trip, see if the endocrinology visit can be scheduled the same day/campus or via telehealth if no exam is needed."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "Thursday 2:00 PM class starts at the patient's shift end time (6 AM\u20132 PM), with no sick days, making weekly attendance difficult.",
+            "evidence": [
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Request a later class time or a different day that fits after the warehouse shift, or ask whether a make-up/online option exists."
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "See if the diabetes class can be paired with an existing medical visit day to reduce separate trips and time off work."
+          }
+        ]
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 2946,
+    "completion_tokens": 1604
+  },
+  "latency_ms": 89231,
+  "wall_s": 89.26,
+  "log": [
+    {
+      "prompt_sha256": "fa5ed884bdcfafce59144fad7d929314d24250043ac4bd8437ce0c2c06229b81",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 89231,
+      "usage": {
+        "prompt_tokens": 2946,
+        "total_tokens": 4550,
+        "completion_tokens": 1604,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 940
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "utilities",
+                    "reason": "Patient reports the power was off twice this month for a day each time and is unsure refrigerated insulin stayed cold, so nightly insulin glargine storage is at risk.",
+                    "evidence": [
+                      "turn:T02",
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "medical_certificate_utilities",
+                    "resource_record_id": null,
+                    "text": "Complete the utility medical certification form to delay disconnection while refrigerated insulin is needed (limited duration; verify current rule)."
+                  },
+                  {
+                    "category": "utility_assistance",
+                    "resource_record_id": null,
+                    "text": "Screen for LIHEAP utility assistance through CEDA/Cook County to help restore and maintain power; check current funding window."
+                  },
+                  {
+                    "category": "med_assistance_program",
+                    "resource_record_id": null,
+                    "text": "Ask the pharmacy about insulin storage options or a lower-cost equivalent if refrigeration remains unreliable."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "A Tuesday 10:00 AM endocrinology visit conflicts with warehouse work 6 AM\u20132 PM and the patient loses hours with no sick days, so they may miss it again.",
+                    "evidence": [
+                      "turn:T05",
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask endocrinology for a later morning or evening appointment that does not conflict with the 6 AM\u20132 PM shift."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "If the patient has another recurring medical trip, see if the endocrinology visit can be scheduled the same day/campus or via telehealth if no exam is needed."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Thursday 2:00 PM class starts at the patient's shift end time (6 AM\u20132 PM), with no sick days, making weekly attendance difficult.",
+                    "evidence": [
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Request a later class time or a different day that fits after the warehouse shift, or ask whether a make-up/online option exists."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "See if the diabetes class can be paired with an existing medical visit day to reduce separate trips and time off work."
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

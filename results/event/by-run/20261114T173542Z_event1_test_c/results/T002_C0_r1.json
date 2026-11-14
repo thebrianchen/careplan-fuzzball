@@ -1,0 +1,162 @@
+{
+  "case_id": "T002",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "Pulmonary rehab requires traveling to the hospital twice a week for eight weeks, but the patient already reports that reaching this visit took two buses (Chicago Avenue then Pulaski) and 1.5 hours, leaving them exhausted before arrival, with only occasional rides from a working nephew.",
+            "evidence": [
+              "turn:T04",
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "nemt",
+            "text": "Arrange Medicaid non-emergency medical transportation for the twice-weekly rehab trips; managed-care members call the number on the back of the plan card, fee-for-service uses Transdev.",
+            "resource_record_id": null
+          },
+          {
+            "category": "schedule_change",
+            "text": "Ask the pulmonary rehab program for a different day or later time that lines up with an available ride; chair/slot times are limited so frame as a request.",
+            "resource_record_id": null
+          },
+          {
+            "category": "paratransit",
+            "text": "Apply for ADA Paratransit certification through the Northern Illinois Transit Authority (312-663-HELP) if the oxygen-dependent condition prevents fixed-route bus use; note certification is not immediate.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3114,
+    "completion_tokens": 1177
+  },
+  "latency_ms": 57140,
+  "wall_s": 57.17,
+  "log": [
+    {
+      "prompt_sha256": "c69269fd92455566a0a48cb6d6fb9ef73fac1426214b6f761931026b7b67359d",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 57140,
+      "usage": {
+        "prompt_tokens": 3114,
+        "total_tokens": 4291,
+        "completion_tokens": 1177,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 759
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Pulmonary rehab requires traveling to the hospital twice a week for eight weeks, but the patient already reports that reaching this visit took two buses (Chicago Avenue then Pulaski) and 1.5 hours, leaving them exhausted before arrival, with only occasional rides from a working nephew.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "text": "Arrange Medicaid non-emergency medical transportation for the twice-weekly rehab trips; managed-care members call the number on the back of the plan card, fee-for-service uses Transdev.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask the pulmonary rehab program for a different day or later time that lines up with an available ride; chair/slot times are limited so frame as a request.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "paratransit",
+                    "text": "Apply for ADA Paratransit certification through the Northern Illinois Transit Authority (312-663-HELP) if the oxygen-dependent condition prevents fixed-route bus use; note certification is not immediate.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

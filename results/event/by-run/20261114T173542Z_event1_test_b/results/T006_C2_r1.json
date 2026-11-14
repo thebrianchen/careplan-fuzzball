@@ -1,0 +1,261 @@
+{
+  "case_id": "T006",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "med_cost",
+            "reason": "Specialty-tier copay of $650/month for 12 weeks may be unaffordable despite the fill cap, and the patient is already stretched by work doubles.",
+            "evidence": [
+              "med:1",
+              "turn:T01"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "med_assistance_program",
+            "resource_record_id": null,
+            "text": "Pharmacy or social work screens for manufacturer copay assistance or a cheaper formulary equivalent for sofosbuvir-velpatasvir."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "blocked",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "Works 3\u201311 PM Tue\u2013Sat, so the Wednesday 6 PM group is during a shift; only Sun/Mon are off and he prefers mornings ending before 2.",
+            "evidence": [
+              "turn:T06",
+              "turn:T08"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask behavioral health for a morning alcohol group ending before 2 PM, or a Sunday/Monday slot matching his days off."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 2,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T006"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T006"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T006"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T006"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T006"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 10496,
+    "completion_tokens": 3126
+  },
+  "latency_ms": 163122,
+  "wall_s": 163.16,
+  "log": [
+    {
+      "prompt_sha256": "2d039ec1a471e58418170c181c398f9e839fead50c4fae4a389675a5d3c31b3d",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 30009,
+      "usage": {
+        "prompt_tokens": 4746,
+        "total_tokens": 5330,
+        "completion_tokens": 584,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 428
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I'll gather the patient record and supporting data now.",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T006"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T006"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T006"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T006"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T006"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 133113,
+      "usage": {
+        "prompt_tokens": 5750,
+        "total_tokens": 8292,
+        "completion_tokens": 2542,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1805
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I have enough evidence. Let me summarize my analysis:\n\n**Patient context:** 44M, commercial high-deductible PPO (deductible met, specialty-tier coinsurance capped at $650/fill), no transport benefit, English-speaking, home near Red Line (Lawrence). Works as a cook 3\u201311 PM Tue\u2013Sat; only Sun/Mon off; prefers mornings ending before 2. Rent rises in January (housing worried but stable now). Kept all prior hepatology appointments via Red Line.\n\n**Item-by-item:**\n- P1 (sofosbuvir-velpatasvir): at_risk \u2014 $650/month tier-5 copay for 12 weeks is a concrete cost burden (med:1 high-cost signal); patient is juggling pharmacy calls while working doubles (turn:T01).\n- P2 (week 4/12 labs): likely_ok \u2014 reaches hospital by Red Line, all prior appointments kept.\n- P3 (Wednesday 6 PM alcohol group): blocked \u2014 directly conflicts with work 3\u201311 PM Tue\u2013Sat; patient said mornings ending before 2 work, Sun/Mon are days off (turn:T06, turn:T08).\n- P4 (vaccines): likely_ok \u2014 first doses given today, no barrier.\n- P5 (SVR12 lab ~2027-04): likely_ok \u2014 one-time future lab, transport already demonstrated.\n\nNo transit tool needed (no scheduled facility appointment conflicts; transport shown to work), and find_resources isn't needed since the fixes are schedule/program-based.",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "med_cost",
+                    "reason": "Specialty-tier copay of $650/month for 12 weeks may be unaffordable despite the fill cap, and the patient is already stretched by work doubles.",
+                    "evidence": [
+                      "med:1",
+                      "turn:T01"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "med_assistance_program",
+                    "resource_record_id": null,
+                    "text": "Pharmacy or social work screens for manufacturer copay assistance or a cheaper formulary equivalent for sofosbuvir-velpatasvir."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "blocked",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Works 3\u201311 PM Tue\u2013Sat, so the Wednesday 6 PM group is during a shift; only Sun/Mon are off and he prefers mornings ending before 2.",
+                    "evidence": [
+                      "turn:T06",
+                      "turn:T08"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask behavioral health for a morning alcohol group ending before 2 PM, or a Sunday/Monday slot matching his days off."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

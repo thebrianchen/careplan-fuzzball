@@ -1,0 +1,392 @@
+{
+  "case_id": "D007",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "Recurring 8:00 AM cardiac rehab 3x/week is hard: grandson works all day (no daytime driver), and tract has high no-vehicle share.",
+            "evidence": [
+              "turn:T08",
+              "tract:no_vehicle_share",
+              "screener:transportation"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask cardiac rehab for a later start time or a day that matches an available ride; chair times are limited so frame as a request."
+          },
+          {
+            "category": "ada_paratransit",
+            "resource_record_id": null,
+            "text": "If a health condition prevents using fixed-route bus/train, apply for ADA Paratransit certification (312-663-HELP, weekdays 8:30 am-5:00 pm); rides must be reserved in advance."
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "Schedule rehab on the same day/campus as another existing visit to reduce trips, if clinically appropriate."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "med_cost",
+            "reason": "Empagliflozin is tier 4 with a $47/month copay, above the $30 threshold; Original Medicare Part D with no supplemental plan makes ongoing cost a hardship.",
+            "evidence": [
+              "med:2"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "med_assistance_program",
+            "resource_record_id": null,
+            "text": "Screen for Medicare Part D Extra Help (low-income subsidy) through the pharmacy or social work; prescriber can also check for a cheaper formulary equivalent or manufacturer assistance."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 4,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-D007"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-D007"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-D007"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-D007"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-D007"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031681000"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 23697,
+    "completion_tokens": 3567
+  },
+  "latency_ms": 221238,
+  "wall_s": 221.28,
+  "log": [
+    {
+      "prompt_sha256": "eec14b84fa179c9944cbc4364b12762330f3f0f445ee4f80b79755e3198ca63a",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 20561,
+      "usage": {
+        "prompt_tokens": 4590,
+        "total_tokens": 4869,
+        "completion_tokens": 279,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 122
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I'll gather the patient record and supporting evidence in parallel.",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-D007"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-D007"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-D007"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-D007"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-D007"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 53580,
+      "usage": {
+        "prompt_tokens": 5550,
+        "total_tokens": 6084,
+        "completion_tokens": 534,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 486
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "Now let me check the neighborhood profile for transport context.",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031681000"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 118637,
+      "usage": {
+        "prompt_tokens": 6372,
+        "total_tokens": 8503,
+        "completion_tokens": 2131,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1414
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I have enough evidence. Let me submit the assessment.\n\n**Reasoning summary:**\n- **P1 (cardiac rehab MWF 8:00 AM):** at_risk for transport \u2014 recurring 8:00 AM trips 3\u00d7/week for 12 weeks; patient is Original Medicare with no transport benefit; grandson works all day (no daytime driver); tract has high no-vehicle share (0.451).\n- **P2 (2 g sodium diet):** likely_ok \u2014 screener shows no food worry and food never ran out (today's date), no fresh-food barrier reported by patient.\n- **P3 (empagliflozin):** at_risk for med_cost \u2014 tier 4, $47/month copay (above $30 threshold), Original Medicare Part D no supplemental.\n- **P4 (daily weight):** likely_ok \u2014 patient already weighs daily and logs it (turn T04).",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Recurring 8:00 AM cardiac rehab 3x/week is hard: Original Medicare has no transport benefit, grandson works all day (no daytime driver), and tract has high no-vehicle share.",
+                    "evidence": [
+                      "turn:T08",
+                      "get_patient coverage transport_benefit no",
+                      "tract:no_vehicle_share",
+                      "screener:transportation"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask cardiac rehab for a later start time or a day that matches an available ride; chair times are limited so frame as a request."
+                  },
+                  {
+                    "category": "ada_paratransit",
+                    "resource_record_id": null,
+                    "text": "If a health condition prevents using fixed-route bus/train, apply for ADA Paratransit certification (312-663-HELP, weekdays 8:30 am-5:00 pm); rides must be reserved in advance."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Schedule rehab on the same day/campus as another existing visit to reduce trips, if clinically appropriate."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "med_cost",
+                    "reason": "Empagliflozin is tier 4 with a $47/month copay, above the $30 threshold; Original Medicare Part D with no supplemental plan makes ongoing cost a hardship.",
+                    "evidence": [
+                      "med:2"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "med_assistance_program",
+                    "resource_record_id": null,
+                    "text": "Screen for Medicare Part D Extra Help (low-income subsidy) through the pharmacy or social work; prescriber can also check for a cheaper formulary equivalent or manufacturer assistance."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 28460,
+      "usage": {
+        "prompt_tokens": 7185,
+        "total_tokens": 7808,
+        "completion_tokens": 623,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 121
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Recurring 8:00 AM cardiac rehab 3x/week is hard: grandson works all day (no daytime driver), and tract has high no-vehicle share.",
+                    "evidence": [
+                      "turn:T08",
+                      "tract:no_vehicle_share",
+                      "screener:transportation"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask cardiac rehab for a later start time or a day that matches an available ride; chair times are limited so frame as a request."
+                  },
+                  {
+                    "category": "ada_paratransit",
+                    "resource_record_id": null,
+                    "text": "If a health condition prevents using fixed-route bus/train, apply for ADA Paratransit certification (312-663-HELP, weekdays 8:30 am-5:00 pm); rides must be reserved in advance."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Schedule rehab on the same day/campus as another existing visit to reduce trips, if clinically appropriate."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "med_cost",
+                    "reason": "Empagliflozin is tier 4 with a $47/month copay, above the $30 threshold; Original Medicare Part D with no supplemental plan makes ongoing cost a hardship.",
+                    "evidence": [
+                      "med:2"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "med_assistance_program",
+                    "resource_record_id": null,
+                    "text": "Screen for Medicare Part D Extra Help (low-income subsidy) through the pharmacy or social work; prescriber can also check for a cheaper formulary equivalent or manufacturer assistance."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

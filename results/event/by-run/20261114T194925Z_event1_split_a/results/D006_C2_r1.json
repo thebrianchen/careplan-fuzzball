@@ -1,0 +1,395 @@
+{
+  "case_id": "D006",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "med_cost",
+            "reason": "Patient is uninsured and stopped tiotropium because it costs over $400/month; drug is tier 5 at $420/month with a 45-day refill gap, so restarting as written is unaffordable.",
+            "evidence": [
+              "turn:T02",
+              "med:1"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "med_assistance_program",
+            "resource_record_id": null,
+            "text": "Screen for manufacturer patient-assistance or a lower-cost inhaled bronchodilator/formulary switch; patient is uninsured so Extra Help does not apply."
+          },
+          {
+            "category": "fqhc_sliding_fee",
+            "resource_record_id": "HC15236",
+            "text": "ACCESS Paul and Mimi Francis Westside Family Health Center, 3752 W 16th St; sliding-fee discounts for uninsured, open about 52 h/week; call 773-762-2435."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "housing",
+            "reason": "Patient is staying on a friend's couch with uncertain length of stay and a positive housing-instability screener; home oxygen setup needs a stable address, power, and space, so qualification/setup may fail.",
+            "evidence": [
+              "turn:T04",
+              "screener:living_situation"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "housing",
+            "resource_record_id": null,
+            "text": "Resolve housing first: refer to social work to secure a stable address before ordering home oxygen; oxygen suppliers require a durable, serviceable location."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 4,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-D006"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-D006"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-D006"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-D006"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-D006"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031290900",
+        "need": "med_cost"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031290900",
+        "need": "housing"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 23630,
+    "completion_tokens": 3783
+  },
+  "latency_ms": 188096,
+  "wall_s": 188.23,
+  "log": [
+    {
+      "prompt_sha256": "63008d265e4e73d521dea179717923b50c2363ee5252be8e973c185cc017bd2c",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 6906,
+      "usage": {
+        "prompt_tokens": 4502,
+        "total_tokens": 4694,
+        "completion_tokens": 192,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 46
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-D006"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-D006"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-D006"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-D006"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-D006"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 61381,
+      "usage": {
+        "prompt_tokens": 5490,
+        "total_tokens": 6565,
+        "completion_tokens": 1075,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 957
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I have the core data. Let me pull community resources for the two flagged needs (medication cost and housing).",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031290900",
+            "need": "med_cost"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031290900",
+            "need": "housing"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 101337,
+      "usage": {
+        "prompt_tokens": 6530,
+        "total_tokens": 8463,
+        "completion_tokens": 1933,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1445
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "med_cost",
+                    "reason": "Patient is uninsured and stopped tiotropium because it costs over $400/month; drug is tier 5 at $420/month with a 45-day refill gap, so restarting as written is unaffordable.",
+                    "evidence": [
+                      "turn:T02",
+                      "med:1",
+                      "coverage:none"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "med_assistance_program",
+                    "resource_record_id": null,
+                    "text": "Screen for manufacturer patient-assistance or a lower-cost inhaled bronchodilator/formulary switch; patient is uninsured so Extra Help does not apply."
+                  },
+                  {
+                    "category": "fqhc_sliding_fee",
+                    "resource_record_id": "HC15236",
+                    "text": "ACCESS Paul and Mimi Francis Westside Family Health Center, 3752 W 16th St; sliding-fee discounts for uninsured, open about 52 h/week; call 773-762-2435."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "housing",
+                    "reason": "Patient is staying on a friend's couch with uncertain length of stay and a positive housing-instability screener; home oxygen setup needs a stable address, power, and space, so qualification/setup may fail.",
+                    "evidence": [
+                      "turn:T04",
+                      "screener:living_situation"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "housing",
+                    "resource_record_id": null,
+                    "text": "Resolve housing first: refer to social work to secure a stable address before ordering home oxygen; oxygen suppliers require a durable, serviceable location."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 18472,
+      "usage": {
+        "prompt_tokens": 7108,
+        "total_tokens": 7691,
+        "completion_tokens": 583,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 100
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "med_cost",
+                    "reason": "Patient is uninsured and stopped tiotropium because it costs over $400/month; drug is tier 5 at $420/month with a 45-day refill gap, so restarting as written is unaffordable.",
+                    "evidence": [
+                      "turn:T02",
+                      "med:1"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "med_assistance_program",
+                    "resource_record_id": null,
+                    "text": "Screen for manufacturer patient-assistance or a lower-cost inhaled bronchodilator/formulary switch; patient is uninsured so Extra Help does not apply."
+                  },
+                  {
+                    "category": "fqhc_sliding_fee",
+                    "resource_record_id": "HC15236",
+                    "text": "ACCESS Paul and Mimi Francis Westside Family Health Center, 3752 W 16th St; sliding-fee discounts for uninsured, open about 52 h/week; call 773-762-2435."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "housing",
+                    "reason": "Patient is staying on a friend's couch with uncertain length of stay and a positive housing-instability screener; home oxygen setup needs a stable address, power, and space, so qualification/setup may fail.",
+                    "evidence": [
+                      "turn:T04",
+                      "screener:living_situation"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "housing",
+                    "resource_record_id": null,
+                    "text": "Resolve housing first: refer to social work to secure a stable address before ordering home oxygen; oxygen suppliers require a durable, serviceable location."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

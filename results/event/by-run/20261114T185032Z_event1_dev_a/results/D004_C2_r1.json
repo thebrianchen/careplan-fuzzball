@@ -1,0 +1,439 @@
+{
+  "case_id": "D004",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "language_literacy",
+            "reason": "Titration schedule printed in English, but the patient reads Spanish and his usual translator (his son) is away at school.",
+            "evidence": [
+              "turn:T04",
+              "turn:T02"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "interpreter",
+            "resource_record_id": null,
+            "text": "Use the hospital interpreter service and provide the losartan titration schedule in Spanish / plain language so the patient can follow dose changes."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "language_literacy",
+            "reason": "Patient portal app is English-only and the patient does not know where to enter home BP readings.",
+            "evidence": [
+              "turn:T06",
+              "turn:T05"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "interpreter",
+            "resource_record_id": null,
+            "text": "Provide translated, plain-language portal instructions, or allow the patient to call in / bring written BP readings instead of portal entry."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "language_literacy",
+            "reason": "Kidney-friendly diet handout is in English; patient prefers Spanish and his translator (son) is away.",
+            "evidence": [
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "interpreter",
+            "resource_record_id": null,
+            "text": "Give the renal diet handout translated into Spanish, or review it with an interpreter and the renal dietitian."
+          }
+        ]
+      }
+    ]
+  },
+  "error": null,
+  "steps": 5,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-D004"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-D004"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-D004"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-D004"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-D004"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031610300"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031610300",
+        "need": "language"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 28957,
+    "completion_tokens": 4808
+  },
+  "latency_ms": 255853,
+  "wall_s": 255.9,
+  "log": [
+    {
+      "prompt_sha256": "9f999e9a87ce50e01c895412f9c5a6565ffd9fb31fad5e1d4a105ffe5d00ad68",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 22223,
+      "usage": {
+        "prompt_tokens": 4579,
+        "total_tokens": 4982,
+        "completion_tokens": 403,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 246
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I'll gather the patient record and all relevant evidence first.",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-D004"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-D004"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-D004"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-D004"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-D004"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 26132,
+      "usage": {
+        "prompt_tokens": 5260,
+        "total_tokens": 5709,
+        "completion_tokens": 449,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 411
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031610300"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 64479,
+      "usage": {
+        "prompt_tokens": 6023,
+        "total_tokens": 7148,
+        "completion_tokens": 1125,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1077
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031610300",
+            "need": "language"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 126823,
+      "usage": {
+        "prompt_tokens": 6087,
+        "total_tokens": 8411,
+        "completion_tokens": 2324,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1547
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I have all the evidence I need. Let me summarize my reasoning before submitting:\n\n**Patient context:** 51M, Spanish-preferred (language: es), commercial employer PPO with no transport benefit, home tract 17031610300 (no-vehicle share 25%, lack of transit above county 75th percentile). CKD 3a + hypertension, on losartan 25 mg (tier 1, $10 copay, no refill gaps). Screener: no food/housing/utility problems, no transportation problem reported. He attended today's visit (kept). Transcript: he asked for Spanish papers (son, his usual translator, is away at school); the patient portal app is English-only and he doesn't know where to enter BP numbers; his wife is home and helps with pills.\n\nAssessment per item:\n- **P1 (losartan titration, printed English schedule):** at_risk \u2014 language/literacy barrier; English schedule, patient reads Spanish, translator away.\n- **P2 (home BP + portal):** at_risk \u2014 language/digital access; portal is English-only, he doesn't know where to type readings.\n- **P3 (nephrology referral in 3 months):** likely_ok \u2014 no appointment yet to test transit, screener reports no transportation problem, he kept today's visit; neighborhood transit signal alone isn't enough to flag.\n- **P4 (sodium limits, English kidney-diet handout):** at_risk \u2014 language barrier; English handout, Spanish-preferred patient, son away.\n\nNow submitting.",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "language_literacy",
+                    "reason": "Titration schedule printed in English, but the patient reads Spanish and his usual translator (his son) is away at school.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T02",
+                      "patient:language es"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "interpreter",
+                    "resource_record_id": null,
+                    "text": "Use the hospital interpreter service and provide the losartan titration schedule in Spanish / plain language so the patient can follow dose changes."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "language_literacy",
+                    "reason": "Patient portal app is English-only and the patient does not know where to enter home BP readings.",
+                    "evidence": [
+                      "turn:T06",
+                      "turn:T05"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "interpreter",
+                    "resource_record_id": null,
+                    "text": "Provide translated, plain-language portal instructions, or allow the patient to call in / bring written BP readings instead of portal entry."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "language_literacy",
+                    "reason": "Kidney-friendly diet handout is in English; patient prefers Spanish and his translator (son) is away.",
+                    "evidence": [
+                      "turn:T04",
+                      "patient:language es"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "interpreter",
+                    "resource_record_id": null,
+                    "text": "Give the renal diet handout translated into Spanish, or review it with an interpreter and the renal dietitian."
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 5,
+      "latency_ms": 16196,
+      "usage": {
+        "prompt_tokens": 7008,
+        "total_tokens": 7515,
+        "completion_tokens": 507,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 79
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "language_literacy",
+                    "reason": "Titration schedule printed in English, but the patient reads Spanish and his usual translator (his son) is away at school.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T02"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "interpreter",
+                    "resource_record_id": null,
+                    "text": "Use the hospital interpreter service and provide the losartan titration schedule in Spanish / plain language so the patient can follow dose changes."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "language_literacy",
+                    "reason": "Patient portal app is English-only and the patient does not know where to enter home BP readings.",
+                    "evidence": [
+                      "turn:T06",
+                      "turn:T05"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "interpreter",
+                    "resource_record_id": null,
+                    "text": "Provide translated, plain-language portal instructions, or allow the patient to call in / bring written BP readings instead of portal entry."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "language_literacy",
+                    "reason": "Kidney-friendly diet handout is in English; patient prefers Spanish and his translator (son) is away.",
+                    "evidence": [
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "interpreter",
+                    "resource_record_id": null,
+                    "text": "Give the renal diet handout translated into Spanish, or review it with an interpreter and the renal dietitian."
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,274 @@
+{
+  "case_id": "D007",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "med_cost",
+            "reason": "Empagliflozin is tier 4 at $47/month, above the high-cost copay threshold.",
+            "evidence": [
+              "med:2"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "med_cost_help",
+            "resource_record_id": null,
+            "text": "Screen for Medicare Part D Extra Help (low-income subsidy) at the pharmacy or via social work; ask the prescriber about a lower-tier SGLT2 inhibitor or formulary switch."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 4,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-D007"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-D007"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-D007"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-D007"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-D007"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031681000"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 23571,
+    "completion_tokens": 3926
+  },
+  "latency_ms": 210591,
+  "wall_s": 210.62,
+  "log": [
+    {
+      "prompt_sha256": "eec14b84fa179c9944cbc4364b12762330f3f0f445ee4f80b79755e3198ca63a",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 6457,
+      "usage": {
+        "prompt_tokens": 4590,
+        "total_tokens": 4780,
+        "completion_tokens": 190,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 35
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I'll gather the patient's full record first.",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-D007"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-D007"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-D007"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-D007"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-D007"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 30555,
+      "usage": {
+        "prompt_tokens": 5548,
+        "total_tokens": 5978,
+        "completion_tokens": 430,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 392
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031681000"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 158940,
+      "usage": {
+        "prompt_tokens": 6360,
+        "total_tokens": 9338,
+        "completion_tokens": 2978,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 2531
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I have all the evidence I need. Here's my reasoning:\n\n- **P1 (cardiac rehab MWF 8 AM):** Patient's current screener reports no transportation problem, and the tract has robust early-morning transit (44 early-service stops). No specific evidence blocks attendance \u2192 likely_ok.\n- **P2 (2 g sodium diet):** Patient reports never worrying about food and never running out; tract-level food-access signals don't override the patient's own report \u2192 likely_ok.\n- **P3 (empagliflozin):** Tier 4, $47/month copay \u2014 above the high-cost threshold; patient is on Original Medicare Part D. Concrete med-cost risk \u2192 at_risk. Alternative: Extra Help / formulary switch / manufacturer assistance.\n- **P4 (daily weights):** Patient is already weighing each morning and logging it (turn T04) \u2192 likely_ok.\n\nNo cardiac-rehab appointment is scheduled yet, so there's no facility ref to run a transit trip on.",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "[{\"item_id\": \"P1\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}, {\"item_id\": \"P2\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}, {\"item_id\": \"P3\", \"status\": \"at_risk\", \"barriers\": [{\"barrier\": \"med_cost\", \"reason\": \"Empagliflozin is tier 4 at $47/month, above the high-cost copay threshold.\", \"evidence\": [\"med:2\"]}], \"alternatives\": [{\"category\": \"med_cost_help\", \"resource_record_id\": null, \"text\": \"Screen for Medicare Part D Extra Help (low-income subsidy) at the pharmacy or via social work; ask the prescriber about a lower-tier SGLT2 inhibitor or formulary switch.\"}]}], {\"item_id\": \"P4\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}]"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 14639,
+      "usage": {
+        "prompt_tokens": 7073,
+        "total_tokens": 7401,
+        "completion_tokens": 328,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 91
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "med_cost",
+                    "reason": "Empagliflozin is tier 4 at $47/month, above the high-cost copay threshold.",
+                    "evidence": [
+                      "med:2"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "med_cost_help",
+                    "resource_record_id": null,
+                    "text": "Screen for Medicare Part D Extra Help (low-income subsidy) at the pharmacy or via social work; ask the prescriber about a lower-tier SGLT2 inhibitor or formulary switch."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

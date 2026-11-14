@@ -1,0 +1,407 @@
+{
+  "case_id": "T003",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "Cannot drive; daughter works 7-5 and is unavailable; unsteady on bus transfer with walker; Original Medicare covers no rides.",
+            "evidence": [
+              "turn:T04",
+              "turn:T06",
+              "screener:transportation",
+              "tract:no_vehicle_share",
+              "tract:places_lacktrpt"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "paratransit",
+            "resource_record_id": null,
+            "text": "Apply for ADA Paratransit certification (312-663-HELP) for pre-booked rides; federal decision within 21 days."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask rehab for a later chair time or day that matches an available ride."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 5,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T003"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T003"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T003"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T003"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T003"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031491400"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031491400",
+        "need": "transport",
+        "days": [
+          "Mon",
+          "Wed",
+          "Fri"
+        ],
+        "start": "07:00",
+        "end": "10:00"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 31196,
+    "completion_tokens": 4445
+  },
+  "latency_ms": 243118,
+  "wall_s": 243.16,
+  "log": [
+    {
+      "prompt_sha256": "c07466fcb0c3dcfa3ea4fb455705ea7e7710d1347471067869ce343cafc8640b",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 5391,
+      "usage": {
+        "prompt_tokens": 4784,
+        "total_tokens": 4943,
+        "completion_tokens": 159,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 13
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T003"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T003"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T003"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T003"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T003"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 57645,
+      "usage": {
+        "prompt_tokens": 5813,
+        "total_tokens": 6695,
+        "completion_tokens": 882,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 844
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031491400"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 50772,
+      "usage": {
+        "prompt_tokens": 6647,
+        "total_tokens": 7497,
+        "completion_tokens": 850,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 756
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031491400",
+            "need": "transport",
+            "days": [
+              "Mon",
+              "Wed",
+              "Fri"
+            ],
+            "start": "07:00",
+            "end": "10:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 114103,
+      "usage": {
+        "prompt_tokens": 6757,
+        "total_tokens": 8856,
+        "completion_tokens": 2099,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1756
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Cannot drive; daughter works 7-5 and is unavailable; unsteady on bus transfer with walker; Original Medicare covers no rides.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T06",
+                      "coverage:transport_benefit no",
+                      "screener:transportation",
+                      "tract:no_vehicle_share",
+                      "tract:places_lacktrpt"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "paratransit",
+                    "resource_record_id": null,
+                    "text": "Apply for ADA Paratransit certification (312-663-HELP) for pre-booked rides; federal decision within 21 days."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask rehab for a later chair time or day that matches an available ride."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 5,
+      "latency_ms": 15207,
+      "usage": {
+        "prompt_tokens": 7195,
+        "total_tokens": 7650,
+        "completion_tokens": 455,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 122
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Cannot drive; daughter works 7-5 and is unavailable; unsteady on bus transfer with walker; Original Medicare covers no rides.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T06",
+                      "screener:transportation",
+                      "tract:no_vehicle_share",
+                      "tract:places_lacktrpt"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "paratransit",
+                    "resource_record_id": null,
+                    "text": "Apply for ADA Paratransit certification (312-663-HELP) for pre-booked rides; federal decision within 21 days."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask rehab for a later chair time or day that matches an available ride."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

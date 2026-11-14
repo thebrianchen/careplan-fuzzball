@@ -1,0 +1,465 @@
+{
+  "case_id": "T001",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "caregiving",
+            "reason": "Thursday afternoons no one watches the kids after school; daughter works until 6:30.",
+            "evidence": [
+              "turn:T02",
+              "turn:T04",
+              "appt:2",
+              "appt:5",
+              "appt:8"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Ask the dialysis unit for a later Thursday chair time that fits after school pickup.",
+            "resource_record_id": null
+          },
+          {
+            "category": "dialysis_social_worker",
+            "text": "Message the unit social worker for Thursday caregiving/transport help and benefits screening.",
+            "resource_record_id": null
+          },
+          {
+            "category": "home_dialysis_evaluation",
+            "text": "Refer to home dialysis to discuss peritoneal or home hemodialysis as a clinical conversation.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "food_access",
+            "reason": "Food worry is positive and the tract has high food insecurity; she cooks the kids' processed meals.",
+            "evidence": [
+              "screener:food_worry",
+              "tract:places_foodinsecu",
+              "turn:T08"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "renal_dietitian",
+            "text": "Unit dietitian rebuilds the renal diet around foods she can actually obtain and afford.",
+            "resource_record_id": null
+          },
+          {
+            "category": "snap",
+            "text": "Apply for SNAP through Illinois ABE; very low income may get expedited benefits in 7 days.",
+            "resource_record_id": null
+          },
+          {
+            "category": "food_pantry",
+            "text": "Sanad Organization food pantry, 6248 S Spaulding Ave; call ahead for hours and pair with the renal dietitian.",
+            "resource_record_id": "resource:PLcf547c4e"
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "med_cost",
+            "reason": "Cinacalcet is tier 3 at $45/month with no Extra Help and a 21-day refill gap.",
+            "evidence": [
+              "med:3"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "med_cost_help",
+            "text": "Pharmacy or social work screens for Medicare Extra Help; consider a formulary switch or manufacturer assistance.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 4,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T001"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T001"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T001"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T001",
+        "dept": "dialysis",
+        "window_days": 90
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T001"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031360500"
+      },
+      "ok": false
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031660500"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_transit_trip",
+      "args": {
+        "appt_ref": "appt:1",
+        "arrive_by": "11:30"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031660500",
+        "need": "food",
+        "days": [
+          "Mon",
+          "Wed",
+          "Fri",
+          "Sun"
+        ]
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031660500",
+        "need": "med_cost"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 28618,
+    "completion_tokens": 3591
+  },
+  "latency_ms": 175548,
+  "wall_s": 218.96,
+  "log": [
+    {
+      "prompt_sha256": "7738a975baeec8b8533b908513298e1c77dabc1026ed787da8da589afe8a10de",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 10921,
+      "usage": {
+        "prompt_tokens": 4804,
+        "total_tokens": 5051,
+        "completion_tokens": 247,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 42
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T001"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T001"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T001"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T001",
+            "dept": "dialysis",
+            "window_days": 90
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T001"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031360500"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 8775,
+      "usage": {
+        "prompt_tokens": 6703,
+        "total_tokens": 6848,
+        "completion_tokens": 145,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 61
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031660500"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_transit_trip",
+          "args": {
+            "appt_ref": "appt:1",
+            "arrive_by": "11:30"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 55819,
+      "usage": {
+        "prompt_tokens": 7595,
+        "total_tokens": 8609,
+        "completion_tokens": 1014,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 899
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031660500",
+            "need": "food",
+            "days": [
+              "Mon",
+              "Wed",
+              "Fri",
+              "Sun"
+            ]
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031660500",
+            "need": "med_cost"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 100033,
+      "usage": {
+        "prompt_tokens": 9516,
+        "total_tokens": 11701,
+        "completion_tokens": 2185,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1550
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "caregiving",
+                    "reason": "Thursday afternoons no one watches the kids after school; daughter works until 6:30.",
+                    "evidence": [
+                      "turn:T02",
+                      "turn:T04",
+                      "appt:2",
+                      "appt:5",
+                      "appt:8"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask the dialysis unit for a later Thursday chair time that fits after school pickup.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "dialysis_social_worker",
+                    "text": "Message the unit social worker for Thursday caregiving/transport help and benefits screening.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "home_dialysis_evaluation",
+                    "text": "Refer to home dialysis to discuss peritoneal or home hemodialysis as a clinical conversation.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "Food worry is positive and the tract has high food insecurity; she cooks the kids' processed meals.",
+                    "evidence": [
+                      "screener:food_worry",
+                      "tract:places_foodinsecu",
+                      "turn:T08"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "renal_dietitian",
+                    "text": "Unit dietitian rebuilds the renal diet around foods she can actually obtain and afford.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "snap",
+                    "text": "Apply for SNAP through Illinois ABE; very low income may get expedited benefits in 7 days.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "food_pantry",
+                    "text": "Sanad Organization food pantry, 6248 S Spaulding Ave; call ahead for hours and pair with the renal dietitian.",
+                    "resource_record_id": "resource:PLcf547c4e"
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "med_cost",
+                    "reason": "Cinacalcet is tier 3 at $45/month with no Extra Help and a 21-day refill gap.",
+                    "evidence": [
+                      "med:3"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "med_cost_help",
+                    "text": "Pharmacy or social work screens for Medicare Extra Help; consider a formulary switch or manufacturer assistance.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

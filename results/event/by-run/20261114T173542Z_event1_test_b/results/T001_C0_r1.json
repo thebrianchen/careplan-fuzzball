@@ -1,0 +1,162 @@
+{
+  "case_id": "T001",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "caregiving",
+            "reason": "The Thursday 11:30 AM session runs until about 3:30 PM, when the grandbabies get out of school at 3; the neighbor who helps on Tuesdays works Thursdays and the patient's daughter works until 6:30, so no one is available for the children during/after Thursday dialysis, which matches the missed and shortened Thursday sessions.",
+            "evidence": [
+              "turn:T02",
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the dialysis unit for an earlier Thursday chair time so the 4-hour session ends before school pickup at 3, or request moving Thursday to a day when the patient has childcare coverage (e.g., keep Saturday)."
+          },
+          {
+            "category": "dialysis_social_worker",
+            "resource_record_id": null,
+            "text": "Message the dialysis unit social worker to assess after-school/childcare support options and any benefits that could help cover Thursday care."
+          },
+          {
+            "category": "home_dialysis_evaluation",
+            "resource_record_id": null,
+            "text": "Discuss a peritoneal or home hemodialysis evaluation as a longer-term option to remove the fixed in-center Thursday schedule, noting it requires space, supplies, training, and home support."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3127,
+    "completion_tokens": 2027
+  },
+  "latency_ms": 112008,
+  "wall_s": 112.03,
+  "log": [
+    {
+      "prompt_sha256": "731cb084562673f7d5d545cfd33cee1e871ec92e1109267275473a5420150544",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 112008,
+      "usage": {
+        "prompt_tokens": 3127,
+        "total_tokens": 5154,
+        "completion_tokens": 2027,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1587
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "caregiving",
+                    "reason": "The Thursday 11:30 AM session runs until about 3:30 PM, when the grandbabies get out of school at 3; the neighbor who helps on Tuesdays works Thursdays and the patient's daughter works until 6:30, so no one is available for the children during/after Thursday dialysis, which matches the missed and shortened Thursday sessions.",
+                    "evidence": [
+                      "turn:T02",
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the dialysis unit for an earlier Thursday chair time so the 4-hour session ends before school pickup at 3, or request moving Thursday to a day when the patient has childcare coverage (e.g., keep Saturday)."
+                  },
+                  {
+                    "category": "dialysis_social_worker",
+                    "resource_record_id": null,
+                    "text": "Message the dialysis unit social worker to assess after-school/childcare support options and any benefits that could help cover Thursday care."
+                  },
+                  {
+                    "category": "home_dialysis_evaluation",
+                    "resource_record_id": null,
+                    "text": "Discuss a peritoneal or home hemodialysis evaluation as a longer-term option to remove the fixed in-center Thursday schedule, noting it requires space, supplies, training, and home support."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

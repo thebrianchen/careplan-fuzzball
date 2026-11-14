@@ -1,0 +1,156 @@
+{
+  "case_id": "D006",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "med_cost",
+            "reason": "The patient stopped the daily inhaler in August because it costs over $400 without insurance, so restarting tiotropium is likely unaffordable.",
+            "evidence": [
+              "turn:T02"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "med_assistance_program",
+            "resource_record_id": null,
+            "text": "Screen for Extra Help/manufacturer assistance or switch to a lower-cost equivalent inhaler before restarting."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "housing",
+            "reason": "The patient is staying on a buddy's couch with an uncertain end date, so there is no stable home or reliable power source for home oxygen setup.",
+            "evidence": [
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "housing",
+            "resource_record_id": null,
+            "text": "Confirm stable housing before ordering home oxygen setup; re-evaluate oxygen needs once the patient has a secure address."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 2825,
+    "completion_tokens": 1659
+  },
+  "latency_ms": 86430,
+  "wall_s": 86.45,
+  "log": [
+    {
+      "prompt_sha256": "70c9593141dbe9f32161bdeeca1ab5af238745755b907fe4ef791337a5eabf14",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 86430,
+      "usage": {
+        "prompt_tokens": 2825,
+        "total_tokens": 4484,
+        "completion_tokens": 1659,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1330
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "med_cost",
+                    "reason": "The patient stopped the daily inhaler in August because it costs over $400 without insurance, so restarting tiotropium is likely unaffordable.",
+                    "evidence": [
+                      "turn:T02"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "med_assistance_program",
+                    "resource_record_id": null,
+                    "text": "Screen for Extra Help/manufacturer assistance or switch to a lower-cost equivalent inhaler before restarting."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "housing",
+                    "reason": "The patient is staying on a buddy's couch with an uncertain end date, so there is no stable home or reliable power source for home oxygen setup.",
+                    "evidence": [
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "housing",
+                    "resource_record_id": null,
+                    "text": "Confirm stable housing before ordering home oxygen setup; re-evaluate oxygen needs once the patient has a secure address."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

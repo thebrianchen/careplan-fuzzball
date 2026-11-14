@@ -1,0 +1,457 @@
+{
+  "case_id": "D002",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "utilities",
+            "reason": "Power shutoffs twice this month put refrigerated insulin at risk.",
+            "evidence": [
+              "turn:T02",
+              "turn:T04",
+              "screener:utilities_shutoff",
+              "med:1",
+              "med:2"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "utility_medical_certificate",
+            "resource_record_id": null,
+            "text": "Clinician signs utility medical certification to delay shutoff due to refrigerated insulin needs."
+          },
+          {
+            "category": "liheap",
+            "resource_record_id": null,
+            "text": "Apply through CEDA for utility bill assistance; income-based, seasonal funding."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "10 AM visit conflicts with 6\u20132 shift; no sick days, loses pay.",
+            "evidence": [
+              "turn:T06",
+              "appt:1"
+            ]
+          },
+          {
+            "barrier": "transport",
+            "reason": "Prior 10 AM endocrinology no-show; neighborhood transit access limited.",
+            "evidence": [
+              "appt:1",
+              "tract:places_lacktrpt"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask endocrinology for a later appointment after 2 PM or a different work-compatible day."
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "Schedule on same day as another visit or use telehealth if exam not needed."
+          },
+          {
+            "category": "medicaid_nemt",
+            "resource_record_id": null,
+            "text": "Call Medicaid MCO number on plan card to request a ride to the appointment."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "2 PM class starts as 6\u20132 shift ends; hard to attend on time.",
+            "evidence": [
+              "turn:T06"
+            ]
+          },
+          {
+            "barrier": "transport",
+            "reason": "Limited neighborhood transit makes getting from work to class difficult.",
+            "evidence": [
+              "tract:places_lacktrpt"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask for a class time after work or on a non-work day."
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "Combine diabetes education with another clinic visit or telehealth session."
+          }
+        ]
+      }
+    ]
+  },
+  "error": null,
+  "steps": 3,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-D002"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-D002"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-D002"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-D002"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-D002"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "placeholder"
+      },
+      "ok": false
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031300900"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_transit_trip",
+      "args": {
+        "appt_ref": "appt:1",
+        "arrive_by": "10:00"
+      },
+      "ok": false
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031300900",
+        "need": "transport",
+        "days": [
+          "Tue"
+        ],
+        "start": "06:00",
+        "end": "10:00"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031300900",
+        "need": "utilities"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 17931,
+    "completion_tokens": 3946
+  },
+  "latency_ms": 168940,
+  "wall_s": 168.99,
+  "log": [
+    {
+      "prompt_sha256": "96f4dfe296b0c33d7c66bf36ce458ba55aa25ace188f661efbcdc2c1c0bd9926",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 9073,
+      "usage": {
+        "prompt_tokens": 4623,
+        "total_tokens": 4827,
+        "completion_tokens": 204,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 23
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I'll gather all the patient evidence in parallel first.",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-D002"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-D002"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-D002"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-D002"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-D002"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "placeholder"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 15796,
+      "usage": {
+        "prompt_tokens": 5676,
+        "total_tokens": 6060,
+        "completion_tokens": 384,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 142
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "Now let me get the tract profile, check transit to the endocrinology clinic, and look up community resources for transport and utilities.",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031300900"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_transit_trip",
+          "args": {
+            "appt_ref": "appt:1",
+            "arrive_by": "10:00"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031300900",
+            "need": "transport",
+            "days": [
+              "Tue"
+            ],
+            "start": "06:00",
+            "end": "10:00"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031300900",
+            "need": "utilities"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 144071,
+      "usage": {
+        "prompt_tokens": 7632,
+        "total_tokens": 10990,
+        "completion_tokens": 3358,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 2701
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I now have all the evidence needed. Let me submit the assessment.",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "utilities",
+                    "reason": "Power shutoffs twice this month put refrigerated insulin at risk.",
+                    "evidence": [
+                      "turn:T02",
+                      "turn:T04",
+                      "screener:utilities_shutoff",
+                      "med:1",
+                      "med:2"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "utility_medical_certificate",
+                    "resource_record_id": null,
+                    "text": "Clinician signs utility medical certification to delay shutoff due to refrigerated insulin needs."
+                  },
+                  {
+                    "category": "liheap",
+                    "resource_record_id": null,
+                    "text": "Apply through CEDA for utility bill assistance; income-based, seasonal funding."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "10 AM visit conflicts with 6\u20132 shift; no sick days, loses pay.",
+                    "evidence": [
+                      "turn:T06",
+                      "appt:1"
+                    ]
+                  },
+                  {
+                    "barrier": "transport",
+                    "reason": "Prior 10 AM endocrinology no-show; neighborhood transit access limited.",
+                    "evidence": [
+                      "appt:1",
+                      "tract:places_lacktrpt"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask endocrinology for a later appointment after 2 PM or a different work-compatible day."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Schedule on same day as another visit or use telehealth if exam not needed."
+                  },
+                  {
+                    "category": "medicaid_nemt",
+                    "resource_record_id": null,
+                    "text": "Call Medicaid MCO number on plan card to request a ride to the appointment."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "2 PM class starts as 6\u20132 shift ends; hard to attend on time.",
+                    "evidence": [
+                      "turn:T06"
+                    ]
+                  },
+                  {
+                    "barrier": "transport",
+                    "reason": "Limited neighborhood transit makes getting from work to class difficult.",
+                    "evidence": [
+                      "tract:places_lacktrpt"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask for a class time after work or on a non-work day."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Combine diabetes education with another clinic visit or telehealth session."
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

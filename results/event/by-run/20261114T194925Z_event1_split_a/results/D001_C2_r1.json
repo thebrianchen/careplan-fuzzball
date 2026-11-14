@@ -1,0 +1,493 @@
+{
+  "case_id": "D001",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "Patient sold car, relies on two buses each way to a distant unit, long days cause missed sessions (3 no-shows); high no-vehicle tract share and screener show no transport.",
+            "evidence": [
+              "turn:T02",
+              "turn:T04",
+              "turn:T06",
+              "appt:2",
+              "appt:3",
+              "appt:5",
+              "tract:no_vehicle_share",
+              "screener:transportation",
+              "transit:appt:1"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "nemt",
+            "resource_record_id": null,
+            "text": "Medicaid NEMT via Lakeshore Community Health Plan (dual coverage, transport benefit yes): call the number on the back of the plan card to book rides to dialysis."
+          },
+          {
+            "category": "dialysis_social_worker",
+            "resource_record_id": null,
+            "text": "Message the DaVita unit social worker to help arrange transport and benefits for the Park Manor chair."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the dialysis unit for a later chair time or a day that matches an available ride."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "food_access",
+            "reason": "Patient eats mostly corner-store chips and lunch meat; real grocery is a bus ride away and they are wiped after dialysis; screener food worry sometimes true and tract food insecurity is high.",
+            "evidence": [
+              "turn:T08",
+              "screener:food_worry",
+              "tract:places_foodinsecu"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "food_pantry",
+            "resource_record_id": "CUR001",
+            "text": "Legler Regional Library Food Pantry (Greater Chicago Food Depository), Thu 16:00-19:00 and Sun 13:00-16:00, on non-dialysis days; call (312) 746-7730."
+          },
+          {
+            "category": "renal_dietitian",
+            "resource_record_id": null,
+            "text": "Ask the dialysis unit dietitian to rebuild the low-potassium/low-phosphorus diet around foods the patient can actually get nearby."
+          },
+          {
+            "category": "snap",
+            "resource_record_id": null,
+            "text": "Apply for SNAP through Illinois ABE (abe.illinois.gov); very low income may qualify for expedited benefits within 7 days."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "A new downtown vascular surgery trip adds to an already-burdened dialysis travel routine; patient is hesitant (\"I'll try\") and has a no-show pattern.",
+            "evidence": [
+              "turn:T14",
+              "turn:T04",
+              "appt:2",
+              "appt:3",
+              "appt:5"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "Schedule the vascular surgery visit on the same day/campus as a dialysis or nephrology visit, or use telehealth if an exam is not needed."
+          },
+          {
+            "category": "nemt",
+            "resource_record_id": null,
+            "text": "Use Medicaid NEMT (Lakeshore Community Health Plan) for the one-time surgery visit; call the number on the plan card to book."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask vascular surgery for an appointment time that lines up with an available ride."
+          }
+        ]
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 4,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-D001"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-D001"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-D001"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-D001"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-D001"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031260300"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_transit_trip",
+      "args": {
+        "appt_ref": "appt:1",
+        "arrive_by": "15:00"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031260300",
+        "need": "food",
+        "days": [
+          "Tue",
+          "Thu",
+          "Sat",
+          "Sun"
+        ]
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031260300",
+        "need": "transport",
+        "days": [
+          "Mon",
+          "Wed",
+          "Fri"
+        ]
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 26712,
+    "completion_tokens": 4648
+  },
+  "latency_ms": 255403,
+  "wall_s": 297.72,
+  "log": [
+    {
+      "prompt_sha256": "0904edb9eaae87930c86d5b0c2d0b67a0d05285828ab44e2bdfaf618acd22f52",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 21473,
+      "usage": {
+        "prompt_tokens": 4782,
+        "total_tokens": 5016,
+        "completion_tokens": 234,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 76
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I'll gather the patient's full record and neighborhood data first.",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-D001"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-D001"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-D001"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-D001"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-D001"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 14222,
+      "usage": {
+        "prompt_tokens": 6245,
+        "total_tokens": 6530,
+        "completion_tokens": 285,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 180
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "Now let me check the neighborhood profile and whether the patient can actually reach the dialysis unit on time by transit.",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031260300"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_transit_trip",
+          "args": {
+            "appt_ref": "appt:1",
+            "arrive_by": "15:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 90354,
+      "usage": {
+        "prompt_tokens": 7231,
+        "total_tokens": 8795,
+        "completion_tokens": 1564,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1402
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "Let me look up community resources for the flagged needs (transport and food access) near the patient's tract, on days they're not in dialysis.",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031260300",
+            "need": "food",
+            "days": [
+              "Tue",
+              "Thu",
+              "Sat",
+              "Sun"
+            ]
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031260300",
+            "need": "transport",
+            "days": [
+              "Mon",
+              "Wed",
+              "Fri"
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 129354,
+      "usage": {
+        "prompt_tokens": 8454,
+        "total_tokens": 11019,
+        "completion_tokens": 2565,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1641
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I have all the evidence I need. Let me submit the assessment.",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Patient sold car, relies on two buses each way to a distant unit, long days cause missed sessions (3 no-shows); high no-vehicle tract share and screener show no transport.",
+                    "evidence": [
+                      "turn:T02",
+                      "turn:T04",
+                      "turn:T06",
+                      "appt:2",
+                      "appt:3",
+                      "appt:5",
+                      "tract:no_vehicle_share",
+                      "screener:transportation",
+                      "transit:appt:1"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Medicaid NEMT via Lakeshore Community Health Plan (dual coverage, transport benefit yes): call the number on the back of the plan card to book rides to dialysis."
+                  },
+                  {
+                    "category": "dialysis_social_worker",
+                    "resource_record_id": null,
+                    "text": "Message the DaVita unit social worker to help arrange transport and benefits for the Park Manor chair."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the dialysis unit for a later chair time or a day that matches an available ride."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "Patient eats mostly corner-store chips and lunch meat; real grocery is a bus ride away and they are wiped after dialysis; screener food worry sometimes true and tract food insecurity is high.",
+                    "evidence": [
+                      "turn:T08",
+                      "screener:food_worry",
+                      "tract:places_foodinsecu"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "food_pantry",
+                    "resource_record_id": "CUR001",
+                    "text": "Legler Regional Library Food Pantry (Greater Chicago Food Depository), Thu 16:00-19:00 and Sun 13:00-16:00, on non-dialysis days; call (312) 746-7730."
+                  },
+                  {
+                    "category": "renal_dietitian",
+                    "resource_record_id": null,
+                    "text": "Ask the dialysis unit dietitian to rebuild the low-potassium/low-phosphorus diet around foods the patient can actually get nearby."
+                  },
+                  {
+                    "category": "snap",
+                    "resource_record_id": null,
+                    "text": "Apply for SNAP through Illinois ABE (abe.illinois.gov); very low income may qualify for expedited benefits within 7 days."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "A new downtown vascular surgery trip adds to an already-burdened dialysis travel routine; patient is hesitant (\"I'll try\") and has a no-show pattern.",
+                    "evidence": [
+                      "turn:T14",
+                      "turn:T04",
+                      "appt:2",
+                      "appt:3",
+                      "appt:5"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Schedule the vascular surgery visit on the same day/campus as a dialysis or nephrology visit, or use telehealth if an exam is not needed."
+                  },
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Use Medicaid NEMT (Lakeshore Community Health Plan) for the one-time surgery visit; call the number on the plan card to book."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask vascular surgery for an appointment time that lines up with an available ride."
+                  }
+                ]
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

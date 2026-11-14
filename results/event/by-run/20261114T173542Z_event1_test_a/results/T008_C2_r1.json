@@ -1,0 +1,201 @@
+{
+  "case_id": "T008",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 2,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T008"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T008"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T008"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T008"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T008"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 10469,
+    "completion_tokens": 1791
+  },
+  "latency_ms": 87899,
+  "wall_s": 87.93,
+  "log": [
+    {
+      "prompt_sha256": "be9f8028c5b9082686bd9d3ee771a011cb58e5d5f2c799b6edd02e25025e3cdf",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 8495,
+      "usage": {
+        "prompt_tokens": 4676,
+        "total_tokens": 4894,
+        "completion_tokens": 218,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 49
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I'll gather the patient's record, problems, medications, appointments, screener, and neighborhood profile all at once.",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T008"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T008"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T008"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T008"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T008"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 79404,
+      "usage": {
+        "prompt_tokens": 5793,
+        "total_tokens": 7366,
+        "completion_tokens": 1573,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 945
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I have all the evidence I need. Let me summarize what I found:\n\n- **Patient:** 68M, Medicare Advantage (Lakeshore Senior HMO), $20 therapy copay, transport benefit unknown. Home tract 17031100200.\n- **Problems:** joint replacement aftercare, artificial right hip, hypertension.\n- **Meds:** aspirin 81 mg ($0), acetaminophen ($0), oxycodone 5 mg ($3/mo), lisinopril ($0) \u2014 all low cost, no refill gaps.\n- **Appointments:** surgery and two home-health PT visits kept; today's ortho visit kept. No 6-week follow-up booked yet (it's a plan item to schedule).\n- **Screener (10/13):** steady housing, no housing problems, food worry never true, **no transportation problem**, no utility shutoff risk.\n- **Transcript:** PT clinic on Northwest Highway is 5 minutes from home (T04); patient can't drive until cleared at 6-week visit but **wife is retired and drives him everywhere** (T05\u201306); ranch home, no stairs, shower chair set up (T08); no red-flag symptoms (T11\u201312).\n\nAssessment per item:\n\n- **P1 (PT 2\u00d7/week):** Transport covered by wife who drives him everywhere; clinic is 5 minutes away; screener shows no transportation problem. \u2192 likely_ok\n- **P2 (aspirin + docusate):** Free/low-cost meds; patient agreed (T10). \u2192 likely_ok\n- **P3 (walking/walker, hip precautions):** Ranch, no stairs, shower chair ready. \u2192 likely_ok\n- **P4 (acetaminophen, oxycodone taper):** Cheap meds; patient only takes oxycodone at night. \u2192 likely_ok\n- **P5 (6-week ortho follow-up + X-ray):** Wife drives; not yet scheduled so no transit check needed; will be cleared to drive at that visit. \u2192 likely_ok\n\nNo item has concrete evidence of a barrier. I'll submit all as likely_ok.",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,249 @@
+{
+  "case_id": "D006",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "med_cost",
+            "reason": "Uninsured; tiotropium costs $420/month (tier 5); patient stopped it in August over cost.",
+            "evidence": [
+              "turn:T02",
+              "med:1"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "med_assistance_program",
+            "resource_record_id": null,
+            "text": "Pharmacy or social work screens for manufacturer patient-assistance or a cheaper equivalent inhaler; offer samples."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "housing",
+            "reason": "Patient on buddy's couch, unsure how long; oxygen setup needs stable housing and power.",
+            "evidence": [
+              "turn:T04",
+              "screener:living_situation"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "housing",
+            "resource_record_id": null,
+            "text": "Social-work referral for housing stabilization; confirm stable address and electricity before oxygen concentrator setup."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 2,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-D006"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-D006"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-D006"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-D006"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-D006"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 10001,
+    "completion_tokens": 2898
+  },
+  "latency_ms": 146825,
+  "wall_s": 146.86,
+  "log": [
+    {
+      "prompt_sha256": "63008d265e4e73d521dea179717923b50c2363ee5252be8e973c185cc017bd2c",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 7684,
+      "usage": {
+        "prompt_tokens": 4502,
+        "total_tokens": 4672,
+        "completion_tokens": 170,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 15
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I'll gather the patient's record data first.",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-D006"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-D006"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-D006"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-D006"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-D006"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 139141,
+      "usage": {
+        "prompt_tokens": 5499,
+        "total_tokens": 8227,
+        "completion_tokens": 2728,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 2351
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I have the full picture. Patient is uninsured, on a buddy's couch (housing unstable), worried about food, stopped tiotropium due to $400/month cost, and reports a bus reaches the lab. Let me submit the assessment.",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "med_cost",
+                    "reason": "Uninsured; tiotropium costs $420/month (tier 5); patient stopped it in August over cost.",
+                    "evidence": [
+                      "turn:T02",
+                      "med:1"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "med_assistance_program",
+                    "resource_record_id": null,
+                    "text": "Pharmacy or social work screens for manufacturer patient-assistance or a cheaper equivalent inhaler; offer samples."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "housing",
+                    "reason": "Patient on buddy's couch, unsure how long; oxygen setup needs stable housing and power.",
+                    "evidence": [
+                      "turn:T04",
+                      "screener:living_situation"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "housing",
+                    "resource_record_id": null,
+                    "text": "Social-work referral for housing stabilization; confirm stable address and electricity before oxygen concentrator setup."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

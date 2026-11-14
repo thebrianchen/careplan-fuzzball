@@ -1,0 +1,322 @@
+{
+  "case_id": "D001",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "The patient reaches Park Manor only by two buses each way for a 3:00 PM chair, leaves home at 1:30 PM and returns around 8:30 PM, and already skips sessions because the trip is too long.",
+            "evidence": [
+              "turn:T04"
+            ]
+          },
+          {
+            "barrier": "caregiving",
+            "reason": "No reliable driver is available: the daughter lives in Indiana and the neighbor works during the day.",
+            "evidence": [
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Ask the dialysis unit for a later chair time or a different day that fits a manageable bus route.",
+            "resource_record_id": null
+          },
+          {
+            "category": "dialysis_social_worker",
+            "text": "Message the DaVita unit social worker to review transport options and benefits; facilities have a social worker on the care team.",
+            "resource_record_id": null
+          },
+          {
+            "category": "home_dialysis_evaluation",
+            "text": "Refer to the home dialysis program for a peritoneal or home hemodialysis evaluation as a longer-term way to reduce travel (clinical decision, not a guaranteed fix).",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "food_access",
+            "reason": "The patient eats mostly corner-store foods because the real grocery is a bus ride away and they are too wiped out after dialysis to shop, making fresh low-potassium produce hard to obtain.",
+            "evidence": [
+              "turn:T08"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "renal_dietitian",
+            "text": "Ask the dialysis unit dietitian to rebuild the renal diet around foods the patient can actually get (corner-store and pantry-friendly, renal-appropriate).",
+            "resource_record_id": null
+          },
+          {
+            "category": "snap",
+            "text": "Apply for SNAP through Illinois ABE (income-based; expedited benefits possible within 7 days for very low income).",
+            "resource_record_id": null
+          },
+          {
+            "category": "food_pantry",
+            "text": "Use a pantry locator matched to non-treatment days, paired with dietitian guidance since pantry food is often not renal-friendly.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "food_access",
+            "reason": "The patient only takes sevelamer with meals and skips doses when a meal is skipped; unreliable access to food makes three daily doses with meals hard to sustain.",
+            "evidence": [
+              "turn:T10",
+              "turn:T08"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "renal_dietitian",
+            "text": "Have the dialysis dietitian plan reliable, accessible meals so the binder can be taken consistently with food.",
+            "resource_record_id": null
+          },
+          {
+            "category": "snap",
+            "text": "Apply for SNAP through Illinois ABE to improve regular meal access.",
+            "resource_record_id": null
+          },
+          {
+            "category": "food_pantry",
+            "text": "Connect to a local food pantry on non-dialysis days, with dietitian review for renal-appropriateness.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "A downtown vascular surgery visit adds another trip; the patient is already reluctant about additional travel after the burdensome dialysis commute.",
+            "evidence": [
+              "turn:T13",
+              "turn:T14"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "coordinate_with_existing_visit",
+            "text": "Schedule the surgery visit on the same day/campus as a dialysis session, or use telehealth if an exam is not required.",
+            "resource_record_id": null
+          },
+          {
+            "category": "schedule_change",
+            "text": "Ask the surgery clinic for an appointment time that fits an existing travel day or a ride the patient can arrange.",
+            "resource_record_id": null
+          },
+          {
+            "category": "dialysis_social_worker",
+            "text": "Ask the dialysis social worker to help coordinate the surgery visit with transport resources and benefits.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3105,
+    "completion_tokens": 2231
+  },
+  "latency_ms": 101080,
+  "wall_s": 101.1,
+  "log": [
+    {
+      "prompt_sha256": "85387c1367a779d4622ce564ae196c152185f80b1532f695e3dbb8e944af926a",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 101080,
+      "usage": {
+        "prompt_tokens": 3105,
+        "total_tokens": 5336,
+        "completion_tokens": 2231,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1233
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "The patient reaches Park Manor only by two buses each way for a 3:00 PM chair, leaves home at 1:30 PM and returns around 8:30 PM, and already skips sessions because the trip is too long.",
+                    "evidence": [
+                      "turn:T04"
+                    ]
+                  },
+                  {
+                    "barrier": "caregiving",
+                    "reason": "No reliable driver is available: the daughter lives in Indiana and the neighbor works during the day.",
+                    "evidence": [
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask the dialysis unit for a later chair time or a different day that fits a manageable bus route.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "dialysis_social_worker",
+                    "text": "Message the DaVita unit social worker to review transport options and benefits; facilities have a social worker on the care team.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "home_dialysis_evaluation",
+                    "text": "Refer to the home dialysis program for a peritoneal or home hemodialysis evaluation as a longer-term way to reduce travel (clinical decision, not a guaranteed fix).",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "The patient eats mostly corner-store foods because the real grocery is a bus ride away and they are too wiped out after dialysis to shop, making fresh low-potassium produce hard to obtain.",
+                    "evidence": [
+                      "turn:T08"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "renal_dietitian",
+                    "text": "Ask the dialysis unit dietitian to rebuild the renal diet around foods the patient can actually get (corner-store and pantry-friendly, renal-appropriate).",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "snap",
+                    "text": "Apply for SNAP through Illinois ABE (income-based; expedited benefits possible within 7 days for very low income).",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "food_pantry",
+                    "text": "Use a pantry locator matched to non-treatment days, paired with dietitian guidance since pantry food is often not renal-friendly.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "The patient only takes sevelamer with meals and skips doses when a meal is skipped; unreliable access to food makes three daily doses with meals hard to sustain.",
+                    "evidence": [
+                      "turn:T10",
+                      "turn:T08"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "renal_dietitian",
+                    "text": "Have the dialysis dietitian plan reliable, accessible meals so the binder can be taken consistently with food.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "snap",
+                    "text": "Apply for SNAP through Illinois ABE to improve regular meal access.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "food_pantry",
+                    "text": "Connect to a local food pantry on non-dialysis days, with dietitian review for renal-appropriateness.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "A downtown vascular surgery visit adds another trip; the patient is already reluctant about additional travel after the burdensome dialysis commute.",
+                    "evidence": [
+                      "turn:T13",
+                      "turn:T14"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "text": "Schedule the surgery visit on the same day/campus as a dialysis session, or use telehealth if an exam is not required.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask the surgery clinic for an appointment time that fits an existing travel day or a ride the patient can arrange.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "dialysis_social_worker",
+                    "text": "Ask the dialysis social worker to help coordinate the surgery visit with transport resources and benefits.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

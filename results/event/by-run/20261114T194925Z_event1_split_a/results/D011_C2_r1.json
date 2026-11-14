@@ -1,0 +1,301 @@
+{
+  "case_id": "D011",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "blocked",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "Patient teaches fourth grade until 3:30 PM on weekdays and says weekdays are hard before 4, so a Tuesday 10:00 AM class directly conflicts.",
+            "evidence": [
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Ask the diabetes education program for a session after 4 PM or on a day that fits the teaching schedule.",
+            "resource_record_id": null
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "text": "Schedule education on the same day as an existing clinic visit or via telehealth if no exam is needed.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "med_cost",
+            "reason": "Semaglutide is tier 4 with a $250/month copay on a high-deductible plan whose deductible is not met, plus a 14-day refill gap.",
+            "evidence": [
+              "med:2"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "med_assistance_program",
+            "text": "Pharmacy or social work to screen for manufacturer assistance or a lower-cost formulary GLP-1 equivalent.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 3,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-D011"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-D011"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-D011"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-D011"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-D011"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "P-D011"
+      },
+      "ok": false
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031062000"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 16201,
+    "completion_tokens": 1840
+  },
+  "latency_ms": 93090,
+  "wall_s": 93.13,
+  "log": [
+    {
+      "prompt_sha256": "075bf56873e9d740eb6f5769886af5bff99cef0336bbd95c4044b99cd3859b85",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 7302,
+      "usage": {
+        "prompt_tokens": 4548,
+        "total_tokens": 4734,
+        "completion_tokens": 186,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 11
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-D011"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-D011"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-D011"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-D011"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-D011"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "P-D011"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 13999,
+      "usage": {
+        "prompt_tokens": 5484,
+        "total_tokens": 5692,
+        "completion_tokens": 208,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 170
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031062000"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 71789,
+      "usage": {
+        "prompt_tokens": 6169,
+        "total_tokens": 7615,
+        "completion_tokens": 1446,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1057
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "blocked",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Patient teaches fourth grade until 3:30 PM on weekdays and says weekdays are hard before 4, so a Tuesday 10:00 AM class directly conflicts.",
+                    "evidence": [
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask the diabetes education program for a session after 4 PM or on a day that fits the teaching schedule.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "text": "Schedule education on the same day as an existing clinic visit or via telehealth if no exam is needed.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "med_cost",
+                    "reason": "Semaglutide is tier 4 with a $250/month copay on a high-deductible plan whose deductible is not met, plus a 14-day refill gap.",
+                    "evidence": [
+                      "med:2"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "med_assistance_program",
+                    "text": "Pharmacy or social work to screen for manufacturer assistance or a lower-cost formulary GLP-1 equivalent.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

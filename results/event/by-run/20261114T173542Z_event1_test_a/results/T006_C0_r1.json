@@ -1,0 +1,202 @@
+{
+  "case_id": "T006",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "blocked",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "The Wednesday 6:00 PM group falls during the patient's cooking shift (3-11 PM Tuesday through Saturday); the patient is only off Sunday and Monday and said mornings ending before 2 work.",
+            "evidence": [
+              "turn:T06",
+              "turn:T08"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Ask behavioral health to place the patient in a daytime/morning alcohol group ending before 2 PM, or on a Sunday/Monday session, matching the patient's availability.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 2,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 6431,
+    "completion_tokens": 1727
+  },
+  "latency_ms": 87813,
+  "wall_s": 87.84,
+  "log": [
+    {
+      "prompt_sha256": "4951f81ecd4ca29f29ec9e9bd34c574a6c4e4e9938912c8a3dc7e49198f22e54",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 65205,
+      "usage": {
+        "prompt_tokens": 3069,
+        "total_tokens": 4303,
+        "completion_tokens": 1234,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 991
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "blocked",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "The Wednesday 6:00 PM group falls during the patient's cooking shift (3-11 PM Tuesday through Saturday); the patient is only off Sunday and Monday and said mornings ending before 2 work.",
+                    "evidence": [
+                      "turn:T06",
+                      "turn:T08"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask behavioral health to place the patient in a daytime/morning alcohol group ending before 2 PM, or on a Sunday/Monday session, matching the patient's availability.",
+                    "resource_record_id": null,
+                    "maxItems": 3
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 22608,
+      "usage": {
+        "prompt_tokens": 3362,
+        "total_tokens": 3855,
+        "completion_tokens": 493,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 206
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "blocked",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "The Wednesday 6:00 PM group falls during the patient's cooking shift (3-11 PM Tuesday through Saturday); the patient is only off Sunday and Monday and said mornings ending before 2 work.",
+                    "evidence": [
+                      "turn:T06",
+                      "turn:T08"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask behavioral health to place the patient in a daytime/morning alcohol group ending before 2 PM, or on a Sunday/Monday session, matching the patient's availability.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,186 @@
+{
+  "case_id": "T016",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "An 8:00 AM Wednesday visit conflicts with the patient's stated rule that nothing starts before 11 AM because of West Coast work-from-home obligations.",
+            "evidence": [
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Ask the obstetrics clinic to move Wednesday prenatal visits to after 11 AM to match the patient's work schedule.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 2,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 6233,
+    "completion_tokens": 2519
+  },
+  "latency_ms": 126803,
+  "wall_s": 126.83,
+  "log": [
+    {
+      "prompt_sha256": "7882b290fd82983456072a9ded21b89d85326e1ea7e358ace22889b3f26c0c90",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 98443,
+      "usage": {
+        "prompt_tokens": 3004,
+        "total_tokens": 4858,
+        "completion_tokens": 1854,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1685
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "The patient works from home with a West Coast team and stated nothing starts before 11 AM, so an 8:00 AM Wednesday prenatal visit conflicts with work obligations.",
+                    "evidence": [
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask the obstetrics clinic to move Wednesday visits to after 11 AM to fit the patient's work-from-home schedule (nothing starts before 11).",
+                    "resource_record_id": null
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 28360,
+      "usage": {
+        "prompt_tokens": 3229,
+        "total_tokens": 3894,
+        "completion_tokens": 665,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 407
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "An 8:00 AM Wednesday visit conflicts with the patient's stated rule that nothing starts before 11 AM because of West Coast work-from-home obligations.",
+                    "evidence": [
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask the obstetrics clinic to move Wednesday prenatal visits to after 11 AM to match the patient's work schedule.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

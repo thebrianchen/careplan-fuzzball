@@ -1,0 +1,208 @@
+{
+  "case_id": "D004",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "language_literacy",
+            "reason": "The titration schedule is printed in English, but the patient needs Spanish materials and his son, who previously read English papers, is away at school.",
+            "evidence": [
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "interpreter",
+            "resource_record_id": null,
+            "text": "Provide the losartan titration schedule in Spanish through the hospital interpreter service with plain-language instructions."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "language_literacy",
+            "reason": "The patient portal/app is in English and he does not know where to type blood pressure numbers.",
+            "evidence": [
+              "turn:T06"
+            ]
+          },
+          {
+            "barrier": "digital_access",
+            "reason": "He has the app but cannot navigate the English interface to submit readings.",
+            "evidence": [
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "interpreter",
+            "resource_record_id": null,
+            "text": "Use interpreter services to teach portal/app entry in Spanish and confirm he can send weekly readings before relying on portal monitoring."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "language_literacy",
+            "reason": "The kidney-friendly eating handout is in English while the patient requires Spanish and his usual reader is away at school.",
+            "evidence": [
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "renal_dietitian",
+            "resource_record_id": null,
+            "text": "Ask the dialysis/renal dietitian to adapt sodium and processed-food guidance to foods the patient can obtain and provide translated materials."
+          },
+          {
+            "category": "interpreter",
+            "resource_record_id": null,
+            "text": "Have the diet handout translated into Spanish and reviewed with an interpreter."
+          }
+        ]
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 2902,
+    "completion_tokens": 1078
+  },
+  "latency_ms": 54627,
+  "wall_s": 54.66,
+  "log": [
+    {
+      "prompt_sha256": "b34428901cdeb9c199cdf503e00d94de719410c738865161ab7a9c1a8936761c",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 54627,
+      "usage": {
+        "prompt_tokens": 2902,
+        "total_tokens": 3980,
+        "completion_tokens": 1078,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 591
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "language_literacy",
+                    "reason": "The titration schedule is printed in English, but the patient needs Spanish materials and his son, who previously read English papers, is away at school.",
+                    "evidence": [
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "interpreter",
+                    "resource_record_id": null,
+                    "text": "Provide the losartan titration schedule in Spanish through the hospital interpreter service with plain-language instructions."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "language_literacy",
+                    "reason": "The patient portal/app is in English and he does not know where to type blood pressure numbers.",
+                    "evidence": [
+                      "turn:T06"
+                    ]
+                  },
+                  {
+                    "barrier": "digital_access",
+                    "reason": "He has the app but cannot navigate the English interface to submit readings.",
+                    "evidence": [
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "interpreter",
+                    "resource_record_id": null,
+                    "text": "Use interpreter services to teach portal/app entry in Spanish and confirm he can send weekly readings before relying on portal monitoring."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "language_literacy",
+                    "reason": "The kidney-friendly eating handout is in English while the patient requires Spanish and his usual reader is away at school.",
+                    "evidence": [
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "renal_dietitian",
+                    "resource_record_id": null,
+                    "text": "Ask the dialysis/renal dietitian to adapt sodium and processed-food guidance to foods the patient can obtain and provide translated materials."
+                  },
+                  {
+                    "category": "interpreter",
+                    "resource_record_id": null,
+                    "text": "Have the diet handout translated into Spanish and reviewed with an interpreter."
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,142 @@
+{
+  "case_id": "D011",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "The patient works as a fourth-grade teacher until 3:30 PM and says weekdays are hard before 4, so a Tuesday 10:00 AM class conflicts with their job.",
+            "evidence": [
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Ask the diabetes education program for evening or weekend sessions, or sessions starting after 4 PM to match the patient's teaching schedule."
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "text": "Offer telehealth diabetes education if an in-person exam is not required, or combine education with an existing clinic visit."
+          },
+          {
+            "category": "renal_dietitian",
+            "text": "If nutrition is the priority, refer to the dialysis/renal dietitian at a time that fits the patient's schedule."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 2871,
+    "completion_tokens": 530
+  },
+  "latency_ms": 21854,
+  "wall_s": 21.88,
+  "log": [
+    {
+      "prompt_sha256": "82bf325854078f180125cb2c8dfdb16455afc6b54b1b5a771269e64ae5754ac3",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 21854,
+      "usage": {
+        "prompt_tokens": 2871,
+        "total_tokens": 3401,
+        "completion_tokens": 530,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 214
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "The patient works as a fourth-grade teacher until 3:30 PM and says weekdays are hard before 4, so a Tuesday 10:00 AM class conflicts with their job.",
+                    "evidence": [
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask the diabetes education program for evening or weekend sessions, or sessions starting after 4 PM to match the patient's teaching schedule."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "text": "Offer telehealth diabetes education if an in-person exam is not required, or combine education with an existing clinic visit."
+                  },
+                  {
+                    "category": "renal_dietitian",
+                    "text": "If nutrition is the priority, refer to the dialysis/renal dietitian at a time that fits the patient's schedule."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

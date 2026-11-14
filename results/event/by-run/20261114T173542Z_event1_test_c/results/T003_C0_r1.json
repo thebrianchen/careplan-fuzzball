@@ -1,0 +1,245 @@
+{
+  "case_id": "T003",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "The patient cannot drive, the daughter who drove today works 7-5 and cannot regularly bring the patient, and the patient feels unsteady with a walker on the bus route requiring a transfer, so getting to the hospital rehab center three mornings a week is uncertain.",
+            "evidence": [
+              "turn:T04",
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "ada_paratransit",
+            "resource_record_id": null,
+            "text": "Assess eligibility for ADA Paratransit certification (Northern Illinois Transit Authority, 312-663-HELP) since weakness with a walker may prevent fixed-route bus use; note certification takes time and rides match fixed-route service hours."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the rehab center whether therapy can be scheduled on a day or time when a ride is available, or consolidated to fewer trips."
+          },
+          {
+            "category": "nemt",
+            "resource_record_id": null,
+            "text": "If the patient has Medicaid or dual coverage, check Medicaid NEMT (managed care: number on plan card; fee-for-service: Transdev 877-725-0569); do not promise a covered ride if coverage is Medicare-only."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 2,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 6734,
+    "completion_tokens": 1582
+  },
+  "latency_ms": 74101,
+  "wall_s": 74.13,
+  "log": [
+    {
+      "prompt_sha256": "0ab0ee559d89b81360ee0e252fc283e4f0823af51f3a51829999858a9a579c83",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 58641,
+      "usage": {
+        "prompt_tokens": 3107,
+        "total_tokens": 4202,
+        "completion_tokens": 1095,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 640
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "The patient cannot drive, the daughter who drove today works 7-5 and cannot regularly bring the patient, and the patient feels unsteady with a walker on the bus route requiring a transfer, so getting to the hospital rehab center three mornings a week is uncertain.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "ada_paratransit",
+                    "resource_record_id": null,
+                    "text": "Assess eligibility for ADA Paratransit certification (Northern Illinois Transit Authority, 312-663-HELP) since weakness with a walker may prevent fixed-route bus use; note certification takes time and rides match fixed-route service hours.",
+                    "text_override": null
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the rehab center whether therapy can be scheduled on a day or time when a ride is available, or consolidated to fewer trips.",
+                    "text_override": null
+                  },
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "If the patient has Medicaid or dual coverage, check Medicaid NEMT (managed care: number on plan card; fee-for-service: Transdev 877-725-0569); do not promise a covered ride if coverage is Medicare-only."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 15460,
+      "usage": {
+        "prompt_tokens": 3627,
+        "total_tokens": 4114,
+        "completion_tokens": 487,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 44
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "The patient cannot drive, the daughter who drove today works 7-5 and cannot regularly bring the patient, and the patient feels unsteady with a walker on the bus route requiring a transfer, so getting to the hospital rehab center three mornings a week is uncertain.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "ada_paratransit",
+                    "resource_record_id": null,
+                    "text": "Assess eligibility for ADA Paratransit certification (Northern Illinois Transit Authority, 312-663-HELP) since weakness with a walker may prevent fixed-route bus use; note certification takes time and rides match fixed-route service hours."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the rehab center whether therapy can be scheduled on a day or time when a ride is available, or consolidated to fewer trips."
+                  },
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "If the patient has Medicaid or dual coverage, check Medicaid NEMT (managed care: number on plan card; fee-for-service: Transdev 877-725-0569); do not promise a covered ride if coverage is Medicare-only."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

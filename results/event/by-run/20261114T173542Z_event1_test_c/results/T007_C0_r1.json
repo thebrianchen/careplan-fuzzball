@@ -1,0 +1,154 @@
+{
+  "case_id": "T007",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "The patient's Target shifts are posted weekly and sometimes fall on Tuesday afternoons, and they have already missed a Tuesday session; the only time guaranteed free is before 10 AM, so a fixed Tuesday 2 PM slot is likely to conflict.",
+            "evidence": [
+              "turn:T03",
+              "turn:T04",
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the behavioral health clinic for a therapy time that avoids Target shift hours, such as before 10 AM on a day the patient is not working, or rebook weekly after the Sunday shift posting."
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "Schedule therapy on the same day/campus as another existing visit, or use telehealth if an in-person exam is not needed, to reduce travel and shift conflicts."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3052,
+    "completion_tokens": 1281
+  },
+  "latency_ms": 64681,
+  "wall_s": 64.71,
+  "log": [
+    {
+      "prompt_sha256": "d3e4e4203ec65b8ecf41b269b6e78726aa96e4aa1b73e67157261218cbfbc317",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 64681,
+      "usage": {
+        "prompt_tokens": 3052,
+        "total_tokens": 4333,
+        "completion_tokens": 1281,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 915
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "The patient's Target shifts are posted weekly and sometimes fall on Tuesday afternoons, and they have already missed a Tuesday session; the only time guaranteed free is before 10 AM, so a fixed Tuesday 2 PM slot is likely to conflict.",
+                    "evidence": [
+                      "turn:T03",
+                      "turn:T04",
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the behavioral health clinic for a therapy time that avoids Target shift hours, such as before 10 AM on a day the patient is not working, or rebook weekly after the Sunday shift posting."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Schedule therapy on the same day/campus as another existing visit, or use telehealth if an in-person exam is not needed, to reduce travel and shift conflicts."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,152 @@
+{
+  "case_id": "T007",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "The patient\u2019s Target shifts are posted weekly and sometimes fall on Tuesday afternoons, while evenings also vary; only pre-10 AM shifts are reliably unavailable, so a fixed Tuesday 2:00 PM therapy slot may conflict with work.",
+            "evidence": [
+              "turn:T04",
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask behavioral health for a recurring appointment before 10 AM or on a day matching a known non-work shift, and confirm week by week once the Target schedule is posted."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Offer telehealth therapy sessions if clinically appropriate, so the appointment can fit around variable shifts without requiring travel."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3052,
+    "completion_tokens": 558
+  },
+  "latency_ms": 37489,
+  "wall_s": 37.51,
+  "log": [
+    {
+      "prompt_sha256": "d3e4e4203ec65b8ecf41b269b6e78726aa96e4aa1b73e67157261218cbfbc317",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 37489,
+      "usage": {
+        "prompt_tokens": 3052,
+        "total_tokens": 3610,
+        "completion_tokens": 558,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 224
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "The patient\u2019s Target shifts are posted weekly and sometimes fall on Tuesday afternoons, while evenings also vary; only pre-10 AM shifts are reliably unavailable, so a fixed Tuesday 2:00 PM therapy slot may conflict with work.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask behavioral health for a recurring appointment before 10 AM or on a day matching a known non-work shift, and confirm week by week once the Target schedule is posted."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Offer telehealth therapy sessions if clinically appropriate, so the appointment can fit around variable shifts without requiring travel."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,206 @@
+{
+  "case_id": "T013",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "The 8:00 AM drop-off conflicts with the caregiver's work departure at 6:15 AM, the patient cannot ride the bus alone because of dementia-related getting-lost risk, and the program's van availability is unknown, so the scheduled drop-off likely cannot happen as written.",
+            "evidence": [
+              "turn:T03",
+              "turn:T04",
+              "turn:T05",
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "transport",
+            "resource_record_id": null,
+            "text": "Ask the adult day program whether it provides a van or shuttle for pick-up/drop-off."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Request a later drop-off time or different program days that fit the caregiver's work schedule."
+          },
+          {
+            "category": "paratransit",
+            "resource_record_id": null,
+            "text": "Check eligibility for ADA paratransit certification given the patient's dementia, noting certification takes time and rides follow fixed-route hours."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "The Thursday 10:00 AM class conflicts with the caregiver's work (he is on a boiler and would be docked), so weekly attendance is unlikely without a schedule change.",
+            "evidence": [
+              "turn:T07",
+              "turn:T08"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the hospital whether the caregiver class is offered at another time, on weekends, or as a recorded/online option."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Offer a one-on-one caregiver teaching session at a time that fits the son's work schedule."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3144,
+    "completion_tokens": 1203
+  },
+  "latency_ms": 59020,
+  "wall_s": 59.04,
+  "log": [
+    {
+      "prompt_sha256": "0f7aa761d13079b352504e8cadae0742049c8a432ae967bbafc25b4ea3c9f1e6",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 59020,
+      "usage": {
+        "prompt_tokens": 3144,
+        "total_tokens": 4347,
+        "completion_tokens": 1203,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 665
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "The 8:00 AM drop-off conflicts with the caregiver's work departure at 6:15 AM, the patient cannot ride the bus alone because of dementia-related getting-lost risk, and the program's van availability is unknown, so the scheduled drop-off likely cannot happen as written.",
+                    "evidence": [
+                      "turn:T03",
+                      "turn:T04",
+                      "turn:T05",
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "transport",
+                    "resource_record_id": null,
+                    "text": "Ask the adult day program whether it provides a van or shuttle for pick-up/drop-off."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Request a later drop-off time or different program days that fit the caregiver's work schedule."
+                  },
+                  {
+                    "category": "paratransit",
+                    "resource_record_id": null,
+                    "text": "Check eligibility for ADA paratransit certification given the patient's dementia, noting certification takes time and rides follow fixed-route hours."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "The Thursday 10:00 AM class conflicts with the caregiver's work (he is on a boiler and would be docked), so weekly attendance is unlikely without a schedule change.",
+                    "evidence": [
+                      "turn:T07",
+                      "turn:T08"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the hospital whether the caregiver class is offered at another time, on weekends, or as a recorded/online option."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Offer a one-on-one caregiver teaching session at a time that fits the son's work schedule."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

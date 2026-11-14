@@ -1,0 +1,162 @@
+{
+  "case_id": "T002",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "The patient must take two buses (Chicago Avenue then Pulaski) with an oxygen tank to reach hospital-based rehab; the last trip took 90 minutes and left the patient exhausted before arrival, and the only driving help is a nephew who works and is available only occasionally.",
+            "evidence": [
+              "turn:T04",
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "nemt",
+            "resource_record_id": null,
+            "text": "Set up Medicaid non-emergency medical transportation for rides to pulmonary rehab; since the patient has Medicaid, call the number on the back of the managed care plan card to book (standing recurring trips can be requested)."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the pulmonary rehab program for a later start time or a different day that matches an available ride or the nephew's schedule."
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "Try to schedule rehab sessions on the same day and campus as other medical visits to reduce separate trips."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3114,
+    "completion_tokens": 1420
+  },
+  "latency_ms": 70043,
+  "wall_s": 70.07,
+  "log": [
+    {
+      "prompt_sha256": "c69269fd92455566a0a48cb6d6fb9ef73fac1426214b6f761931026b7b67359d",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 70043,
+      "usage": {
+        "prompt_tokens": 3114,
+        "total_tokens": 4534,
+        "completion_tokens": 1420,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1023
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "The patient must take two buses (Chicago Avenue then Pulaski) with an oxygen tank to reach hospital-based rehab; the last trip took 90 minutes and left the patient exhausted before arrival, and the only driving help is a nephew who works and is available only occasionally.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Set up Medicaid non-emergency medical transportation for rides to pulmonary rehab; since the patient has Medicaid, call the number on the back of the managed care plan card to book (standing recurring trips can be requested)."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the pulmonary rehab program for a later start time or a different day that matches an available ride or the nephew's schedule."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Try to schedule rehab sessions on the same day and campus as other medical visits to reduce separate trips."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

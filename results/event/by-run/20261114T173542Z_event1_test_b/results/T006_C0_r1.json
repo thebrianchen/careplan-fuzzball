@@ -1,0 +1,152 @@
+{
+  "case_id": "T006",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "The Wednesday 6:00 PM group falls during the patient's cooking shift (3\u201311 PM Tuesday\u2013Saturday), so the patient cannot attend as written; they said mornings work if it ends before 2 PM.",
+            "evidence": [
+              "turn:T06",
+              "turn:T08"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask behavioral health to move the alcohol group to a morning/daytime session ending before 2 PM, or to Sunday/Monday (the patient's days off)."
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "If feasible, schedule any needed counseling on the same day as another hospital visit to limit extra trips."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3069,
+    "completion_tokens": 1207
+  },
+  "latency_ms": 67560,
+  "wall_s": 67.58,
+  "log": [
+    {
+      "prompt_sha256": "4951f81ecd4ca29f29ec9e9bd34c574a6c4e4e9938912c8a3dc7e49198f22e54",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 67560,
+      "usage": {
+        "prompt_tokens": 3069,
+        "total_tokens": 4276,
+        "completion_tokens": 1207,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 874
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "The Wednesday 6:00 PM group falls during the patient's cooking shift (3\u201311 PM Tuesday\u2013Saturday), so the patient cannot attend as written; they said mornings work if it ends before 2 PM.",
+                    "evidence": [
+                      "turn:T06",
+                      "turn:T08"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask behavioral health to move the alcohol group to a morning/daytime session ending before 2 PM, or to Sunday/Monday (the patient's days off)."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "If feasible, schedule any needed counseling on the same day as another hospital visit to limit extra trips."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

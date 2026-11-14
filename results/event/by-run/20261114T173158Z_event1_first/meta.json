@@ -1,0 +1,39 @@
+{
+  "started": "20261114T173158Z",
+  "git": null,
+  "conditions": {
+    "C2": "Care Plan Check: 8 typed tools"
+  },
+  "profiles": {
+    "C2": {
+      "name": "super35-vllm-think",
+      "model": "nemotron-3.5-super-vl",
+      "base_url": "http://planner:8000/v1",
+      "api_key_env": "VLLM_API_KEY",
+      "temperature": 1.0,
+      "top_p": 0.95,
+      "max_tokens": 8192,
+      "tool_mode": "native",
+      "quantization": "NVFP4",
+      "extra_body": {
+        "chat_template_kwargs": {
+          "enable_thinking": true,
+          "medium_effort": true
+        }
+      },
+      "template_dir": null,
+      "base_url_env": "PLANNER_URL"
+    }
+  },
+  "reps": 1,
+  "prefetch": false,
+  "final": "tool",
+  "signals": true,
+  "tract_table": "/code/app/data/processed/tracts.csv",
+  "tract_table_is_fixture": false,
+  "resource_table": "/code/app/data/processed/resources.csv",
+  "cases": {
+    "D001": "d0172911e8d25a13cb4dd94e625914dd97f1b0f8525b106e40d25f460389546f"
+  },
+  "unfrozen_warnings": []
+}

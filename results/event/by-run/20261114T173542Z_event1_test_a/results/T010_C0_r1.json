@@ -1,0 +1,164 @@
+{
+  "case_id": "T010",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "The clinic opens at 8:00 AM but the patient's work vans leave at 6:00 AM, so attending weekday 8:00 AM DOT conflicts with the work pickup and risks losing a day's wages.",
+            "evidence": [
+              "turn:T02"
+            ]
+          },
+          {
+            "barrier": "work_schedule",
+            "reason": "Each clinic visit costs the patient a full day's pay because missing the work van means not working that day, making daily weekday attendance for 8 weeks financially unsustainable.",
+            "evidence": [
+              "turn:T02"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the TB clinic for a later weekday DOT start time or a fixed day that lines up with the work-van schedule so the patient does not lose a full day's pay."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Use video directly observed therapy via WhatsApp (the patient already has a smartphone and uses WhatsApp daily) instead of traveling to the clinic for every dose."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3093,
+    "completion_tokens": 1640
+  },
+  "latency_ms": 90856,
+  "wall_s": 90.9,
+  "log": [
+    {
+      "prompt_sha256": "61aa5922b96e9261f435c9eb6b92d5814eb826b7c6362acf8550a0035f823bc0",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 90856,
+      "usage": {
+        "prompt_tokens": 3093,
+        "total_tokens": 4733,
+        "completion_tokens": 1640,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1241
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "The clinic opens at 8:00 AM but the patient's work vans leave at 6:00 AM, so attending weekday 8:00 AM DOT conflicts with the work pickup and risks losing a day's wages.",
+                    "evidence": [
+                      "turn:T02"
+                    ]
+                  },
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Each clinic visit costs the patient a full day's pay because missing the work van means not working that day, making daily weekday attendance for 8 weeks financially unsustainable.",
+                    "evidence": [
+                      "turn:T02"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the TB clinic for a later weekday DOT start time or a fixed day that lines up with the work-van schedule so the patient does not lose a full day's pay."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Use video directly observed therapy via WhatsApp (the patient already has a smartphone and uses WhatsApp daily) instead of traveling to the clinic for every dose."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

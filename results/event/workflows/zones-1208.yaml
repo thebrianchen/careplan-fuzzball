@@ -1,0 +1,48 @@
+jobs:
+  split:
+    image:
+      uri: docker://rockylinux/rockylinux:9
+    mounts:
+      /code:
+        volume: code
+      /patient:
+        volume: patient
+      /public:
+        volume: public
+    resource:
+      cpu:
+        cores: 2
+      memory:
+        size: 4GB
+    script: |
+      #!/bin/sh
+      set -e
+      echo "== patient side"
+      rm -rf /patient/cases.new && cp -r /code/app/cases/. /patient/cases.new && rm -rf /patient/cases && mv /patient/cases.new /patient/cases
+      ls -ld /patient; echo "case files on the patient volume: $(find /patient/cases -name '*.yaml' | wc -l)"
+      echo "== public side"
+      P=/public/code; mkdir -p $P
+      [ -x $P/python/bin/python3 ] || cp -a /code/python $P/
+      rm -rf $P/site.new && cp -a /code/site $P/site.new && rm -rf $P/site && mv $P/site.new $P/site
+      rm -rf $P/app && mkdir -p $P/app/data/processed
+      for d in careplan schemas rules prompts config requirements.txt VERSION; do cp -a /code/app/$d $P/app/; done
+      for f in resources.csv tracts.csv SOURCES.json; do cp -a /code/app/data/processed/$f $P/app/data/processed/; done
+      find $P/app -name __pycache__ -prune -exec rm -rf {} +
+      du -sh $P/python $P/site $P/app
+      echo "== checks on the public copy"
+      cd $P/app; export PYTHONPATH=$P/site PATH=$P/python/bin:/usr/bin:/bin
+      python3 -c "import careplan.gateway as g; from careplan.data import TractTable, ResourceTable; t, r = TractTable.load(None), ResourceTable.load(None); print('gateway imports; tables load')"
+      echo "case files under /public: $(find /public \( -name 'D0*.yaml' -o -name 'T0*.yaml' -o -name 'case_tracts.csv' -o -name 'stream_*.json' \) | wc -l)"
+      echo "SPLIT DONE"
+version: v4
+volumes:
+  code:
+    name: code
+    use: team4
+  patient:
+    name: patient
+    use: team4
+  public:
+    name: public
+    use: team4
+

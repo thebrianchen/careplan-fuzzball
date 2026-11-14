@@ -1,0 +1,208 @@
+{
+  "case_id": "D002",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "utilities",
+            "reason": "Insulin must be refrigerated, but the patient reports power shutoffs twice this month and an unreliable cooler, so nightly insulin storage is at risk.",
+            "evidence": [
+              "turn:T02",
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "utility_assistance",
+            "text": "Complete the utility medical certification form so the patient's power is not disconnected while insulin requires refrigeration.",
+            "resource_record_id": null
+          },
+          {
+            "category": "utility_assistance",
+            "text": "Refer the patient to LIHEAP/CEDA for utility bill assistance to prevent further shutoffs.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "A Tuesday 10:00 AM endocrinology visit conflicts with warehouse work from 6 to 2 with no sick days, matching the patient's prior missed endocrinology visits.",
+            "evidence": [
+              "turn:T05",
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Ask endocrinology for an appointment after the patient's shift, on a day off, or later in the day to avoid missed work hours.",
+            "resource_record_id": null
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "text": "Schedule the endocrinology visit on the same day as another existing appointment or use telehealth if no in-person exam is needed.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "Thursday 2:00 PM classes fall at the end of or just after the patient's 6-to-2 warehouse shift with no sick days, making weekly attendance difficult.",
+            "evidence": [
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Ask the diabetes education program for evening, weekend, or make-up sessions that do not conflict with the patient's work schedule.",
+            "resource_record_id": null
+          }
+        ]
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 2946,
+    "completion_tokens": 1224
+  },
+  "latency_ms": 63792,
+  "wall_s": 63.82,
+  "log": [
+    {
+      "prompt_sha256": "fa5ed884bdcfafce59144fad7d929314d24250043ac4bd8437ce0c2c06229b81",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 63792,
+      "usage": {
+        "prompt_tokens": 2946,
+        "total_tokens": 4170,
+        "completion_tokens": 1224,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 672
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "utilities",
+                    "reason": "Insulin must be refrigerated, but the patient reports power shutoffs twice this month and an unreliable cooler, so nightly insulin storage is at risk.",
+                    "evidence": [
+                      "turn:T02",
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "utility_assistance",
+                    "text": "Complete the utility medical certification form so the patient's power is not disconnected while insulin requires refrigeration.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "utility_assistance",
+                    "text": "Refer the patient to LIHEAP/CEDA for utility bill assistance to prevent further shutoffs.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "A Tuesday 10:00 AM endocrinology visit conflicts with warehouse work from 6 to 2 with no sick days, matching the patient's prior missed endocrinology visits.",
+                    "evidence": [
+                      "turn:T05",
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask endocrinology for an appointment after the patient's shift, on a day off, or later in the day to avoid missed work hours.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "text": "Schedule the endocrinology visit on the same day as another existing appointment or use telehealth if no in-person exam is needed.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Thursday 2:00 PM classes fall at the end of or just after the patient's 6-to-2 warehouse shift with no sick days, making weekly attendance difficult.",
+                    "evidence": [
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask the diabetes education program for evening, weekend, or make-up sessions that do not conflict with the patient's work schedule.",
+                    "resource_record_id": null
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

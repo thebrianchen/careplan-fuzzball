@@ -1,0 +1,212 @@
+{
+  "case_id": "T018",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "The patient cannot drive, lives alone, has no local caregiver, and reports that reaching the bus requires apartment stairs plus using a walker on the bus, which they are not ready for. This makes three weekly trips to the hospital rehab center unlikely as scheduled.",
+            "evidence": [
+              "turn:T04",
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "paratransit",
+            "resource_record_id": null,
+            "text": "Assess eligibility for ADA Paratransit certification through the regional transit authority; note that certification takes time and rides must be reserved in advance."
+          },
+          {
+            "category": "nemt",
+            "resource_record_id": null,
+            "text": "If the patient has Medicaid or dual coverage, ask the managed-care plan about non-emergency medical transportation; original Medicare alone generally does not cover routine rides."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the rehabilitation center whether therapy can be scheduled on days and times that match any available ride, recognizing that chair times are limited."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "The single follow-up visit still requires travel, and the patient cannot drive, has no local caregiver, and reports that using the nearby bus is not currently feasible because of apartment stairs and walker use.",
+            "evidence": [
+              "turn:T04",
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "paratransit",
+            "resource_record_id": null,
+            "text": "Assess eligibility for ADA Paratransit certification and reserve the ride well in advance, allowing time for the certification process."
+          },
+          {
+            "category": "nemt",
+            "resource_record_id": null,
+            "text": "If covered by Medicaid or a dual plan, request non-emergency medical transportation through the plan; do not promise a ride if the patient has original Medicare only."
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "Ask whether the X-ray can be combined with another visit or located closer to home to reduce travel burden."
+          }
+        ]
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3110,
+    "completion_tokens": 1348
+  },
+  "latency_ms": 92162,
+  "wall_s": 92.19,
+  "log": [
+    {
+      "prompt_sha256": "608c3251c0badfddc612528346f230baeb579ade5d3e3ebbaa6f311ffbb82690",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 92162,
+      "usage": {
+        "prompt_tokens": 3110,
+        "total_tokens": 4458,
+        "completion_tokens": 1348,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 743
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "The patient cannot drive, lives alone, has no local caregiver, and reports that reaching the bus requires apartment stairs plus using a walker on the bus, which they are not ready for. This makes three weekly trips to the hospital rehab center unlikely as scheduled.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "paratransit",
+                    "resource_record_id": null,
+                    "text": "Assess eligibility for ADA Paratransit certification through the regional transit authority; note that certification takes time and rides must be reserved in advance."
+                  },
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "If the patient has Medicaid or dual coverage, ask the managed-care plan about non-emergency medical transportation; original Medicare alone generally does not cover routine rides."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the rehabilitation center whether therapy can be scheduled on days and times that match any available ride, recognizing that chair times are limited."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "The single follow-up visit still requires travel, and the patient cannot drive, has no local caregiver, and reports that using the nearby bus is not currently feasible because of apartment stairs and walker use.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "paratransit",
+                    "resource_record_id": null,
+                    "text": "Assess eligibility for ADA Paratransit certification and reserve the ride well in advance, allowing time for the certification process."
+                  },
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "If covered by Medicaid or a dual plan, request non-emergency medical transportation through the plan; do not promise a ride if the patient has original Medicare only."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Ask whether the X-ray can be combined with another visit or located closer to home to reduce travel burden."
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

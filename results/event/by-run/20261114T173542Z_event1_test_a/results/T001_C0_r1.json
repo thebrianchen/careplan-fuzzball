@@ -1,0 +1,212 @@
+{
+  "case_id": "T001",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "caregiving",
+            "reason": "A Thursday 11:30 AM session plus a 4-hour prescription ends around 3:30 PM, when the grandkids get out of school at 3; the neighbor works Thursdays and the daughter works until 6:30, so no one is available to care for the children during/after treatment.",
+            "evidence": [
+              "turn:T02",
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the dialysis unit for a later Thursday chair time or move Thursday to a day when childcare is available (for example Saturday, when the daughter is home)."
+          },
+          {
+            "category": "dialysis_social_worker",
+            "resource_record_id": null,
+            "text": "Message the unit social worker to help arrange Thursday coverage and explore benefits or resources that support the patient's caregiving situation."
+          },
+          {
+            "category": "home_dialysis_evaluation",
+            "resource_record_id": null,
+            "text": "Refer to the home dialysis program to discuss peritoneal or home hemodialysis as a conversation, not a guaranteed fix, given its own space, supply, training, and support requirements."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "food_access",
+            "reason": "The patient eats what the children eat (hot dogs, macaroni and cheese) and has limited access to fresh renal-friendly produce, making a low-phosphorus/low-potassium diet with fresh produce hard to follow.",
+            "evidence": [
+              "turn:T08",
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "renal_dietitian",
+            "resource_record_id": null,
+            "text": "Have the unit dietitian rebuild the diet around foods the patient can actually get, building on the chairside Tuesday visit the patient already accepts."
+          },
+          {
+            "category": "snap",
+            "resource_record_id": null,
+            "text": "Apply for SNAP through Illinois ABE (abe.illinois.gov) to improve income-based food purchasing power; very low-income households may qualify for expedited benefits within 7 days."
+          },
+          {
+            "category": "food_pantry",
+            "resource_record_id": null,
+            "text": "Use the Greater Chicago Food Depository locator to find pantries open on the patient's non-treatment days, and pair pantry use with renal-dietitian guidance because pantry food is often not renal-friendly."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3127,
+    "completion_tokens": 1706
+  },
+  "latency_ms": 76231,
+  "wall_s": 76.25,
+  "log": [
+    {
+      "prompt_sha256": "731cb084562673f7d5d545cfd33cee1e871ec92e1109267275473a5420150544",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 76231,
+      "usage": {
+        "prompt_tokens": 3127,
+        "total_tokens": 4833,
+        "completion_tokens": 1706,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1039
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "caregiving",
+                    "reason": "A Thursday 11:30 AM session plus a 4-hour prescription ends around 3:30 PM, when the grandkids get out of school at 3; the neighbor works Thursdays and the daughter works until 6:30, so no one is available to care for the children during/after treatment.",
+                    "evidence": [
+                      "turn:T02",
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the dialysis unit for a later Thursday chair time or move Thursday to a day when childcare is available (for example Saturday, when the daughter is home)."
+                  },
+                  {
+                    "category": "dialysis_social_worker",
+                    "resource_record_id": null,
+                    "text": "Message the unit social worker to help arrange Thursday coverage and explore benefits or resources that support the patient's caregiving situation."
+                  },
+                  {
+                    "category": "home_dialysis_evaluation",
+                    "resource_record_id": null,
+                    "text": "Refer to the home dialysis program to discuss peritoneal or home hemodialysis as a conversation, not a guaranteed fix, given its own space, supply, training, and support requirements."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "The patient eats what the children eat (hot dogs, macaroni and cheese) and has limited access to fresh renal-friendly produce, making a low-phosphorus/low-potassium diet with fresh produce hard to follow.",
+                    "evidence": [
+                      "turn:T08",
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "renal_dietitian",
+                    "resource_record_id": null,
+                    "text": "Have the unit dietitian rebuild the diet around foods the patient can actually get, building on the chairside Tuesday visit the patient already accepts."
+                  },
+                  {
+                    "category": "snap",
+                    "resource_record_id": null,
+                    "text": "Apply for SNAP through Illinois ABE (abe.illinois.gov) to improve income-based food purchasing power; very low-income households may qualify for expedited benefits within 7 days."
+                  },
+                  {
+                    "category": "food_pantry",
+                    "resource_record_id": null,
+                    "text": "Use the Greater Chicago Food Depository locator to find pantries open on the patient's non-treatment days, and pair pantry use with renal-dietitian guidance because pantry food is often not renal-friendly."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,399 @@
+{
+  "case_id": "D003",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "She cannot drive, relies on cabs, and lives in a high no-vehicle-share tract; Original Medicare covers no routine rides, so 3x/week 9 AM rehab trips are costly and hard.",
+            "evidence": [
+              "turn:T06",
+              "turn:T02",
+              "tract:no_vehicle_share",
+              "screener:transportation"
+            ]
+          },
+          {
+            "barrier": "caregiving",
+            "reason": "Harold cannot be left alone and the neighbor only covers two hours, so she may have no one to watch him during rehab.",
+            "evidence": [
+              "turn:T02",
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask cardiac rehab for a later start or a different day when someone can watch Harold."
+          },
+          {
+            "category": "ada_paratransit",
+            "resource_record_id": null,
+            "text": "Apply for ADA Paratransit certification (312-663-HELP) if fixed-route bus/train is not usable; allow up to 21 days for a decision."
+          },
+          {
+            "category": "medicare_transport_gap",
+            "resource_record_id": null,
+            "text": "Original Medicare generally does not cover routine rehab rides; do not promise a covered ride\u2014confirm any plan transport benefit first."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 4,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-D003"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-D003"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-D003"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-D003"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-D003"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031820100"
+      },
+      "ok": false
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031440201"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_transit_trip",
+      "args": {
+        "appt_ref": "appt:2",
+        "arrive_by": "09:00"
+      },
+      "ok": false
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031440201",
+        "need": "transport",
+        "days": [
+          "Mon",
+          "Wed",
+          "Fri"
+        ],
+        "start": "07:00",
+        "end": "17:00"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031440201",
+        "need": "caregiving",
+        "days": [
+          "Mon",
+          "Wed",
+          "Fri"
+        ],
+        "start": "07:00",
+        "end": "17:00"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 23103,
+    "completion_tokens": 4875
+  },
+  "latency_ms": 334336,
+  "wall_s": 334.39,
+  "log": [
+    {
+      "prompt_sha256": "a82e42420f37bb983a06ffec67f7e1764fd7686b10bb91af57603c3be9a275ff",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 13863,
+      "usage": {
+        "prompt_tokens": 4592,
+        "total_tokens": 4797,
+        "completion_tokens": 205,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 14
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I'll gather the patient's record and evidence first.",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-D003"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-D003"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-D003"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-D003"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-D003"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031820100"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 41506,
+      "usage": {
+        "prompt_tokens": 5518,
+        "total_tokens": 5855,
+        "completion_tokens": 337,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 253
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031440201"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_transit_trip",
+          "args": {
+            "appt_ref": "appt:2",
+            "arrive_by": "09:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 89153,
+      "usage": {
+        "prompt_tokens": 6393,
+        "total_tokens": 7497,
+        "completion_tokens": 1104,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 918
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031440201",
+            "need": "transport",
+            "days": [
+              "Mon",
+              "Wed",
+              "Fri"
+            ],
+            "start": "07:00",
+            "end": "17:00"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031440201",
+            "need": "caregiving",
+            "days": [
+              "Mon",
+              "Wed",
+              "Fri"
+            ],
+            "start": "07:00",
+            "end": "17:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 189814,
+      "usage": {
+        "prompt_tokens": 6600,
+        "total_tokens": 9829,
+        "completion_tokens": 3229,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 2796
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "She cannot drive, relies on cabs, and lives in a high no-vehicle-share tract; Original Medicare covers no routine rides, so 3x/week 9 AM rehab trips are costly and hard.",
+                    "evidence": [
+                      "turn:T06",
+                      "turn:T02",
+                      "tract:no_vehicle_share",
+                      "screener:transportation"
+                    ]
+                  },
+                  {
+                    "barrier": "caregiving",
+                    "reason": "Harold cannot be left alone and the neighbor only covers two hours, so she may have no one to watch him during rehab.",
+                    "evidence": [
+                      "turn:T02",
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask cardiac rehab for a later start or a different day when someone can watch Harold."
+                  },
+                  {
+                    "category": "ada_paratransit",
+                    "resource_record_id": null,
+                    "text": "Apply for ADA Paratransit certification (312-663-HELP) if fixed-route bus/train is not usable; allow up to 21 days for a decision."
+                  },
+                  {
+                    "category": "medicare_transport_gap",
+                    "resource_record_id": null,
+                    "text": "Original Medicare generally does not cover routine rehab rides; do not promise a covered ride\u2014confirm any plan transport benefit first."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

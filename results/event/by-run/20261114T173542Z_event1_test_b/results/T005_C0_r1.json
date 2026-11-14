@@ -1,0 +1,186 @@
+{
+  "case_id": "T005",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "caregiving",
+            "reason": "The patient has no one to watch the 4-month-old during a weekday 9:00 AM downtown visit; her sister works mornings, so she cannot bring the infant and sit for two hours.",
+            "evidence": [
+              "turn:T08",
+              "turn:T10"
+            ]
+          },
+          {
+            "barrier": "transport",
+            "reason": "The referral is to the main hospital campus at 9:00 AM, which is not the same easy Roosevelt bus trip to the clinic, and doing it with an infant makes the trip impractical as written.",
+            "evidence": [
+              "turn:T08",
+              "turn:T12"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the allergy/immunology unit for a later chair time or a different weekday that works without the infant, and confirm whether the infant can accompany the visit or if telehealth is an option."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "housing",
+            "reason": "Mold remediation depends on the landlord, who has ignored two requests and only offered to paint over the bathroom mold, so the patient cannot reliably reduce this trigger herself.",
+            "evidence": [
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "housing",
+            "resource_record_id": null,
+            "text": "Provide the landlord letter (already planned), and refer the patient to local housing/code enforcement or legal aid to compel mold remediation, while giving interim trigger-reduction steps she can control."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3103,
+    "completion_tokens": 1635
+  },
+  "latency_ms": 92573,
+  "wall_s": 92.6,
+  "log": [
+    {
+      "prompt_sha256": "1bc385220992651d49b07cf99558bbcc1274fcb9cd1a6cd5fc16c69e20791c60",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 92573,
+      "usage": {
+        "prompt_tokens": 3103,
+        "total_tokens": 4738,
+        "completion_tokens": 1635,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1088
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "caregiving",
+                    "reason": "The patient has no one to watch the 4-month-old during a weekday 9:00 AM downtown visit; her sister works mornings, so she cannot bring the infant and sit for two hours.",
+                    "evidence": [
+                      "turn:T08",
+                      "turn:T10"
+                    ]
+                  },
+                  {
+                    "barrier": "transport",
+                    "reason": "The referral is to the main hospital campus at 9:00 AM, which is not the same easy Roosevelt bus trip to the clinic, and doing it with an infant makes the trip impractical as written.",
+                    "evidence": [
+                      "turn:T08",
+                      "turn:T12"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the allergy/immunology unit for a later chair time or a different weekday that works without the infant, and confirm whether the infant can accompany the visit or if telehealth is an option."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "housing",
+                    "reason": "Mold remediation depends on the landlord, who has ignored two requests and only offered to paint over the bathroom mold, so the patient cannot reliably reduce this trigger herself.",
+                    "evidence": [
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "housing",
+                    "resource_record_id": null,
+                    "text": "Provide the landlord letter (already planned), and refer the patient to local housing/code enforcement or legal aid to compel mold remediation, while giving interim trigger-reduction steps she can control."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,403 @@
+{
+  "case_id": "T004",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "blocked",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "She works 6:00 AM\u20132:30 PM and said the 10:00 AM visit is the problem; she already no-showed the 10/13 10:00 AM visit for this reason and risks job loss after two unexcused absences.",
+            "evidence": [
+              "turn:T02",
+              "turn:T04",
+              "appt:2",
+              "appt:4"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the OB clinic for a Tuesday slot after 3:00 PM, after her shift ends at 2:30 PM; she confirmed after-work visits work."
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "Bundle labs or other visits on the same Tuesday afternoon to limit missed work days."
+          },
+          {
+            "category": "nemt",
+            "resource_record_id": null,
+            "text": "Medicaid covers NEMT rides; call the number on the plan card to book, though this does not fix the 10:00 AM work conflict."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "food_access",
+            "reason": "Screener shows food worry is sometimes true; a daily fresh-produce, lean-meat diet may be hard to afford or obtain reliably.",
+            "evidence": [
+              "screener:food_worry"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "snap",
+            "resource_record_id": null,
+            "text": "Apply for SNAP through Illinois ABE (abe.illinois.gov); very low-income households can get expedited benefits within 7 days."
+          },
+          {
+            "category": "food_pantry",
+            "resource_record_id": "CUR040",
+            "text": "Casa Catalina pantry, 4537 S Ashland Ave; Tue 9:30\u201311:30, Wed 13:00\u201317:30, Thu 9:30\u201311:30; also offers SNAP application assistance (call to confirm hours)."
+          },
+          {
+            "category": "food_access",
+            "resource_record_id": null,
+            "text": "Ask the OB clinic for a nutrition/dietitian referral to adapt the iron-rich diet to foods she can actually afford and get."
+          }
+        ]
+      }
+    ]
+  },
+  "error": null,
+  "steps": 3,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T004"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T004"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T004"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T004"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T004"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_visit_transcript",
+      "args": {
+        "visit_id": "V-T004",
+        "topic": "transport"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_visit_transcript",
+      "args": {
+        "visit_id": "V-T004",
+        "topic": "work_schedule"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_transit_trip",
+      "args": {
+        "appt_ref": "appt:4",
+        "arrive_by": "10:00"
+      },
+      "ok": false
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031580600",
+        "need": "food",
+        "days": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri",
+          "Sat",
+          "Sun"
+        ]
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 18103,
+    "completion_tokens": 3705
+  },
+  "latency_ms": 190467,
+  "wall_s": 190.52,
+  "log": [
+    {
+      "prompt_sha256": "60b7e4c6bb4435d0d995a88cd47ca35a7a5147b2129e035c34d6efcdf86aef15",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 17191,
+      "usage": {
+        "prompt_tokens": 4750,
+        "total_tokens": 5196,
+        "completion_tokens": 446,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 218
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T004"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T004"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T004"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T004"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T004"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_visit_transcript",
+          "args": {
+            "visit_id": "V-T004",
+            "topic": "transport"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_visit_transcript",
+          "args": {
+            "visit_id": "V-T004",
+            "topic": "work_schedule"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 101754,
+      "usage": {
+        "prompt_tokens": 6058,
+        "total_tokens": 7916,
+        "completion_tokens": 1858,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1733
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_transit_trip",
+          "args": {
+            "appt_ref": "appt:4",
+            "arrive_by": "10:00"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031580600",
+            "need": "food",
+            "days": [
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri",
+              "Sat",
+              "Sun"
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 71522,
+      "usage": {
+        "prompt_tokens": 7295,
+        "total_tokens": 8696,
+        "completion_tokens": 1401,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 742
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "blocked",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "She works 6:00 AM\u20132:30 PM and said the 10:00 AM visit is the problem; she already no-showed the 10/13 10:00 AM visit for this reason and risks job loss after two unexcused absences.",
+                    "evidence": [
+                      "turn:T02",
+                      "turn:T04",
+                      "appt:2",
+                      "appt:4"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the OB clinic for a Tuesday slot after 3:00 PM, after her shift ends at 2:30 PM; she confirmed after-work visits work."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Bundle labs or other visits on the same Tuesday afternoon to limit missed work days."
+                  },
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Medicaid covers NEMT rides; call the number on the plan card to book, though this does not fix the 10:00 AM work conflict."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "Screener shows food worry is sometimes true; a daily fresh-produce, lean-meat diet may be hard to afford or obtain reliably.",
+                    "evidence": [
+                      "screener:food_worry"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "snap",
+                    "resource_record_id": null,
+                    "text": "Apply for SNAP through Illinois ABE (abe.illinois.gov); very low-income households can get expedited benefits within 7 days."
+                  },
+                  {
+                    "category": "food_pantry",
+                    "resource_record_id": "CUR040",
+                    "text": "Casa Catalina pantry, 4537 S Ashland Ave; Tue 9:30\u201311:30, Wed 13:00\u201317:30, Thu 9:30\u201311:30; also offers SNAP application assistance (call to confirm hours)."
+                  },
+                  {
+                    "category": "food_access",
+                    "resource_record_id": null,
+                    "text": "Ask the OB clinic for a nutrition/dietitian referral to adapt the iron-rich diet to foods she can actually afford and get."
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,196 @@
+{
+  "case_id": "D008",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "A weekday 8:00 AM lab appointment conflicts with the patient's overnight security shift (11 PM\u20137 AM) and morning sleep time, making attendance as written unlikely.",
+            "evidence": [
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Ask the hospital lab for a later weekday slot or a day that fits after the overnight shift, since chair/appointment times are limited.",
+            "resource_record_id": null
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "text": "Schedule the pulmonary function test on the same day/campus as another existing visit to reduce separate trips.",
+            "resource_record_id": null
+          },
+          {
+            "category": "telehealth",
+            "text": "Check whether any part of the pulmonary workup can be done by telehealth if a full in-person lab test is not required at that visit.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "food_access",
+            "reason": "The patient eats whatever is quick while working nights, so obtaining fresh fruits and vegetables and maintaining under 2 g sodium daily may be difficult.",
+            "evidence": [
+              "turn:T10"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "food_pantry",
+            "text": "Use the Greater Chicago Food Depository locator to find a pantry open on the patient's non-treatment nights, then pair choices with renal-dietitian guidance.",
+            "resource_record_id": null
+          },
+          {
+            "category": "snap",
+            "text": "Apply for SNAP through Illinois ABE to help afford healthier, lower-sodium groceries.",
+            "resource_record_id": null
+          },
+          {
+            "category": "medically_tailored_meals",
+            "text": "Check whether the patient's Medicaid MCO or Medicare Advantage plan covers medically tailored meals for hypertension.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 2893,
+    "completion_tokens": 1579
+  },
+  "latency_ms": 79790,
+  "wall_s": 79.81,
+  "log": [
+    {
+      "prompt_sha256": "94a384bd8f0f1d752d77060a18ab1aa60a9640f88f3c203616c6cadc46257ebc",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 79790,
+      "usage": {
+        "prompt_tokens": 2893,
+        "total_tokens": 4472,
+        "completion_tokens": 1579,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1057
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "A weekday 8:00 AM lab appointment conflicts with the patient's overnight security shift (11 PM\u20137 AM) and morning sleep time, making attendance as written unlikely.",
+                    "evidence": [
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask the hospital lab for a later weekday slot or a day that fits after the overnight shift, since chair/appointment times are limited.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "text": "Schedule the pulmonary function test on the same day/campus as another existing visit to reduce separate trips.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "telehealth",
+                    "text": "Check whether any part of the pulmonary workup can be done by telehealth if a full in-person lab test is not required at that visit.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "The patient eats whatever is quick while working nights, so obtaining fresh fruits and vegetables and maintaining under 2 g sodium daily may be difficult.",
+                    "evidence": [
+                      "turn:T10"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "food_pantry",
+                    "text": "Use the Greater Chicago Food Depository locator to find a pantry open on the patient's non-treatment nights, then pair choices with renal-dietitian guidance.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "snap",
+                    "text": "Apply for SNAP through Illinois ABE to help afford healthier, lower-sodium groceries.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "medically_tailored_meals",
+                    "text": "Check whether the patient's Medicaid MCO or Medicare Advantage plan covers medically tailored meals for hypertension.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,167 @@
+{
+  "case_id": "T004",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "The patient works 6:00 AM to 2:30 PM at a candy factory with only two unexcused absences allowed before termination, already missed a visit because she could not leave work, and said the 10:00 AM time is the problem while after-work is fine.",
+            "evidence": [
+              "turn:T02",
+              "turn:T03",
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Request a later prenatal appointment after her shift (around 3:00 PM) or on a day that matches an available ride; chair/slot availability is limited."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 2,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 6877,
+    "completion_tokens": 1205
+  },
+  "latency_ms": 54204,
+  "wall_s": 54.23,
+  "log": [
+    {
+      "prompt_sha256": "e5262e6f9c125b5f2407a88175926764f1f00077d03938cbd428868b31ca8c91",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 43200,
+      "usage": {
+        "prompt_tokens": 3073,
+        "total_tokens": 3942,
+        "completion_tokens": 869,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 519
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "[{\"item_id\": \"P1\", \"status\": \"at_risk\", \"barriers\": [{\"barrier\": \"work_schedule\", \"reason\": \"The patient works 6:00 AM to 2:30 PM at a candy factory with only two unexcused absences allowed before termination, and already missed a visit because she could not leave work; a Tuesday 10:00 AM appointment falls squarely in her shift, and she explicitly said the 10 o'clock time is the problem while after-work is fine.\", \"evidence\": [\"turn:T02\", \"turn:T03\", \"turn:T04\"]}], \"alternatives\": [{\"category\": \"schedule_change\", \"text\": \"Request a later prenatal appointment after her shift (e.g., around 3:00 PM) or on a day that matches an available ride, noting chair/slot availability is limited.\"}]}] , \"P2\": {\"item_id\": \"P2\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []} , \"P3\": {\"item_id\": \"P3\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []} , \"P4\": {\"item_id\": \"P4\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []} , \"P5\": {\"item_id\": \"P5\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}]}"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 11004,
+      "usage": {
+        "prompt_tokens": 3804,
+        "total_tokens": 4140,
+        "completion_tokens": 336,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 26
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "The patient works 6:00 AM to 2:30 PM at a candy factory with only two unexcused absences allowed before termination, already missed a visit because she could not leave work, and said the 10:00 AM time is the problem while after-work is fine.",
+                    "evidence": [
+                      "turn:T02",
+                      "turn:T03",
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Request a later prenatal appointment after her shift (around 3:00 PM) or on a day that matches an available ride; chair/slot availability is limited."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

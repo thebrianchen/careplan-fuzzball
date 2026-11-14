@@ -1,0 +1,84 @@
+{
+  "case_id": "D005",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "likely_ok"
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok"
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok"
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok"
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 2793,
+    "completion_tokens": 502
+  },
+  "latency_ms": 30321,
+  "wall_s": 30.35,
+  "log": [
+    {
+      "prompt_sha256": "1f097645d5205d0175b06d340578e29555d4c1fcd5b0c94a7c20d87afd111099",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 30321,
+      "usage": {
+        "prompt_tokens": 2793,
+        "total_tokens": 3295,
+        "completion_tokens": 502,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 415
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok"
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

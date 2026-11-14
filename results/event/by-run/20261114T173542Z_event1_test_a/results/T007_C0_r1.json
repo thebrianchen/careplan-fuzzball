@@ -1,0 +1,152 @@
+{
+  "case_id": "T007",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "A fixed Tuesday 2:00 PM therapy slot conflicts with the patient's rotating Target shifts, which are posted Sundays and sometimes fall on Tuesday afternoons; the patient cannot commit to the same day/time weekly.",
+            "evidence": [
+              "turn:T04",
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask behavioral health to move CBT to a morning slot before 10 AM (the only time the patient is never scheduled to work) or to a weekday that reliably matches a non-work day."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Have the clinic confirm the standing appointment each week only after the Sunday shift schedule posts, so it is booked only on Tuesdays the patient is off."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3052,
+    "completion_tokens": 990
+  },
+  "latency_ms": 51742,
+  "wall_s": 51.77,
+  "log": [
+    {
+      "prompt_sha256": "d3e4e4203ec65b8ecf41b269b6e78726aa96e4aa1b73e67157261218cbfbc317",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 51742,
+      "usage": {
+        "prompt_tokens": 3052,
+        "total_tokens": 4042,
+        "completion_tokens": 990,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 647
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "A fixed Tuesday 2:00 PM therapy slot conflicts with the patient's rotating Target shifts, which are posted Sundays and sometimes fall on Tuesday afternoons; the patient cannot commit to the same day/time weekly.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask behavioral health to move CBT to a morning slot before 10 AM (the only time the patient is never scheduled to work) or to a weekday that reliably matches a non-work day."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Have the clinic confirm the standing appointment each week only after the Sunday shift schedule posts, so it is booked only on Tuesdays the patient is off."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

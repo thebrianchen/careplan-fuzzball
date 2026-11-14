@@ -1,0 +1,319 @@
+{
+  "case_id": "D003",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "No driver's license; relies on cab; Original Medicare has no transport benefit; tract has high no-vehicle share and limited transit access.",
+            "evidence": [
+              "turn:T06",
+              "tract:no_vehicle_share",
+              "tract:places_lacktrpt"
+            ]
+          },
+          {
+            "barrier": "caregiving",
+            "reason": "Harold cannot be left alone; neighbor covers only 2 hours; patient cannot spare three weekday mornings for rehab.",
+            "evidence": [
+              "turn:T02",
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "ada_paratransit",
+            "resource_record_id": null,
+            "text": "Apply for ADA Paratransit certification (312-663-HELP, weekdays 8:30-5); rides match fixed-route times and are not immediate."
+          },
+          {
+            "category": "medicare_transport_gap",
+            "resource_record_id": null,
+            "text": "Check whether any Medicare transport benefit applies; Original Medicare generally does not cover routine rehab rides."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask cardiac rehab for a later start time or a different day that fits a ride and caregiver coverage."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 3,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-D003"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-D003"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-D003"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-D003"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-D003"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031830100"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031440201"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_transit_trip",
+      "args": {
+        "appt_ref": "appt:2",
+        "arrive_by": "09:00"
+      },
+      "ok": false
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 17722,
+    "completion_tokens": 3756
+  },
+  "latency_ms": 203628,
+  "wall_s": 203.67,
+  "log": [
+    {
+      "prompt_sha256": "a82e42420f37bb983a06ffec67f7e1764fd7686b10bb91af57603c3be9a275ff",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 9479,
+      "usage": {
+        "prompt_tokens": 4592,
+        "total_tokens": 4794,
+        "completion_tokens": 202,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 10
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I'll gather the patient's record and neighborhood data first.",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-D003"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-D003"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-D003"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-D003"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-D003"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031830100"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 25016,
+      "usage": {
+        "prompt_tokens": 6108,
+        "total_tokens": 6588,
+        "completion_tokens": 480,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 357
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "The patient's home tract is 17031440201, not the one I queried. Let me get the correct tract profile and check transit to the hospital.",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031440201"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_transit_trip",
+          "args": {
+            "appt_ref": "appt:2",
+            "arrive_by": "09:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 169133,
+      "usage": {
+        "prompt_tokens": 7022,
+        "total_tokens": 10096,
+        "completion_tokens": 3074,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 2670
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "No driver's license; relies on cab; Original Medicare has no transport benefit; tract has high no-vehicle share and limited transit access.",
+                    "evidence": [
+                      "turn:T06",
+                      "tract:no_vehicle_share",
+                      "tract:places_lacktrpt"
+                    ]
+                  },
+                  {
+                    "barrier": "caregiving",
+                    "reason": "Harold cannot be left alone; neighbor covers only 2 hours; patient cannot spare three weekday mornings for rehab.",
+                    "evidence": [
+                      "turn:T02",
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "ada_paratransit",
+                    "resource_record_id": null,
+                    "text": "Apply for ADA Paratransit certification (312-663-HELP, weekdays 8:30-5); rides match fixed-route times and are not immediate."
+                  },
+                  {
+                    "category": "medicare_transport_gap",
+                    "resource_record_id": null,
+                    "text": "Check whether any Medicare transport benefit applies; Original Medicare generally does not cover routine rehab rides."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask cardiac rehab for a later start time or a different day that fits a ride and caregiver coverage."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

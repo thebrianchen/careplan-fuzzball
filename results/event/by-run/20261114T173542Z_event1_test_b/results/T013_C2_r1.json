@@ -1,0 +1,357 @@
+{
+  "case_id": "T013",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P2",
+        "status": "blocked",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "Caregiver leaves at 6:15 AM for work and cannot drive patient to the West Side 8:00 AM drop-off; patient with dementia cannot ride the bus alone; tract has high no-vehicle share.",
+            "evidence": [
+              "turn:T04",
+              "turn:T06",
+              "tract:no_vehicle_share",
+              "screener:transportation"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the adult day program if it runs a van/shuttle and whether an 8:00 AM drop-off is required or flexible."
+          },
+          {
+            "category": "dialysis_social_worker",
+            "resource_record_id": null,
+            "text": "Not applicable to adult day; instead ask the geriatrics social worker about in-home respite or day-program transport options."
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "Not applicable to adult day; consider a program closer to home or on the caregiver's route."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "blocked",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "Son works Thursday mornings as a boiler technician and would be docked pay; he cannot attend a 10:00 AM class.",
+            "evidence": [
+              "turn:08"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the hospital for a different day/time, a recorded session, or a one-on-one meeting with a social worker instead of the class series."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": [
+          {
+            "category": "nemt",
+            "resource_record_id": null,
+            "text": "Patient has dual Medicaid/Medicare with a transport benefit; use Medicaid NEMT (call the plan card number) for the follow-up if the son cannot drive."
+          }
+        ]
+      }
+    ]
+  },
+  "error": null,
+  "steps": 3,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T013"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T013"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T013"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T013"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T013"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031841100"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031841100",
+        "need": "transport",
+        "days": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri"
+        ]
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 17164,
+    "completion_tokens": 2622
+  },
+  "latency_ms": 144512,
+  "wall_s": 144.56,
+  "log": [
+    {
+      "prompt_sha256": "b4f723cd7b20a54588ea17ca7d9f6f02988ab2d6edb27aecc8d8b412bbf61887",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 8621,
+      "usage": {
+        "prompt_tokens": 4821,
+        "total_tokens": 5049,
+        "completion_tokens": 228,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 82
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T013"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T013"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T013"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T013"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T013"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 48606,
+      "usage": {
+        "prompt_tokens": 5788,
+        "total_tokens": 6560,
+        "completion_tokens": 772,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 664
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031841100"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031841100",
+            "need": "transport",
+            "days": [
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri"
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 87285,
+      "usage": {
+        "prompt_tokens": 6555,
+        "total_tokens": 8177,
+        "completion_tokens": 1622,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1077
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P2",
+                "status": "blocked",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Caregiver leaves at 6:15 AM for work and cannot drive patient to the West Side 8:00 AM drop-off; patient with dementia cannot ride the bus alone; tract has high no-vehicle share.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T06",
+                      "tract:no_vehicle_share",
+                      "screener:transportation"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the adult day program if it runs a van/shuttle and whether an 8:00 AM drop-off is required or flexible."
+                  },
+                  {
+                    "category": "dialysis_social_worker",
+                    "resource_record_id": null,
+                    "text": "Not applicable to adult day; instead ask the geriatrics social worker about in-home respite or day-program transport options."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Not applicable to adult day; consider a program closer to home or on the caregiver's route."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "blocked",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Son works Thursday mornings as a boiler technician and would be docked pay; he cannot attend a 10:00 AM class.",
+                    "evidence": [
+                      "turn:08"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the hospital for a different day/time, a recorded session, or a one-on-one meeting with a social worker instead of the class series."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Patient has dual Medicaid/Medicare with a transport benefit; use Medicaid NEMT (call the plan card number) for the follow-up if the son cannot drive."
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

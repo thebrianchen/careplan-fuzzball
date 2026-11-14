@@ -1,0 +1,212 @@
+{
+  "case_id": "T020",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "caregiving",
+            "reason": "The patient\u2019s wife is in a rehabilitation hospital and the patient has already missed four dialysis sessions, so the fixed 5:30 AM Monday/Wednesday/Friday schedule may be difficult to keep.",
+            "evidence": [
+              "turn:T01",
+              "turn:T02"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Ask the dialysis unit about a later chair time or a different day that works better now that the patient\u2019s wife is in rehabilitation.",
+            "resource_record_id": null
+          },
+          {
+            "category": "dialysis_social_worker",
+            "text": "Ask the dialysis unit social worker to assess caregiving, transportation, and benefit needs and help arrange support.",
+            "resource_record_id": null
+          },
+          {
+            "category": "home_dialysis_evaluation",
+            "text": "Discuss referral for peritoneal or home hemodialysis evaluation if in-center timing remains unworkable; this is a clinical decision with home and support requirements.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "language_literacy",
+            "reason": "The patient needs English renal-diet materials read by a daughter in Arizona who works and has requested a Polish version, so English-only education may not be understood or consistently available.",
+            "evidence": [
+              "turn:T05",
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "interpreter",
+            "text": "Provide the potassium handout and diet education in Polish through a qualified interpreter or translated materials.",
+            "resource_record_id": null
+          },
+          {
+            "category": "renal_dietitian",
+            "text": "Ask the dialysis dietitian to create a low-potassium plan using foods the patient can obtain and explain it in Polish with interpreter support.",
+            "resource_record_id": null
+          },
+          {
+            "category": "food_pantry",
+            "text": "If food access is limited, use a pantry locator for non-treatment days and have the dietitian review pantry choices for potassium content.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3123,
+    "completion_tokens": 1224
+  },
+  "latency_ms": 81755,
+  "wall_s": 81.78,
+  "log": [
+    {
+      "prompt_sha256": "639a7248c8f3b4d871a55adeb23696c2f2e41fc04bb5f8f966958d0fdd3a3981",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 81755,
+      "usage": {
+        "prompt_tokens": 3123,
+        "total_tokens": 4347,
+        "completion_tokens": 1224,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 649
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "caregiving",
+                    "reason": "The patient\u2019s wife is in a rehabilitation hospital and the patient has already missed four dialysis sessions, so the fixed 5:30 AM Monday/Wednesday/Friday schedule may be difficult to keep.",
+                    "evidence": [
+                      "turn:T01",
+                      "turn:T02"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask the dialysis unit about a later chair time or a different day that works better now that the patient\u2019s wife is in rehabilitation.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "dialysis_social_worker",
+                    "text": "Ask the dialysis unit social worker to assess caregiving, transportation, and benefit needs and help arrange support.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "home_dialysis_evaluation",
+                    "text": "Discuss referral for peritoneal or home hemodialysis evaluation if in-center timing remains unworkable; this is a clinical decision with home and support requirements.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "language_literacy",
+                    "reason": "The patient needs English renal-diet materials read by a daughter in Arizona who works and has requested a Polish version, so English-only education may not be understood or consistently available.",
+                    "evidence": [
+                      "turn:T05",
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "interpreter",
+                    "text": "Provide the potassium handout and diet education in Polish through a qualified interpreter or translated materials.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "renal_dietitian",
+                    "text": "Ask the dialysis dietitian to create a low-potassium plan using foods the patient can obtain and explain it in Polish with interpreter support.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "food_pantry",
+                    "text": "If food access is limited, use a pantry locator for non-treatment days and have the dietitian review pantry choices for potassium content.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,259 @@
+{
+  "case_id": "D008",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "Overnight shift ends at 7 AM and patient sleeps in the morning, so a weekday 8:00 AM appointment conflicts directly.",
+            "evidence": [
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Ask the clinic for a later appointment time or a different day after the patient's morning sleep.",
+            "resource_record_id": null
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "text": "If another clinic visit exists, schedule the PFT the same day/campus to avoid a separate early trip.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 3,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-D008"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-D008"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-D008"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-D008"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-D008"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031400800"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 16324,
+    "completion_tokens": 3815
+  },
+  "latency_ms": 223787,
+  "wall_s": 223.81,
+  "log": [
+    {
+      "prompt_sha256": "a83ab77544690f311157509572c1fa041e0b233eff56df4da3174f3c35398183",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 6219,
+      "usage": {
+        "prompt_tokens": 4570,
+        "total_tokens": 4738,
+        "completion_tokens": 168,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 9
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I'll gather the patient's record information to assess each plan item.",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-D008"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-D008"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-D008"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-D008"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-D008"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 45328,
+      "usage": {
+        "prompt_tokens": 5482,
+        "total_tokens": 6238,
+        "completion_tokens": 756,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 718
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031400800"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 172240,
+      "usage": {
+        "prompt_tokens": 6272,
+        "total_tokens": 9163,
+        "completion_tokens": 2891,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 2358
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I have all the evidence I need. Let me summarize my analysis:\n\n**Patient context:** 41M, Medicaid (transport benefit: yes), works overnights 11 PM\u20137 AM and sleeps mornings, drives own car, English-speaking. Screener: no food worry, stable housing, utilities shutoff risk flagged. Tract: high no-vehicle share but he drives; no food desert (lila=0). Meds all low copay ($1\u2013$3).\n\n- **P1 (PFT 8 AM weekday):** at_risk \u2014 work schedule: overnight shift ends 7 AM and he sleeps mornings, so an 8 AM slot directly conflicts (turn:T04).\n- **P2 (albuterol neb PRN):** likely_ok \u2014 home-based, $1 copay, no refill gap.\n- **P3 (low-sodium fresh diet):** likely_ok \u2014 no food insecurity evidence (screener never_true; tract lila=0); \"quick food\" habit is a consideration but not a concrete barrier.\n- **P4 (budesonide-formoterol + phone reminder):** likely_ok \u2014 $3 copay, English, reminder addresses the missed-dose habit.\n\nI'll submit now.",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Overnight shift ends at 7 AM and patient sleeps in the morning, so a weekday 8:00 AM appointment conflicts directly.",
+                    "evidence": [
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask the clinic for a later appointment time or a different day after the patient's morning sleep.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "text": "If another clinic visit exists, schedule the PFT the same day/campus to avoid a separate early trip.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

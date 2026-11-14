@@ -1,0 +1,461 @@
+{
+  "case_id": "T019",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "No steady housing, high no-vehicle share in tract, and patient relies on bus; prior ID-clinic no-show suggests travel is unreliable.",
+            "evidence": [
+              "screener:living_situation",
+              "tract:no_vehicle_share",
+              "appt:2",
+              "turn:T05",
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "nemt",
+            "resource_record_id": null,
+            "text": "Medicaid covers NEMT; call the number on the back of the HealthChoice plan card to book the lab ride (MCO rules vary; confirm lead time)."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the lab for a later or same-day time that matches an available bus/Halsted route."
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "If possible, draw the viral-load lab on the same day as any other clinic visit to reduce trips."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "digital_access",
+            "reason": "Patient says phone is cracked but works and has the app; portal reminders could fail if the phone breaks.",
+            "evidence": [
+              "turn:T12"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "interpreter",
+            "resource_record_id": null,
+            "text": "Use plain-language instructions and offer case-manager phone calls or text reminders instead of relying only on the portal app."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "food_access",
+            "reason": "Patient screens positive for food worry and ran-out-of-food; tract is low-income/low-access, so high-calorie food and supplements may be hard to obtain.",
+            "evidence": [
+              "screener:food_worry",
+              "screener:food_ran_out",
+              "tract:lila_half_10",
+              "tract:places_foodinsecu",
+              "turn:T08"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "snap",
+            "resource_record_id": null,
+            "text": "Apply for SNAP through Illinois ABE (abe.illinois.gov); expedited benefits may be available within 7 days for very low income."
+          },
+          {
+            "category": "food_pantry",
+            "resource_record_id": "CUR052",
+            "text": "Salvation Army Englewood Red Shield Center pantry, 845 W 69th St, open Tue-Thu 9:00-13:00; call 773-358-3200 to confirm."
+          },
+          {
+            "category": "medically_tailored_meals",
+            "resource_record_id": null,
+            "text": "Check whether the patient's Medicaid MCO or Medicare Advantage plan covers medically tailored meals before promising them."
+          }
+        ]
+      },
+      {
+        "item_id": "P5",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "Follow-up requires travel to the hospital ID clinic; prior no-show, no-vehicle tract share, and unstable housing make attendance uncertain.",
+            "evidence": [
+              "appt:2",
+              "screener:living_situation",
+              "tract:no_vehicle_share",
+              "tract:places_lacktrpt"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "nemt",
+            "resource_record_id": null,
+            "text": "Medicaid NEMT: call the number on the back of the plan card to schedule the 3-month ID visit; book early because MCO lead times vary."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Request a clinic chair/appointment time that aligns with a working bus route or the patient's ride."
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "Combine the ID follow-up with any other scheduled visit or lab draw on the same campus/day if clinically appropriate."
+          }
+        ]
+      }
+    ]
+  },
+  "error": null,
+  "steps": 3,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T019"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T019"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T019"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T019"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T019"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031710800"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031710800",
+        "need": "food",
+        "days": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri",
+          "Sat",
+          "Sun"
+        ]
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 17835,
+    "completion_tokens": 2757
+  },
+  "latency_ms": 149108,
+  "wall_s": 149.16,
+  "log": [
+    {
+      "prompt_sha256": "3b5697f3f2931564a19bce174412aa66060c63939bc4c68079f0a23a8853413e",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 7186,
+      "usage": {
+        "prompt_tokens": 4709,
+        "total_tokens": 4875,
+        "completion_tokens": 166,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 20
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T019"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T019"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T019"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T019"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T019"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 59687,
+      "usage": {
+        "prompt_tokens": 5553,
+        "total_tokens": 6641,
+        "completion_tokens": 1088,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 974
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031710800"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031710800",
+            "need": "food",
+            "days": [
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri",
+              "Sat",
+              "Sun"
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 82235,
+      "usage": {
+        "prompt_tokens": 7573,
+        "total_tokens": 9076,
+        "completion_tokens": 1503,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 532
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "No steady housing, high no-vehicle share in tract, and patient relies on bus; prior ID-clinic no-show suggests travel is unreliable.",
+                    "evidence": [
+                      "screener:living_situation",
+                      "tract:no_vehicle_share",
+                      "appt:2",
+                      "turn:T05",
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Medicaid covers NEMT; call the number on the back of the HealthChoice plan card to book the lab ride (MCO rules vary; confirm lead time)."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the lab for a later or same-day time that matches an available bus/Halsted route."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "If possible, draw the viral-load lab on the same day as any other clinic visit to reduce trips."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "digital_access",
+                    "reason": "Patient says phone is cracked but works and has the app; portal reminders could fail if the phone breaks.",
+                    "evidence": [
+                      "turn:T12"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "interpreter",
+                    "resource_record_id": null,
+                    "text": "Use plain-language instructions and offer case-manager phone calls or text reminders instead of relying only on the portal app."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "Patient screens positive for food worry and ran-out-of-food; tract is low-income/low-access, so high-calorie food and supplements may be hard to obtain.",
+                    "evidence": [
+                      "screener:food_worry",
+                      "screener:food_ran_out",
+                      "tract:lila_half_10",
+                      "tract:places_foodinsecu",
+                      "turn:T08"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "snap",
+                    "resource_record_id": null,
+                    "text": "Apply for SNAP through Illinois ABE (abe.illinois.gov); expedited benefits may be available within 7 days for very low income."
+                  },
+                  {
+                    "category": "food_pantry",
+                    "resource_record_id": "CUR052",
+                    "text": "Salvation Army Englewood Red Shield Center pantry, 845 W 69th St, open Tue-Thu 9:00-13:00; call 773-358-3200 to confirm."
+                  },
+                  {
+                    "category": "medically_tailored_meals",
+                    "resource_record_id": null,
+                    "text": "Check whether the patient's Medicaid MCO or Medicare Advantage plan covers medically tailored meals before promising them."
+                  }
+                ]
+              },
+              {
+                "item_id": "P5",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Follow-up requires travel to the hospital ID clinic; prior no-show, no-vehicle tract share, and unstable housing make attendance uncertain.",
+                    "evidence": [
+                      "appt:2",
+                      "screener:living_situation",
+                      "tract:no_vehicle_share",
+                      "tract:places_lacktrpt"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Medicaid NEMT: call the number on the back of the plan card to schedule the 3-month ID visit; book early because MCO lead times vary."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Request a clinic chair/appointment time that aligns with a working bus route or the patient's ride."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Combine the ID follow-up with any other scheduled visit or lab draw on the same campus/day if clinically appropriate."
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

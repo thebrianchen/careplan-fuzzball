@@ -1,0 +1,361 @@
+{
+  "case_id": "D012",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "utilities",
+            "reason": "Insulin needs refrigeration but patient has no steady housing, so cold storage is uncertain.",
+            "evidence": [
+              "med:1",
+              "prob:2",
+              "screener:living_situation"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "medical_certificate_utilities",
+            "text": "Complete utility medical certification for refrigerated insulin if the patient has utility service; verify current Illinois duration rules.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "Prior podiatry no-show, high no-vehicle share, and patient reports no transport make the 9 AM clinic trip uncertain.",
+            "evidence": [
+              "appt:1",
+              "tract:no_vehicle_share",
+              "screener:transportation"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "nemt",
+            "text": "Medicaid managed care transport: call the number on the Lakeshore plan card to book the podiatry ride; confirm advance-booking rules.",
+            "resource_record_id": null
+          },
+          {
+            "category": "paratransit",
+            "text": "Apply for ADA Paratransit via Northern Illinois Transit Authority (312-663-4357) if health prevents fixed-route bus use.",
+            "resource_record_id": null
+          },
+          {
+            "category": "schedule_change",
+            "text": "Ask the podiatry clinic for a later chair/appointment time that matches an available ride.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "Lab requires travel; patient reports no transport and neighborhood no-vehicle share is high, so a standalone lab trip may fail.",
+            "evidence": [
+              "screener:transportation",
+              "tract:no_vehicle_share"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "nemt",
+            "text": "Book a Medicaid MCO ride to the lab through Lakeshore Community Health Plan; schedule ahead per MCO rules.",
+            "resource_record_id": null
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "text": "Draw the A1c on the same day as another clinic visit or use a lab near home to reduce trips.",
+            "resource_record_id": null
+          }
+        ]
+      }
+    ]
+  },
+  "error": null,
+  "steps": 3,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-D012"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-D012"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-D012"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-D012"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-D012"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031230500"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_transit_trip",
+      "args": {
+        "appt_ref": "appt:1",
+        "arrive_by": "09:00"
+      },
+      "ok": false
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 16175,
+    "completion_tokens": 2236
+  },
+  "latency_ms": 119733,
+  "wall_s": 119.77,
+  "log": [
+    {
+      "prompt_sha256": "212d1d3207974e9b0311196e362683baa8a44c3a23c9b50c941d063ee75337d5",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 12866,
+      "usage": {
+        "prompt_tokens": 4508,
+        "total_tokens": 4753,
+        "completion_tokens": 245,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 99
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-D012"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-D012"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-D012"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-D012"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-D012"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 52284,
+      "usage": {
+        "prompt_tokens": 5407,
+        "total_tokens": 6391,
+        "completion_tokens": 984,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 900
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031230500"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_transit_trip",
+          "args": {
+            "appt_ref": "appt:1",
+            "arrive_by": "09:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 54583,
+      "usage": {
+        "prompt_tokens": 6260,
+        "total_tokens": 7267,
+        "completion_tokens": 1007,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 417
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "utilities",
+                    "reason": "Insulin needs refrigeration but patient has no steady housing, so cold storage is uncertain.",
+                    "evidence": [
+                      "med:1",
+                      "prob:2",
+                      "screener:living_situation"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "medical_certificate_utilities",
+                    "text": "Complete utility medical certification for refrigerated insulin if the patient has utility service; verify current Illinois duration rules.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Prior podiatry no-show, high no-vehicle share, and patient reports no transport make the 9 AM clinic trip uncertain.",
+                    "evidence": [
+                      "appt:1",
+                      "tract:no_vehicle_share",
+                      "screener:transportation"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "text": "Medicaid managed care transport: call the number on the Lakeshore plan card to book the podiatry ride; confirm advance-booking rules.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "paratransit",
+                    "text": "Apply for ADA Paratransit via Northern Illinois Transit Authority (312-663-4357) if health prevents fixed-route bus use.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask the podiatry clinic for a later chair/appointment time that matches an available ride.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Lab requires travel; patient reports no transport and neighborhood no-vehicle share is high, so a standalone lab trip may fail.",
+                    "evidence": [
+                      "screener:transportation",
+                      "tract:no_vehicle_share"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "text": "Book a Medicaid MCO ride to the lab through Lakeshore Community Health Plan; schedule ahead per MCO rules.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "text": "Draw the A1c on the same day as another clinic visit or use a lab near home to reduce trips.",
+                    "resource_record_id": null
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

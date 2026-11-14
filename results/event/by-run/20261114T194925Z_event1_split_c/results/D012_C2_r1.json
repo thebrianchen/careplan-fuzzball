@@ -1,0 +1,373 @@
+{
+  "case_id": "D012",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "housing",
+            "reason": "No steady housing means a dependable refrigerator for insulin is not assured.",
+            "evidence": [
+              "prob:2",
+              "screener:living_situation"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "housing",
+            "resource_record_id": null,
+            "text": "Confirm where pens are stored; connect patient with shelter staff or social work for reliable refrigeration."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "housing",
+            "reason": "Mail-order delivery needs a stable mailing address; patient has no steady place.",
+            "evidence": [
+              "prob:2",
+              "screener:living_situation"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "housing",
+            "resource_record_id": null,
+            "text": "Keep local pharmacy pickup; use the shelter address or social work to coordinate mail delivery."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "Missed a 9:00 AM podiatry visit; area has high no-vehicle share and limited early transit.",
+            "evidence": [
+              "appt:1",
+              "tract:no_vehicle_share",
+              "tract:places_lacktrpt"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "nemt",
+            "resource_record_id": null,
+            "text": "Medicaid NEMT: call the number on the plan card to book rides (MCO rules apply; book ahead)."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the clinic for a later appointment time to avoid the 9 AM slot already missed."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 4,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-D012"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-D012"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-D012"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-D012"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-D012"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031230500"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_transit_trip",
+      "args": {
+        "appt_ref": "appt:1",
+        "arrive_by": "09:00"
+      },
+      "ok": false
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031230500",
+        "need": "transport"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 22668,
+    "completion_tokens": 5264
+  },
+  "latency_ms": 163458,
+  "wall_s": 164.19,
+  "log": [
+    {
+      "prompt_sha256": "212d1d3207974e9b0311196e362683baa8a44c3a23c9b50c941d063ee75337d5",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 4884,
+      "usage": {
+        "prompt_tokens": 4508,
+        "total_tokens": 4735,
+        "completion_tokens": 227,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 68
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I'll start by pulling the patient record and relevant data in parallel.",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-D012"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-D012"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-D012"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-D012"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-D012"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 38361,
+      "usage": {
+        "prompt_tokens": 5420,
+        "total_tokens": 6588,
+        "completion_tokens": 1168,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1028
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I have the core record. Key facts: Medicaid with transport benefit, sheltered homelessness, prior podiatry no-show at 9:00 AM, insulin needs refrigeration, food worry sometimes true. Let me check the neighborhood and the prior podiatry trip feasibility.",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031230500"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_transit_trip",
+          "args": {
+            "appt_ref": "appt:1",
+            "arrive_by": "09:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 37070,
+      "usage": {
+        "prompt_tokens": 6329,
+        "total_tokens": 7431,
+        "completion_tokens": 1102,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1036
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "Let me get community transport resources near the patient's tract for the podiatry referral alternative.",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031230500",
+            "need": "transport"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 83143,
+      "usage": {
+        "prompt_tokens": 6411,
+        "total_tokens": 9178,
+        "completion_tokens": 2767,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 2124
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I have enough evidence. Let me summarize the reasoning before submitting:\n\n- **P1 (insulin + refrigeration):** Patient is sheltered homeless (prob:2, screener:living_situation \"no_steady_place\"), so reliable refrigerator storage for insulin is uncertain \u2192 at_risk (housing).\n- **P2 (mail-order pharmacy):** Mail-order needs a stable mailing address, which the patient lacks \u2192 at_risk (housing).\n- **P3 (podiatry 9:00 AM):** Prior podiatry no-show at 9:00 AM (appt:1), high neighborhood no-vehicle share and limited transit (tract:no_vehicle_share, tract:places_lacktrpt) \u2192 at_risk (transport). Medicaid covers NEMT.\n- **P4 (A1c in 3 months):** Routine lab, no conflicting evidence \u2192 likely_ok.",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "housing",
+                    "reason": "No steady housing means a dependable refrigerator for insulin is not assured.",
+                    "evidence": [
+                      "prob:2",
+                      "screener:living_situation"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "housing",
+                    "resource_record_id": null,
+                    "text": "Confirm where pens are stored; connect patient with shelter staff or social work for reliable refrigeration."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "housing",
+                    "reason": "Mail-order delivery needs a stable mailing address; patient has no steady place.",
+                    "evidence": [
+                      "prob:2",
+                      "screener:living_situation"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "housing",
+                    "resource_record_id": null,
+                    "text": "Keep local pharmacy pickup; use the shelter address or social work to coordinate mail delivery."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Missed a 9:00 AM podiatry visit; area has high no-vehicle share and limited early transit.",
+                    "evidence": [
+                      "appt:1",
+                      "tract:no_vehicle_share",
+                      "tract:places_lacktrpt"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Medicaid NEMT: call the number on the plan card to book rides (MCO rules apply; book ahead)."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the clinic for a later appointment time to avoid the 9 AM slot already missed."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

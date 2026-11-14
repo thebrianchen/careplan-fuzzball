@@ -1,0 +1,405 @@
+{
+  "case_id": "T014",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "9 AM rehab conflicts with walking grandson to bus at 8:30; patient is sole caregiver.",
+            "evidence": [
+              "turn:T04",
+              "turn:T06",
+              "screener:transportation",
+              "tract:no_vehicle_share"
+            ]
+          },
+          {
+            "barrier": "work_schedule",
+            "reason": "Grandson's program runs 9-2 three days a week, same days as rehab.",
+            "evidence": [
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Ask cardiac rehab for a later start time or days matching available rides/caregiver.",
+            "resource_record_id": null
+          },
+          {
+            "category": "nemt",
+            "text": "Dual coverage includes NEMT; call number on plan card to book recurring rides (MCO rules vary).",
+            "resource_record_id": null
+          },
+          {
+            "category": "schedule_change",
+            "text": "Coordinate rehab with an existing appointment day/campus to reduce trips.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "utilities",
+            "reason": "Power shut off since Monday; CPAP needs electricity; patient sleeping upright.",
+            "evidence": [
+              "turn:T08",
+              "turn:T10",
+              "screener:utilities_shutoff"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "medical_certificate_utilities",
+            "text": "Clinician completes utility medical certification form to delay disconnection (health depends on power).",
+            "resource_record_id": null
+          },
+          {
+            "category": "utility_assistance",
+            "text": "Apply through CEDA (Cook County LIHEAP) for bill help; check current funding window.",
+            "resource_record_id": null
+          },
+          {
+            "category": "utility_assistance",
+            "text": "Rogers Park Library warming center, 6907 N Clark St; Mon 12-20, Tue 10-18, Wed 12-20, Thu 10-18, Fri-Sat 9-17, Sun 13-17.",
+            "resource_record_id": "WARM217"
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 4,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T014"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T014"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T014"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T014",
+        "window_days": 90
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T014"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031010702"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031010702",
+        "need": "caregiving"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031010702",
+        "need": "utilities"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 25150,
+    "completion_tokens": 4920
+  },
+  "latency_ms": 255136,
+  "wall_s": 255.19,
+  "log": [
+    {
+      "prompt_sha256": "02fcb7f665ffc637be97d84c170ab19b1d2e2e135414b616b4012657d44e4ffc",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 9289,
+      "usage": {
+        "prompt_tokens": 4768,
+        "total_tokens": 5021,
+        "completion_tokens": 253,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 70
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I'll start by pulling the patient's record, problems, medications, appointments, screener, and neighborhood profile all at once.",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T014"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T014"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T014"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T014",
+            "window_days": 90
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T014"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 82912,
+      "usage": {
+        "prompt_tokens": 5933,
+        "total_tokens": 7241,
+        "completion_tokens": 1308,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1251
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I have the key record. Let me get the neighborhood tract profile to round out the transport picture.",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031010702"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 88273,
+      "usage": {
+        "prompt_tokens": 6645,
+        "total_tokens": 8271,
+        "completion_tokens": 1626,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1508
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I now have the full picture. Let me look up community resources for the caregiving and utilities needs before finalizing.",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031010702",
+            "need": "caregiving"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031010702",
+            "need": "utilities"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 74662,
+      "usage": {
+        "prompt_tokens": 7804,
+        "total_tokens": 9537,
+        "completion_tokens": 1733,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 503
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "## Assessment Summary\n\n**P1 \u2014 Cardiac rehabilitation (MWF 9:00 AM \u00d7 12 weeks):** **at_risk**\n- Barrier: transport \u2014 rehab at 9:00 conflicts with walking grandson to bus at 8:30; patient is the only caregiver. Evidence: turn:T04, turn:T06, screener:transportation=no, tract:no_vehicle_share=0.295.\n- Barrier: work_schedule \u2014 grandson's program runs 9\u20132 three days a week, same days as rehab. Evidence: turn:T04.\n- Alternatives:\n  1. schedule_change \u2014 ask cardiac rehab for a later start time or different days matching available rides. (category: schedule_change)\n  2. medicaid_nemt \u2014 dual coverage includes NEMT; call the number on the plan card to book recurring rides. (category: nemt)\n  3. schedule_change \u2014 ask if rehab can be coordinated with an existing appointment day/campus. (category: schedule_change)\n\n**P2 \u2014 Remote monitoring (Bluetooth scale/BP cuff, daily app upload):** **likely_ok**\n- No digital-access, language, or cost barrier evidenced; patient already tracks weight on calendar. language=en, no screener digital flag.\n\n**P3 \u2014 CPAP nightly:** **at_risk**\n- Barrier: utilities \u2014 power shut off since Monday (ComEd); CPAP requires electricity; patient sleeping sitting up. Evidence: turn:T08, turn:T10, screener:utilities_shutoff=already_shut_off.\n- Alternatives:\n  1. utility_medical_certificate \u2014 clinician completes medical certification form to delay disconnection (health depends on power). (category: medical_certificate_utilities)\n  2. liheap \u2014 apply through CEDA (Cook County) for utility bill assistance; check current funding window. (category: utility_assistance)\n  3. WARM217 Rogers Park Library warming center, Mon 12\u201320, Tue 10\u201318, etc.; open to public during outage. (category: utility_assistance, resource_record_id: WARM217)\n\n**P4 \u2014 Continue sacubitril-valsartan, carvedilol, empagliflozin, furosemide:** **likely_ok**\n- Dual Medicaid/Medicare coverage; monthly copays $1.60\u2013$4.90, no refill gaps. Evidence: med:1\u20134, coverage=dual.\n\n**P5 \u2014 2 g sodium diet; fluid li",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "9 AM rehab conflicts with walking grandson to bus at 8:30; patient is sole caregiver.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T06",
+                      "screener:transportation",
+                      "tract:no_vehicle_share"
+                    ]
+                  },
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Grandson's program runs 9-2 three days a week, same days as rehab.",
+                    "evidence": [
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask cardiac rehab for a later start time or days matching available rides/caregiver.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "nemt",
+                    "text": "Dual coverage includes NEMT; call number on plan card to book recurring rides (MCO rules vary).",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "schedule_change",
+                    "text": "Coordinate rehab with an existing appointment day/campus to reduce trips.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "utilities",
+                    "reason": "Power shut off since Monday; CPAP needs electricity; patient sleeping upright.",
+                    "evidence": [
+                      "turn:T08",
+                      "turn:T10",
+                      "screener:utilities_shutoff"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "medical_certificate_utilities",
+                    "text": "Clinician completes utility medical certification form to delay disconnection (health depends on power).",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "utility_assistance",
+                    "text": "Apply through CEDA (Cook County LIHEAP) for bill help; check current funding window.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "utility_assistance",
+                    "text": "Rogers Park Library warming center, 6907 N Clark St; Mon 12-20, Tue 10-18, Wed 12-20, Thu 10-18, Fri-Sat 9-17, Sun 13-17.",
+                    "resource_record_id": "WARM217"
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,264 @@
+{
+  "case_id": "D001",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "The patient no longer drives and relies on two buses each way to reach the 3:00 PM chair at Park Manor, a long commute that already causes missed sessions, with no local driver available.",
+            "evidence": [
+              "turn:T02",
+              "turn:T04",
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Ask the dialysis unit for a different chair time or day that matches an easier ride, since the 3:00 PM slot is the only one and creates a long two-bus commute.",
+            "resource_record_id": null
+          },
+          {
+            "category": "ada_paratransit",
+            "text": "If the patient's health condition prevents using fixed-route buses/trains, apply for ADA Paratransit certification through the Northern Illinois Transit Authority (312-663-HELP).",
+            "resource_record_id": null
+          },
+          {
+            "category": "dialysis_social_worker",
+            "text": "Contact the dialysis unit social worker to explore transport options and benefits, since the patient is missing in-center sessions.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "food_access",
+            "reason": "The patient eats mostly corner-store food because the real grocery is a bus ride away and they are too wiped out after dialysis to shop, making a fresh-produce renal diet hard to follow.",
+            "evidence": [
+              "turn:T08",
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "renal_dietitian",
+            "text": "Ask the dialysis unit dietitian to redesign the low-potassium/low-phosphorus diet around foods the patient can actually obtain nearby.",
+            "resource_record_id": null
+          },
+          {
+            "category": "food_pantry",
+            "text": "Use the Greater Chicago Food Depository locator for pantries open on non-treatment days, noting pantry food is often not renal-friendly and should be paired with dietitian guidance.",
+            "resource_record_id": null
+          },
+          {
+            "category": "snap",
+            "text": "If income-eligible, apply for SNAP through Illinois ABE to improve food-buying ability.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "A vascular surgery visit downtown adds another trip on top of an already burdensome dialysis commute, and the patient is hesitant about another trip.",
+            "evidence": [
+              "turn:T04",
+              "turn:T14"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "coordinate_with_existing_visit",
+            "text": "Schedule the fistula check on the same day/campus as a dialysis session, or use telehealth if no in-person exam is needed.",
+            "resource_record_id": null
+          },
+          {
+            "category": "schedule_change",
+            "text": "Ask the surgery clinic for an appointment day/time that lines up with an available ride.",
+            "resource_record_id": null
+          },
+          {
+            "category": "ada_paratransit",
+            "text": "If fixed-route transit is not usable due to the patient's condition, pursue ADA Paratransit certification for the surgery trip.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3105,
+    "completion_tokens": 3208
+  },
+  "latency_ms": 156029,
+  "wall_s": 156.05,
+  "log": [
+    {
+      "prompt_sha256": "85387c1367a779d4622ce564ae196c152185f80b1532f695e3dbb8e944af926a",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 156029,
+      "usage": {
+        "prompt_tokens": 3105,
+        "total_tokens": 6313,
+        "completion_tokens": 3208,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 2389
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "The patient no longer drives and relies on two buses each way to reach the 3:00 PM chair at Park Manor, a long commute that already causes missed sessions, with no local driver available.",
+                    "evidence": [
+                      "turn:T02",
+                      "turn:T04",
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask the dialysis unit for a different chair time or day that matches an easier ride, since the 3:00 PM slot is the only one and creates a long two-bus commute.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "ada_paratransit",
+                    "text": "If the patient's health condition prevents using fixed-route buses/trains, apply for ADA Paratransit certification through the Northern Illinois Transit Authority (312-663-HELP).",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "dialysis_social_worker",
+                    "text": "Contact the dialysis unit social worker to explore transport options and benefits, since the patient is missing in-center sessions.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "The patient eats mostly corner-store food because the real grocery is a bus ride away and they are too wiped out after dialysis to shop, making a fresh-produce renal diet hard to follow.",
+                    "evidence": [
+                      "turn:T08",
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "renal_dietitian",
+                    "text": "Ask the dialysis unit dietitian to redesign the low-potassium/low-phosphorus diet around foods the patient can actually obtain nearby.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "food_pantry",
+                    "text": "Use the Greater Chicago Food Depository locator for pantries open on non-treatment days, noting pantry food is often not renal-friendly and should be paired with dietitian guidance.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "snap",
+                    "text": "If income-eligible, apply for SNAP through Illinois ABE to improve food-buying ability.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "A vascular surgery visit downtown adds another trip on top of an already burdensome dialysis commute, and the patient is hesitant about another trip.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T14"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "text": "Schedule the fistula check on the same day/campus as a dialysis session, or use telehealth if no in-person exam is needed.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask the surgery clinic for an appointment day/time that lines up with an available ride.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "ada_paratransit",
+                    "text": "If fixed-route transit is not usable due to the patient's condition, pursue ADA Paratransit certification for the surgery trip.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

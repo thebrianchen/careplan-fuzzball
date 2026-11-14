@@ -1,0 +1,265 @@
+{
+  "case_id": "D008",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "Works overnights 11pm-7am and sleeps in the morning, so a weekday 8:00 AM appointment conflicts with sleep and just-finished shift.",
+            "evidence": [
+              "turn:T04",
+              "turn:T06",
+              "tract:no_vehicle_share",
+              "tract:places_lacktrpt"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Ask the hospital lab for a later start time or a day that fits after the patient's sleep shift.",
+            "resource_record_id": null
+          },
+          {
+            "category": "nemt",
+            "text": "Medicaid covers non-emergency medical transport; if the car is unreliable, call the MCO number on the plan card to arrange a ride (book in advance).",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 3,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-D008"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-D008"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-D008"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-D008"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-D008"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031400800"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 16346,
+    "completion_tokens": 3170
+  },
+  "latency_ms": 218109,
+  "wall_s": 218.15,
+  "log": [
+    {
+      "prompt_sha256": "a83ab77544690f311157509572c1fa041e0b233eff56df4da3174f3c35398183",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 13073,
+      "usage": {
+        "prompt_tokens": 4570,
+        "total_tokens": 4747,
+        "completion_tokens": 177,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 16
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I'll gather the patient's records to assess each plan item against their circumstances.",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-D008"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-D008"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-D008"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-D008"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-D008"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 59979,
+      "usage": {
+        "prompt_tokens": 5484,
+        "total_tokens": 6171,
+        "completion_tokens": 687,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 631
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "Let me check the neighborhood profile for transport feasibility, especially for the early-morning appointment.",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031400800"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 145057,
+      "usage": {
+        "prompt_tokens": 6292,
+        "total_tokens": 8598,
+        "completion_tokens": 2306,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1769
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I have all the evidence needed. Let me summarize the assessment:\n\n**Patient context:** 41M, Medicaid MCO with transport benefit, works overnight security 11pm\u20137am and sleeps mornings, drives own car, English-speaking, steady housing. Screener: no food worry, no food ran out, utilities shutoff = yes (no utility plan item). Tract: high no-vehicle share and lack of transit, but patient drives.\n\n**Item-by-item:**\n- P1 (PFT weekday 8:00 AM): conflicts with overnight shift ending at 7am and morning sleep \u2192 timing/work-schedule problem as written.\n- P2 (albuterol nebulizer): low-cost ($1), home use, no refill gaps \u2192 fine.\n- P3 (low-sodium fresh produce diet): screener shows no food insecurity; \"quick food\" is a time/habit issue, not access \u2192 fine.\n- P4 (budesonide-formoterol + phone reminder): low cost ($3), reminder addresses the missed evening dose \u2192 fine.",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Works overnights 11pm-7am and sleeps in the morning, so a weekday 8:00 AM appointment conflicts with sleep and just-finished shift.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T06",
+                      "tract:no_vehicle_share",
+                      "tract:places_lacktrpt"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask the hospital lab for a later start time or a day that fits after the patient's sleep shift.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "nemt",
+                    "text": "Medicaid covers non-emergency medical transport; if the car is unreliable, call the MCO number on the plan card to arrange a ride (book in advance).",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

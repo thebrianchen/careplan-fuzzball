@@ -1,0 +1,495 @@
+{
+  "case_id": "T002",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "Two buses with oxygen tank, 1.5-hour trip, patient arrives wiped out; twice-weekly rehab is burdensome.",
+            "evidence": [
+              "turn:T04",
+              "screener:transportation",
+              "tract:places_lacktrpt"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "nemt",
+            "resource_record_id": null,
+            "text": "Dual coverage includes Medicaid transport benefit; call the number on the plan card to book rides to rehab."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask pulmonary rehab for a later start time or a day that matches an available ride."
+          },
+          {
+            "category": "paratransit",
+            "resource_record_id": null,
+            "text": "Apply for ADA Paratransit certification if fixed-route buses are not usable while on oxygen."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "utilities",
+            "reason": "Home oxygen concentrator needs electricity; utility shutoff reported could interrupt overnight oxygen.",
+            "evidence": [
+              "screener:utilities_shutoff",
+              "tract:places_shututility",
+              "turn:T10"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "medical_certificate_utilities",
+            "resource_record_id": null,
+            "text": "Clinician completes the utility medical certification form to delay disconnection for an oxygen-dependent patient."
+          },
+          {
+            "category": "utility_assistance",
+            "resource_record_id": null,
+            "text": "Apply through CEDA/Cook County LIHEAP for utility bill assistance during the current funding window."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "food_access",
+            "reason": "Sometimes worried food will run out and has run out; high neighborhood food insecurity makes protein meals and supplements hard to afford.",
+            "evidence": [
+              "screener:food_worry",
+              "screener:food_ran_out",
+              "tract:places_foodinsecu"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "snap",
+            "resource_record_id": "SNAP1667306",
+            "text": "Apply for SNAP via Illinois ABE for grocery money; expedited benefits possible within 7 days."
+          },
+          {
+            "category": "food_pantry",
+            "resource_record_id": "PL3136f0b4",
+            "text": "Use Helping Our People Excel pantry (0.18 mi) on non-rehab days; call ahead for hours and pair with a dietitian."
+          },
+          {
+            "category": "medically_tailored_meals",
+            "resource_record_id": null,
+            "text": "Check whether the patient's Medicaid MMAI plan covers medically tailored, renal-appropriate meals."
+          }
+        ]
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 3,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T002"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T002"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T002"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T002"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T002"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031251300"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_transit_trip",
+      "args": {
+        "appt_ref": "appt:4",
+        "arrive_by": "13:00"
+      },
+      "ok": false
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031251300",
+        "need": "transport",
+        "days": [
+          "Tue",
+          "Thu"
+        ],
+        "start": "08:00",
+        "end": "15:00"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031251300",
+        "need": "food",
+        "days": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri",
+          "Sat",
+          "Sun"
+        ],
+        "start": "08:00",
+        "end": "18:00"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031251300",
+        "need": "utilities",
+        "days": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri"
+        ],
+        "start": "08:30",
+        "end": "17:00"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 20127,
+    "completion_tokens": 3496
+  },
+  "latency_ms": 170857,
+  "wall_s": 170.93,
+  "log": [
+    {
+      "prompt_sha256": "e29d08872508522e3d885b252d3761137d2c47c1e0f5004eeeb055a725d3c395",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 4990,
+      "usage": {
+        "prompt_tokens": 4791,
+        "total_tokens": 4952,
+        "completion_tokens": 161,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 15
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T002"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T002"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T002"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T002"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T002"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 44836,
+      "usage": {
+        "prompt_tokens": 6023,
+        "total_tokens": 6960,
+        "completion_tokens": 937,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 562
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031251300"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_transit_trip",
+          "args": {
+            "appt_ref": "appt:4",
+            "arrive_by": "13:00"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031251300",
+            "need": "transport",
+            "days": [
+              "Tue",
+              "Thu"
+            ],
+            "start": "08:00",
+            "end": "15:00"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031251300",
+            "need": "food",
+            "days": [
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri",
+              "Sat",
+              "Sun"
+            ],
+            "start": "08:00",
+            "end": "18:00"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031251300",
+            "need": "utilities",
+            "days": [
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri"
+            ],
+            "start": "08:30",
+            "end": "17:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 121031,
+      "usage": {
+        "prompt_tokens": 9313,
+        "total_tokens": 11711,
+        "completion_tokens": 2398,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1682
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Two buses with oxygen tank, 1.5-hour trip, patient arrives wiped out; twice-weekly rehab is burdensome.",
+                    "evidence": [
+                      "turn:T04",
+                      "screener:transportation",
+                      "tract:places_lacktrpt"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Dual coverage includes Medicaid transport benefit; call the number on the plan card to book rides to rehab."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask pulmonary rehab for a later start time or a day that matches an available ride."
+                  },
+                  {
+                    "category": "paratransit",
+                    "resource_record_id": null,
+                    "text": "Apply for ADA Paratransit certification if fixed-route buses are not usable while on oxygen."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "utilities",
+                    "reason": "Home oxygen concentrator needs electricity; utility shutoff reported could interrupt overnight oxygen.",
+                    "evidence": [
+                      "screener:utilities_shutoff",
+                      "tract:places_shututility",
+                      "turn:T10"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "medical_certificate_utilities",
+                    "resource_record_id": null,
+                    "text": "Clinician completes the utility medical certification form to delay disconnection for an oxygen-dependent patient."
+                  },
+                  {
+                    "category": "utility_assistance",
+                    "resource_record_id": null,
+                    "text": "Apply through CEDA/Cook County LIHEAP for utility bill assistance during the current funding window."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "Sometimes worried food will run out and has run out; high neighborhood food insecurity makes protein meals and supplements hard to afford.",
+                    "evidence": [
+                      "screener:food_worry",
+                      "screener:food_ran_out",
+                      "tract:places_foodinsecu"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "snap",
+                    "resource_record_id": "SNAP1667306",
+                    "text": "Apply for SNAP via Illinois ABE for grocery money; expedited benefits possible within 7 days."
+                  },
+                  {
+                    "category": "food_pantry",
+                    "resource_record_id": "PL3136f0b4",
+                    "text": "Use Helping Our People Excel pantry (0.18 mi) on non-rehab days; call ahead for hours and pair with a dietitian."
+                  },
+                  {
+                    "category": "medically_tailored_meals",
+                    "resource_record_id": null,
+                    "text": "Check whether the patient's Medicaid MMAI plan covers medically tailored, renal-appropriate meals."
+                  }
+                ]
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

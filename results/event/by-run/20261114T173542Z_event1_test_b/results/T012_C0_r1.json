@@ -1,0 +1,154 @@
+{
+  "case_id": "T012",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "The patient has already missed Monday wound visits, relies on two buses with a 6:15 AM departure for an 8:00 AM appointment, has no car, and the person they stay with works nights and sleeps mornings, so a ride is not reliably available.",
+            "evidence": [
+              "turn:T01",
+              "turn:T02",
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Ask the wound center for a later appointment time or a different weekday that fits the patient's bus schedule and the host's availability.",
+            "resource_record_id": null
+          },
+          {
+            "category": "ada_paratransit",
+            "text": "Apply for ADA Paratransit certification if the foot condition prevents using fixed-route buses; certification takes time, so start now.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3053,
+    "completion_tokens": 1439
+  },
+  "latency_ms": 71249,
+  "wall_s": 71.27,
+  "log": [
+    {
+      "prompt_sha256": "94e267404de1641598d48eb2cda0181b116313598e68b61b40b9880ee41d46f3",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 71249,
+      "usage": {
+        "prompt_tokens": 3053,
+        "total_tokens": 4492,
+        "completion_tokens": 1439,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1092
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "The patient has already missed Monday wound visits, relies on two buses with a 6:15 AM departure for an 8:00 AM appointment, has no car, and the person they stay with works nights and sleeps mornings, so a ride is not reliably available.",
+                    "evidence": [
+                      "turn:T01",
+                      "turn:T02",
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask the wound center for a later appointment time or a different weekday that fits the patient's bus schedule and the host's availability.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "ada_paratransit",
+                    "text": "Apply for ADA Paratransit certification if the foot condition prevents using fixed-route buses; certification takes time, so start now.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

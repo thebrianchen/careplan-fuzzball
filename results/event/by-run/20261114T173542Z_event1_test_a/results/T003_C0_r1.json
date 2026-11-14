@@ -1,0 +1,206 @@
+{
+  "case_id": "T003",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "Patient cannot drive, is not steady enough to take the bus with a walker and transfer, and has no independent way to reach the hospital rehab center three times weekly.",
+            "evidence": [
+              "turn:T04",
+              "turn:T06"
+            ]
+          },
+          {
+            "barrier": "work_schedule",
+            "reason": "The 9:00 AM Monday/Wednesday/Friday therapy times conflict with the daughter's 7-to-5 work schedule, which is the patient's only described ride source.",
+            "evidence": [
+              "turn:T04",
+              "turn:T01"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Ask the rehab center for a later chair/appointment time or days that match when the daughter can take off or another ride is available.",
+            "resource_record_id": null
+          },
+          {
+            "category": "nemt",
+            "text": "If the patient has Medicaid or dual coverage, request Medicaid non-emergency medical transportation for standing rides to therapy; if Medicare-only, check whether the Medicare Advantage plan includes a transportation benefit rather than promising a covered ride.",
+            "resource_record_id": null
+          },
+          {
+            "category": "paratransit",
+            "text": "Evaluate ADA Paratransit certification if the patient's condition prevents fixed-route bus use; note this is not immediate and runs only when fixed-route service operates.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "med_cost",
+            "reason": "Patient is on a fixed income and already has unopened hospital/rehab bills, so ongoing apixaban, atorvastatin, and lisinopril costs may be unaffordable without assistance.",
+            "evidence": [
+              "turn:T10"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "med_assistance_program",
+            "text": "Screen for Medicare Part D Extra Help/low-income subsidy or manufacturer assistance, and ask the prescriber about a lower-cost formulary equivalent if needed.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3107,
+    "completion_tokens": 1265
+  },
+  "latency_ms": 60099,
+  "wall_s": 60.12,
+  "log": [
+    {
+      "prompt_sha256": "0ab0ee559d89b81360ee0e252fc283e4f0823af51f3a51829999858a9a579c83",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 60099,
+      "usage": {
+        "prompt_tokens": 3107,
+        "total_tokens": 4372,
+        "completion_tokens": 1265,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 689
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Patient cannot drive, is not steady enough to take the bus with a walker and transfer, and has no independent way to reach the hospital rehab center three times weekly.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T06"
+                    ]
+                  },
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "The 9:00 AM Monday/Wednesday/Friday therapy times conflict with the daughter's 7-to-5 work schedule, which is the patient's only described ride source.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T01"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask the rehab center for a later chair/appointment time or days that match when the daughter can take off or another ride is available.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "nemt",
+                    "text": "If the patient has Medicaid or dual coverage, request Medicaid non-emergency medical transportation for standing rides to therapy; if Medicare-only, check whether the Medicare Advantage plan includes a transportation benefit rather than promising a covered ride.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "paratransit",
+                    "text": "Evaluate ADA Paratransit certification if the patient's condition prevents fixed-route bus use; note this is not immediate and runs only when fixed-route service operates.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "med_cost",
+                    "reason": "Patient is on a fixed income and already has unopened hospital/rehab bills, so ongoing apixaban, atorvastatin, and lisinopril costs may be unaffordable without assistance.",
+                    "evidence": [
+                      "turn:T10"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "med_assistance_program",
+                    "text": "Screen for Medicare Part D Extra Help/low-income subsidy or manufacturer assistance, and ask the prescriber about a lower-cost formulary equivalent if needed.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

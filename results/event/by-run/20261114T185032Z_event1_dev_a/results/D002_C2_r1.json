@@ -1,0 +1,379 @@
+{
+  "case_id": "D002",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "utilities",
+            "reason": "Power was off twice this month; insulin needs refrigeration and a cooler may not keep it cold.",
+            "evidence": [
+              "turn:T02",
+              "turn:T04",
+              "med:1",
+              "screener:utilities_shutoff"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "medical_certificate_utilities",
+            "resource_record_id": null,
+            "text": "Complete utility medical certification to delay disconnection for refrigerated insulin."
+          },
+          {
+            "category": "utility_assistance",
+            "resource_record_id": null,
+            "text": "Apply for LIHEAP through CEDA for utility bill help; funding windows vary."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "10 AM endocrinology visit conflicts with warehouse shift 6-2 and no sick days; prior endocrinology no-show.",
+            "evidence": [
+              "turn:T06",
+              "appt:1"
+            ]
+          },
+          {
+            "barrier": "transport",
+            "reason": "Prior no-show and limited vehicle access suggest getting to a morning clinic may be hard; Medicaid NEMT is available.",
+            "evidence": [
+              "appt:1",
+              "tract:no_vehicle_share"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "nemt",
+            "resource_record_id": null,
+            "text": "Use Medicaid NEMT: call Lakeshore plan number on card to book a ride in advance."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask endocrinology for an after-work or weekend appointment to avoid lost shift hours."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "Thursday 2 PM class starts when the warehouse shift ends and the patient has no sick days.",
+            "evidence": [
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Request an evening, weekend, or individual diabetes education session instead of Thursday 2 PM class."
+          }
+        ]
+      }
+    ]
+  },
+  "error": null,
+  "steps": 3,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-D002"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-D002"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-D002"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-D002"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-D002"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "home_tract"
+      },
+      "ok": false
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031300900"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_transit_trip",
+      "args": {
+        "appt_ref": "appt:1",
+        "arrive_by": "10:00"
+      },
+      "ok": false
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 16791,
+    "completion_tokens": 1568
+  },
+  "latency_ms": 76387,
+  "wall_s": 76.43,
+  "log": [
+    {
+      "prompt_sha256": "96f4dfe296b0c33d7c66bf36ce458ba55aa25ace188f661efbcdc2c1c0bd9926",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 6248,
+      "usage": {
+        "prompt_tokens": 4623,
+        "total_tokens": 4805,
+        "completion_tokens": 182,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 9
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-D002"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-D002"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-D002"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-D002"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-D002"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "home_tract"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 5292,
+      "usage": {
+        "prompt_tokens": 5670,
+        "total_tokens": 5808,
+        "completion_tokens": 138,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 54
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031300900"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_transit_trip",
+          "args": {
+            "appt_ref": "appt:1",
+            "arrive_by": "10:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 64847,
+      "usage": {
+        "prompt_tokens": 6498,
+        "total_tokens": 7746,
+        "completion_tokens": 1248,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 696
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "utilities",
+                    "reason": "Power was off twice this month; insulin needs refrigeration and a cooler may not keep it cold.",
+                    "evidence": [
+                      "turn:T02",
+                      "turn:T04",
+                      "med:1",
+                      "screener:utilities_shutoff"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "medical_certificate_utilities",
+                    "resource_record_id": null,
+                    "text": "Complete utility medical certification to delay disconnection for refrigerated insulin."
+                  },
+                  {
+                    "category": "utility_assistance",
+                    "resource_record_id": null,
+                    "text": "Apply for LIHEAP through CEDA for utility bill help; funding windows vary."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "10 AM endocrinology visit conflicts with warehouse shift 6-2 and no sick days; prior endocrinology no-show.",
+                    "evidence": [
+                      "turn:T06",
+                      "appt:1"
+                    ]
+                  },
+                  {
+                    "barrier": "transport",
+                    "reason": "Prior no-show and limited vehicle access suggest getting to a morning clinic may be hard; Medicaid NEMT is available.",
+                    "evidence": [
+                      "appt:1",
+                      "tract:no_vehicle_share"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Use Medicaid NEMT: call Lakeshore plan number on card to book a ride in advance."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask endocrinology for an after-work or weekend appointment to avoid lost shift hours."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Thursday 2 PM class starts when the warehouse shift ends and the patient has no sick days.",
+                    "evidence": [
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Request an evening, weekend, or individual diabetes education session instead of Thursday 2 PM class."
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

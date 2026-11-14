@@ -1,0 +1,473 @@
+{
+  "case_id": "D006",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "med_cost",
+            "reason": "Tiotropium costs $420/month and the patient stopped it for cost because they lack insurance (turn:T02, med:1).",
+            "evidence": [
+              "turn:T02",
+              "med:1"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "med_assistance_program",
+            "resource_record_id": "HC13382",
+            "text": "Lawndale Christian Health Center Main Clinic, sliding-fee discounts for uninsured patients, call 773-843-3000."
+          },
+          {
+            "category": "med_assistance_program",
+            "resource_record_id": "HC11526",
+            "text": "LCHC at 3910, sliding-fee discounts for uninsured patients, call 872-588-3000."
+          },
+          {
+            "category": "med_assistance_program",
+            "resource_record_id": "HC06892",
+            "text": "LCHC Belle Whaley, sliding-fee discounts for uninsured patients, call 773-650-3200."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "housing",
+            "reason": "Patient is on a buddy's couch with uncertain duration; home oxygen needs stable housing and power (turn:T04, screener:living_situation).",
+            "evidence": [
+              "turn:T04",
+              "screener:living_situation"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Sequence oxygen evaluation after housing is more secure; involve social work for housing stability."
+          },
+          {
+            "category": "other",
+            "resource_record_id": null,
+            "text": "Screen for emergency housing/shelter options given couch-surfing with uncertain length of stay."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 5,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-D006"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-D006"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-D006"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-D006"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-D006"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031290900"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031290900",
+        "need": "housing"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031290900",
+        "need": "med_cost"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031290900",
+        "need": "food"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 33398,
+    "completion_tokens": 3203
+  },
+  "latency_ms": 170030,
+  "wall_s": 170.09,
+  "log": [
+    {
+      "prompt_sha256": "63008d265e4e73d521dea179717923b50c2363ee5252be8e973c185cc017bd2c",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 6148,
+      "usage": {
+        "prompt_tokens": 4502,
+        "total_tokens": 4670,
+        "completion_tokens": 168,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 22
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-D006"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-D006"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-D006"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-D006"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-D006"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 33433,
+      "usage": {
+        "prompt_tokens": 5490,
+        "total_tokens": 6071,
+        "completion_tokens": 581,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 543
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031290900"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 48698,
+      "usage": {
+        "prompt_tokens": 6302,
+        "total_tokens": 7205,
+        "completion_tokens": 903,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 763
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031290900",
+            "need": "housing"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031290900",
+            "need": "med_cost"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031290900",
+            "need": "food"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 46104,
+      "usage": {
+        "prompt_tokens": 8230,
+        "total_tokens": 9122,
+        "completion_tokens": 892,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 343
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "med_cost",
+                    "reason": "Tiotropium costs $420/month and the patient is uninsured; they already stopped it for cost (turn:T02, med:1, get_patient coverage none).",
+                    "evidence": [
+                      "turn:T02",
+                      "med:1",
+                      "get_patient:coverage.none"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "med_assistance_program",
+                    "resource_record_id": "HC13382",
+                    "text": "Lawndale Christian Health Center Main Clinic, sliding-fee discounts for uninsured patients, call 773-843-3000."
+                  },
+                  {
+                    "category": "med_assistance_program",
+                    "resource_record_id": "HC11526",
+                    "text": "LCHC at 3910, sliding-fee discounts for uninsured patients, call 872-588-3000."
+                  },
+                  {
+                    "category": "med_assistance_program",
+                    "resource_record_id": "HC06892",
+                    "text": "LCHC Belle Whaley, sliding-fee discounts for uninsured patients, call 773-650-3200."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "housing",
+                    "reason": "Patient is staying on a buddy's couch with uncertain duration; home oxygen setup needs stable housing and power (turn:T04, screener:living_situation).",
+                    "evidence": [
+                      "turn:T04",
+                      "screener:living_situation"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the oxygen/sleep clinic to sequence evaluation after housing is more secure, and involve social work for housing stability."
+                  },
+                  {
+                    "category": "other",
+                    "resource_record_id": null,
+                    "text": "Screen for emergency housing/shelter options given couch-surfing with uncertain length of stay."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 5,
+      "latency_ms": 35647,
+      "usage": {
+        "prompt_tokens": 8874,
+        "total_tokens": 9533,
+        "completion_tokens": 659,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 138
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "med_cost",
+                    "reason": "Tiotropium costs $420/month and the patient stopped it for cost because they lack insurance (turn:T02, med:1).",
+                    "evidence": [
+                      "turn:T02",
+                      "med:1"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "med_assistance_program",
+                    "resource_record_id": "HC13382",
+                    "text": "Lawndale Christian Health Center Main Clinic, sliding-fee discounts for uninsured patients, call 773-843-3000."
+                  },
+                  {
+                    "category": "med_assistance_program",
+                    "resource_record_id": "HC11526",
+                    "text": "LCHC at 3910, sliding-fee discounts for uninsured patients, call 872-588-3000."
+                  },
+                  {
+                    "category": "med_assistance_program",
+                    "resource_record_id": "HC06892",
+                    "text": "LCHC Belle Whaley, sliding-fee discounts for uninsured patients, call 773-650-3200."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "housing",
+                    "reason": "Patient is on a buddy's couch with uncertain duration; home oxygen needs stable housing and power (turn:T04, screener:living_situation).",
+                    "evidence": [
+                      "turn:T04",
+                      "screener:living_situation"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Sequence oxygen evaluation after housing is more secure; involve social work for housing stability."
+                  },
+                  {
+                    "category": "other",
+                    "resource_record_id": null,
+                    "text": "Screen for emergency housing/shelter options given couch-surfing with uncertain length of stay."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

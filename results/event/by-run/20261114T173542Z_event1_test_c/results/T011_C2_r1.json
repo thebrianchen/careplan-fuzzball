@@ -1,0 +1,319 @@
+{
+  "case_id": "T011",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "food_access",
+            "reason": "Patient screens positive for food worry and food running out, so a daily high-protein diet plus protein shakes may be unaffordable or inconsistent.",
+            "evidence": [
+              "screener:food_worry",
+              "screener:food_ran_out",
+              "turn:T09",
+              "turn:T10"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "snap",
+            "resource_record_id": "SNAP1258040",
+            "text": "Apply for SNAP through Illinois ABE (abe.illinois.gov); expedited benefits possible within 7 days."
+          },
+          {
+            "category": "food_pantry",
+            "resource_record_id": null,
+            "text": "Use the Greater Chicago Food Depository locator for a pantry open on non-infusion days; coordinate picks with the oncology dietitian."
+          },
+          {
+            "category": "food_access",
+            "resource_record_id": null,
+            "text": "Ask the oncology dietitian to rebuild the high-protein plan around affordable, available foods the patient can actually get."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 3,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T011"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T011"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T011"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T011"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T011"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031151200"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031151200",
+        "need": "food",
+        "days": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri",
+          "Sat"
+        ]
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 18094,
+    "completion_tokens": 3029
+  },
+  "latency_ms": 170011,
+  "wall_s": 170.06,
+  "log": [
+    {
+      "prompt_sha256": "efcf73adaf8b90d8fa88960b0a88e8f83ff1c1b7e63fb6ec2cd09e2f28e875a6",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 10705,
+      "usage": {
+        "prompt_tokens": 4770,
+        "total_tokens": 4977,
+        "completion_tokens": 207,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 61
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T011"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T011"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T011"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T011"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T011"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 59410,
+      "usage": {
+        "prompt_tokens": 5891,
+        "total_tokens": 6846,
+        "completion_tokens": 955,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 844
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031151200"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031151200",
+            "need": "food",
+            "days": [
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri",
+              "Sat"
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 99896,
+      "usage": {
+        "prompt_tokens": 7433,
+        "total_tokens": 9300,
+        "completion_tokens": 1867,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1485
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "Patient screens positive for food worry and food running out, so a daily high-protein diet plus protein shakes may be unaffordable or inconsistent.",
+                    "evidence": [
+                      "screener:food_worry",
+                      "screener:food_ran_out",
+                      "turn:T09",
+                      "turn:T10"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "snap",
+                    "resource_record_id": "SNAP1258040",
+                    "text": "Apply for SNAP through Illinois ABE (abe.illinois.gov); expedited benefits possible within 7 days."
+                  },
+                  {
+                    "category": "food_pantry",
+                    "resource_record_id": null,
+                    "text": "Use the Greater Chicago Food Depository locator for a pantry open on non-infusion days; coordinate picks with the oncology dietitian."
+                  },
+                  {
+                    "category": "food_access",
+                    "resource_record_id": null,
+                    "text": "Ask the oncology dietitian to rebuild the high-protein plan around affordable, available foods the patient can actually get."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

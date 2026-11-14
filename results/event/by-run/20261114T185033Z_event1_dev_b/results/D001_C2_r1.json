@@ -1,0 +1,461 @@
+{
+  "case_id": "D001",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "Long two-bus ride to Park Manor; 3 dialysis no-shows this month; patient skips sessions.",
+            "evidence": [
+              "turn:T04",
+              "appt:2",
+              "appt:3",
+              "appt:5",
+              "transit:appt:1",
+              "tract:no_vehicle_share"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "nemt",
+            "resource_record_id": null,
+            "text": "Medicaid NEMT covers rides to dialysis; call the Lakeshore plan number on the card to book standing MWF rides."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask DaVita for a later chair time or a day that matches an available ride to shorten the trip."
+          },
+          {
+            "category": "dialysis_social_worker",
+            "resource_record_id": null,
+            "text": "Message the dialysis unit social worker for transport help and benefit screening."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "food_access",
+            "reason": "Relies on corner-store food; grocery is a bus ride away; too tired after dialysis.",
+            "evidence": [
+              "turn:T08",
+              "screener:food_worry",
+              "tract:places_foodinsecu"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "food_pantry",
+            "resource_record_id": "CUR001",
+            "text": "Legler Regional Library Food Pantry, Thu 16:00-19:00 and Sun 13:00-16:00, 0.5 mi away; call (312) 746-7730."
+          },
+          {
+            "category": "snap",
+            "resource_record_id": "SNAP1239868",
+            "text": "Apply for SNAP via Illinois ABE; Andy's Deli (0.24 mi) accepts EBT for groceries."
+          },
+          {
+            "category": "renal_dietitian",
+            "resource_record_id": null,
+            "text": "Ask the dialysis dietitian to build a renal diet around corner-store and pantry foods he can get."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "Surgery trip downtown adds travel burden he already struggles to manage.",
+            "evidence": [
+              "turn:T14",
+              "turn:T04",
+              "appt:2",
+              "appt:3",
+              "appt:5"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "Book the surgery visit the same day/campus as a dialysis day, or use telehealth if no exam is needed."
+          },
+          {
+            "category": "nemt",
+            "resource_record_id": null,
+            "text": "Use Medicaid NEMT for the one-time surgery trip; book via the MCO number on the plan card."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the surgery clinic for a time that fits an existing ride."
+          }
+        ]
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 4,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-D001"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-D001"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-D001"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-D001"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-D001"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_transit_trip",
+      "args": {
+        "appt_ref": "appt:1",
+        "arrive_by": "15:00"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031260300"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031260300",
+        "need": "food",
+        "days": [
+          "Tue",
+          "Thu",
+          "Sat",
+          "Sun"
+        ]
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 26536,
+    "completion_tokens": 3408
+  },
+  "latency_ms": 162146,
+  "wall_s": 202.65,
+  "log": [
+    {
+      "prompt_sha256": "0904edb9eaae87930c86d5b0c2d0b67a0d05285828ab44e2bdfaf618acd22f52",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 7519,
+      "usage": {
+        "prompt_tokens": 4782,
+        "total_tokens": 4992,
+        "completion_tokens": 210,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 64
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-D001"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-D001"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-D001"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-D001"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-D001"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 11338,
+      "usage": {
+        "prompt_tokens": 6233,
+        "total_tokens": 6450,
+        "completion_tokens": 217,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 133
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_transit_trip",
+          "args": {
+            "appt_ref": "appt:1",
+            "arrive_by": "15:00"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031260300"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 54942,
+      "usage": {
+        "prompt_tokens": 7198,
+        "total_tokens": 8057,
+        "completion_tokens": 859,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 790
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031260300",
+            "need": "food",
+            "days": [
+              "Tue",
+              "Thu",
+              "Sat",
+              "Sun"
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 88347,
+      "usage": {
+        "prompt_tokens": 8323,
+        "total_tokens": 10445,
+        "completion_tokens": 2122,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1323
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Long two-bus ride to Park Manor; 3 dialysis no-shows this month; patient skips sessions.",
+                    "evidence": [
+                      "turn:T04",
+                      "appt:2",
+                      "appt:3",
+                      "appt:5",
+                      "transit:appt:1",
+                      "tract:no_vehicle_share"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Medicaid NEMT covers rides to dialysis; call the Lakeshore plan number on the card to book standing MWF rides."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask DaVita for a later chair time or a day that matches an available ride to shorten the trip."
+                  },
+                  {
+                    "category": "dialysis_social_worker",
+                    "resource_record_id": null,
+                    "text": "Message the dialysis unit social worker for transport help and benefit screening."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "Relies on corner-store food; grocery is a bus ride away; too tired after dialysis.",
+                    "evidence": [
+                      "turn:T08",
+                      "screener:food_worry",
+                      "tract:places_foodinsecu"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "food_pantry",
+                    "resource_record_id": "CUR001",
+                    "text": "Legler Regional Library Food Pantry, Thu 16:00-19:00 and Sun 13:00-16:00, 0.5 mi away; call (312) 746-7730."
+                  },
+                  {
+                    "category": "snap",
+                    "resource_record_id": "SNAP1239868",
+                    "text": "Apply for SNAP via Illinois ABE; Andy's Deli (0.24 mi) accepts EBT for groceries."
+                  },
+                  {
+                    "category": "renal_dietitian",
+                    "resource_record_id": null,
+                    "text": "Ask the dialysis dietitian to build a renal diet around corner-store and pantry foods he can get."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Surgery trip downtown adds travel burden he already struggles to manage.",
+                    "evidence": [
+                      "turn:T14",
+                      "turn:T04",
+                      "appt:2",
+                      "appt:3",
+                      "appt:5"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Book the surgery visit the same day/campus as a dialysis day, or use telehealth if no exam is needed."
+                  },
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Use Medicaid NEMT for the one-time surgery trip; book via the MCO number on the plan card."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the surgery clinic for a time that fits an existing ride."
+                  }
+                ]
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,208 @@
+{
+  "case_id": "T015",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "The educator is only available at 1:00 PM on a weekday, but the patient works the warehouse 7:00-3:30 and drives Uber until 10:00, so a 1:00 PM appointment would cost half a shift and a write-up; the patient is only free after 4:00 or Saturday morning.",
+            "evidence": [
+              "turn:T03",
+              "turn:T04",
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Request a diabetes-educator slot after 4:00 PM or Saturday morning that matches the patient's availability, or complete insulin-pen teaching during today's visit as the doctor already offered."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "food_access",
+            "reason": "On workdays the patient eats coffee and gas-station food between jobs, which is not renal-friendly, and only eats home-cooked meals on weekends, so a carbohydrate-consistent diet with packed lunches is hard to sustain.",
+            "evidence": [
+              "turn:T08"
+            ]
+          },
+          {
+            "barrier": "work_schedule",
+            "reason": "Working the warehouse until 3:30 and Uber until 10 leaves little time or opportunity to shop for, pack, and carry renal-appropriate meals and snacks for workdays.",
+            "evidence": [
+              "turn:T04",
+              "turn:T08"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "renal_dietitian",
+            "resource_record_id": null,
+            "text": "Ask the dialysis/renal dietitian to redesign the carbohydrate-consistent meal plan around foods the patient can actually obtain at gas stations and on weekends."
+          },
+          {
+            "category": "snap",
+            "resource_record_id": null,
+            "text": "Screen for SNAP through Illinois ABE to improve food budget if income-eligible."
+          },
+          {
+            "category": "food_pantry",
+            "resource_record_id": null,
+            "text": "Use a food-pantry locator for non-workdays, paired with renal-dietitian guidance since pantry food is often not renal-friendly."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3051,
+    "completion_tokens": 2118
+  },
+  "latency_ms": 108984,
+  "wall_s": 109.01,
+  "log": [
+    {
+      "prompt_sha256": "487506c4f07f44cacb1a5e8999cec020499b21eb3b34a0afc912c7b049537cc4",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 108984,
+      "usage": {
+        "prompt_tokens": 3051,
+        "total_tokens": 5169,
+        "completion_tokens": 2118,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1501
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "The educator is only available at 1:00 PM on a weekday, but the patient works the warehouse 7:00-3:30 and drives Uber until 10:00, so a 1:00 PM appointment would cost half a shift and a write-up; the patient is only free after 4:00 or Saturday morning.",
+                    "evidence": [
+                      "turn:T03",
+                      "turn:T04",
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Request a diabetes-educator slot after 4:00 PM or Saturday morning that matches the patient's availability, or complete insulin-pen teaching during today's visit as the doctor already offered."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "On workdays the patient eats coffee and gas-station food between jobs, which is not renal-friendly, and only eats home-cooked meals on weekends, so a carbohydrate-consistent diet with packed lunches is hard to sustain.",
+                    "evidence": [
+                      "turn:T08"
+                    ]
+                  },
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Working the warehouse until 3:30 and Uber until 10 leaves little time or opportunity to shop for, pack, and carry renal-appropriate meals and snacks for workdays.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T08"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "renal_dietitian",
+                    "resource_record_id": null,
+                    "text": "Ask the dialysis/renal dietitian to redesign the carbohydrate-consistent meal plan around foods the patient can actually obtain at gas stations and on weekends."
+                  },
+                  {
+                    "category": "snap",
+                    "resource_record_id": null,
+                    "text": "Screen for SNAP through Illinois ABE to improve food budget if income-eligible."
+                  },
+                  {
+                    "category": "food_pantry",
+                    "resource_record_id": null,
+                    "text": "Use a food-pantry locator for non-workdays, paired with renal-dietitian guidance since pantry food is often not renal-friendly."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

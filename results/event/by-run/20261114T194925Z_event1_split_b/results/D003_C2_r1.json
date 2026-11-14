@@ -1,0 +1,392 @@
+{
+  "case_id": "D003",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "No driver/license, cab-dependent, no vehicle, early 9 AM three times weekly for 12 weeks; Original Medicare has no transport benefit.",
+            "evidence": [
+              "turn:T06",
+              "turn:T02",
+              "tract:no_vehicle_share",
+              "screener:transportation"
+            ]
+          },
+          {
+            "barrier": "caregiving",
+            "reason": "Harold cannot be left alone; neighbor only covers 2 hours, conflicting with repeated rehab sessions.",
+            "evidence": [
+              "turn:T02",
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask cardiac rehab for a later start time or a day that fits a ride/caregiver; chair times are limited so frame as a request."
+          },
+          {
+            "category": "ada_paratransit",
+            "resource_record_id": null,
+            "text": "Apply for ADA Paratransit certification (Northern Illinois Transit Authority, 312-663-HELP, weekdays 8:30 AM-5 PM); not immediate, decision within 21 days of complete application."
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "Not well-suited: rehab is 3x/week and separate from cardiology; consider only if any session can share a campus/day."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 4,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-D003"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-D003"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-D003"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-D003"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-D003"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031440201"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_transit_trip",
+      "args": {
+        "appt_ref": "appt:2",
+        "arrive_by": "09:00"
+      },
+      "ok": false
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 23222,
+    "completion_tokens": 3685
+  },
+  "latency_ms": 194987,
+  "wall_s": 195.02,
+  "log": [
+    {
+      "prompt_sha256": "a82e42420f37bb983a06ffec67f7e1764fd7686b10bb91af57603c3be9a275ff",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 22556,
+      "usage": {
+        "prompt_tokens": 4592,
+        "total_tokens": 5096,
+        "completion_tokens": 504,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 358
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-D003"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-D003"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-D003"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-D003"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-D003"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 63700,
+      "usage": {
+        "prompt_tokens": 5448,
+        "total_tokens": 6604,
+        "completion_tokens": 1156,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1072
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031440201"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_transit_trip",
+          "args": {
+            "appt_ref": "appt:2",
+            "arrive_by": "09:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 92981,
+      "usage": {
+        "prompt_tokens": 6323,
+        "total_tokens": 7863,
+        "completion_tokens": 1540,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1098
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "No driver/license, cab-dependent, no vehicle, early 9 AM three times weekly for 12 weeks; Original Medicare has no transport benefit.",
+                    "evidence": [
+                      "turn:T06",
+                      "turn:T02",
+                      "tract:no_vehicle_share",
+                      "coverage.transport_benefit"
+                    ]
+                  },
+                  {
+                    "barrier": "caregiving",
+                    "reason": "Harold cannot be left alone; neighbor only covers 2 hours, conflicting with repeated rehab sessions.",
+                    "evidence": [
+                      "turn:T02",
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask cardiac rehab for a later start time or a day that fits a ride/caregiver; chair times are limited so frame as a request."
+                  },
+                  {
+                    "category": "ada_paratransit",
+                    "resource_record_id": null,
+                    "text": "Apply for ADA Paratransit certification (Northern Illinois Transit Authority, 312-663-HELP, weekdays 8:30 AM-5 PM); not immediate, decision within 21 days of complete application."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Not well-suited: rehab is 3x/week and separate from cardiology; consider only if any session can share a campus/day."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 15750,
+      "usage": {
+        "prompt_tokens": 6859,
+        "total_tokens": 7344,
+        "completion_tokens": 485,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 44
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "No driver/license, cab-dependent, no vehicle, early 9 AM three times weekly for 12 weeks; Original Medicare has no transport benefit.",
+                    "evidence": [
+                      "turn:T06",
+                      "turn:T02",
+                      "tract:no_vehicle_share",
+                      "screener:transportation"
+                    ]
+                  },
+                  {
+                    "barrier": "caregiving",
+                    "reason": "Harold cannot be left alone; neighbor only covers 2 hours, conflicting with repeated rehab sessions.",
+                    "evidence": [
+                      "turn:T02",
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask cardiac rehab for a later start time or a day that fits a ride/caregiver; chair times are limited so frame as a request."
+                  },
+                  {
+                    "category": "ada_paratransit",
+                    "resource_record_id": null,
+                    "text": "Apply for ADA Paratransit certification (Northern Illinois Transit Authority, 312-663-HELP, weekdays 8:30 AM-5 PM); not immediate, decision within 21 days of complete application."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Not well-suited: rehab is 3x/week and separate from cardiology; consider only if any session can share a campus/day."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

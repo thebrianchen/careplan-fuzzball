@@ -1,0 +1,319 @@
+{
+  "case_id": "D004",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "language_literacy",
+            "reason": "English titration schedule unreadable; son who translated is away.",
+            "evidence": [
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "interpreter",
+            "text": "Use hospital interpreter service; give translated, plain-language titration instructions.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "language_literacy",
+            "reason": "Patient portal app is English-only; he does not know where to enter BP numbers.",
+            "evidence": [
+              "turn:T06"
+            ]
+          },
+          {
+            "barrier": "digital_access",
+            "reason": "Patient portal app is English-only; he does not know where to enter BP numbers.",
+            "evidence": [
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "interpreter",
+            "text": "Provide translated portal instructions and teach-back; involve wife to help enter readings.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "language_literacy",
+            "reason": "Kidney-diet handout is English-only; patient needs Spanish materials.",
+            "evidence": [
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "interpreter",
+            "text": "Provide a Spanish-translated kidney-diet handout through interpreter services.",
+            "resource_record_id": null
+          }
+        ]
+      }
+    ]
+  },
+  "error": null,
+  "steps": 3,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-D004"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-D004"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-D004"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-D004"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-D004"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031610300"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 15872,
+    "completion_tokens": 2285
+  },
+  "latency_ms": 112516,
+  "wall_s": 112.55,
+  "log": [
+    {
+      "prompt_sha256": "9f999e9a87ce50e01c895412f9c5a6565ffd9fb31fad5e1d4a105ffe5d00ad68",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 6029,
+      "usage": {
+        "prompt_tokens": 4579,
+        "total_tokens": 4767,
+        "completion_tokens": 188,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 26
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I'll gather the patient record and social context in parallel to assess each plan item.",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-D004"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-D004"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-D004"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-D004"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-D004"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 8299,
+      "usage": {
+        "prompt_tokens": 5265,
+        "total_tokens": 5383,
+        "completion_tokens": 118,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 80
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031610300"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 98188,
+      "usage": {
+        "prompt_tokens": 6028,
+        "total_tokens": 8007,
+        "completion_tokens": 1979,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1330
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I have all the evidence I need. Let me summarize my analysis before submitting.\n\n**Patient context (P-D004):** Spanish-language preference, commercial PPO (no transport benefit), CKD 3a + HTN, losartan 25 mg/day ($10 copay, no gaps). Screener: stable housing, no food/utility worries, no transportation problem. Tract: 25% no-vehicle share. Today's PCP visit kept.\n\n**Item-by-item:**\n- P1 (losartan titration, printed English schedule): at_risk \u2014 patient is Spanish-speaking; prior English papers required his son, who is now away (turn:T04).\n- P2 (home BP via patient portal): at_risk \u2014 portal/app is English-only and he doesn't know where to type numbers (turn:T06); language + digital access.\n- P3 (nephrology referral in 3 months): likely_ok \u2014 no appointment/travel barrier established; screener reports no transportation problem.\n- P4 (kidney-diet handout, English): at_risk \u2014 English-only handout for a Spanish-speaking patient (turn:T04).\n\nNow submitting.",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "language_literacy",
+                    "reason": "English titration schedule unreadable; son who translated is away.",
+                    "evidence": [
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "interpreter",
+                    "text": "Use hospital interpreter service; give translated, plain-language titration instructions.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "language_literacy",
+                    "reason": "Patient portal app is English-only; he does not know where to enter BP numbers.",
+                    "evidence": [
+                      "turn:T06"
+                    ]
+                  },
+                  {
+                    "barrier": "digital_access",
+                    "reason": "Patient portal app is English-only; he does not know where to enter BP numbers.",
+                    "evidence": [
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "interpreter",
+                    "text": "Provide translated portal instructions and teach-back; involve wife to help enter readings.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "language_literacy",
+                    "reason": "Kidney-diet handout is English-only; patient needs Spanish materials.",
+                    "evidence": [
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "interpreter",
+                    "text": "Provide a Spanish-translated kidney-diet handout through interpreter services.",
+                    "resource_record_id": null
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

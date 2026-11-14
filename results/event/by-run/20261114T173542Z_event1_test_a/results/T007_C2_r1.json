@@ -1,0 +1,306 @@
+{
+  "case_id": "T007",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "Works unpredictable Target shifts, sometimes Tuesday afternoons; cannot commit to a fixed weekly day; already missed the Tuesday 2 PM session.",
+            "evidence": [
+              "turn:T04",
+              "turn:T06",
+              "appt:3"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask behavioral health for a morning slot after 10 AM (her only guaranteed-free time) or a day that matches her posted shifts."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 4,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T007"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T007"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T007"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T007"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T007"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031430101"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_transit_trip",
+      "args": {
+        "appt_ref": "appt:3",
+        "arrive_by": "14:00"
+      },
+      "ok": false
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 24273,
+    "completion_tokens": 3617
+  },
+  "latency_ms": 183587,
+  "wall_s": 183.63,
+  "log": [
+    {
+      "prompt_sha256": "83438414d5be556ce645901e00d96f188c8bc83e3342c6ea2db4a3f786462d7a",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 18094,
+      "usage": {
+        "prompt_tokens": 4729,
+        "total_tokens": 5109,
+        "completion_tokens": 380,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 221
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I'll gather the patient record first, then assess each plan item.",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T007"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T007"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T007"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T007"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T007"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 35899,
+      "usage": {
+        "prompt_tokens": 5645,
+        "total_tokens": 6319,
+        "completion_tokens": 674,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 567
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "Now let me check the neighborhood profile and the transit feasibility for the Tuesday behavioral health appointment (which was a no-show).",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031430101"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_transit_trip",
+          "args": {
+            "appt_ref": "appt:3",
+            "arrive_by": "14:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 115076,
+      "usage": {
+        "prompt_tokens": 6543,
+        "total_tokens": 8751,
+        "completion_tokens": 2208,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1696
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I have all the evidence I need. Here's my assessment:\n\n- **P1 (sertraline increase):** Medicaid, tier-1 drug, $0 copay, no refill gaps. No cost or access barrier. \u2192 likely_ok\n- **P2 (weekly CBT Tue 2 PM):** Patient's Target shifts post weekly and sometimes fall Tuesday afternoons; she cannot promise a fixed day; she already no-showed the same Tuesday 2 PM slot (appt:3). Work schedule directly conflicts. \u2192 at_risk (work_schedule). She has bus + mother for transport, so transport is not the blocker.\n- **P3 (care manager video check-in):** Patient agreed; English speaker; no digital-access evidence in transcript or screener. \u2192 likely_ok\n- **P4 (daily walk):** General recommendation; she already walks to the bus; no safety/housing barrier indicated (housing steady). \u2192 likely_ok\n- **P5 (6-week PCP follow-up):** She has kept prior 5 PM primary care visits (appt:1, appt:4) at the same clinic. \u2192 likely_ok",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "[{\"item_id\": \"P1\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}, {\"item_id\": \"P2\", \"status\": \"at_risk\", \"barriers\": [{\"barrier\": \"work_schedule\", \"reason\": \"Works unpredictable Target shifts, sometimes Tuesday afternoons; cannot commit to a fixed weekly day; already missed the Tuesday 2 PM session.\", \"evidence\": [\"turn:T04\", \"turn:T06\", \"appt:3\"]}], \"alternatives\": [{\"category\": \"schedule_change\", \"resource_record_id\": null, \"text\": \"Ask behavioral health for a morning slot after 10 AM (her only guaranteed-free time) or a day that matches her posted shifts.\"}]}], {\"item_id\": \"P3\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}, {\"item_id\": \"P4\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}, {\"item_id\": \"P5\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}]"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 14518,
+      "usage": {
+        "prompt_tokens": 7356,
+        "total_tokens": 7711,
+        "completion_tokens": 355,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 61
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I had a JSON bracket error \u2014 the array closed early. Let me resubmit with all items in one array.",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Works unpredictable Target shifts, sometimes Tuesday afternoons; cannot commit to a fixed weekly day; already missed the Tuesday 2 PM session.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T06",
+                      "appt:3"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask behavioral health for a morning slot after 10 AM (her only guaranteed-free time) or a day that matches her posted shifts."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

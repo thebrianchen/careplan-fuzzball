@@ -1,0 +1,162 @@
+{
+  "case_id": "T004",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "A 10:00 AM Tuesday visit falls during her 6:00 AM\u20132:30 PM factory shift; she already missed a visit for this reason and risks termination after two unexcused absences, while she said after-work times are fine.",
+            "evidence": [
+              "turn:T02",
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the prenatal clinic for a later Tuesday appointment after her shift (e.g., 3:00 PM or later) or a different day that does not conflict with work."
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "Bundle the prenatal visit with the glucose lab draw or other same-day services so she only needs one trip off work."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Offer telehealth follow-ups where a physical exam is not required to reduce missed work time."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3073,
+    "completion_tokens": 1536
+  },
+  "latency_ms": 79035,
+  "wall_s": 79.06,
+  "log": [
+    {
+      "prompt_sha256": "e5262e6f9c125b5f2407a88175926764f1f00077d03938cbd428868b31ca8c91",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 79035,
+      "usage": {
+        "prompt_tokens": 3073,
+        "total_tokens": 4609,
+        "completion_tokens": 1536,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1151
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "A 10:00 AM Tuesday visit falls during her 6:00 AM\u20132:30 PM factory shift; she already missed a visit for this reason and risks termination after two unexcused absences, while she said after-work times are fine.",
+                    "evidence": [
+                      "turn:T02",
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the prenatal clinic for a later Tuesday appointment after her shift (e.g., 3:00 PM or later) or a different day that does not conflict with work."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Bundle the prenatal visit with the glucose lab draw or other same-day services so she only needs one trip off work."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Offer telehealth follow-ups where a physical exam is not required to reduce missed work time."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

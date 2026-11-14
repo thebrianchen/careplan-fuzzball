@@ -1,0 +1,189 @@
+{
+  "case_id": "D009",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 2,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-D009"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-D009"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-D009"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-D009"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-D009"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 9863,
+    "completion_tokens": 1318
+  },
+  "latency_ms": 69145,
+  "wall_s": 69.18,
+  "log": [
+    {
+      "prompt_sha256": "35650eedb990161e047d813d5ce48bd437eae7b71e544e1038a5b42b6d995bdb",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 8614,
+      "usage": {
+        "prompt_tokens": 4511,
+        "total_tokens": 4702,
+        "completion_tokens": 191,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 23
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I'll gather the patient record, medications, appointments, and social-needs screener to assess each plan item.",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-D009"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-D009"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-D009"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-D009"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-D009"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 60531,
+      "usage": {
+        "prompt_tokens": 5352,
+        "total_tokens": 6479,
+        "completion_tokens": 1127,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 758
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I have all the evidence I need. Let me summarize what I found:\n\n- **Patient**: 73F, Medicare Advantage (transport benefit unknown), drives herself, lives 5 minutes from the hospital, home tract 17031720500\n- **Meds**: warfarin 5 mg daily (tier 1, $0 copay), metoprolol, calcium/vitamin D (all $0, no refill gaps)\n- **Screener**: steady housing, no food worry, no transportation problem, no utility shutoff\n- **Appointments**: today's cardiology visit kept; no INR clinic appointments yet scheduled\n\nAssessment:\n- **P1 warfarin**: $0 copay, patient uses a weekly pill box and is careful with pills \u2192 likely_ok\n- **P2 weekly INR checks**: patient drives, 5 minutes from hospital, no transportation barrier per screener \u2192 likely_ok\n- **P3 calcium/vit D**: already taking, $0 copay \u2192 likely_ok\n- **P4 walking/balance**: walks daily, no falls \u2192 likely_ok",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

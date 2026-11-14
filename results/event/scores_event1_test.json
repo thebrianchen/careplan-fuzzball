@@ -1,0 +1,89 @@
+{
+  "runs": [
+    "runs/20261114T173542Z_event1_test_c",
+    "runs/20261114T173542Z_event1_test_b",
+    "runs/20261114T173542Z_event1_test_a"
+  ],
+  "cases": [
+    "T001",
+    "T002",
+    "T003",
+    "T004",
+    "T005",
+    "T006",
+    "T007",
+    "T008",
+    "T009",
+    "T010",
+    "T011",
+    "T012",
+    "T013",
+    "T014",
+    "T015",
+    "T016",
+    "T017",
+    "T018",
+    "T019",
+    "T020"
+  ],
+  "by_condition": {
+    "C0": {
+      "all": {
+        "conflict_reps": 129,
+        "supported_recall": 0.465,
+        "ci95": [
+          0.341,
+          0.59
+        ]
+      },
+      "record_only": {
+        "conflict_reps": 60,
+        "supported_recall": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "spoken": {
+        "conflict_reps": 69,
+        "supported_recall": 0.87,
+        "ci95": [
+          0.747,
+          0.981
+        ]
+      },
+      "false_flags_per_case": 0.33,
+      "failed_runs": 0,
+      "runs": 60
+    },
+    "C2": {
+      "all": {
+        "conflict_reps": 129,
+        "supported_recall": 0.62,
+        "ci95": [
+          0.496,
+          0.742
+        ]
+      },
+      "record_only": {
+        "conflict_reps": 60,
+        "supported_recall": 0.433,
+        "ci95": [
+          0.235,
+          0.609
+        ]
+      },
+      "spoken": {
+        "conflict_reps": 69,
+        "supported_recall": 0.783,
+        "ci95": [
+          0.642,
+          0.947
+        ]
+      },
+      "false_flags_per_case": 0.45,
+      "failed_runs": 0,
+      "runs": 60
+    }
+  }
+}

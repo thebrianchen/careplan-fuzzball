@@ -1,0 +1,214 @@
+{
+  "case_id": "T001",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "caregiving",
+            "reason": "A Thursday 11:30 AM, 4-hour session ends around 3:30 PM, clashing with the 3 PM school pickup; the patient has no one for the kids Thursdays (neighbor works, daughter works until 6:30).",
+            "evidence": [
+              "turn:T02",
+              "turn:T04",
+              "turn:T06"
+            ]
+          },
+          {
+            "barrier": "work_schedule",
+            "reason": "The daughter's downtown schedule until 6:30 leaves no evening backup, so the Thursday chair time conflicts with the family's care coverage.",
+            "evidence": [
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Ask the dialysis unit for a later Thursday chair time or a different day that fits school pickup and available rides."
+          },
+          {
+            "category": "dialysis_social_worker",
+            "text": "Message the unit social worker for help with caregiving/benefits and to explore Thursday scheduling or transport support."
+          },
+          {
+            "category": "home_dialysis_evaluation",
+            "text": "Discuss a peritoneal or home hemodialysis evaluation as a schedule/transport alternative, noting it requires clinical approval, space, training, and home support."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "food_access",
+            "reason": "The patient eats processed kid-friendly foods (hot dogs, mac and cheese) and relies on what is available at home, so switching to fresh low-potassium produce may be unaffordable or hard to obtain.",
+            "evidence": [
+              "turn:T08"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "renal_dietitian",
+            "text": "Have the dialysis dietitian redesign the renal diet around foods the patient can actually get and that the children will eat."
+          },
+          {
+            "category": "food_pantry",
+            "text": "Use the Greater Chicago Food Depository locator for pantries open on non-treatment days, then pair selections with renal-dietitian guidance."
+          },
+          {
+            "category": "snap",
+            "text": "Apply through Illinois ABE for income-based SNAP benefits; very low-income households may qualify for expedited benefits within 7 days."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3127,
+    "completion_tokens": 1881
+  },
+  "latency_ms": 85349,
+  "wall_s": 85.37,
+  "log": [
+    {
+      "prompt_sha256": "731cb084562673f7d5d545cfd33cee1e871ec92e1109267275473a5420150544",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 85349,
+      "usage": {
+        "prompt_tokens": 3127,
+        "total_tokens": 5008,
+        "completion_tokens": 1881,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1262
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "caregiving",
+                    "reason": "A Thursday 11:30 AM, 4-hour session ends around 3:30 PM, clashing with the 3 PM school pickup; the patient has no one for the kids Thursdays (neighbor works, daughter works until 6:30).",
+                    "evidence": [
+                      "turn:T02",
+                      "turn:T04",
+                      "turn:T06"
+                    ]
+                  },
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "The daughter's downtown schedule until 6:30 leaves no evening backup, so the Thursday chair time conflicts with the family's care coverage.",
+                    "evidence": [
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask the dialysis unit for a later Thursday chair time or a different day that fits school pickup and available rides."
+                  },
+                  {
+                    "category": "dialysis_social_worker",
+                    "text": "Message the unit social worker for help with caregiving/benefits and to explore Thursday scheduling or transport support."
+                  },
+                  {
+                    "category": "home_dialysis_evaluation",
+                    "text": "Discuss a peritoneal or home hemodialysis evaluation as a schedule/transport alternative, noting it requires clinical approval, space, training, and home support."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "The patient eats processed kid-friendly foods (hot dogs, mac and cheese) and relies on what is available at home, so switching to fresh low-potassium produce may be unaffordable or hard to obtain.",
+                    "evidence": [
+                      "turn:T08"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "renal_dietitian",
+                    "text": "Have the dialysis dietitian redesign the renal diet around foods the patient can actually get and that the children will eat."
+                  },
+                  {
+                    "category": "food_pantry",
+                    "text": "Use the Greater Chicago Food Depository locator for pantries open on non-treatment days, then pair selections with renal-dietitian guidance."
+                  },
+                  {
+                    "category": "snap",
+                    "text": "Apply through Illinois ABE for income-based SNAP benefits; very low-income households may qualify for expedited benefits within 7 days."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

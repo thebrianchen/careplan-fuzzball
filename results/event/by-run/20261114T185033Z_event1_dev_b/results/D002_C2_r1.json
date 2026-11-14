@@ -1,0 +1,315 @@
+{
+  "case_id": "D002",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "utilities",
+            "reason": "Power shut off twice this month; insulin glargine and lispro need refrigeration and cooler storage is unreliable.",
+            "evidence": [
+              "turn:T02",
+              "turn:T04",
+              "screener:utilities_shutoff",
+              "med:1",
+              "med:2",
+              "tract:places_shututility"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "medical_certificate_utilities",
+            "text": "Complete the utility medical certification form to delay disconnection so insulin stays cold.",
+            "resource_record_id": null
+          },
+          {
+            "category": "utility_assistance",
+            "text": "Apply for LIHEAP through CEDA (Cook County) for utility bill help; check current funding window.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "Tuesday 10 AM endocrinology visit conflicts with 6 AM\u20132 PM warehouse shift; patient has no sick days and loses pay for missed shifts.",
+            "evidence": [
+              "turn:T06",
+              "appt:1"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Ask endocrinology for a later appointment time or a day that does not conflict with the warehouse shift.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 3,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-D002"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-D002"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-D002"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-D002"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-D002"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031300900"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_transit_trip",
+      "args": {
+        "appt_ref": "appt:1",
+        "arrive_by": "10:00"
+      },
+      "ok": false
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 16699,
+    "completion_tokens": 1976
+  },
+  "latency_ms": 103892,
+  "wall_s": 103.93,
+  "log": [
+    {
+      "prompt_sha256": "96f4dfe296b0c33d7c66bf36ce458ba55aa25ace188f661efbcdc2c1c0bd9926",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 11447,
+      "usage": {
+        "prompt_tokens": 4623,
+        "total_tokens": 4910,
+        "completion_tokens": 287,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 125
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I'll gather the patient's full picture first, then check the specific plan items.",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-D002"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-D002"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-D002"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-D002"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-D002"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 5363,
+      "usage": {
+        "prompt_tokens": 5624,
+        "total_tokens": 5746,
+        "completion_tokens": 122,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 38
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031300900"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_transit_trip",
+          "args": {
+            "appt_ref": "appt:1",
+            "arrive_by": "10:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 87082,
+      "usage": {
+        "prompt_tokens": 6452,
+        "total_tokens": 8019,
+        "completion_tokens": 1567,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1167
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "utilities",
+                    "reason": "Power shut off twice this month; insulin glargine and lispro need refrigeration and cooler storage is unreliable.",
+                    "evidence": [
+                      "turn:T02",
+                      "turn:T04",
+                      "screener:utilities_shutoff",
+                      "med:1",
+                      "med:2",
+                      "tract:places_shututility"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "medical_certificate_utilities",
+                    "text": "Complete the utility medical certification form to delay disconnection so insulin stays cold.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "utility_assistance",
+                    "text": "Apply for LIHEAP through CEDA (Cook County) for utility bill help; check current funding window.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Tuesday 10 AM endocrinology visit conflicts with 6 AM\u20132 PM warehouse shift; patient has no sick days and loses pay for missed shifts.",
+                    "evidence": [
+                      "turn:T06",
+                      "appt:1"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask endocrinology for a later appointment time or a day that does not conflict with the warehouse shift.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,373 @@
+{
+  "case_id": "T014",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "caregiving",
+            "reason": "Patient is the only adult who walks the child to the bus at 8:30 AM, conflicting with a 9:00 AM rehab start three mornings a week.",
+            "evidence": [
+              "turn:T04",
+              "turn:T06"
+            ]
+          },
+          {
+            "barrier": "transport",
+            "reason": "Patient relies on the Clark bus; tract has high no-vehicle share and no rehab ride is arranged yet.",
+            "evidence": [
+              "turn:T12",
+              "tract:no_vehicle_share",
+              "screener:transportation"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "nemt",
+            "resource_record_id": null,
+            "text": "Medicaid NEMT: dual coverage with transport benefit; call the number on the back of the MMAI plan card to book recurring rehab rides (standing trips)."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask cardiac rehab for a later start time or different days to match the bus schedule and child's bus drop-off."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "utilities",
+            "reason": "Power has been off since Monday (ComEd shutoff); nightly CPAP requires electricity and patient is sleeping sitting up.",
+            "evidence": [
+              "turn:T08",
+              "screener:utilities_shutoff"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "medical_certificate_utilities",
+            "resource_record_id": null,
+            "text": "Complete the utility medical certification form to delay disconnection while power is restored (expected Tuesday)."
+          },
+          {
+            "category": "utility_assistance",
+            "resource_record_id": "WARM217",
+            "text": "Apply for LIHEAP utility assistance through CEDA; Rogers Park Library warming center 6907 N. Clark St is open Mon 12-8, Tue 10-6, Fri 9-5, Sat 9-5, Sun 1-5."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 3,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T014"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T014"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T014"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T014"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T014"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031340100"
+      },
+      "ok": false
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031010702"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031010702",
+        "need": "utilities",
+        "days": [
+          "Fri",
+          "Sat",
+          "Sun",
+          "Mon"
+        ]
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 18560,
+    "completion_tokens": 2446
+  },
+  "latency_ms": 128667,
+  "wall_s": 128.71,
+  "log": [
+    {
+      "prompt_sha256": "02fcb7f665ffc637be97d84c170ab19b1d2e2e135414b616b4012657d44e4ffc",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 20064,
+      "usage": {
+        "prompt_tokens": 4768,
+        "total_tokens": 5191,
+        "completion_tokens": 423,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 242
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T014"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T014"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T014"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T014"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T014"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031340100"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 28326,
+      "usage": {
+        "prompt_tokens": 5956,
+        "total_tokens": 6453,
+        "completion_tokens": 497,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 392
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031010702"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031010702",
+            "need": "utilities",
+            "days": [
+              "Fri",
+              "Sat",
+              "Sun",
+              "Mon"
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 80277,
+      "usage": {
+        "prompt_tokens": 7836,
+        "total_tokens": 9362,
+        "completion_tokens": 1526,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 950
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "caregiving",
+                    "reason": "Patient is the only adult who walks the child to the bus at 8:30 AM, conflicting with a 9:00 AM rehab start three mornings a week.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T06"
+                    ]
+                  },
+                  {
+                    "barrier": "transport",
+                    "reason": "Patient relies on the Clark bus; tract has high no-vehicle share and no rehab ride is arranged yet.",
+                    "evidence": [
+                      "turn:T12",
+                      "tract:no_vehicle_share",
+                      "screener:transportation"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Medicaid NEMT: dual coverage with transport benefit; call the number on the back of the MMAI plan card to book recurring rehab rides (standing trips)."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask cardiac rehab for a later start time or different days to match the bus schedule and child's bus drop-off."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "utilities",
+                    "reason": "Power has been off since Monday (ComEd shutoff); nightly CPAP requires electricity and patient is sleeping sitting up.",
+                    "evidence": [
+                      "turn:T08",
+                      "screener:utilities_shutoff"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "medical_certificate_utilities",
+                    "resource_record_id": null,
+                    "text": "Complete the utility medical certification form to delay disconnection while power is restored (expected Tuesday)."
+                  },
+                  {
+                    "category": "utility_assistance",
+                    "resource_record_id": "WARM217",
+                    "text": "Apply for LIHEAP utility assistance through CEDA; Rogers Park Library warming center 6907 N. Clark St is open Mon 12-8, Tue 10-6, Fri 9-5, Sat 9-5, Sun 1-5."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

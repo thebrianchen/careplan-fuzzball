@@ -1,0 +1,123 @@
+jobs:
+  leak-report:
+    cwd: /code/app
+    depends-on:
+    - name: redteam
+      status: FINISHED
+    env:
+    - PYTHONPATH=/code/site
+    - PATH=/code/python/bin:/usr/local/bin:/usr/bin:/bin
+    - TAG=event1
+    image:
+      uri: docker://rockylinux/rockylinux:9
+    mounts:
+      /code:
+        volume: code
+    resource:
+      cpu:
+        cores: 1
+      memory:
+        size: 1GB
+    script: |
+      #!/bin/sh
+      python3 -m leaktest.run --merge /code/runs/*_${TAG}_leaktest_s*of* --out /code/results/leaktest_$TAG.json
+      cat /code/results/leaktest_$TAG.json
+      awk 'NR==1{a=$2;b=$3} {if($2<a)a=$2; if($3>b)b=$3} END{printf "array wall time: %.1f min over %d tasks\n",(b-a)/60,NR}' /code/results/leaktest_$TAG.times
+  redteam:
+    cwd: /code/app
+    depends-on:
+    - name: planner
+      status: RUNNING
+    env:
+    - PYTHONPATH=/code/site
+    - PATH=/code/python/bin:/usr/local/bin:/usr/bin:/bin
+    - PLANNER_URL=http://planner:8000/v1
+    - VLLM_API_KEY=none
+    - PROFILE=super35-vllm-think
+    - TAG=event1
+    - SHARDS=6
+    - REPS=3
+    image:
+      uri: docker://rockylinux/rockylinux:9
+    mounts:
+      /code:
+        volume: code
+    policy:
+      timeout:
+        execute: 4h
+    resource:
+      cpu:
+        cores: 1
+      memory:
+        size: 2GB
+    script: |
+      #!/bin/sh
+      # three tasks at a time: the planner serves three requests at once
+      mkdir -p /code/results; s=$(date +%s)
+      python3 -m leaktest.run --cases cases/dev --reps $REPS --profile $PROFILE \
+        --shard $((FB_TASK_ID - 1))/$SHARDS --tag $TAG --out-root /code/runs; rc=$?
+      echo "$FB_TASK_ID $s $(date +%s) $rc" >> /code/results/leaktest_$TAG.times
+      exit $rc
+    task-array:
+      concurrency: 3
+      end: 6
+      start: 1
+services:
+  planner:
+    env:
+    - HOME=/models/home
+    - USER=careplan
+    - XDG_CACHE_HOME=/models/home/.cache
+    - HF_HUB_OFFLINE=1
+    - MAX_JOBS=2
+    - NVCC_THREADS=1
+    - SEQS=3
+    image:
+      uri: docker://vllm/vllm-openai:v0.32.0
+    mounts:
+      /models:
+        volume: models
+    network:
+      ports:
+      - name: openai
+        port: 8000
+        protocol: tcp
+    readiness-probe:
+      failure-threshold: 240
+      http-get:
+        path: /health
+        port: 8000
+        scheme: HTTP
+      initial-delay-seconds: 60
+      period-seconds: 15
+      timeout-seconds: 5
+    resource:
+      cpu:
+        cores: 12
+      devices:
+        nvidia.com/gpu: 1
+      memory:
+        size: 110GB
+    script: |
+      #!/bin/bash
+      mkdir -p "$XDG_CACHE_HOME"
+      M=/models/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-NVFP4
+      exec vllm serve $M --served-model-name nemotron-3.5-super-vl \
+        --max-num-seqs ${SEQS:-1} --trust-remote-code --gpu-memory-utilization 0.75 --max-num-batched-tokens 8192 \
+        --speculative_config.model $M-LiLiCorr \
+        --speculative_config.num_speculative_tokens 7 --speculative_config.method dflash \
+        --mamba-backend flashinfer --mamba-ssm-cache-dtype float16 --enable-mamba-cache-stochastic-rounding \
+        --mamba-cache-philox-rounds 5 --enable-mamba-shared-prefix-checkpoint \
+        --video-pruning-rate 0.5 --media-io-kwargs '{"video": {"fps": 2, "num_frames": 256}}' \
+        --block-size 64 --prefix-match-unit 64 \
+        --enable-auto-tool-choice --tool-call-parser qwen3_coder --reasoning-parser nemotron_v3 \
+        --host 0.0.0.0 --port 8000
+version: v4
+volumes:
+  code:
+    name: code
+    use: team4
+  models:
+    name: models
+    use: team4
+

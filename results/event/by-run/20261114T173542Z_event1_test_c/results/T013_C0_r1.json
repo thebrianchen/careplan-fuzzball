@@ -1,0 +1,180 @@
+{
+  "case_id": "T013",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "The son leaves home at 6:15 AM and is at work by 7, so he cannot drive her to a West Side 8:00 AM drop-off; she cannot take the bus alone because she would get lost.",
+            "evidence": [
+              "turn:T04",
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "paratransit",
+            "resource_record_id": null,
+            "text": "Ask whether the adult day program provides a van; if not, evaluate ADA Paratransit certification (312-663-HELP) so she can ride to the center on fixed-route comparable service."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the center about a later drop-off or different days that fit the son's work schedule, or arrange another adult to handle morning drop-off."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "He is on a boiler at Thursday 10 AM and says his employer would dock him, so he cannot attend a fixed morning class.",
+            "evidence": [
+              "turn:T08"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the hospital for a different class time, evening/weekend session, recorded materials, or a one-time individual caregiver teaching visit."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3144,
+    "completion_tokens": 1166
+  },
+  "latency_ms": 65480,
+  "wall_s": 65.51,
+  "log": [
+    {
+      "prompt_sha256": "0f7aa761d13079b352504e8cadae0742049c8a432ae967bbafc25b4ea3c9f1e6",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 65480,
+      "usage": {
+        "prompt_tokens": 3144,
+        "total_tokens": 4310,
+        "completion_tokens": 1166,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 630
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "The son leaves home at 6:15 AM and is at work by 7, so he cannot drive her to a West Side 8:00 AM drop-off; she cannot take the bus alone because she would get lost.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "paratransit",
+                    "resource_record_id": null,
+                    "text": "Ask whether the adult day program provides a van; if not, evaluate ADA Paratransit certification (312-663-HELP) so she can ride to the center on fixed-route comparable service."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the center about a later drop-off or different days that fit the son's work schedule, or arrange another adult to handle morning drop-off."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "He is on a boiler at Thursday 10 AM and says his employer would dock him, so he cannot attend a fixed morning class.",
+                    "evidence": [
+                      "turn:T08"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the hospital for a different class time, evening/weekend session, recorded materials, or a one-time individual caregiver teaching visit."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

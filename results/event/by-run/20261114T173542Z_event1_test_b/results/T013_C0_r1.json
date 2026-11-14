@@ -1,0 +1,200 @@
+{
+  "case_id": "T013",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "The son leaves home at 6:15 and is at work by 7, so he cannot drive the patient to an 8:00 AM West Side drop-off, and the patient cannot take the bus alone because she would get lost.",
+            "evidence": [
+              "turn:T04",
+              "turn:T02"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the adult day program whether drop-off can be later than 8:00 AM or whether a different day/schedule fits the son's work hours."
+          },
+          {
+            "category": "ada_paratransit",
+            "resource_record_id": null,
+            "text": "If the patient's condition prevents using fixed-route buses/trains, apply for ADA Paratransit certification (312-663-HELP) so she can get reserved rides to the program."
+          },
+          {
+            "category": "medicaid_nemt",
+            "resource_record_id": null,
+            "text": "If the patient has Medicaid or dual coverage, check whether managed-care NEMT can cover rides to the adult day program; call the number on the back of the plan card."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "The son works Thursdays at 10 AM on a boiler and has no flexibility; attending would cost him wages.",
+            "evidence": [
+              "turn:T08"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the hospital whether the caregiver series is offered at another time/day, as a recorded or online session, or with printed materials he can review on his own schedule."
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "See whether any education session can be bundled with the patient's or son's existing clinic visits to avoid a separate Thursday trip."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3144,
+    "completion_tokens": 1153
+  },
+  "latency_ms": 52923,
+  "wall_s": 52.95,
+  "log": [
+    {
+      "prompt_sha256": "0f7aa761d13079b352504e8cadae0742049c8a432ae967bbafc25b4ea3c9f1e6",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 52923,
+      "usage": {
+        "prompt_tokens": 3144,
+        "total_tokens": 4297,
+        "completion_tokens": 1153,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 584
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "The son leaves home at 6:15 and is at work by 7, so he cannot drive the patient to an 8:00 AM West Side drop-off, and the patient cannot take the bus alone because she would get lost.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T02"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the adult day program whether drop-off can be later than 8:00 AM or whether a different day/schedule fits the son's work hours."
+                  },
+                  {
+                    "category": "ada_paratransit",
+                    "resource_record_id": null,
+                    "text": "If the patient's condition prevents using fixed-route buses/trains, apply for ADA Paratransit certification (312-663-HELP) so she can get reserved rides to the program."
+                  },
+                  {
+                    "category": "medicaid_nemt",
+                    "resource_record_id": null,
+                    "text": "If the patient has Medicaid or dual coverage, check whether managed-care NEMT can cover rides to the adult day program; call the number on the back of the plan card."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "The son works Thursdays at 10 AM on a boiler and has no flexibility; attending would cost him wages.",
+                    "evidence": [
+                      "turn:T08"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the hospital whether the caregiver series is offered at another time/day, as a recorded or online session, or with printed materials he can review on his own schedule."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "See whether any education session can be bundled with the patient's or son's existing clinic visits to avoid a separate Thursday trip."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

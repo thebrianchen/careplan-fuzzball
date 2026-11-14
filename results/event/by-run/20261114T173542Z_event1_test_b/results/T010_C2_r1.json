@@ -1,0 +1,413 @@
+{
+  "case_id": "T010",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "Work vans leave at 6 AM and clinic opens at 8 AM; attending costs a full day's pay, so weekday 8 AM DOT is hard to keep.",
+            "evidence": [
+              "turn:T02",
+              "appt:4",
+              "appt:6",
+              "appt:7"
+            ]
+          },
+          {
+            "barrier": "transport",
+            "reason": "No transport benefit, uninsured, and 20% of tract households lack a vehicle, making daily 8 AM trips unreliable.",
+            "evidence": [
+              "screener:transportation",
+              "tract:no_vehicle_share"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the TB clinic for a later chair time or day that fits the work-van schedule."
+          },
+          {
+            "category": "telehealth",
+            "resource_record_id": null,
+            "text": "Offer video-observed doses via WhatsApp on days the patient cannot reach the 8 AM clinic."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "Monthly labs are tied to DOT encounters that the patient keeps missing because of 6 AM work vans and lost pay.",
+            "evidence": [
+              "turn:T02",
+              "appt:4",
+              "appt:6",
+              "appt:7"
+            ]
+          },
+          {
+            "barrier": "transport",
+            "reason": "No transport benefit and low vehicle access make repeated early-morning clinic trips for labs unlikely.",
+            "evidence": [
+              "screener:transportation",
+              "tract:no_vehicle_share"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "Draw monthly labs during a DOT visit the patient already attends, avoiding a separate trip."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Schedule lab draws on a later clinic day that matches available transport."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "language_literacy",
+            "reason": "The visit required an interpreter and English-only written side-effect instructions may not be understood or acted on.",
+            "evidence": [
+              "turn:T01",
+              "turn:T02"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "interpreter",
+            "resource_record_id": null,
+            "text": "Provide side-effect and when-to-call instructions in Arabic through the hospital interpreter, with plain-language teach-back."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 3,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T010"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T010"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T010"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T010"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T010"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031000100"
+      },
+      "ok": false
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031140200"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_transit_trip",
+      "args": {
+        "appt_ref": "appt:3",
+        "arrive_by": "08:00"
+      },
+      "ok": false
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 18067,
+    "completion_tokens": 2706
+  },
+  "latency_ms": 151416,
+  "wall_s": 151.46,
+  "log": [
+    {
+      "prompt_sha256": "1cd3bd02666f3df1b77c7723995c7c98c22ee49b00075f8b3cd817f0775468c9",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 19938,
+      "usage": {
+        "prompt_tokens": 4770,
+        "total_tokens": 5110,
+        "completion_tokens": 340,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 159
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T010"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T010"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T010"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T010"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T010"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031000100"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 13578,
+      "usage": {
+        "prompt_tokens": 6283,
+        "total_tokens": 6526,
+        "completion_tokens": 243,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 159
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031140200"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_transit_trip",
+          "args": {
+            "appt_ref": "appt:3",
+            "arrive_by": "08:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 117900,
+      "usage": {
+        "prompt_tokens": 7014,
+        "total_tokens": 9137,
+        "completion_tokens": 2123,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1453
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Work vans leave at 6 AM and clinic opens at 8 AM; attending costs a full day's pay, so weekday 8 AM DOT is hard to keep.",
+                    "evidence": [
+                      "turn:T02",
+                      "appt:4",
+                      "appt:6",
+                      "appt:7"
+                    ]
+                  },
+                  {
+                    "barrier": "transport",
+                    "reason": "No transport benefit, uninsured, and 20% of tract households lack a vehicle, making daily 8 AM trips unreliable.",
+                    "evidence": [
+                      "screener:transportation",
+                      "tract:no_vehicle_share"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the TB clinic for a later chair time or day that fits the work-van schedule."
+                  },
+                  {
+                    "category": "telehealth",
+                    "resource_record_id": null,
+                    "text": "Offer video-observed doses via WhatsApp on days the patient cannot reach the 8 AM clinic."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Monthly labs are tied to DOT encounters that the patient keeps missing because of 6 AM work vans and lost pay.",
+                    "evidence": [
+                      "turn:T02",
+                      "appt:4",
+                      "appt:6",
+                      "appt:7"
+                    ]
+                  },
+                  {
+                    "barrier": "transport",
+                    "reason": "No transport benefit and low vehicle access make repeated early-morning clinic trips for labs unlikely.",
+                    "evidence": [
+                      "screener:transportation",
+                      "tract:no_vehicle_share"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Draw monthly labs during a DOT visit the patient already attends, avoiding a separate trip."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Schedule lab draws on a later clinic day that matches available transport."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "language_literacy",
+                    "reason": "The visit required an interpreter and English-only written side-effect instructions may not be understood or acted on.",
+                    "evidence": [
+                      "turn:T01",
+                      "turn:T02"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "interpreter",
+                    "resource_record_id": null,
+                    "text": "Provide side-effect and when-to-call instructions in Arabic through the hospital interpreter, with plain-language teach-back."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

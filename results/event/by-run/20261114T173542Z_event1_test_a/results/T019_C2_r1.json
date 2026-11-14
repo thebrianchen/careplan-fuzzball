@@ -1,0 +1,357 @@
+{
+  "case_id": "T019",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "food_access",
+            "reason": "Patient often worries food will run out and food has run out; tract is low-income/low-access and patient lost 9 lb, so a high-calorie diet and supplements may not be affordable or obtainable.",
+            "evidence": [
+              "screener:food_worry",
+              "screener:food_ran_out",
+              "tract:lila_half_10",
+              "tract:places_foodinsecu",
+              "turn:T07",
+              "turn:T08"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "snap",
+            "resource_record_id": "SNAP1626633",
+            "text": "Apply for SNAP via Illinois ABE (abe.illinois.gov); use EBT at Save A Lot 21653 (7908 S Halsted St, ~0.3 mi) for groceries."
+          },
+          {
+            "category": "food_pantry",
+            "resource_record_id": "PLa4e17890",
+            "text": "St Sabina Parish food pantry (1120 W 79th St, ~0.3 mi); hours not listed\u2014call ahead; pair pantry choices with dietitian guidance."
+          },
+          {
+            "category": "medically_tailored_meals",
+            "resource_record_id": null,
+            "text": "Check whether the patient's Medicaid MCO or Medicare Advantage plan covers medically tailored meals; not universal."
+          }
+        ]
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 4,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T019"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T019"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T019"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T019"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T019"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031710800"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_transit_trip",
+      "args": {
+        "appt_ref": "appt:2",
+        "arrive_by": "13:00"
+      },
+      "ok": false
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031710800",
+        "need": "food"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031710800",
+        "need": "housing"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 24068,
+    "completion_tokens": 3331
+  },
+  "latency_ms": 170653,
+  "wall_s": 170.7,
+  "log": [
+    {
+      "prompt_sha256": "3b5697f3f2931564a19bce174412aa66060c63939bc4c68079f0a23a8853413e",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 6278,
+      "usage": {
+        "prompt_tokens": 4709,
+        "total_tokens": 4860,
+        "completion_tokens": 151,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 5
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T019"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T019"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T019"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T019"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T019"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 50175,
+      "usage": {
+        "prompt_tokens": 5553,
+        "total_tokens": 6546,
+        "completion_tokens": 993,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 909
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031710800"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_transit_trip",
+          "args": {
+            "appt_ref": "appt:2",
+            "arrive_by": "13:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 35525,
+      "usage": {
+        "prompt_tokens": 6428,
+        "total_tokens": 7017,
+        "completion_tokens": 589,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 495
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031710800",
+            "need": "food"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031710800",
+            "need": "housing"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 78675,
+      "usage": {
+        "prompt_tokens": 7378,
+        "total_tokens": 8976,
+        "completion_tokens": 1598,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1130
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "Patient often worries food will run out and food has run out; tract is low-income/low-access and patient lost 9 lb, so a high-calorie diet and supplements may not be affordable or obtainable.",
+                    "evidence": [
+                      "screener:food_worry",
+                      "screener:food_ran_out",
+                      "tract:lila_half_10",
+                      "tract:places_foodinsecu",
+                      "turn:T07",
+                      "turn:T08"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "snap",
+                    "resource_record_id": "SNAP1626633",
+                    "text": "Apply for SNAP via Illinois ABE (abe.illinois.gov); use EBT at Save A Lot 21653 (7908 S Halsted St, ~0.3 mi) for groceries."
+                  },
+                  {
+                    "category": "food_pantry",
+                    "resource_record_id": "PLa4e17890",
+                    "text": "St Sabina Parish food pantry (1120 W 79th St, ~0.3 mi); hours not listed\u2014call ahead; pair pantry choices with dietitian guidance."
+                  },
+                  {
+                    "category": "medically_tailored_meals",
+                    "resource_record_id": null,
+                    "text": "Check whether the patient's Medicaid MCO or Medicare Advantage plan covers medically tailored meals; not universal."
+                  }
+                ]
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

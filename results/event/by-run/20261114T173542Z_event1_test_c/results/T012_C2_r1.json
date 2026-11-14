@@ -1,0 +1,355 @@
+{
+  "case_id": "T012",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "8 AM Mon/Thu visits need a 6:15 AM two-bus trip with a foot ulcer; no car, missed two Monday visits.",
+            "evidence": [
+              "turn:T02",
+              "turn:T04",
+              "appt:3",
+              "appt:5",
+              "tract:no_vehicle_share",
+              "tract:places_lacktrpt",
+              "screener:transportation"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "nemt",
+            "resource_record_id": null,
+            "text": "Medicaid covers non-emergency medical transport; call the number on the back of the HealthChoice Illinois plan card to schedule rides (advance booking varies by MCO)."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the wound center for a later chair time or a day that matches an available ride; chair times are limited."
+          },
+          {
+            "category": "paratransit",
+            "resource_record_id": null,
+            "text": "Apply for ADA Paratransit certification (312-663-HELP, weekdays 8:30 AM-5 PM); decision within 21 days of a complete application."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 4,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T012"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T012"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T012"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T012"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T012"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031461000"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_transit_trip",
+      "args": {
+        "appt_ref": "appt:2",
+        "arrive_by": "08:00"
+      },
+      "ok": false
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031461000",
+        "need": "transport",
+        "days": [
+          "Mon",
+          "Thu"
+        ],
+        "start": "06:00",
+        "end": "09:00"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 24914,
+    "completion_tokens": 3415
+  },
+  "latency_ms": 182459,
+  "wall_s": 182.5,
+  "log": [
+    {
+      "prompt_sha256": "d972326eec8f08f54673e3c891242a38801c1139aaadc53cda584c730a3a6ba5",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 13876,
+      "usage": {
+        "prompt_tokens": 4730,
+        "total_tokens": 5074,
+        "completion_tokens": 344,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 176
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I'll gather the patient record, problems, medications, appointments, screener, and tract profile in parallel first.",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T012"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T012"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T012"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T012"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T012"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 8044,
+      "usage": {
+        "prompt_tokens": 6114,
+        "total_tokens": 6284,
+        "completion_tokens": 170,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 86
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031461000"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_transit_trip",
+          "args": {
+            "appt_ref": "appt:2",
+            "arrive_by": "08:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 100000,
+      "usage": {
+        "prompt_tokens": 6966,
+        "total_tokens": 8514,
+        "completion_tokens": 1548,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1426
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "The transit tool has no facility coordinates on file, so I'll rely on the transcript and tract data. Let me pull community transport resources for the patient's tract.",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031461000",
+            "need": "transport",
+            "days": [
+              "Mon",
+              "Thu"
+            ],
+            "start": "06:00",
+            "end": "09:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 60539,
+      "usage": {
+        "prompt_tokens": 7104,
+        "total_tokens": 8457,
+        "completion_tokens": 1353,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 706
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "All evidence is gathered. Here's my assessment:\n\n- **P1 (Mon/Thu 8:00 AM wound visits \u00d76 weeks):** at_risk \u2014 transport. The patient describes buses as unreliable, a 6:15 AM two-bus departure with a painful foot, no car, and a host who works nights/sleeps mornings. He has two Monday no-shows (appt:3, appt:5) and the tract has very high no-vehicle share (0.745) and lack-of-transit (21.0, above county 75th percentile). Coverage is Medicaid with a transport benefit, so NEMT is available.\n- **P2 (boot indoors/out):** likely_ok \u2014 no barrier.\n- **P3 (home health nursing 3\u00d7/week):** likely_ok \u2014 comes to the patient, no travel required.\n- **P4 (metformin):** likely_ok \u2014 $0 copay, no refill gaps.\n- **P5 (return precautions education):** likely_ok \u2014 English speaker, simple instructions.\n\nSubmitting now.",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "8 AM Mon/Thu visits need a 6:15 AM two-bus trip with a foot ulcer; no car, missed two Monday visits.",
+                    "evidence": [
+                      "turn:T02",
+                      "turn:T04",
+                      "appt:3",
+                      "appt:5",
+                      "tract:no_vehicle_share",
+                      "tract:places_lacktrpt",
+                      "screener:transportation"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Medicaid covers non-emergency medical transport; call the number on the back of the HealthChoice Illinois plan card to schedule rides (advance booking varies by MCO)."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the wound center for a later chair time or a day that matches an available ride; chair times are limited."
+                  },
+                  {
+                    "category": "paratransit",
+                    "resource_record_id": null,
+                    "text": "Apply for ADA Paratransit certification (312-663-HELP, weekdays 8:30 AM-5 PM); decision within 21 days of a complete application."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

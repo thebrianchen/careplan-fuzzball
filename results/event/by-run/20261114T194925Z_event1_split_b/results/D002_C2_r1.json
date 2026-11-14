@@ -1,0 +1,331 @@
+{
+  "case_id": "D002",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "utilities",
+            "reason": "Power shutoffs twice this month put refrigerated insulin at risk; patient unsure cooler kept it cold.",
+            "evidence": [
+              "turn:T02",
+              "turn:T04",
+              "screener:utilities_shutoff",
+              "med:1",
+              "med:2"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "utility_medical_certificate",
+            "resource_record_id": null,
+            "text": "Clinician completes the utility medical certification form to postpone disconnection and protect refrigerated insulin."
+          },
+          {
+            "category": "liheap",
+            "resource_record_id": null,
+            "text": "Apply through CEDA/Cook County LIHEAP for utility bill assistance during the open funding window."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "Tuesday 10 AM conflicts with the 6 AM\u20132 PM warehouse shift with no sick days; prior 10 AM endocrinology visits were no-show/cancelled.",
+            "evidence": [
+              "turn:T06",
+              "appt:1",
+              "appt:2"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask endocrinology for a later chair time or a day that does not conflict with the 6\u20132 warehouse shift."
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "Book the endocrinology visit on the same day and campus as another existing appointment to limit missed work."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "Thursday 2 PM class falls at the end of the 6 AM\u20132 PM warehouse shift, making timely attendance unreliable.",
+            "evidence": [
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the diabetes education program for a class time after the 2 PM shift end or on a day off."
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "Combine the education session with another clinic visit on a non-work day."
+          }
+        ]
+      }
+    ]
+  },
+  "error": null,
+  "steps": 2,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-D002"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-D002"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-D002"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-D002"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-D002"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_visit_transcript",
+      "args": {
+        "visit_id": "V-D002",
+        "topic": "any"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 10661,
+    "completion_tokens": 3210
+  },
+  "latency_ms": 156843,
+  "wall_s": 156.87,
+  "log": [
+    {
+      "prompt_sha256": "96f4dfe296b0c33d7c66bf36ce458ba55aa25ace188f661efbcdc2c1c0bd9926",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 10310,
+      "usage": {
+        "prompt_tokens": 4623,
+        "total_tokens": 4863,
+        "completion_tokens": 240,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 46
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I'll gather all the patient evidence first.",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-D002"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-D002"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-D002"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-D002"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-D002"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_visit_transcript",
+          "args": {
+            "visit_id": "V-D002",
+            "topic": "any"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 146533,
+      "usage": {
+        "prompt_tokens": 6038,
+        "total_tokens": 9008,
+        "completion_tokens": 2970,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 2366
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I have enough evidence to assess all four items. Let me submit the assessment.",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "utilities",
+                    "reason": "Power shutoffs twice this month put refrigerated insulin at risk; patient unsure cooler kept it cold.",
+                    "evidence": [
+                      "turn:T02",
+                      "turn:T04",
+                      "screener:utilities_shutoff",
+                      "med:1",
+                      "med:2"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "utility_medical_certificate",
+                    "resource_record_id": null,
+                    "text": "Clinician completes the utility medical certification form to postpone disconnection and protect refrigerated insulin."
+                  },
+                  {
+                    "category": "liheap",
+                    "resource_record_id": null,
+                    "text": "Apply through CEDA/Cook County LIHEAP for utility bill assistance during the open funding window."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Tuesday 10 AM conflicts with the 6 AM\u20132 PM warehouse shift with no sick days; prior 10 AM endocrinology visits were no-show/cancelled.",
+                    "evidence": [
+                      "turn:T06",
+                      "appt:1",
+                      "appt:2"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask endocrinology for a later chair time or a day that does not conflict with the 6\u20132 warehouse shift."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Book the endocrinology visit on the same day and campus as another existing appointment to limit missed work."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Thursday 2 PM class falls at the end of the 6 AM\u20132 PM warehouse shift, making timely attendance unreliable.",
+                    "evidence": [
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the diabetes education program for a class time after the 2 PM shift end or on a day off."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Combine the education session with another clinic visit on a non-work day."
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

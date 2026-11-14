@@ -1,0 +1,377 @@
+{
+  "case_id": "T015",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "utilities",
+            "reason": "Insulin glargine needs refrigeration; patient screens positive for utility shutoff risk.",
+            "evidence": [
+              "med:3",
+              "screener:utilities_shutoff"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "utility_medical_certificate",
+            "resource_record_id": null,
+            "text": "Clinician completes utility medical certification form to delay disconnection and protect insulin refrigeration."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "1 PM Wednesday conflicts with warehouse shift 7-3:30; prior 1 PM education visits were no-show/cancelled.",
+            "evidence": [
+              "turn:T04",
+              "appt:1",
+              "appt:2"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask diabetes educator for after-4 PM or Saturday morning teaching, matching patient availability."
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "Book educator visit same day/campus as a clinic visit, or telehealth if no exam is needed."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "Workday meals come from gas station between warehouse and Uber shifts; packing lunch is difficult.",
+            "evidence": [
+              "turn:T08"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Move diabetes educator teaching to after 4 PM or Saturday to include workday meal planning."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 3,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T015"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T015"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T015"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T015"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T015"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031600900"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031600900",
+        "need": "utilities",
+        "days": [
+          "Sat"
+        ]
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031600900",
+        "need": "food",
+        "days": [
+          "Sat"
+        ]
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 19076,
+    "completion_tokens": 2753
+  },
+  "latency_ms": 160451,
+  "wall_s": 160.5,
+  "log": [
+    {
+      "prompt_sha256": "615a98d92d40d4737837415112f47d17019af97ff7693d870d9955dab431e5a3",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 6951,
+      "usage": {
+        "prompt_tokens": 4728,
+        "total_tokens": 4884,
+        "completion_tokens": 156,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 10
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T015"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T015"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T015"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T015"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T015"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 37595,
+      "usage": {
+        "prompt_tokens": 5772,
+        "total_tokens": 6401,
+        "completion_tokens": 629,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 478
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031600900"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031600900",
+            "need": "utilities",
+            "days": [
+              "Sat"
+            ]
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031600900",
+            "need": "food",
+            "days": [
+              "Sat"
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 115905,
+      "usage": {
+        "prompt_tokens": 8576,
+        "total_tokens": 10544,
+        "completion_tokens": 1968,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1487
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "utilities",
+                    "reason": "Insulin glargine needs refrigeration; patient screens positive for utility shutoff risk.",
+                    "evidence": [
+                      "med:3",
+                      "screener:utilities_shutoff"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "utility_medical_certificate",
+                    "resource_record_id": null,
+                    "text": "Clinician completes utility medical certification form to delay disconnection and protect insulin refrigeration."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "1 PM Wednesday conflicts with warehouse shift 7-3:30; prior 1 PM education visits were no-show/cancelled.",
+                    "evidence": [
+                      "turn:T04",
+                      "appt:1",
+                      "appt:2"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask diabetes educator for after-4 PM or Saturday morning teaching, matching patient availability."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Book educator visit same day/campus as a clinic visit, or telehealth if no exam is needed."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Workday meals come from gas station between warehouse and Uber shifts; packing lunch is difficult.",
+                    "evidence": [
+                      "turn:T08"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Move diabetes educator teaching to after 4 PM or Saturday to include workday meal planning."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

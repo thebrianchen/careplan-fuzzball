@@ -1,0 +1,212 @@
+{
+  "case_id": "T018",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "The patient cannot drive until cleared, has no local caregiver (son is in Texas), and reports the nearby bus requires stairs down from the apartment plus managing a walker on board, which they are not ready for; this makes three weekly trips to the hospital rehab center unlikely to succeed as written.",
+            "evidence": [
+              "turn:T04",
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Ask the rehab center for a later chair time or an alternate day that matches an available ride; dialysis-style chair times are limited, so frame as a request.",
+            "resource_record_id": null
+          },
+          {
+            "category": "ada_paratransit",
+            "text": "Apply for ADA Paratransit certification through the Northern Illinois Transit Authority (312-663-HELP) because stairs and walker use make fixed-route bus travel unsafe; note certification is not immediate.",
+            "resource_record_id": null
+          },
+          {
+            "category": "medicaid_nemt",
+            "text": "If covered by Medicaid or dual eligibility, call the MCO number on the back of the plan card to request non-emergency medical transport; verify coverage first since original Medicare generally does not cover routine rides.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "The 6-week follow-up still requires travel, but the patient cannot drive, has no one to drive them, and finds the bus route (apartment stairs plus walker) unmanageable, so getting to the orthopedic clinic with X-ray is uncertain without a ride plan.",
+            "evidence": [
+              "turn:T04",
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Coordinate the X-ray and clinic visit on the same day/campus or ask for the earliest workable appointment to reduce trips; use telehealth only if an exam is not needed.",
+            "resource_record_id": null
+          },
+          {
+            "category": "ada_paratransit",
+            "text": "Apply for ADA Paratransit certification (312-663-HELP) for this one-time medical travel, since stairs and walker use preclude fixed-route bus use; allow time for certification.",
+            "resource_record_id": null
+          },
+          {
+            "category": "medicaid_nemt",
+            "text": "If Medicaid or dual-eligible, contact the MCO number on the plan card to arrange a one-time non-emergency medical ride; confirm coverage because original Medicare generally does not cover routine rides.",
+            "resource_record_id": null
+          }
+        ]
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3110,
+    "completion_tokens": 2293
+  },
+  "latency_ms": 110431,
+  "wall_s": 110.46,
+  "log": [
+    {
+      "prompt_sha256": "608c3251c0badfddc612528346f230baeb579ade5d3e3ebbaa6f311ffbb82690",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 110431,
+      "usage": {
+        "prompt_tokens": 3110,
+        "total_tokens": 5403,
+        "completion_tokens": 2293,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1587
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "The patient cannot drive until cleared, has no local caregiver (son is in Texas), and reports the nearby bus requires stairs down from the apartment plus managing a walker on board, which they are not ready for; this makes three weekly trips to the hospital rehab center unlikely to succeed as written.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask the rehab center for a later chair time or an alternate day that matches an available ride; dialysis-style chair times are limited, so frame as a request.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "ada_paratransit",
+                    "text": "Apply for ADA Paratransit certification through the Northern Illinois Transit Authority (312-663-HELP) because stairs and walker use make fixed-route bus travel unsafe; note certification is not immediate.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "medicaid_nemt",
+                    "text": "If covered by Medicaid or dual eligibility, call the MCO number on the back of the plan card to request non-emergency medical transport; verify coverage first since original Medicare generally does not cover routine rides.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "The 6-week follow-up still requires travel, but the patient cannot drive, has no one to drive them, and finds the bus route (apartment stairs plus walker) unmanageable, so getting to the orthopedic clinic with X-ray is uncertain without a ride plan.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Coordinate the X-ray and clinic visit on the same day/campus or ask for the earliest workable appointment to reduce trips; use telehealth only if an exam is not needed.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "ada_paratransit",
+                    "text": "Apply for ADA Paratransit certification (312-663-HELP) for this one-time medical travel, since stairs and walker use preclude fixed-route bus use; allow time for certification.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "medicaid_nemt",
+                    "text": "If Medicaid or dual-eligible, contact the MCO number on the plan card to arrange a one-time non-emergency medical ride; confirm coverage because original Medicare generally does not cover routine rides.",
+                    "resource_record_id": null
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,212 @@
+{
+  "case_id": "T003",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "The patient cannot drive after stroke, her only driver (daughter) works 7\u20135 and cannot bring her to 9 AM MWF appointments, and she is not steady enough to use the bus with a walker from 111th, so three weekly trips to the rehab center are not reliably feasible as written.",
+            "evidence": [
+              "turn:T04",
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "nemt",
+            "resource_record_id": null,
+            "text": "If the patient has Medicaid or dual coverage, arrange non-emergency medical transport through her managed care plan (call the number on the plan card) or Transdev for fee-for-service, booked in advance for the standing MWF therapy trips."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the hospital rehab center for a later chair/therapy start time or different days that fall when the daughter is off work, framing it as a scheduling request given limited chair times."
+          },
+          {
+            "category": "paratransit",
+            "resource_record_id": null,
+            "text": "If her condition prevents using CTA/Pace fixed-route buses and trains, apply for ADA Paratransit certification (Northern Illinois Transit Authority, 312-663-HELP); note it is not immediate and runs only when fixed-route service operates."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "The single neurology follow-up requires travel the patient cannot provide herself (cannot drive; daughter works 7\u20135; bus with walker is not manageable), so getting to that appointment is uncertain unless a ride is arranged.",
+            "evidence": [
+              "turn:T04",
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "nemt",
+            "resource_record_id": null,
+            "text": "Check coverage: if Medicaid/dual, book a one-way ride via the plan's NEMT line or Transdev; if Medicare-only, check whether a Medicare Advantage plan includes a transportation benefit before promising a covered ride."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Schedule the follow-up on a day/time that matches a family member's availability or coordinate it with another existing trip to reduce separate travel."
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "Consider whether any part of the neurology follow-up can be done by telehealth if no in-person exam is needed, removing the transport barrier entirely."
+          }
+        ]
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3107,
+    "completion_tokens": 1769
+  },
+  "latency_ms": 98252,
+  "wall_s": 98.28,
+  "log": [
+    {
+      "prompt_sha256": "0ab0ee559d89b81360ee0e252fc283e4f0823af51f3a51829999858a9a579c83",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 98252,
+      "usage": {
+        "prompt_tokens": 3107,
+        "total_tokens": 4876,
+        "completion_tokens": 1769,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1065
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "The patient cannot drive after stroke, her only driver (daughter) works 7\u20135 and cannot bring her to 9 AM MWF appointments, and she is not steady enough to use the bus with a walker from 111th, so three weekly trips to the rehab center are not reliably feasible as written.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "If the patient has Medicaid or dual coverage, arrange non-emergency medical transport through her managed care plan (call the number on the plan card) or Transdev for fee-for-service, booked in advance for the standing MWF therapy trips."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the hospital rehab center for a later chair/therapy start time or different days that fall when the daughter is off work, framing it as a scheduling request given limited chair times."
+                  },
+                  {
+                    "category": "paratransit",
+                    "resource_record_id": null,
+                    "text": "If her condition prevents using CTA/Pace fixed-route buses and trains, apply for ADA Paratransit certification (Northern Illinois Transit Authority, 312-663-HELP); note it is not immediate and runs only when fixed-route service operates."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "The single neurology follow-up requires travel the patient cannot provide herself (cannot drive; daughter works 7\u20135; bus with walker is not manageable), so getting to that appointment is uncertain unless a ride is arranged.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Check coverage: if Medicaid/dual, book a one-way ride via the plan's NEMT line or Transdev; if Medicare-only, check whether a Medicare Advantage plan includes a transportation benefit before promising a covered ride."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Schedule the follow-up on a day/time that matches a family member's availability or coordinate it with another existing trip to reduce separate travel."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Consider whether any part of the neurology follow-up can be done by telehealth if no in-person exam is needed, removing the transport barrier entirely."
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

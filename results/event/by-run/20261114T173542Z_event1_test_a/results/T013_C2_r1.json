@@ -1,0 +1,335 @@
+{
+  "case_id": "T013",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "Patient cannot take the bus alone (dementia) and no program van is confirmed.",
+            "evidence": [
+              "turn:T04",
+              "turn:T06",
+              "screener:transportation"
+            ]
+          },
+          {
+            "barrier": "work_schedule",
+            "reason": "Caregiver leaves home at 6:15 AM and is at work by 7:00 AM, so an 8:00 AM drop-off conflicts with work.",
+            "evidence": [
+              "turn:T04"
+            ]
+          },
+          {
+            "barrier": "caregiving",
+            "reason": "No one available to supervise or transport the patient to the West Side center during the caregiver's work hours.",
+            "evidence": [
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the day center for a later drop-off matching the caregiver's work start, or confirm whether the program runs a van (doctor is already checking)."
+          },
+          {
+            "category": "ada_paratransit",
+            "resource_record_id": null,
+            "text": "Apply for ADA Paratransit certification at 312-663-HELP (4357), weekdays 8:30 AM-5:00 PM; dementia can qualify, decision within 21 days."
+          },
+          {
+            "category": "medicaid_nemt",
+            "resource_record_id": null,
+            "text": "Dual coverage with a transport benefit; call the number on the back of the plan card to ask whether day-program rides can be scheduled (advance booking varies by MCO)."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "Caregiver works Thursdays at 10:00 AM with no flexibility and would be docked pay.",
+            "evidence": [
+              "turn:T08"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the hospital for a later class time or a different day that fits the caregiver's work schedule."
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "See if any session can fall on a day the patient already travels to the hospital, reducing extra trips."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 2,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T013"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T013"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T013"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T013"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T013"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_visit_transcript",
+      "args": {
+        "visit_id": "V-T013",
+        "topic": "transport"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 10781,
+    "completion_tokens": 2681
+  },
+  "latency_ms": 140595,
+  "wall_s": 140.63,
+  "log": [
+    {
+      "prompt_sha256": "b4f723cd7b20a54588ea17ca7d9f6f02988ab2d6edb27aecc8d8b412bbf61887",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 10973,
+      "usage": {
+        "prompt_tokens": 4821,
+        "total_tokens": 5097,
+        "completion_tokens": 276,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 78
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I'll gather the patient's record and the transcript context together.",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T013"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T013"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T013"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T013"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T013"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_visit_transcript",
+          "args": {
+            "visit_id": "V-T013",
+            "topic": "transport"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 129622,
+      "usage": {
+        "prompt_tokens": 5960,
+        "total_tokens": 8365,
+        "completion_tokens": 2405,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1762
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Patient cannot take the bus alone (dementia) and no program van is confirmed.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T06",
+                      "screener:transportation"
+                    ]
+                  },
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Caregiver leaves home at 6:15 AM and is at work by 7:00 AM, so an 8:00 AM drop-off conflicts with work.",
+                    "evidence": [
+                      "turn:T04"
+                    ]
+                  },
+                  {
+                    "barrier": "caregiving",
+                    "reason": "No one available to supervise or transport the patient to the West Side center during the caregiver's work hours.",
+                    "evidence": [
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the day center for a later drop-off matching the caregiver's work start, or confirm whether the program runs a van (doctor is already checking)."
+                  },
+                  {
+                    "category": "ada_paratransit",
+                    "resource_record_id": null,
+                    "text": "Apply for ADA Paratransit certification at 312-663-HELP (4357), weekdays 8:30 AM-5:00 PM; dementia can qualify, decision within 21 days."
+                  },
+                  {
+                    "category": "medicaid_nemt",
+                    "resource_record_id": null,
+                    "text": "Dual coverage with a transport benefit; call the number on the back of the plan card to ask whether day-program rides can be scheduled (advance booking varies by MCO)."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Caregiver works Thursdays at 10:00 AM with no flexibility and would be docked pay.",
+                    "evidence": [
+                      "turn:T08"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the hospital for a later class time or a different day that fits the caregiver's work schedule."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "See if any session can fall on a day the patient already travels to the hospital, reducing extra trips."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

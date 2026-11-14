@@ -1,0 +1,219 @@
+{
+  "case_id": "D008",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "An 8:00 AM slot conflicts with the overnight shift (11 PM\u20137 AM) and morning sleep; patient just gets off work at 7 AM.",
+            "evidence": [
+              "turn:T04",
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the lab/clinic for a later afternoon PFT slot or a different day that fits after the night shift and sleep."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 2,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-D008"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-D008"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-D008"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-D008"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-D008"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 10062,
+    "completion_tokens": 2129
+  },
+  "latency_ms": 64025,
+  "wall_s": 64.06,
+  "log": [
+    {
+      "prompt_sha256": "a83ab77544690f311157509572c1fa041e0b233eff56df4da3174f3c35398183",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 5050,
+      "usage": {
+        "prompt_tokens": 4570,
+        "total_tokens": 4800,
+        "completion_tokens": 230,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 61
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I'll start by pulling the patient record, problems, medications, appointments, screener, and neighborhood profile in parallel.",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-D008"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-D008"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-D008"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-D008"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-D008"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 58975,
+      "usage": {
+        "prompt_tokens": 5492,
+        "total_tokens": 7391,
+        "completion_tokens": 1899,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1325
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I have all the evidence I need. Let me summarize the key facts before assessing:\n\n- **Coverage:** Medicaid (Lakeshore MCO) with a transportation benefit; patient drives their own car (turn:T06).\n- **Work:** Overnights 11 PM\u20137 AM, sleeps in the morning (turn:T04); eats \"whatever's quick\" due to nights (turn:T10).\n- **Screener:** food worry never true, food ran out never true, transportation \"no,\" utilities shutoff \"yes\" (no plan item addresses utilities, so that signal touches nothing here).\n- **Meds:** albuterol neb $1 copay; budesonide-formoterol $3 copay; both affordable, no refill gaps.\n\nAssessment:\n- **P1 (8:00 AM weekday PFT):** at_risk \u2014 an 8 AM slot directly conflicts with getting off work at 7 AM and sleeping in the morning (work_schedule). Transport is not a barrier (drives, Medicaid NEMT available).\n- **P2 (albuterol neb):** likely_ok \u2014 $1 copay, tier 1, no refill gaps.\n- **P3 (low-sodium/fresh produce diet):** likely_ok \u2014 screener shows no food insecurity; convenience eating is a habit issue, not an access barrier.\n- **P4 (budesonide-formoterol + phone reminder):** likely_ok \u2014 $3 copay, affordable, and the reminder directly addresses the forgotten evening dose (turn:T08).",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "An 8:00 AM slot conflicts with the overnight shift (11 PM\u20137 AM) and morning sleep; patient just gets off work at 7 AM.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the lab/clinic for a later afternoon PFT slot or a different day that fits after the night shift and sleep."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

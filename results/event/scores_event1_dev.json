@@ -1,0 +1,97 @@
+{
+  "runs": [
+    "runs/20261114T185033Z_event1_dev_b",
+    "runs/20261114T185033Z_event1_dev_c",
+    "runs/20261114T185032Z_event1_dev_a"
+  ],
+  "cases": [
+    "D001",
+    "D002",
+    "D003",
+    "D004",
+    "D005",
+    "D006",
+    "D007",
+    "D008",
+    "D009",
+    "D010",
+    "D011",
+    "D012"
+  ],
+  "by_condition": {
+    "C0": {
+      "all": {
+        "conflict_reps": 96,
+        "supported_recall": 0.49,
+        "ci95": [
+          0.292,
+          0.687
+        ]
+      },
+      "record_only": {
+        "conflict_reps": 18,
+        "supported_recall": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "spoken": {
+        "conflict_reps": 66,
+        "supported_recall": 0.712,
+        "ci95": [
+          0.573,
+          0.9
+        ]
+      },
+      "tract_only": {
+        "conflict_reps": 12,
+        "supported_recall": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "false_flags_per_case": 0.11,
+      "failed_runs": 0,
+      "runs": 36
+    },
+    "C2": {
+      "all": {
+        "conflict_reps": 96,
+        "supported_recall": 0.583,
+        "ci95": [
+          0.427,
+          0.773
+        ]
+      },
+      "record_only": {
+        "conflict_reps": 18,
+        "supported_recall": 0.389,
+        "ci95": [
+          0.056,
+          0.8
+        ]
+      },
+      "spoken": {
+        "conflict_reps": 66,
+        "supported_recall": 0.652,
+        "ci95": [
+          0.522,
+          0.817
+        ]
+      },
+      "tract_only": {
+        "conflict_reps": 12,
+        "supported_recall": 0.5,
+        "ci95": [
+          0.0,
+          1.0
+        ]
+      },
+      "false_flags_per_case": 0.22,
+      "failed_runs": 0,
+      "runs": 36
+    }
+  }
+}

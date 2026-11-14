@@ -1,0 +1,305 @@
+{
+  "case_id": "D007",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "Original Medicare has no transport benefit, so a covered ride to MWF 8 AM cardiac rehab is not guaranteed; high no-vehicle share and low transit access in the tract make early-morning trips hard.",
+            "evidence": [
+              "prob:1",
+              "appt:2",
+              "screener:transportation",
+              "tract:no_vehicle_share",
+              "tract:places_lacktrpt"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Ask cardiac rehab for a later start time or a day that matches an available ride; chair slots are limited, so frame as a request.",
+            "resource_record_id": null
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "text": "Schedule rehab on the same day/campus as another clinic visit, or use telehealth when an exam is not needed, to cut trips.",
+            "resource_record_id": null
+          },
+          {
+            "category": "ada_paratransit",
+            "text": "Apply for ADA Paratransit certification (Northern Illinois Transit Authority, 312-663-HELP, weekdays 8:30-5); not immediate, and rides run only when fixed-route service runs.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "med_cost",
+            "reason": "Empagliflozin is tier 4 at $47/month under Medicare Part D, above the cost threshold, creating an ongoing affordability barrier.",
+            "evidence": [
+              "med:2"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "med_assistance_program",
+            "text": "Screen for Medicare Part D Extra Help (low-income subsidy) through the pharmacy or social work, or ask the prescriber about a cheaper equivalent/formulary switch.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 3,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-D007"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-D007"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-D007"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-D007"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-D007"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031681000"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 16500,
+    "completion_tokens": 2166
+  },
+  "latency_ms": 81081,
+  "wall_s": 81.12,
+  "log": [
+    {
+      "prompt_sha256": "eec14b84fa179c9944cbc4364b12762330f3f0f445ee4f80b79755e3198ca63a",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 11088,
+      "usage": {
+        "prompt_tokens": 4590,
+        "total_tokens": 4820,
+        "completion_tokens": 230,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 74
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I'll gather the patient's record and evidence first.",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-D007"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-D007"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-D007"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-D007"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-D007"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 25111,
+      "usage": {
+        "prompt_tokens": 5549,
+        "total_tokens": 6133,
+        "completion_tokens": 584,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 546
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031681000"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 44882,
+      "usage": {
+        "prompt_tokens": 6361,
+        "total_tokens": 7713,
+        "completion_tokens": 1352,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 840
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Original Medicare has no transport benefit, so a covered ride to MWF 8 AM cardiac rehab is not guaranteed; high no-vehicle share and low transit access in the tract make early-morning trips hard.",
+                    "evidence": [
+                      "prob:1",
+                      "appt:2",
+                      "screener:transportation",
+                      "tract:no_vehicle_share",
+                      "tract:places_lacktrpt"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask cardiac rehab for a later start time or a day that matches an available ride; chair slots are limited, so frame as a request.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "text": "Schedule rehab on the same day/campus as another clinic visit, or use telehealth when an exam is not needed, to cut trips.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "ada_paratransit",
+                    "text": "Apply for ADA Paratransit certification (Northern Illinois Transit Authority, 312-663-HELP, weekdays 8:30-5); not immediate, and rides run only when fixed-route service runs.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "med_cost",
+                    "reason": "Empagliflozin is tier 4 at $47/month under Medicare Part D, above the cost threshold, creating an ongoing affordability barrier.",
+                    "evidence": [
+                      "med:2"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "med_assistance_program",
+                    "text": "Screen for Medicare Part D Extra Help (low-income subsidy) through the pharmacy or social work, or ask the prescriber about a cheaper equivalent/formulary switch.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

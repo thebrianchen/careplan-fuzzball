@@ -1,0 +1,162 @@
+{
+  "case_id": "T004",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "The patient works 6:00 AM to 2:30 PM at a candy factory and can only take two unexcused absences before job loss, so a Tuesday 10:00 AM prenatal visit conflicts with her shift; she said the 10:00 slot is the problem and that after-work (3:00 PM) would work.",
+            "evidence": [
+              "turn:T02",
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the OB clinic to move prenatal visits to after 3:00 PM (post-shift) or to a day that fits her work schedule."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Combine visits on the same day/campus when possible to reduce the number of separate trips."
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "Schedule lab work (e.g., 32-week hemoglobin) on the same day as a prenatal visit to limit time off work."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3073,
+    "completion_tokens": 921
+  },
+  "latency_ms": 44493,
+  "wall_s": 44.52,
+  "log": [
+    {
+      "prompt_sha256": "e5262e6f9c125b5f2407a88175926764f1f00077d03938cbd428868b31ca8c91",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 44493,
+      "usage": {
+        "prompt_tokens": 3073,
+        "total_tokens": 3994,
+        "completion_tokens": 921,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 514
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "The patient works 6:00 AM to 2:30 PM at a candy factory and can only take two unexcused absences before job loss, so a Tuesday 10:00 AM prenatal visit conflicts with her shift; she said the 10:00 slot is the problem and that after-work (3:00 PM) would work.",
+                    "evidence": [
+                      "turn:T02",
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the OB clinic to move prenatal visits to after 3:00 PM (post-shift) or to a day that fits her work schedule."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Combine visits on the same day/campus when possible to reduce the number of separate trips."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Schedule lab work (e.g., 32-week hemoglobin) on the same day as a prenatal visit to limit time off work."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,513 @@
+{
+  "case_id": "T010",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "6 AM work vans clash with 8 AM clinic and cost a day's pay, causing missed doses.",
+            "evidence": [
+              "turn:T02",
+              "appt:4",
+              "appt:6",
+              "appt:7"
+            ]
+          },
+          {
+            "barrier": "transport",
+            "reason": "No transit benefit and fixed 8 AM weekday times make reliable daily travel unlikely.",
+            "evidence": [
+              "turn:T02",
+              "tract:no_vehicle_share",
+              "appt:4"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Request a later TB clinic time or switch to video observed dosing via WhatsApp; free to patient."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "Monthly labs tied to weekday 8 AM DOT visits conflict with 6 AM work vans and lost pay.",
+            "evidence": [
+              "turn:T02",
+              "appt:4",
+              "appt:6",
+              "appt:7"
+            ]
+          },
+          {
+            "barrier": "transport",
+            "reason": "No covered transportation benefit; repeated TB-clinic no-shows show the 8 AM slot is unreliable.",
+            "evidence": [
+              "turn:T02",
+              "tract:no_vehicle_share",
+              "appt:4",
+              "appt:6",
+              "appt:7"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask to draw labs at a later clinic time or combine with a kept visit; consider video DOT for doses."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "language_literacy",
+            "reason": "Patient relied on an interpreter; English written instructions may not be understood.",
+            "evidence": [
+              "turn:T01",
+              "turn:T12"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "interpreter",
+            "resource_record_id": null,
+            "text": "Use hospital interpreter services and provide translated, plain-language side-effect instructions in Arabic."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 4,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T010"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T010"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T010"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T010"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T010"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_transit_trip",
+      "args": {
+        "appt_ref": "appt:4",
+        "arrive_by": "08:00"
+      },
+      "ok": false
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031140200"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 25710,
+    "completion_tokens": 3070
+  },
+  "latency_ms": 153692,
+  "wall_s": 153.73,
+  "log": [
+    {
+      "prompt_sha256": "1cd3bd02666f3df1b77c7723995c7c98c22ee49b00075f8b3cd817f0775468c9",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 11668,
+      "usage": {
+        "prompt_tokens": 4770,
+        "total_tokens": 5041,
+        "completion_tokens": 271,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 125
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T010"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T010"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T010"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T010"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T010"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 47950,
+      "usage": {
+        "prompt_tokens": 6223,
+        "total_tokens": 6988,
+        "completion_tokens": 765,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 681
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_transit_trip",
+          "args": {
+            "appt_ref": "appt:4",
+            "arrive_by": "08:00"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031140200"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 71083,
+      "usage": {
+        "prompt_tokens": 6954,
+        "total_tokens": 8319,
+        "completion_tokens": 1365,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 763
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "6 AM work vans clash with 8 AM clinic and cost a day's pay, causing missed doses.",
+                    "evidence": [
+                      "turn:T02",
+                      "appt:4",
+                      "appt:6",
+                      "appt:7"
+                    ]
+                  },
+                  {
+                    "barrier": "transport",
+                    "reason": "No transit benefit and fixed 8 AM weekday times make reliable daily travel unlikely.",
+                    "evidence": [
+                      "turn:T02",
+                      "tract:no_vehicle_share",
+                      "coverage.transport_benefit:no"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Request a later TB clinic chair time or switch to video observed dosing via WhatsApp; no cost to patient."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Monthly labs tied to weekday 8 AM DOT visits conflict with 6 AM work vans and lost pay.",
+                    "evidence": [
+                      "turn:T02",
+                      "appt:4",
+                      "appt:6",
+                      "appt:7"
+                    ]
+                  },
+                  {
+                    "barrier": "transport",
+                    "reason": "No covered transportation benefit; repeated TB-clinic no-shows show the 8 AM slot is unreliable.",
+                    "evidence": [
+                      "tract:no_vehicle_share",
+                      "coverage.transport_benefit:no",
+                      "appt:4",
+                      "appt:6",
+                      "appt:7"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask to draw labs at a later clinic time or combine with a kept visit; consider video DOT for doses."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "language_literacy",
+                    "reason": "Patient speaks Arabic and relied on an interpreter; English written instructions may not be understood.",
+                    "evidence": [
+                      "patient.language:ar",
+                      "turn:T01",
+                      "turn:T12"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "interpreter",
+                    "resource_record_id": null,
+                    "text": "Use hospital interpreter services and provide translated, plain-language side-effect instructions in Arabic."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 22991,
+      "usage": {
+        "prompt_tokens": 7763,
+        "total_tokens": 8432,
+        "completion_tokens": 669,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 87
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "6 AM work vans clash with 8 AM clinic and cost a day's pay, causing missed doses.",
+                    "evidence": [
+                      "turn:T02",
+                      "appt:4",
+                      "appt:6",
+                      "appt:7"
+                    ]
+                  },
+                  {
+                    "barrier": "transport",
+                    "reason": "No transit benefit and fixed 8 AM weekday times make reliable daily travel unlikely.",
+                    "evidence": [
+                      "turn:T02",
+                      "tract:no_vehicle_share",
+                      "appt:4"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Request a later TB clinic time or switch to video observed dosing via WhatsApp; free to patient."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Monthly labs tied to weekday 8 AM DOT visits conflict with 6 AM work vans and lost pay.",
+                    "evidence": [
+                      "turn:T02",
+                      "appt:4",
+                      "appt:6",
+                      "appt:7"
+                    ]
+                  },
+                  {
+                    "barrier": "transport",
+                    "reason": "No covered transportation benefit; repeated TB-clinic no-shows show the 8 AM slot is unreliable.",
+                    "evidence": [
+                      "turn:T02",
+                      "tract:no_vehicle_share",
+                      "appt:4",
+                      "appt:6",
+                      "appt:7"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask to draw labs at a later clinic time or combine with a kept visit; consider video DOT for doses."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "language_literacy",
+                    "reason": "Patient relied on an interpreter; English written instructions may not be understood.",
+                    "evidence": [
+                      "turn:T01",
+                      "turn:T12"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "interpreter",
+                    "resource_record_id": null,
+                    "text": "Use hospital interpreter services and provide translated, plain-language side-effect instructions in Arabic."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

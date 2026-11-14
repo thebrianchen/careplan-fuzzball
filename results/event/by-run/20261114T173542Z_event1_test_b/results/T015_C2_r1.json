@@ -1,0 +1,481 @@
+{
+  "case_id": "T015",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "utilities",
+            "reason": "Insulin pen requires refrigeration; utility shutoff risk may spoil medication.",
+            "evidence": [
+              "med:3",
+              "screener:utilities_shutoff"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "utility_medical_certificate",
+            "resource_record_id": null,
+            "text": "Clinician completes utility medical certification form to delay disconnection for refrigerated insulin."
+          },
+          {
+            "category": "liheap",
+            "resource_record_id": null,
+            "text": "Apply through CEDA (Cook County) for income-based LIHEAP utility bill help; check funding window."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "blocked",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "1pm visit conflicts with warehouse 7-3:30 shift; loses half shift, written up; prior no-shows.",
+            "evidence": [
+              "turn:T04",
+              "turn:T06",
+              "appt:1",
+              "appt:2"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask diabetes educator for an after-4pm or Saturday appointment to avoid work conflict."
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "Schedule eye/other visit same day and campus as existing visit, or use telehealth if exam not needed."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "food_access",
+            "reason": "Workday meals from gas station; difficult to maintain carb-consistent, diabetes-appropriate diet.",
+            "evidence": [
+              "turn:T08",
+              "tract:places_foodinsecu"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "snap",
+            "resource_record_id": null,
+            "text": "Apply via Illinois ABE (abe.illinois.gov) for SNAP income-based food benefits; expedited in 7 days if eligible."
+          },
+          {
+            "category": "food_pantry",
+            "resource_record_id": null,
+            "text": "Use Greater Chicago Food Depository locator for a pantry open Saturday/non-work day; pair with dietitian."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 6,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T015"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T015"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T015"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T015"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T015"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031430100"
+      },
+      "ok": false
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031600900"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_visit_transcript",
+      "args": {
+        "visit_id": "V-T015",
+        "topic": "any"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031600900",
+        "need": "utilities",
+        "days": [
+          "Sat"
+        ],
+        "start": "08:00",
+        "end": "14:00"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 46453,
+    "completion_tokens": 6833
+  },
+  "latency_ms": 322105,
+  "wall_s": 322.16,
+  "log": [
+    {
+      "prompt_sha256": "615a98d92d40d4737837415112f47d17019af97ff7693d870d9955dab431e5a3",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 7432,
+      "usage": {
+        "prompt_tokens": 4728,
+        "total_tokens": 4920,
+        "completion_tokens": 192,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 11
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T015"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T015"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T015"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T015"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T015"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031430100"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 19584,
+      "usage": {
+        "prompt_tokens": 5832,
+        "total_tokens": 6133,
+        "completion_tokens": 301,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 223
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031600900"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_visit_transcript",
+          "args": {
+            "visit_id": "V-T015",
+            "topic": "any"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 85082,
+      "usage": {
+        "prompt_tokens": 7060,
+        "total_tokens": 8513,
+        "completion_tokens": 1453,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1365
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031600900",
+            "need": "utilities",
+            "days": [
+              "Sat"
+            ],
+            "start": "08:00",
+            "end": "14:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 161388,
+      "usage": {
+        "prompt_tokens": 8386,
+        "total_tokens": 11724,
+        "completion_tokens": 3338,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 2746
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "[{\"item_id\": \"P1\", \"status\": \"at_risk\", \"barriers\": [{\"barrier\": \"utilities\", \"reason\": \"Insulin pen requires refrigeration; utility shutoff risk may spoil medication.\", \"evidence\": [\"med:3\", \"screener:utilities_shutoff\"]}], \"alternatives\": [{\"category\": \"utility_medical_certificate\", \"resource_record_id\": None, \"text\": \"Clinician completes utility medical certification form to delay disconnection for refrigerated insulin.\"}, {\"category\": \"liheap\", \"resource_record_id\": None, \"text\": \"Apply through CEDA (Cook County) for income-based LIHEAP utility bill help; check funding window.\"}]}, {\"item_id\": \"P2\", \"status\": \"blocked\", \"barriers\": [{\"barrier\": \"work_schedule\", \"reason\": \"1pm visit conflicts with warehouse 7-3:30 shift; loses half shift, written up; prior no-shows.\", \"evidence\": [\"turn:T04\", \"turn:T06\", \"appt:1\", \"appt:2\"]}], \"alternatives\": [{\"category\": \"schedule_change\", \"resource_record_id\": None, \"text\": \"Ask diabetes educator for an after-4pm or Saturday appointment to avoid work conflict.\"}, {\"category\": \"coordinate_with_existing_visit\", \"resource_record_id\": None, \"text\": \"Schedule eye/other visit same day and campus as existing visit, or use telehealth if exam not needed.\"}]}, {\"item_id\": \"P3\", \"status\": \"at_risk\", \"barriers\": [{\"barrier\": \"food_access\", \"reason\": \"Workday meals from gas station; difficult to maintain carb-consistent, diabetes-appropriate diet.\", \"evidence\": [\"turn:T08\", \"tract:places_foodinsecu\"]}], \"alternatives\": [{\"category\": \"snap\", \"resource_record_id\": None, \"text\": \"Apply via Illinois ABE (abe.illinois.gov) for SNAP income-based food benefits; expedited in 7 days if eligible.\"}, {\"category\": \"food_pantry\", \"resource_record_id\": None, \"text\": \"Use Greater Chicago Food Depository locator for a pantry open Saturday/non-work day; pair with dietitian.\"}]}, {\"item_id\": \"P4\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}, {\"item_id\": \"P5\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}]"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 5,
+      "latency_ms": 17387,
+      "usage": {
+        "prompt_tokens": 9611,
+        "total_tokens": 10365,
+        "completion_tokens": 754,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 162
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "[{\"item_id\": \"P1\", \"status\": \"at_risk\", \"barriers\": [{\"barrier\": \"utilities\", \"reason\": \"Insulin pen requires refrigeration; utility shutoff risk may spoil medication.\", \"evidence\": [\"med:3\", \"screener:utilities_shutoff\"]}], \"alternatives\": [{\"category\": \"utility_medical_certificate\", \"resource_record_id\": None, \"text\": \"Clinician completes utility medical certification form to delay disconnection for refrigerated insulin.\"}, {\"category\": \"liheap\", \"resource_record_id\": None, \"text\": \"Apply through CEDA (Cook County) for income-based LIHEAP utility bill help; check funding window.\"}]}, {\"item_id\": \"P2\", \"status\": \"blocked\", \"barriers\": [{\"barrier\": \"work_schedule\", \"reason\": \"1pm visit conflicts with warehouse 7-3:30 shift; loses half shift, written up; prior no-shows.\", \"evidence\": [\"turn:T04\", \"turn:T06\", \"appt:1\", \"appt:2\"]}], \"alternatives\": [{\"category\": \"schedule_change\", \"resource_record_id\": None, \"text\": \"Ask diabetes educator for an after-4pm or Saturday appointment to avoid work conflict.\"}, {\"category\": \"coordinate_with_existing_visit\", \"resource_record_id\": None, \"text\": \"Schedule eye/other visit same day and campus as existing visit, or use telehealth if exam not needed.\"}]}, {\"item_id\": \"P3\", \"status\": \"at_risk\", \"barriers\": [{\"barrier\": \"food_access\", \"reason\": \"Workday meals from gas station; difficult to maintain carb-consistent, diabetes-appropriate diet.\", \"evidence\": [\"turn:T08\", \"tract:places_foodinsecu\"]}], \"alternatives\": [{\"category\": \"snap\", \"resource_record_id\": None, \"text\": \"Apply via Illinois ABE (abe.illinois.gov) for SNAP income-based food benefits; expedited in 7 days if eligible.\"}, {\"category\": \"food_pantry\", \"resource_record_id\": None, \"text\": \"Use Greater Chicago Food Depository locator for a pantry open Saturday/non-work day; pair with dietitian.\"}]}, {\"item_id\": \"P4\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}, {\"item_id\": \"P5\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}]"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 6,
+      "latency_ms": 31232,
+      "usage": {
+        "prompt_tokens": 10836,
+        "total_tokens": 11631,
+        "completion_tokens": 795,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 203
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "utilities",
+                    "reason": "Insulin pen requires refrigeration; utility shutoff risk may spoil medication.",
+                    "evidence": [
+                      "med:3",
+                      "screener:utilities_shutoff"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "utility_medical_certificate",
+                    "resource_record_id": null,
+                    "text": "Clinician completes utility medical certification form to delay disconnection for refrigerated insulin."
+                  },
+                  {
+                    "category": "liheap",
+                    "resource_record_id": null,
+                    "text": "Apply through CEDA (Cook County) for income-based LIHEAP utility bill help; check funding window."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "blocked",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "1pm visit conflicts with warehouse 7-3:30 shift; loses half shift, written up; prior no-shows.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T06",
+                      "appt:1",
+                      "appt:2"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask diabetes educator for an after-4pm or Saturday appointment to avoid work conflict."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Schedule eye/other visit same day and campus as existing visit, or use telehealth if exam not needed."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "Workday meals from gas station; difficult to maintain carb-consistent, diabetes-appropriate diet.",
+                    "evidence": [
+                      "turn:T08",
+                      "tract:places_foodinsecu"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "snap",
+                    "resource_record_id": null,
+                    "text": "Apply via Illinois ABE (abe.illinois.gov) for SNAP income-based food benefits; expedited in 7 days if eligible."
+                  },
+                  {
+                    "category": "food_pantry",
+                    "resource_record_id": null,
+                    "text": "Use Greater Chicago Food Depository locator for a pantry open Saturday/non-work day; pair with dietitian."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

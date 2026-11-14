@@ -1,0 +1,170 @@
+{
+  "case_id": "D008",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "The patient works overnight security from 11 PM to 7 AM and sleeps in the morning, so a weekday 8:00 AM pulmonary function test directly conflicts with work and sleep.",
+            "evidence": [
+              "turn:T03",
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Ask the hospital lab for a later afternoon or evening PFT slot, or a day that does not follow an overnight shift.",
+            "resource_record_id": null
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "text": "If the patient already has another clinic visit, schedule the PFT on the same day and campus to reduce separate trips.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "The patient said they sometimes forget the evening inhaled dose while at work, so a phone reminder alone may not solve administration during the overnight shift.",
+            "evidence": [
+              "turn:T04",
+              "turn:T08"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Discuss adjusting the dosing schedule around the overnight shift or keeping a second inhaler at work so the evening dose is not missed.",
+            "resource_record_id": null
+          }
+        ]
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 2893,
+    "completion_tokens": 676
+  },
+  "latency_ms": 38005,
+  "wall_s": 38.03,
+  "log": [
+    {
+      "prompt_sha256": "94a384bd8f0f1d752d77060a18ab1aa60a9640f88f3c203616c6cadc46257ebc",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 38005,
+      "usage": {
+        "prompt_tokens": 2893,
+        "total_tokens": 3569,
+        "completion_tokens": 676,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 275
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "The patient works overnight security from 11 PM to 7 AM and sleeps in the morning, so a weekday 8:00 AM pulmonary function test directly conflicts with work and sleep.",
+                    "evidence": [
+                      "turn:T03",
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask the hospital lab for a later afternoon or evening PFT slot, or a day that does not follow an overnight shift.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "text": "If the patient already has another clinic visit, schedule the PFT on the same day and campus to reduce separate trips.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "The patient said they sometimes forget the evening inhaled dose while at work, so a phone reminder alone may not solve administration during the overnight shift.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T08"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Discuss adjusting the dosing schedule around the overnight shift or keeping a second inhaler at work so the evening dose is not missed.",
+                    "resource_record_id": null
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

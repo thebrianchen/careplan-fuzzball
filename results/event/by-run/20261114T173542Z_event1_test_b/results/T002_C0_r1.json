@@ -1,0 +1,162 @@
+{
+  "case_id": "T002",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "Pulmonary rehab requires traveling to the hospital twice a week for eight weeks; the patient reports the trip takes two buses with an oxygen tank, about 90 minutes, leaving them exhausted before arrival, and the only driving help (nephew) is occasional because he works.",
+            "evidence": [
+              "turn:T04",
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "nemt",
+            "resource_record_id": null,
+            "text": "Arrange Medicaid non-emergency medical transportation to rehab by calling the number on the back of the patient's Medicaid managed-care plan card (each MCO has its own scheduling rules); confirm recurring/standing rides for twice-weekly appointments."
+          },
+          {
+            "category": "paratransit",
+            "resource_record_id": null,
+            "text": "Refer for ADA Paratransit certification through the Northern Illinois Transit Authority (312-663-HELP) if the patient's condition prevents using fixed-route CTA/Pace buses and trains; note certification takes time and rides run only when fixed-route service runs."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the pulmonary rehab program for a later or different session day/time that better matches an available ride, or coordinate rehab on the same day/campus as another existing appointment to reduce trips."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3114,
+    "completion_tokens": 1458
+  },
+  "latency_ms": 71749,
+  "wall_s": 71.77,
+  "log": [
+    {
+      "prompt_sha256": "c69269fd92455566a0a48cb6d6fb9ef73fac1426214b6f761931026b7b67359d",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 71749,
+      "usage": {
+        "prompt_tokens": 3114,
+        "total_tokens": 4572,
+        "completion_tokens": 1458,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1005
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Pulmonary rehab requires traveling to the hospital twice a week for eight weeks; the patient reports the trip takes two buses with an oxygen tank, about 90 minutes, leaving them exhausted before arrival, and the only driving help (nephew) is occasional because he works.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Arrange Medicaid non-emergency medical transportation to rehab by calling the number on the back of the patient's Medicaid managed-care plan card (each MCO has its own scheduling rules); confirm recurring/standing rides for twice-weekly appointments."
+                  },
+                  {
+                    "category": "paratransit",
+                    "resource_record_id": null,
+                    "text": "Refer for ADA Paratransit certification through the Northern Illinois Transit Authority (312-663-HELP) if the patient's condition prevents using fixed-route CTA/Pace buses and trains; note certification takes time and rides run only when fixed-route service runs."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the pulmonary rehab program for a later or different session day/time that better matches an available ride, or coordinate rehab on the same day/campus as another existing appointment to reduce trips."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

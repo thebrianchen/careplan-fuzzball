@@ -1,0 +1,497 @@
+{
+  "case_id": "T002",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "Patient needs two buses carrying an oxygen tank and was wiped out after a 1.5-hour trip; nephew drives only now and then; no vehicle share in tract; transit lacks service signal.",
+            "evidence": [
+              "turn:T04",
+              "turn:T06",
+              "screener:transportation",
+              "tract:places_lacktrpt",
+              "tract:no_vehicle_share"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "nemt",
+            "text": "Medicaid (dual Lakeshore MMAI) NEMT: call the number on the back of the plan card to book rides to pulmonary rehab; recurring rides can be standing trips.",
+            "resource_record_id": null
+          },
+          {
+            "category": "paratransit",
+            "text": "Apply for ADA Paratransit certification via Northern Illinois Transit Authority, 312-663-HELP; decision within 21 days of a complete application.",
+            "resource_record_id": null
+          },
+          {
+            "category": "schedule_change",
+            "text": "Ask pulmonary rehab for a later start time or a different day that matches an available ride.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "utilities",
+            "reason": "Oxygen concentrator needs continuous power; screener reports a utility shutoff risk and tract shutoff risk is above the county 75th percentile.",
+            "evidence": [
+              "screener:utilities_shutoff",
+              "tract:places_shututility",
+              "turn:T09",
+              "turn:T10"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "medical_certificate_utilities",
+            "text": "Complete the utility's medical certification form (oxygen depends on power) to postpone disconnection; verify current duration rule.",
+            "resource_record_id": null
+          },
+          {
+            "category": "utility_assistance",
+            "text": "Apply for Cook County LIHEAP utility assistance through CEDA; check the current funding window.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "food_access",
+            "reason": "Patient sometimes worries food will run out and food has run out; tract is low-income/low-access with food insecurity above the county 75th percentile.",
+            "evidence": [
+              "screener:food_worry",
+              "screener:food_ran_out",
+              "tract:lila_half_10",
+              "tract:places_foodinsecu"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "snap",
+            "text": "Apply for SNAP through Illinois ABE (abe.illinois.gov); very low-income households may get expedited benefits within 7 days.",
+            "resource_record_id": null
+          },
+          {
+            "category": "food_pantry",
+            "text": "Helping Our People Excel food pantry, 5912 W Iowa St; hours not listed\u2014call ahead; pair with dietitian for appropriate choices.",
+            "resource_record_id": "PL3136f0b4"
+          },
+          {
+            "category": "medically_tailored_meals",
+            "text": "Check whether the MMAI plan covers medically tailored meals; not universal, so verify coverage first.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 4,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T002"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T002"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T002"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T002"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T002"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031251300"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_transit_trip",
+      "args": {
+        "appt_ref": "appt:4",
+        "arrive_by": "10:00"
+      },
+      "ok": false
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031251300",
+        "need": "food",
+        "days": [
+          "Mon",
+          "Wed",
+          "Fri",
+          "Sat",
+          "Sun"
+        ]
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031251300",
+        "need": "utilities"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031251300",
+        "need": "transport",
+        "days": [
+          "Mon",
+          "Wed",
+          "Fri",
+          "Sat",
+          "Sun"
+        ]
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 26829,
+    "completion_tokens": 3407
+  },
+  "latency_ms": 167616,
+  "wall_s": 167.68,
+  "log": [
+    {
+      "prompt_sha256": "e29d08872508522e3d885b252d3761137d2c47c1e0f5004eeeb055a725d3c395",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 8113,
+      "usage": {
+        "prompt_tokens": 4791,
+        "total_tokens": 4997,
+        "completion_tokens": 206,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 60
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T002"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T002"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T002"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T002"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T002"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 10361,
+      "usage": {
+        "prompt_tokens": 6023,
+        "total_tokens": 6219,
+        "completion_tokens": 196,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 112
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031251300"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_transit_trip",
+          "args": {
+            "appt_ref": "appt:4",
+            "arrive_by": "10:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 54065,
+      "usage": {
+        "prompt_tokens": 6873,
+        "total_tokens": 7859,
+        "completion_tokens": 986,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 799
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031251300",
+            "need": "food",
+            "days": [
+              "Mon",
+              "Wed",
+              "Fri",
+              "Sat",
+              "Sun"
+            ]
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031251300",
+            "need": "utilities"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031251300",
+            "need": "transport",
+            "days": [
+              "Mon",
+              "Wed",
+              "Fri",
+              "Sat",
+              "Sun"
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 95077,
+      "usage": {
+        "prompt_tokens": 9142,
+        "total_tokens": 11161,
+        "completion_tokens": 2019,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1200
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Patient needs two buses carrying an oxygen tank and was wiped out after a 1.5-hour trip; nephew drives only now and then; no vehicle share in tract; transit lacks service signal.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T06",
+                      "screener:transportation",
+                      "tract:places_lacktrpt",
+                      "tract:no_vehicle_share"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "text": "Medicaid (dual Lakeshore MMAI) NEMT: call the number on the back of the plan card to book rides to pulmonary rehab; recurring rides can be standing trips.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "paratransit",
+                    "text": "Apply for ADA Paratransit certification via Northern Illinois Transit Authority, 312-663-HELP; decision within 21 days of a complete application.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask pulmonary rehab for a later start time or a different day that matches an available ride.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "utilities",
+                    "reason": "Oxygen concentrator needs continuous power; screener reports a utility shutoff risk and tract shutoff risk is above the county 75th percentile.",
+                    "evidence": [
+                      "screener:utilities_shutoff",
+                      "tract:places_shututility",
+                      "turn:T09",
+                      "turn:T10"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "medical_certificate_utilities",
+                    "text": "Complete the utility's medical certification form (oxygen depends on power) to postpone disconnection; verify current duration rule.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "utility_assistance",
+                    "text": "Apply for Cook County LIHEAP utility assistance through CEDA; check the current funding window.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "Patient sometimes worries food will run out and food has run out; tract is low-income/low-access with food insecurity above the county 75th percentile.",
+                    "evidence": [
+                      "screener:food_worry",
+                      "screener:food_ran_out",
+                      "tract:lila_half_10",
+                      "tract:places_foodinsecu"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "snap",
+                    "text": "Apply for SNAP through Illinois ABE (abe.illinois.gov); very low-income households may get expedited benefits within 7 days.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "food_pantry",
+                    "text": "Helping Our People Excel food pantry, 5912 W Iowa St; hours not listed\u2014call ahead; pair with dietitian for appropriate choices.",
+                    "resource_record_id": "PL3136f0b4"
+                  },
+                  {
+                    "category": "medically_tailored_meals",
+                    "text": "Check whether the MMAI plan covers medically tailored meals; not universal, so verify coverage first.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

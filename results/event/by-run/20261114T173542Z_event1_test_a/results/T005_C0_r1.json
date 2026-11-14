@@ -1,0 +1,192 @@
+{
+  "case_id": "T005",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "caregiving",
+            "reason": "The patient has a 4-month-old infant and no morning childcare; the sister works mornings, so attending a weekday 9:00 AM downtown allergist visit with the infant for two hours is impractical, consistent with the missed October appointment.",
+            "evidence": [
+              "turn:T08",
+              "turn:T10",
+              "turn:T07"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the allergy/immunology clinic for a later morning or afternoon slot, or a day when non-morning childcare is available, rather than a fixed weekday 9:00 AM visit."
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "See if the allergy evaluation can be scheduled on the same day/campus as another existing visit, or use telehealth for the history portion with skin testing arranged separately."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "housing",
+            "reason": "The rental unit has bathroom mold and roaches; the landlord has been notified twice and only offered to paint over mold, so the family cannot reliably complete remediation or pest control on their own.",
+            "evidence": [
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "housing",
+            "resource_record_id": null,
+            "text": "Use the clinician's planned landlord letter to request mold remediation and pest control, and consider a local housing/code inspection or tenant legal-aid referral if the landlord does not act."
+          },
+          {
+            "category": "other_cost",
+            "resource_record_id": null,
+            "text": "Provide allergen-proof mattress/pillow covers through the clinic or a durable medical equipment source if cost is a barrier, and reinforce no-smoking indoors."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3103,
+    "completion_tokens": 1955
+  },
+  "latency_ms": 107295,
+  "wall_s": 107.32,
+  "log": [
+    {
+      "prompt_sha256": "1bc385220992651d49b07cf99558bbcc1274fcb9cd1a6cd5fc16c69e20791c60",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 107295,
+      "usage": {
+        "prompt_tokens": 3103,
+        "total_tokens": 5058,
+        "completion_tokens": 1955,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1414
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "caregiving",
+                    "reason": "The patient has a 4-month-old infant and no morning childcare; the sister works mornings, so attending a weekday 9:00 AM downtown allergist visit with the infant for two hours is impractical, consistent with the missed October appointment.",
+                    "evidence": [
+                      "turn:T08",
+                      "turn:T10",
+                      "turn:T07"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the allergy/immunology clinic for a later morning or afternoon slot, or a day when non-morning childcare is available, rather than a fixed weekday 9:00 AM visit."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "See if the allergy evaluation can be scheduled on the same day/campus as another existing visit, or use telehealth for the history portion with skin testing arranged separately."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "housing",
+                    "reason": "The rental unit has bathroom mold and roaches; the landlord has been notified twice and only offered to paint over mold, so the family cannot reliably complete remediation or pest control on their own.",
+                    "evidence": [
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "housing",
+                    "resource_record_id": null,
+                    "text": "Use the clinician's planned landlord letter to request mold remediation and pest control, and consider a local housing/code inspection or tenant legal-aid referral if the landlord does not act."
+                  },
+                  {
+                    "category": "other_cost",
+                    "resource_record_id": null,
+                    "text": "Provide allergen-proof mattress/pillow covers through the clinic or a durable medical equipment source if cost is a barrier, and reinforce no-smoking indoors."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

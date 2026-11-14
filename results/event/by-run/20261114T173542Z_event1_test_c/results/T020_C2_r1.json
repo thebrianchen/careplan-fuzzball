@@ -1,0 +1,532 @@
+{
+  "case_id": "T020",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "5:30 AM dialysis requires a very early trip (latest departure 05:10) and the patient has four recent no-shows while his wife is in rehab and he is fatigued.",
+            "evidence": [
+              "turn:T02",
+              "appt:3",
+              "appt:4",
+              "appt:6",
+              "appt:8",
+              "transit:appt:3"
+            ]
+          },
+          {
+            "barrier": "caregiving",
+            "reason": "His wife's rehabilitation hospitalization reduces available support for early-morning dialysis trips.",
+            "evidence": [
+              "turn:T02"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "nemt",
+            "resource_record_id": null,
+            "text": "Medicaid NEMT: managed-care members call the number on the back of the plan card to book recurring rides; standing trips for dialysis are usually arranged with the plan."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the dialysis unit for a later chair time or a day that matches an available ride."
+          },
+          {
+            "category": "dialysis_social_worker",
+            "resource_record_id": null,
+            "text": "Have the unit social worker check in (already ordered) to arrange transport and benefits."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "language_literacy",
+            "reason": "Diet handouts are in English; the patient speaks Polish and relies on a daughter in Arizona who works, so he may not understand the low-potassium list.",
+            "evidence": [
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "interpreter",
+            "resource_record_id": null,
+            "text": "Use the hospital interpreter service to provide a Polish low-potassium handout and plain-language, translated diet instructions."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 5,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T020"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T020"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T020"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T020"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T020"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031060100"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031110502"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_transit_trip",
+      "args": {
+        "appt_ref": "appt:3",
+        "arrive_by": "05:30"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031110502",
+        "need": "transport",
+        "days": [
+          "Tue",
+          "Thu",
+          "Sat",
+          "Sun"
+        ]
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031110502",
+        "need": "language"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 38188,
+    "completion_tokens": 2882
+  },
+  "latency_ms": 141586,
+  "wall_s": 160.83,
+  "log": [
+    {
+      "prompt_sha256": "2a65cee0a2bec548099c2b3b48cfbfdb018df846e01ffb7c4052add9b3ec73d4",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 6171,
+      "usage": {
+        "prompt_tokens": 4800,
+        "total_tokens": 4996,
+        "completion_tokens": 196,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 15
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T020"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T020"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T020"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T020"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T020"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031060100"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 7983,
+      "usage": {
+        "prompt_tokens": 7492,
+        "total_tokens": 7682,
+        "completion_tokens": 190,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 106
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031110502"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_transit_trip",
+          "args": {
+            "appt_ref": "appt:3",
+            "arrive_by": "05:30"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 50245,
+      "usage": {
+        "prompt_tokens": 8332,
+        "total_tokens": 9153,
+        "completion_tokens": 821,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 707
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031110502",
+            "need": "transport",
+            "days": [
+              "Tue",
+              "Thu",
+              "Sat",
+              "Sun"
+            ]
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031110502",
+            "need": "language"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 59497,
+      "usage": {
+        "prompt_tokens": 8467,
+        "total_tokens": 9571,
+        "completion_tokens": 1104,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 565
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "5:30 AM dialysis requires a very early trip (latest departure 05:10) and the patient has four recent no-shows while his wife is in rehab and he is fatigued.",
+                    "evidence": [
+                      "turn:T02",
+                      "appt:3",
+                      "appt:4",
+                      "appt:6",
+                      "appt:8",
+                      "transit:appt:3"
+                    ]
+                  },
+                  {
+                    "barrier": "caregiving",
+                    "reason": "His wife's rehabilitation hospitalization reduces available support for early-morning dialysis trips.",
+                    "evidence": [
+                      "turn:T02"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Medicaid NEMT: managed-care members call the number on the back of the plan card to book recurring rides; standing trips for dialysis are usually arranged with the plan."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the dialysis unit for a later chair time or a day that matches an available ride."
+                  },
+                  {
+                    "category": "dialysis_social_worker",
+                    "resource_record_id": null,
+                    "text": "Have the unit social worker check in (already ordered) to arrange transport and benefits."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "language_literacy",
+                    "reason": "Diet handouts are in English; the patient speaks Polish and relies on a daughter in Arizona who works, so he may not understand the low-potassium list.",
+                    "evidence": [
+                      "turn:T06",
+                      "note:language pl"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "interpreter",
+                    "resource_record_id": null,
+                    "text": "Use the hospital interpreter service to provide a Polish low-potassium handout and plain-language, translated diet instructions."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 5,
+      "latency_ms": 17690,
+      "usage": {
+        "prompt_tokens": 9097,
+        "total_tokens": 9668,
+        "completion_tokens": 571,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 38
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "5:30 AM dialysis requires a very early trip (latest departure 05:10) and the patient has four recent no-shows while his wife is in rehab and he is fatigued.",
+                    "evidence": [
+                      "turn:T02",
+                      "appt:3",
+                      "appt:4",
+                      "appt:6",
+                      "appt:8",
+                      "transit:appt:3"
+                    ]
+                  },
+                  {
+                    "barrier": "caregiving",
+                    "reason": "His wife's rehabilitation hospitalization reduces available support for early-morning dialysis trips.",
+                    "evidence": [
+                      "turn:T02"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Medicaid NEMT: managed-care members call the number on the back of the plan card to book recurring rides; standing trips for dialysis are usually arranged with the plan."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the dialysis unit for a later chair time or a day that matches an available ride."
+                  },
+                  {
+                    "category": "dialysis_social_worker",
+                    "resource_record_id": null,
+                    "text": "Have the unit social worker check in (already ordered) to arrange transport and benefits."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "language_literacy",
+                    "reason": "Diet handouts are in English; the patient speaks Polish and relies on a daughter in Arizona who works, so he may not understand the low-potassium list.",
+                    "evidence": [
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "interpreter",
+                    "resource_record_id": null,
+                    "text": "Use the hospital interpreter service to provide a Polish low-potassium handout and plain-language, translated diet instructions."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

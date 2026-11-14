@@ -1,0 +1,257 @@
+{
+  "case_id": "D008",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "Works 11 PM\u20137 AM and sleeps mornings; an 8 AM weekday PFT conflicts with post-shift sleep, making attendance unlikely.",
+            "evidence": [
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the lab/clinic for a later PFT slot after the patient's sleep period (e.g., afternoon/evening)."
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "Schedule the PFT on the same day/campus as another existing visit to reduce separate trips."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "Night shifts lead to quick, likely high-sodium meals; a strict low-sodium fresh-produce diet is hard to sustain.",
+            "evidence": [
+              "turn:T10",
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Offer dietitian counseling built around night shifts with quick low-sodium grab-and-go options."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 2,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-D008"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-D008"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-D008"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-D008"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-D008"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 10056,
+    "completion_tokens": 3974
+  },
+  "latency_ms": 229203,
+  "wall_s": 229.23,
+  "log": [
+    {
+      "prompt_sha256": "a83ab77544690f311157509572c1fa041e0b233eff56df4da3174f3c35398183",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 13001,
+      "usage": {
+        "prompt_tokens": 4570,
+        "total_tokens": 4840,
+        "completion_tokens": 270,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 107
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I'll pull the patient's record and social data in parallel before judging each plan item.",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-D008"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-D008"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-D008"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-D008"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-D008"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 216202,
+      "usage": {
+        "prompt_tokens": 5486,
+        "total_tokens": 9190,
+        "completion_tokens": 3704,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 3108
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I have the full picture. Key facts: patient works overnight security 11 PM\u20137 AM, drives his own car, sleeps mornings, eats quick food on nights, Medicaid with transport benefit, no food insecurity, utilities shutoff signal on screener (but no utilities item in the plan). Medications are low-cost with no refill gaps.\n\n- P1 (8 AM weekday PFT): conflicts with the overnight shift + morning sleep \u2014 at_risk for work_schedule; transport is fine (own car).\n- P2 (albuterol nebulizer): cheap ($1/mo), no refill gap, home use \u2014 likely_ok.\n- P3 (low-sodium fresh diet): patient eats quick food due to nights \u2014 at_risk for work_schedule/food adherence; no food-insecurity screen.\n- P4 (budesonide-formoterol + phone reminder): low cost, reminder directly addresses the forgotten night dose \u2014 likely_ok.\n\nNo community resource lookups are needed since no plan item hinges on food/transport/housing access.",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Works 11 PM\u20137 AM and sleeps mornings; an 8 AM weekday PFT conflicts with post-shift sleep, making attendance unlikely.",
+                    "evidence": [
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the lab/clinic for a later PFT slot after the patient's sleep period (e.g., afternoon/evening)."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Schedule the PFT on the same day/campus as another existing visit to reduce separate trips."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Night shifts lead to quick, likely high-sodium meals; a strict low-sodium fresh-produce diet is hard to sustain.",
+                    "evidence": [
+                      "turn:T10",
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Offer dietitian counseling built around night shifts with quick low-sodium grab-and-go options."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

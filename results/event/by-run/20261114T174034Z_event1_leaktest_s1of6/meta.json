@@ -1,0 +1,25 @@
+{
+  "started": "20261114T174034Z",
+  "profile": "super35-vllm-think",
+  "web_profile": null,
+  "reps": 3,
+  "designs": [
+    "A",
+    "B"
+  ],
+  "shard": [
+    1,
+    6
+  ],
+  "only": null,
+  "git": null,
+  "pages": [
+    "A1-02",
+    "A2-02",
+    "A3-02",
+    "A4-04",
+    "A5-04",
+    "H2",
+    "H8"
+  ]
+}

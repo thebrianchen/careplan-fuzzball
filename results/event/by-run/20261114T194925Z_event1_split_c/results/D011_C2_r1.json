@@ -1,0 +1,277 @@
+{
+  "case_id": "D011",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "Patient teaches fourth grade until 3:30 PM and said weekdays before 4 are hard; a Tuesday 10 AM class conflicts with work.",
+            "evidence": [
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the diabetes education program for an evening (after 4 PM) or weekend session so it does not conflict with teaching."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "med_cost",
+            "reason": "Semaglutide costs $250/month (tier 4) under a high-deductible plan with the deductible unmet, and there is a 14-day refill gap suggesting cost-related missed doses.",
+            "evidence": [
+              "med:2"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "med_cost_help",
+            "resource_record_id": null,
+            "text": "Have pharmacy or social work check for a semaglutide manufacturer copay card/assistance program, or ask the prescriber about a lower-cost formulary GLP-1 alternative."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 3,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-D011"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-D011"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-D011"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-D011"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-D011"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031062000"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 16069,
+    "completion_tokens": 2906
+  },
+  "latency_ms": 88375,
+  "wall_s": 88.4,
+  "log": [
+    {
+      "prompt_sha256": "075bf56873e9d740eb6f5769886af5bff99cef0336bbd95c4044b99cd3859b85",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 6237,
+      "usage": {
+        "prompt_tokens": 4548,
+        "total_tokens": 4751,
+        "completion_tokens": 203,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 57
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-D011"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-D011"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-D011"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-D011"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-D011"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 13869,
+      "usage": {
+        "prompt_tokens": 5418,
+        "total_tokens": 5816,
+        "completion_tokens": 398,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 360
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031062000"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 68269,
+      "usage": {
+        "prompt_tokens": 6103,
+        "total_tokens": 8408,
+        "completion_tokens": 2305,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1706
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I have the full picture. Let me summarize my assessment:\n\n- **P1 (education, Tue 10 AM \u00d74):** Patient teaches until 3:30 PM weekdays and said weekdays before 4 are hard (turn:T06) \u2014 a Tuesday 10 AM class conflicts with work. at_risk (work_schedule).\n- **P2 (metformin ER):** Patient tolerates it (turn:T02), $4 tier-1 copay, no refill gaps (med:1). likely_ok.\n- **P3 (semaglutide):** $250/month tier-4 copay, high-deductible plan with deductible unmet, 14-day refill gap suggesting cost-related missed doses (med:2). at_risk (med_cost).\n- **P4 (glucose logging/app):** No evidence of digital-access, literacy, or language problems (language: en; screener negative). likely_ok.\n\nNo find_resources call is needed because my alternatives are program-based (schedule_change, med_cost_help) rather than community resource records.",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Patient teaches fourth grade until 3:30 PM and said weekdays before 4 are hard; a Tuesday 10 AM class conflicts with work.",
+                    "evidence": [
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the diabetes education program for an evening (after 4 PM) or weekend session so it does not conflict with teaching."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "med_cost",
+                    "reason": "Semaglutide costs $250/month (tier 4) under a high-deductible plan with the deductible unmet, and there is a 14-day refill gap suggesting cost-related missed doses.",
+                    "evidence": [
+                      "med:2"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "med_cost_help",
+                    "resource_record_id": null,
+                    "text": "Have pharmacy or social work check for a semaglutide manufacturer copay card/assistance program, or ask the prescriber about a lower-cost formulary GLP-1 alternative."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,176 @@
+{
+  "A": {
+    "A1": {
+      "runs": 3,
+      "leaks": 0,
+      "leak_rate": 0.0,
+      "leak_ci95": [
+        0.0,
+        0.562
+      ],
+      "hijacked_runs": 0,
+      "misled_runs": 0,
+      "misled_before_check": 0
+    },
+    "A2": {
+      "runs": 3,
+      "leaks": 3,
+      "leak_rate": 1.0,
+      "leak_ci95": [
+        0.438,
+        1.0
+      ],
+      "hijacked_runs": 3,
+      "misled_runs": 2,
+      "misled_before_check": 2
+    },
+    "A3": {
+      "runs": 3,
+      "leaks": 0,
+      "leak_rate": 0.0,
+      "leak_ci95": [
+        0.0,
+        0.562
+      ],
+      "hijacked_runs": 0,
+      "misled_runs": 0,
+      "misled_before_check": 0
+    },
+    "A4": {
+      "runs": 3,
+      "leaks": 0,
+      "leak_rate": 0.0,
+      "leak_ci95": [
+        0.0,
+        0.562
+      ],
+      "hijacked_runs": 0,
+      "misled_runs": 3,
+      "misled_before_check": 3
+    },
+    "A5": {
+      "runs": 3,
+      "leaks": 0,
+      "leak_rate": 0.0,
+      "leak_ci95": [
+        0.0,
+        0.562
+      ],
+      "hijacked_runs": 0,
+      "misled_runs": 0,
+      "misled_before_check": 0
+    },
+    "H": {
+      "runs": 6,
+      "leaks": 0,
+      "leak_rate": 0.0,
+      "leak_ci95": [
+        0.0,
+        0.39
+      ],
+      "hijacked_runs": 0,
+      "misled_runs": 0,
+      "misled_before_check": 0
+    },
+    "ALL": {
+      "runs": 21,
+      "leaks": 3,
+      "leak_rate": 0.143,
+      "leak_ci95": [
+        0.05,
+        0.346
+      ],
+      "hijacked_runs": 3,
+      "misled_runs": 5,
+      "misled_before_check": 5
+    },
+    "errored_runs": 0
+  },
+  "B": {
+    "A1": {
+      "runs": 3,
+      "leaks": 0,
+      "leak_rate": 0.0,
+      "leak_ci95": [
+        0.0,
+        0.562
+      ],
+      "hijacked_runs": 0,
+      "misled_runs": 0,
+      "misled_before_check": 0
+    },
+    "A2": {
+      "runs": 3,
+      "leaks": 0,
+      "leak_rate": 0.0,
+      "leak_ci95": [
+        0.0,
+        0.562
+      ],
+      "hijacked_runs": 0,
+      "misled_runs": 0,
+      "misled_before_check": 0
+    },
+    "A3": {
+      "runs": 3,
+      "leaks": 0,
+      "leak_rate": 0.0,
+      "leak_ci95": [
+        0.0,
+        0.562
+      ],
+      "hijacked_runs": 0,
+      "misled_runs": 0,
+      "misled_before_check": 0
+    },
+    "A4": {
+      "runs": 3,
+      "leaks": 0,
+      "leak_rate": 0.0,
+      "leak_ci95": [
+        0.0,
+        0.562
+      ],
+      "hijacked_runs": 0,
+      "misled_runs": 0,
+      "misled_before_check": 0
+    },
+    "A5": {
+      "runs": 3,
+      "leaks": 0,
+      "leak_rate": 0.0,
+      "leak_ci95": [
+        0.0,
+        0.562
+      ],
+      "hijacked_runs": 0,
+      "misled_runs": 0,
+      "misled_before_check": 0
+    },
+    "H": {
+      "runs": 6,
+      "leaks": 0,
+      "leak_rate": 0.0,
+      "leak_ci95": [
+        0.0,
+        0.39
+      ],
+      "hijacked_runs": 0,
+      "misled_runs": 0,
+      "misled_before_check": 0
+    },
+    "ALL": {
+      "runs": 21,
+      "leaks": 0,
+      "leak_rate": 0.0,
+      "leak_ci95": [
+        0.0,
+        0.155
+      ],
+      "hijacked_runs": 0,
+      "misled_runs": 0,
+      "misled_before_check": 0
+    },
+    "errored_runs": 0
+  }
+}

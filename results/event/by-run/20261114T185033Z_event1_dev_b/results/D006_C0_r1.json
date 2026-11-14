@@ -1,0 +1,277 @@
+{
+  "case_id": "D006",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "med_cost",
+            "reason": "The patient stopped the daily inhaler because it costs over $400 without insurance, so restarting tiotropium is unlikely to be filled or taken as written.",
+            "evidence": [
+              "turn:T02"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "med_assistance_program",
+            "text": "Screen for Medicare Part D Extra Help / manufacturer assistance or switch to a lower-cost equivalent inhaler through pharmacy or social work."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "housing",
+            "reason": "The patient is temporarily staying on a buddy's couch with uncertain duration, which is not a stable setting for home oxygen setup and ongoing use.",
+            "evidence": [
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "housing",
+            "text": "Refer to a social worker or housing navigator to secure stable housing before pursuing home oxygen setup; reassess once housing is secure."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 6,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 27495,
+    "completion_tokens": 3293
+  },
+  "latency_ms": 152001,
+  "wall_s": 152.03,
+  "log": [
+    {
+      "prompt_sha256": "70c9593141dbe9f32161bdeeca1ab5af238745755b907fe4ef791337a5eabf14",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 41491,
+      "usage": {
+        "prompt_tokens": 2825,
+        "total_tokens": 3616,
+        "completion_tokens": 791,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 457
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "[{\"item_id\": \"P1\", \"status\": \"at_risk\", \"barriers\": [{\"barrier\": \"med_cost\", \"reason\": \"The patient stopped the daily inhaler because it costs over $400 without insurance, so restarting tiotropium is unlikely to be filled or taken as written.\", \"evidence\": [\"turn:T02\"]}], \"alternatives\": [{\"category\": \"med_assistance_program\", \"resource_record_id\": None, \"text\": \"Screen for Medicare Part D Extra Help / manufacturer assistance or switch to a lower-cost equivalent inhaler through pharmacy or social work.\"}]}, {\"item_id\": \"P2\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}, {\"item_id\": \"P3\", \"status\": \"at_risk\", \"barriers\": [{\"barrier\": \"housing\", \"reason\": \"The patient is temporarily staying on a buddy's couch with uncertain duration, which is not a stable setting for home oxygen setup and ongoing use.\", \"evidence\": [\"turn:T04\"]}], \"alternatives\": [{\"category\": \"housing\", \"resource_record_id\": None, \"text\": \"Refer to a social worker or housing navigator to secure stable housing before pursuing home oxygen setup; reassess once housing is secure.\"}]}, {\"item_id\": \"P4\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}]"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 13632,
+      "usage": {
+        "prompt_tokens": 3528,
+        "total_tokens": 3931,
+        "completion_tokens": 403,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 69
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "[{\"item_id\": \"P1\", \"status\": \"at_risk\", \"barriers\": [{\"barrier\": \"med_cost\", \"reason\": \"The patient stopped the daily inhaler because it costs over $400 without insurance, so restarting tiotropium is unlikely to be filled or taken as written.\", \"evidence\": [\"turn:T02\"]}], \"alternatives\": [{\"category\": \"med_assistance_program\", \"resource_record_id\": None, \"text\": \"Screen for Medicare Part D Extra Help / manufacturer assistance or switch to a lower-cost equivalent inhaler through pharmacy or social work.\"}]}, {\"item_id\": \"P2\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}, {\"item_id\": \"P3\", \"status\": \"at_risk\", \"barriers\": [{\"barrier\": \"housing\", \"reason\": \"The patient is temporarily staying on a buddy's couch with uncertain duration, which is not a stable setting for home oxygen setup and ongoing use.\", \"evidence\": [\"turn:T04\"]}], \"alternatives\": [{\"category\": \"housing\", \"resource_record_id\": None, \"text\": \"Refer to a social worker or housing navigator to secure stable housing before pursuing home oxygen setup; reassess once housing is secure.\"}]}, {\"item_id\": \"P4\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}]"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 21759,
+      "usage": {
+        "prompt_tokens": 4231,
+        "total_tokens": 4735,
+        "completion_tokens": 504,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 170
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "[{\"item_id\": \"P1\", \"status\": \"at_risk\", \"barriers\": [{\"barrier\": \"med_cost\", \"reason\": \"The patient stopped the daily inhaler because it costs over $400 without insurance, so restarting tiotropium is unlikely to be filled or taken as written.\", \"evidence\": [\"turn:T02\"]}], \"alternatives\": [{\"category\": \"med_assistance_program\", \"resource_record_id\": None, \"text\": \"Screen for Medicare Part D Extra Help / manufacturer assistance or switch to a lower-cost equivalent inhaler through pharmacy or social work.\"}]}, {\"item_id\": \"P2\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}, {\"item_id\": \"P3\", \"status\": \"at_risk\", \"barriers\": [{\"barrier\": \"housing\", \"reason\": \"The patient is temporarily staying on a buddy's couch with uncertain duration, which is not a stable setting for home oxygen setup and ongoing use.\", \"evidence\": [\"turn:T04\"]}], \"alternatives\": [{\"category\": \"housing\", \"resource_record_id\": None, \"text\": \"Refer to a social worker or housing navigator to secure stable housing before pursuing home oxygen setup; reassess once housing is secure.\"}]}, {\"item_id\": \"P4\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}]"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 22520,
+      "usage": {
+        "prompt_tokens": 4934,
+        "total_tokens": 5482,
+        "completion_tokens": 548,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 214
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "[{\"item_id\": \"P1\", \"status\": \"at_risk\", \"barriers\": [{\"barrier\": \"med_cost\", \"reason\": \"The patient stopped the daily inhaler because it costs over $400 without insurance, so restarting tiotropium is unlikely to be filled or taken as written.\", \"evidence\": [\"turn:T02\"]}], \"alternatives\": [{\"category\": \"med_assistance_program\", \"resource_record_id\": None, \"text\": \"Screen for Medicare Part D Extra Help / manufacturer assistance or switch to a lower-cost equivalent inhaler through pharmacy or social work.\"}]}, {\"item_id\": \"P2\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}, {\"item_id\": \"P3\", \"status\": \"at_risk\", \"barriers\": [{\"barrier\": \"housing\", \"reason\": \"The patient is temporarily staying on a buddy's couch with uncertain duration, which is not a stable setting for home oxygen setup and ongoing use.\", \"evidence\": [\"turn:T04\"]}], \"alternatives\": [{\"category\": \"housing\", \"resource_record_id\": None, \"text\": \"Refer to a social worker or housing navigator to secure stable housing before pursuing home oxygen setup; reassess once housing is secure.\"}]}, {\"item_id\": \"P4\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}]"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 5,
+      "latency_ms": 19935,
+      "usage": {
+        "prompt_tokens": 5637,
+        "total_tokens": 6103,
+        "completion_tokens": 466,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 132
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "[{\"item_id\": \"P1\", \"status\": \"at_risk\", \"barriers\": [{\"barrier\": \"med_cost\", \"reason\": \"The patient stopped the daily inhaler because it costs over $400 without insurance, so restarting tiotropium is unlikely to be filled or taken as written.\", \"evidence\": [\"turn:T02\"]}], \"alternatives\": [{\"category\": \"med_assistance_program\", \"resource_record_id\": None, \"text\": \"Screen for Medicare Part D Extra Help / manufacturer assistance or switch to a lower-cost equivalent inhaler through pharmacy or social work.\"}]}, {\"item_id\": \"P2\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}, {\"item_id\": \"P3\", \"status\": \"at_risk\", \"barriers\": [{\"barrier\": \"housing\", \"reason\": \"The patient is temporarily staying on a buddy's couch with uncertain duration, which is not a stable setting for home oxygen setup and ongoing use.\", \"evidence\": [\"turn:T04\"]}], \"alternatives\": [{\"category\": \"housing\", \"resource_record_id\": None, \"text\": \"Refer to a social worker or housing navigator to secure stable housing before pursuing home oxygen setup; reassess once housing is secure.\"}]}, {\"item_id\": \"P4\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}]"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 6,
+      "latency_ms": 32664,
+      "usage": {
+        "prompt_tokens": 6340,
+        "total_tokens": 6921,
+        "completion_tokens": 581,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 261
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "med_cost",
+                    "reason": "The patient stopped the daily inhaler because it costs over $400 without insurance, so restarting tiotropium is unlikely to be filled or taken as written.",
+                    "evidence": [
+                      "turn:T02"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "med_assistance_program",
+                    "text": "Screen for Medicare Part D Extra Help / manufacturer assistance or switch to a lower-cost equivalent inhaler through pharmacy or social work."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "housing",
+                    "reason": "The patient is temporarily staying on a buddy's couch with uncertain duration, which is not a stable setting for home oxygen setup and ongoing use.",
+                    "evidence": [
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "housing",
+                    "text": "Refer to a social worker or housing navigator to secure stable housing before pursuing home oxygen setup; reassess once housing is secure."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

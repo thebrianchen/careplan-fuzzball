@@ -1,0 +1,507 @@
+{
+  "case_id": "T001",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "caregiving",
+            "reason": "Thursday 11:30 AM dialysis ends ~3:30 PM, conflicting with grandkids' 3 PM school pickup; no one available Thursdays (neighbor works, daughter works till 6:30).",
+            "evidence": [
+              "turn:T02",
+              "turn:T04",
+              "appt:2",
+              "appt:5",
+              "appt:8"
+            ]
+          },
+          {
+            "barrier": "transport",
+            "reason": "She drives; vehicle access exists, so transport is not the Thursday barrier.",
+            "evidence": [
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Ask the dialysis unit for a later Thursday chair time (e.g. afternoon) so she can pick up the grandkids at 3 PM. Dialysis chair times are limited; frame as a request.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "food_access",
+            "reason": "Food worry screener positive and high neighborhood food insecurity; fresh low-potassium produce may be unaffordable/hard to get versus kids' processed foods.",
+            "evidence": [
+              "screener:food_worry",
+              "tract:places_foodinsecu",
+              "turn:T08"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "snap",
+            "text": "Apply for SNAP through Illinois ABE (abe.illinois.gov) to help buy renal-friendly foods; very low-income households may get expedited benefits within 7 days.",
+            "resource_record_id": null
+          },
+          {
+            "category": "renal_dietitian",
+            "text": "Ask the dialysis unit dietitian to rebuild the diet around foods the patient can actually get and afford, given she eats what the kids eat.",
+            "resource_record_id": null
+          },
+          {
+            "category": "food_pantry",
+            "text": "Sanad Organization food pantry, 6248 S Spaulding Ave (0.31 mi); hours not listed, call ahead; match pantry visits to non-dialysis days.",
+            "resource_record_id": "PLcf547c4e"
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "med_cost",
+            "reason": "Cinacalcet $45/month tier 3 with a 21-day refill gap; ongoing cost likely unaffordable without Extra Help.",
+            "evidence": [
+              "med:3"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "med_assistance_program",
+            "text": "Screen for Medicare Part D Extra Help (low-income subsidy) at the pharmacy or via social work; prescriber can check for a cheaper equivalent or formulary switch.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 4,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T001"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T001"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T001"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T001"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T001"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031660500"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031660500",
+        "need": "food",
+        "days": [
+          "Mon",
+          "Wed",
+          "Fri",
+          "Sun"
+        ]
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031660500",
+        "need": "med_cost"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031660500",
+        "need": "caregiving"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 31039,
+    "completion_tokens": 3937
+  },
+  "latency_ms": 185673,
+  "wall_s": 185.73,
+  "log": [
+    {
+      "prompt_sha256": "7738a975baeec8b8533b908513298e1c77dabc1026ed787da8da589afe8a10de",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 5877,
+      "usage": {
+        "prompt_tokens": 4804,
+        "total_tokens": 4972,
+        "completion_tokens": 168,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 12
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I'll gather all the patient data in parallel first.",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T001"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T001"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T001"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T001"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T001"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 63600,
+      "usage": {
+        "prompt_tokens": 6690,
+        "total_tokens": 7958,
+        "completion_tokens": 1268,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1058
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "Let me get the tract profile and community resources for the flagged needs.",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031660500"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031660500",
+            "need": "food",
+            "days": [
+              "Mon",
+              "Wed",
+              "Fri",
+              "Sun"
+            ]
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031660500",
+            "need": "med_cost"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031660500",
+            "need": "caregiving"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 74678,
+      "usage": {
+        "prompt_tokens": 9379,
+        "total_tokens": 10936,
+        "completion_tokens": 1557,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 866
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I have all the evidence I need. Let me summarize the key findings before submitting:\n\n- **P1 (dialysis T/Th/Sat 11:30 AM):** Thursdays are no-shows (appt:2, appt:5, appt:8). Transcript confirms the barrier is caregiving \u2014 no one for the grandkids on Thursdays (neighbor works Thursdays, daughter works till 6:30 PM), and an 11:30 AM session ends ~3:30 PM, right when grandkids get out at 3 PM. She drives (10 min), so transport is not the Thursday barrier.\n- **P2 (renal diet):** Food worry screener positive (screener:food_worry), tract food insecurity 34.0 (above county 75th percentile), patient eats kids' processed foods (turn:T08). Fresh low-potassium produce may be hard to obtain.\n- **P3 (cinacalcet):** $45/month tier 3, refill gap 21 days (med:3); Original Medicare, no Extra Help, no transport benefit.\n- **P4 (paper BP/weight log):** Patient accepts paper (turn:T12) \u2014 no barrier.\n- **P5 (chairside dietitian Tuesdays):** Patient says she can do it (turn:T14) \u2014 no barrier.",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "caregiving",
+                    "reason": "Thursday 11:30 AM dialysis ends ~3:30 PM, conflicting with grandkids' 3 PM school pickup; no one available Thursdays (neighbor works, daughter works till 6:30).",
+                    "evidence": [
+                      "turn:T02",
+                      "turn:T04",
+                      "appt:2",
+                      "appt:5",
+                      "appt:8"
+                    ]
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "Food worry screener positive and high neighborhood food insecurity; fresh low-potassium produce may be unaffordable/hard to get versus kids' processed foods.",
+                    "evidence": [
+                      "screener:food_worry",
+                      "tract:places_foodinsecu",
+                      "turn:T08"
+                    ]
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "med_cost",
+                    "reason": "Cinacalcet $45/month tier 3 with a 21-day refill gap; Original Medicare with no Extra Help makes ongoing cost likely unaffordable.",
+                    "evidence": [
+                      "med:3",
+                      "coverage:medicare_no_extra_help"
+                    ]
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 41518,
+      "usage": {
+        "prompt_tokens": 10166,
+        "total_tokens": 11110,
+        "completion_tokens": 944,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 211
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "The coverage ref format was invalid. Let me correct it to use only valid reference types.",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "caregiving",
+                    "reason": "Thursday 11:30 AM dialysis ends ~3:30 PM, conflicting with grandkids' 3 PM school pickup; no one available Thursdays (neighbor works, daughter works till 6:30).",
+                    "evidence": [
+                      "turn:T02",
+                      "turn:T04",
+                      "appt:2",
+                      "appt:5",
+                      "appt:8"
+                    ]
+                  },
+                  {
+                    "barrier": "transport",
+                    "reason": "She drives; vehicle access exists, so transport is not the Thursday barrier.",
+                    "evidence": [
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask the dialysis unit for a later Thursday chair time (e.g. afternoon) so she can pick up the grandkids at 3 PM. Dialysis chair times are limited; frame as a request.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "Food worry screener positive and high neighborhood food insecurity; fresh low-potassium produce may be unaffordable/hard to get versus kids' processed foods.",
+                    "evidence": [
+                      "screener:food_worry",
+                      "tract:places_foodinsecu",
+                      "turn:T08"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "snap",
+                    "text": "Apply for SNAP through Illinois ABE (abe.illinois.gov) to help buy renal-friendly foods; very low-income households may get expedited benefits within 7 days.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "renal_dietitian",
+                    "text": "Ask the dialysis unit dietitian to rebuild the diet around foods the patient can actually get and afford, given she eats what the kids eat.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "food_pantry",
+                    "text": "Sanad Organization food pantry, 6248 S Spaulding Ave (0.31 mi); hours not listed, call ahead; match pantry visits to non-dialysis days.",
+                    "resource_record_id": "PLcf547c4e"
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "med_cost",
+                    "reason": "Cinacalcet $45/month tier 3 with a 21-day refill gap; ongoing cost likely unaffordable without Extra Help.",
+                    "evidence": [
+                      "med:3"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "med_assistance_program",
+                    "text": "Screen for Medicare Part D Extra Help (low-income subsidy) at the pharmacy or via social work; prescriber can check for a cheaper equivalent or formulary switch.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

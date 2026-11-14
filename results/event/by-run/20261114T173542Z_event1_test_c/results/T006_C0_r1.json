@@ -1,0 +1,162 @@
+{
+  "case_id": "T006",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "blocked",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "The Wednesday 6:00 PM group falls during the patient's 3:00\u201311:00 PM shift Tuesday through Saturday, and the patient only has Sunday and Monday off, so the group time conflicts directly with work.",
+            "evidence": [
+              "turn:T06",
+              "turn:T08"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask behavioral health for a morning group that ends before 2:00 PM, or a session on Sunday or Monday (the patient's days off), matching availability the patient already confirmed."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "If an evening group is required, request a chair/time change or a different evening that does not overlap the Clark restaurant shift."
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "Consider combining the group visit with another hospital visit on the same day/campus to reduce separate trips."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3069,
+    "completion_tokens": 1075
+  },
+  "latency_ms": 58652,
+  "wall_s": 58.68,
+  "log": [
+    {
+      "prompt_sha256": "4951f81ecd4ca29f29ec9e9bd34c574a6c4e4e9938912c8a3dc7e49198f22e54",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 58652,
+      "usage": {
+        "prompt_tokens": 3069,
+        "total_tokens": 4144,
+        "completion_tokens": 1075,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 690
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "blocked",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "The Wednesday 6:00 PM group falls during the patient's 3:00\u201311:00 PM shift Tuesday through Saturday, and the patient only has Sunday and Monday off, so the group time conflicts directly with work.",
+                    "evidence": [
+                      "turn:T06",
+                      "turn:T08"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask behavioral health for a morning group that ends before 2:00 PM, or a session on Sunday or Monday (the patient's days off), matching availability the patient already confirmed."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "If an evening group is required, request a chair/time change or a different evening that does not overlap the Clark restaurant shift."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Consider combining the group visit with another hospital visit on the same day/campus to reduce separate trips."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

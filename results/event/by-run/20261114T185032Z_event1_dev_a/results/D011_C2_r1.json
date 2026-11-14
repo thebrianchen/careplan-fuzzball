@@ -1,0 +1,342 @@
+{
+  "case_id": "D011",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "blocked",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "Tuesday 10 AM class conflicts with teaching fourth grade until 3:30 PM on weekdays.",
+            "evidence": [
+              "turn:T06",
+              "turn:T05"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the diabetes education program for a class after 4 PM or on a non-teaching day; offer telehealth or asynchronous sessions if an in-person exam is not needed."
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "Schedule education on the same day/campus as a clinic visit the patient already attends, or use telehealth when an exam is not required."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "med_cost",
+            "reason": "Semaglutide costs $250/month (tier 4) with a 14-day refill gap on a high-deductible plan with deductible not met.",
+            "evidence": [
+              "med:2"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "med_assistance_program",
+            "resource_record_id": null,
+            "text": "Screen for manufacturer copay assistance or patient assistance; prescriber to check for a cheaper formulary equivalent or dose option."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 3,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-D011"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-D011"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-D011"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-D011"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-D011"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 16191,
+    "completion_tokens": 2411
+  },
+  "latency_ms": 62146,
+  "wall_s": 62.18,
+  "log": [
+    {
+      "prompt_sha256": "075bf56873e9d740eb6f5769886af5bff99cef0336bbd95c4044b99cd3859b85",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 4841,
+      "usage": {
+        "prompt_tokens": 4548,
+        "total_tokens": 4778,
+        "completion_tokens": 230,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 70
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I'll gather the patient record and related evidence to assess each plan item.",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-D011"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-D011"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-D011"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-D011"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-D011"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 46424,
+      "usage": {
+        "prompt_tokens": 5432,
+        "total_tokens": 7110,
+        "completion_tokens": 1678,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 992
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I have all the evidence I need. Let me summarize my analysis before submitting.\n\n**Key evidence:**\n- Patient teaches 4th grade until 3:30 PM; weekdays hard before 4 (turn:T06). No car but uses Brown Line (turn:T08); screener: transportation \"no\" problem.\n- Commercial high-deductible plan, no transport benefit (get_patient).\n- Semaglutide: $250/month, tier 4, 14-day refill gap (med:2 signals). Metformin: $4 copay, no gap (med:1).\n- Screener: food/utility/housing all fine; language English (get_screener, get_patient).\n\n**Item assessment:**\n- P1 (Tue 10 AM education): conflicts with teaching until 3:30 weekdays \u2192 blocked (work_schedule). Transport is fine (Brown Line), so only schedule is the problem.\n- P2 (metformin ER): low cost, no gaps \u2192 likely_ok.\n- P3 (semaglutide): $250/mo tier 4, refill gap, high-deductible plan \u2192 at_risk (med_cost).\n- P4 (glucose app log): no digital access evidence \u2192 likely_ok.",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "blocked",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Tuesday 10 AM class conflicts with teaching fourth grade until 3:30 PM on weekdays.",
+                    "evidence": [
+                      "turn:T06",
+                      "turn:T05"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the diabetes education program for a class after 4 PM or on a non-teaching day; offer telehealth or asynchronous sessions if an in-person exam is not needed."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Schedule education on the same day/campus as a clinic visit the patient already attends, or use telehealth when an exam is not required."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "med_cost",
+                    "reason": "Semaglutide costs $250/month (tier 4) with a 14-day refill gap on a high-deductible plan with deductible not met.",
+                    "evidence": [
+                      "med:2",
+                      "get_patient:coverage"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "med_assistance_program",
+                    "resource_record_id": null,
+                    "text": "Screen for manufacturer copay assistance or patient assistance; prescriber to check for a cheaper formulary equivalent or dose option."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 10881,
+      "usage": {
+        "prompt_tokens": 6211,
+        "total_tokens": 6714,
+        "completion_tokens": 503,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 100
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "blocked",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Tuesday 10 AM class conflicts with teaching fourth grade until 3:30 PM on weekdays.",
+                    "evidence": [
+                      "turn:T06",
+                      "turn:T05"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the diabetes education program for a class after 4 PM or on a non-teaching day; offer telehealth or asynchronous sessions if an in-person exam is not needed."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Schedule education on the same day/campus as a clinic visit the patient already attends, or use telehealth when an exam is not required."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "med_cost",
+                    "reason": "Semaglutide costs $250/month (tier 4) with a 14-day refill gap on a high-deductible plan with deductible not met.",
+                    "evidence": [
+                      "med:2"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "med_assistance_program",
+                    "resource_record_id": null,
+                    "text": "Screen for manufacturer copay assistance or patient assistance; prescriber to check for a cheaper formulary equivalent or dose option."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

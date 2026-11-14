@@ -1,0 +1,264 @@
+{
+  "case_id": "T020",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "5:30 AM in-center sessions are very early and the patient has already missed four treatments this month, indicating attendance is failing; no reliable ride source is established.",
+            "evidence": [
+              "turn:T01",
+              "turn:T02"
+            ]
+          },
+          {
+            "barrier": "caregiving",
+            "reason": "The patient's wife, who previously helped with care, is in a rehabilitation hospital after a fall, reducing support for getting to early-morning dialysis.",
+            "evidence": [
+              "turn:T02"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "dialysis_social_worker",
+            "text": "Ask the dialysis unit social worker to help arrange transport and benefits, consistent with the plan to have social work check in today.",
+            "resource_record_id": null
+          },
+          {
+            "category": "schedule_change",
+            "text": "Request a later chair time or a different dialysis day that matches an available ride, framing it as a request given limited chair times.",
+            "resource_record_id": null
+          },
+          {
+            "category": "home_dialysis_evaluation",
+            "text": "Discuss peritoneal or home hemodialysis evaluation as a potential way to reduce travel burden, noting it requires space, supplies, training, and home support.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "language_literacy",
+            "reason": "The diet handout is in English; the patient wants Polish and relies on a daughter in Arizona who works, so written education may not be understood or consistently reviewed.",
+            "evidence": [
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "interpreter",
+            "text": "Provide a Polish-language renal diet handout and use a medical interpreter to review it, with plain-language instructions.",
+            "resource_record_id": null
+          },
+          {
+            "category": "renal_dietitian",
+            "text": "Have the dialysis unit dietitian rebuild the low-potassium plan around foods the patient can actually obtain and understand.",
+            "resource_record_id": null
+          },
+          {
+            "category": "medically_tailored_meals",
+            "text": "Check whether the patient's Medicaid MCO or Medicare Advantage plan covers medically tailored, renal-friendly meals.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "The nephrology follow-up in four weeks requires separate travel, and the patient's attendance is already fragile with missed treatments and disrupted caregiving.",
+            "evidence": [
+              "turn:T01",
+              "turn:T02"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "coordinate_with_existing_visit",
+            "text": "Schedule the nephrology follow-up on the same day and campus as a dialysis session, or use telehealth if no exam is needed.",
+            "resource_record_id": null
+          },
+          {
+            "category": "dialysis_social_worker",
+            "text": "Engage the dialysis social worker to address transport to the follow-up visit and confirm benefits before the appointment.",
+            "resource_record_id": null
+          }
+        ]
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3123,
+    "completion_tokens": 2223
+  },
+  "latency_ms": 114720,
+  "wall_s": 114.75,
+  "log": [
+    {
+      "prompt_sha256": "639a7248c8f3b4d871a55adeb23696c2f2e41fc04bb5f8f966958d0fdd3a3981",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 114720,
+      "usage": {
+        "prompt_tokens": 3123,
+        "total_tokens": 5346,
+        "completion_tokens": 2223,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1458
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "5:30 AM in-center sessions are very early and the patient has already missed four treatments this month, indicating attendance is failing; no reliable ride source is established.",
+                    "evidence": [
+                      "turn:T01",
+                      "turn:T02"
+                    ]
+                  },
+                  {
+                    "barrier": "caregiving",
+                    "reason": "The patient's wife, who previously helped with care, is in a rehabilitation hospital after a fall, reducing support for getting to early-morning dialysis.",
+                    "evidence": [
+                      "turn:T02"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "dialysis_social_worker",
+                    "text": "Ask the dialysis unit social worker to help arrange transport and benefits, consistent with the plan to have social work check in today.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "schedule_change",
+                    "text": "Request a later chair time or a different dialysis day that matches an available ride, framing it as a request given limited chair times.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "home_dialysis_evaluation",
+                    "text": "Discuss peritoneal or home hemodialysis evaluation as a potential way to reduce travel burden, noting it requires space, supplies, training, and home support.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "language_literacy",
+                    "reason": "The diet handout is in English; the patient wants Polish and relies on a daughter in Arizona who works, so written education may not be understood or consistently reviewed.",
+                    "evidence": [
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "interpreter",
+                    "text": "Provide a Polish-language renal diet handout and use a medical interpreter to review it, with plain-language instructions.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "renal_dietitian",
+                    "text": "Have the dialysis unit dietitian rebuild the low-potassium plan around foods the patient can actually obtain and understand.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "medically_tailored_meals",
+                    "text": "Check whether the patient's Medicaid MCO or Medicare Advantage plan covers medically tailored, renal-friendly meals.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "The nephrology follow-up in four weeks requires separate travel, and the patient's attendance is already fragile with missed treatments and disrupted caregiving.",
+                    "evidence": [
+                      "turn:T01",
+                      "turn:T02"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "text": "Schedule the nephrology follow-up on the same day and campus as a dialysis session, or use telehealth if no exam is needed.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "dialysis_social_worker",
+                    "text": "Engage the dialysis social worker to address transport to the follow-up visit and confirm benefits before the appointment.",
+                    "resource_record_id": null
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

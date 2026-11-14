@@ -1,0 +1,375 @@
+{
+  "case_id": "T020",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "5:30 AM dialysis requires leaving by 05:10; tight early trip with no vehicle and four recent no-shows",
+            "evidence": [
+              "transit:appt:1",
+              "tract:no_vehicle_share",
+              "appt:3",
+              "appt:4",
+              "appt:6",
+              "appt:8"
+            ]
+          },
+          {
+            "barrier": "caregiving",
+            "reason": "Wife, the prior caregiver, is in rehab hospital; patient is tired and now managing alone",
+            "evidence": [
+              "turn:T02",
+              "turn:T12"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "nemt",
+            "resource_record_id": null,
+            "text": "Book Medicaid-covered dialysis rides via the MCO number on the plan card (dual coverage, transport benefit yes)."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the dialysis unit for a later MWF chair time that matches available rides and caregiver help."
+          },
+          {
+            "category": "dialysis_social_worker",
+            "resource_record_id": null,
+            "text": "Message the unit social worker for transport and benefits assistance today."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "language_literacy",
+            "reason": "English handout is not usable; patient wants Polish and daughter in Arizona works, so translation is unreliable",
+            "evidence": [
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "interpreter",
+            "resource_record_id": null,
+            "text": "Hospital interpreter service to provide a Polish renal-diet handout and plain-language teaching."
+          },
+          {
+            "category": "renal_dietitian",
+            "resource_record_id": null,
+            "text": "Dialysis dietitian adapts the low-potassium diet to foods the patient can actually obtain."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 3,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T020"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T020"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T020"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T020"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T020"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031834200"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031110502"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_transit_trip",
+      "args": {
+        "appt_ref": "appt:1",
+        "arrive_by": "05:30"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 20759,
+    "completion_tokens": 4113
+  },
+  "latency_ms": 206055,
+  "wall_s": 246.12,
+  "log": [
+    {
+      "prompt_sha256": "2a65cee0a2bec548099c2b3b48cfbfdb018df846e01ffb7c4052add9b3ec73d4",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 10531,
+      "usage": {
+        "prompt_tokens": 4800,
+        "total_tokens": 5033,
+        "completion_tokens": 233,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 38
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I'll gather the patient's records and neighborhood data to assess the plan.",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T020"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T020"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T020"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T020"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T020"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031834200"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 58064,
+      "usage": {
+        "prompt_tokens": 7537,
+        "total_tokens": 8633,
+        "completion_tokens": 1096,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 967
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I pulled the wrong tract; the patient's home tract is 17031110502. Let me get the correct neighborhood profile and check transit to the 5:30 AM dialysis appointment.",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031110502"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_transit_trip",
+          "args": {
+            "appt_ref": "appt:1",
+            "arrive_by": "05:30"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 137460,
+      "usage": {
+        "prompt_tokens": 8422,
+        "total_tokens": 11206,
+        "completion_tokens": 2784,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1936
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I have all the evidence I need. Let me summarize my analysis before submitting.\n\n**P1 (dialysis MWF 5:30 AM):** at_risk. Four recent no-shows (appt:3/4/6/8), 5:30 AM requires leaving by 05:10 per transit (tight, early), tract no_vehicle_share 0.208, and the patient's wife (prior caregiver) is in rehab (turn:T02, T12). Dual coverage with a transport benefit, so Medicaid NEMT is available.\n\n**P2 (diet handout):** at_risk. Patient needs Polish materials; English handout, daughter in Arizona works and can't reliably translate (turn:T06). Doctor already agreed to find a Polish version.\n\n**P3 (daily weight/BP):** likely_ok. Patient has scale and cuff and keeps a notebook (turn:T10).\n\n**P4 (meds):** likely_ok. All $0 copay, no refill gaps; insulin needs refrigeration but no utility insecurity in current evidence (screener:no, tract:places_shututility 6.2 low).\n\n**P5 (labs + 4-week nephrology follow-up):** likely_ok. Labs occur at dialysis (already onsite); the nephrology visit is daytime and the patient kept the 11:00 clinic appointment (appt:11).",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "5:30 AM dialysis requires leaving by 05:10; tight early trip with no vehicle and four recent no-shows",
+                    "evidence": [
+                      "transit:appt:1",
+                      "tract:no_vehicle_share",
+                      "appt:3",
+                      "appt:4",
+                      "appt:6",
+                      "appt:8"
+                    ]
+                  },
+                  {
+                    "barrier": "caregiving",
+                    "reason": "Wife, the prior caregiver, is in rehab hospital; patient is tired and now managing alone",
+                    "evidence": [
+                      "turn:T02",
+                      "turn:T12"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Book Medicaid-covered dialysis rides via the MCO number on the plan card (dual coverage, transport benefit yes)."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the dialysis unit for a later MWF chair time that matches available rides and caregiver help."
+                  },
+                  {
+                    "category": "dialysis_social_worker",
+                    "resource_record_id": null,
+                    "text": "Message the unit social worker for transport and benefits assistance today."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "language_literacy",
+                    "reason": "English handout is not usable; patient wants Polish and daughter in Arizona works, so translation is unreliable",
+                    "evidence": [
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "interpreter",
+                    "resource_record_id": null,
+                    "text": "Hospital interpreter service to provide a Polish renal-diet handout and plain-language teaching."
+                  },
+                  {
+                    "category": "renal_dietitian",
+                    "resource_record_id": null,
+                    "text": "Dialysis dietitian adapts the low-potassium diet to foods the patient can actually obtain."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

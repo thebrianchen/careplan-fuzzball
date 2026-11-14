@@ -1,0 +1,473 @@
+{
+  "case_id": "D001",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "Sold car, two buses each way to Park Manor, leaves 1:30 PM returns 8:30 PM, already missed 3 sessions; high no-vehicle tract.",
+            "evidence": [
+              "turn:T02",
+              "turn:T04",
+              "turn:T06",
+              "appt:2",
+              "appt:3",
+              "appt:5",
+              "tract:no_vehicle_share",
+              "transit:appt:2"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "nemt",
+            "resource_record_id": null,
+            "text": "Medicaid NEMT via Lakeshore MCO for recurring dialysis rides; dual coverage, call plan card number."
+          },
+          {
+            "category": "dialysis_social_worker",
+            "resource_record_id": null,
+            "text": "Ask the DaVita social worker to help arrange rides and benefits; dialysis unit has a social worker."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Request a different chair time at DaVita to match an available ride; chair times are limited."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "food_access",
+            "reason": "Eats corner-store chips/lunch meat; real grocery is a bus ride away and he is exhausted after dialysis; tract food insecurity high.",
+            "evidence": [
+              "turn:T08",
+              "screener:food_worry",
+              "tract:places_foodinsecu"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "food_pantry",
+            "resource_record_id": "CUR001",
+            "text": "Legler Regional Library Food Pantry, Thu 4\u20137 PM and Sun 1\u20134 PM (non-dialysis days); call 312-746-7730."
+          },
+          {
+            "category": "renal_dietitian",
+            "resource_record_id": null,
+            "text": "Ask the DaVita dietitian to rebuild the low-potassium/low-phosphorus diet around corner-store and pantry foods."
+          },
+          {
+            "category": "snap",
+            "resource_record_id": "SNAP1239868",
+            "text": "Apply for SNAP via Illinois ABE (abe.illinois.gov); expedited benefits may arrive within 7 days."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "Another downtown trip; patient is already overwhelmed by the Park Manor commute and said only 'I will try'.",
+            "evidence": [
+              "turn:T13",
+              "turn:T14",
+              "turn:T04",
+              "appt:2",
+              "appt:3",
+              "appt:5"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "nemt",
+            "resource_record_id": null,
+            "text": "Medicaid NEMT through Lakeshore MCO for the vascular surgery visit; call the number on the plan card."
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "Schedule the surgery visit the same day/campus as a dialysis day, or use telehealth if no exam is needed."
+          }
+        ]
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 4,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-D001"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-D001"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-D001"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-D001"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-D001"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031260300"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_transit_trip",
+      "args": {
+        "appt_ref": "appt:2",
+        "arrive_by": "15:00"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031260300",
+        "need": "food",
+        "days": [
+          "Tue",
+          "Thu",
+          "Sat",
+          "Sun"
+        ]
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031260300",
+        "need": "transport"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 26586,
+    "completion_tokens": 3506
+  },
+  "latency_ms": 181489,
+  "wall_s": 223.52,
+  "log": [
+    {
+      "prompt_sha256": "0904edb9eaae87930c86d5b0c2d0b67a0d05285828ab44e2bdfaf618acd22f52",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 18067,
+      "usage": {
+        "prompt_tokens": 4782,
+        "total_tokens": 4937,
+        "completion_tokens": 155,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 9
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-D001"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-D001"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-D001"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-D001"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-D001"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 17923,
+      "usage": {
+        "prompt_tokens": 6233,
+        "total_tokens": 6554,
+        "completion_tokens": 321,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 237
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031260300"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_transit_trip",
+          "args": {
+            "appt_ref": "appt:2",
+            "arrive_by": "15:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 31869,
+      "usage": {
+        "prompt_tokens": 7198,
+        "total_tokens": 7712,
+        "completion_tokens": 514,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 400
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031260300",
+            "need": "food",
+            "days": [
+              "Tue",
+              "Thu",
+              "Sat",
+              "Sun"
+            ]
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031260300",
+            "need": "transport"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 113630,
+      "usage": {
+        "prompt_tokens": 8373,
+        "total_tokens": 10889,
+        "completion_tokens": 2516,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1672
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Sold car, two buses each way to Park Manor, leaves 1:30 PM returns 8:30 PM, already missed 3 sessions; high no-vehicle tract.",
+                    "evidence": [
+                      "turn:T02",
+                      "turn:T04",
+                      "turn:T06",
+                      "appt:2",
+                      "appt:3",
+                      "appt:5",
+                      "tract:no_vehicle_share",
+                      "transit:appt:2"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Medicaid NEMT via Lakeshore MCO for recurring dialysis rides; dual coverage, call plan card number."
+                  },
+                  {
+                    "category": "dialysis_social_worker",
+                    "resource_record_id": null,
+                    "text": "Ask the DaVita social worker to help arrange rides and benefits; dialysis unit has a social worker."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Request a different chair time at DaVita to match an available ride; chair times are limited."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "Eats corner-store chips/lunch meat; real grocery is a bus ride away and he is exhausted after dialysis; tract food insecurity high.",
+                    "evidence": [
+                      "turn:T08",
+                      "screener:food_worry",
+                      "tract:places_foodinsecu"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "food_pantry",
+                    "resource_record_id": "CUR001",
+                    "text": "Legler Regional Library Food Pantry, Thu 4\u20137 PM and Sun 1\u20134 PM (non-dialysis days); call 312-746-7730."
+                  },
+                  {
+                    "category": "renal_dietitian",
+                    "resource_record_id": null,
+                    "text": "Ask the DaVita dietitian to rebuild the low-potassium/low-phosphorus diet around corner-store and pantry foods."
+                  },
+                  {
+                    "category": "snap",
+                    "resource_record_id": "SNAP1239868",
+                    "text": "Apply for SNAP via Illinois ABE (abe.illinois.gov); expedited benefits may arrive within 7 days."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Another downtown trip; patient is already overwhelmed by the Park Manor commute and said only 'I will try'.",
+                    "evidence": [
+                      "turn:T13",
+                      "turn:T14",
+                      "turn:T04",
+                      "appt:2",
+                      "appt:3",
+                      "appt:5"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Medicaid NEMT through Lakeshore MCO for the vascular surgery visit; call the number on the plan card."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Schedule the surgery visit the same day/campus as a dialysis day, or use telehealth if no exam is needed."
+                  }
+                ]
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,164 @@
+{
+  "case_id": "D003",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "Cardiac rehab requires rides three mornings a week for 12 weeks, but the patient does not drive, has no license, Harold previously drove, and the patient arrived today by cab with no standing ride arrangement.",
+            "evidence": [
+              "turn:T06"
+            ]
+          },
+          {
+            "barrier": "caregiving",
+            "reason": "Rehab appointments conflict with the patient's sole responsibility for Harold, who cannot be left alone; the neighbor who watches him is available only two hours and the patient already owes her.",
+            "evidence": [
+              "turn:T02",
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Ask the cardiac rehab program for chair/class times on days that match an available ride or when someone can stay with Harold.",
+            "resource_record_id": null
+          },
+          {
+            "category": "ada_paratransit",
+            "text": "If a disability or health condition prevents using fixed-route buses/trains, apply for ADA Paratransit certification (Northern Illinois Transit Authority, 312-663-HELP); note certification takes time and rides run only when fixed-route service runs.",
+            "resource_record_id": null
+          },
+          {
+            "category": "nemt",
+            "text": "Check the patient's coverage for non-emergency medical transportation: Medicaid/dual members can use MCO NEMT (call the number on the plan card) or Transdev for fee-for-service; Medicare-only patients generally do not have a covered routine ride benefit unless their Medicare Advantage plan includes one.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 2915,
+    "completion_tokens": 1169
+  },
+  "latency_ms": 63214,
+  "wall_s": 63.24,
+  "log": [
+    {
+      "prompt_sha256": "6dd8c9f1a99c57cb897b2412dde0eb86f24606f617d137406a7d6c54f2509408",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 63214,
+      "usage": {
+        "prompt_tokens": 2915,
+        "total_tokens": 4084,
+        "completion_tokens": 1169,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 698
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Cardiac rehab requires rides three mornings a week for 12 weeks, but the patient does not drive, has no license, Harold previously drove, and the patient arrived today by cab with no standing ride arrangement.",
+                    "evidence": [
+                      "turn:T06"
+                    ]
+                  },
+                  {
+                    "barrier": "caregiving",
+                    "reason": "Rehab appointments conflict with the patient's sole responsibility for Harold, who cannot be left alone; the neighbor who watches him is available only two hours and the patient already owes her.",
+                    "evidence": [
+                      "turn:T02",
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask the cardiac rehab program for chair/class times on days that match an available ride or when someone can stay with Harold.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "ada_paratransit",
+                    "text": "If a disability or health condition prevents using fixed-route buses/trains, apply for ADA Paratransit certification (Northern Illinois Transit Authority, 312-663-HELP); note certification takes time and rides run only when fixed-route service runs.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "nemt",
+                    "text": "Check the patient's coverage for non-emergency medical transportation: Medicaid/dual members can use MCO NEMT (call the number on the plan card) or Transdev for fee-for-service; Medicare-only patients generally do not have a covered routine ride benefit unless their Medicare Advantage plan includes one.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,479 @@
+{
+  "case_id": "D001",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "Patient must take two buses each way, leaves by 1:30 PM and is not home until 8:30 PM; has already missed 3 dialysis sessions this month.",
+            "evidence": [
+              "turn:T04",
+              "appt:2",
+              "appt:3",
+              "appt:5",
+              "turn:T02",
+              "tract:no_vehicle_share",
+              "transit:appt:1"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "medicaid_nemt",
+            "text": "Schedule Medicaid NEMT rides for MWF dialysis through Lakeshore Community Health Plan (call number on plan card); confirm standing-trip booking lead time.",
+            "resource_record_id": null
+          },
+          {
+            "category": "schedule_change",
+            "text": "Ask the DaVita unit for a later chair time or a day that matches an available ride, to shorten the long round trip.",
+            "resource_record_id": null
+          },
+          {
+            "category": "dialysis_social_worker",
+            "text": "Message the dialysis unit social worker to help arrange transport and benefits for recurring in-center sessions.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "food_access",
+            "reason": "Patient relies on corner-store food because the grocery is a bus ride away and he is too exhausted after dialysis; screener shows food worry sometimes true.",
+            "evidence": [
+              "turn:T08",
+              "screener:food_worry",
+              "tract:places_foodinsecu"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "food_pantry",
+            "text": "Legler Regional Library Food Pantry, 115 S Pulaski Rd, open Thu 4-7 PM and Sun 1-4 PM (non-dialysis days); call (312) 746-7730 to start.",
+            "resource_record_id": "CUR001"
+          },
+          {
+            "category": "renal_dietitian",
+            "text": "Ask the dialysis unit dietitian to build a renal-friendly diet around foods the patient can actually obtain near home.",
+            "resource_record_id": null
+          },
+          {
+            "category": "snap",
+            "text": "Apply for SNAP via Illinois ABE (abe.illinois.gov) to stretch food budget; expedited benefits possible within 7 days for very low income.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "Patient is hesitant about another downtown trip given his existing two-bus burden and missed dialysis sessions.",
+            "evidence": [
+              "turn:T14",
+              "turn:T04",
+              "appt:2",
+              "appt:3",
+              "appt:5"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "medicaid_nemt",
+            "text": "Use Medicaid NEMT (Lakeshore Community Health Plan) for the one-time vascular surgery visit; book in advance per plan rules.",
+            "resource_record_id": null
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "text": "Try to schedule the surgery visit on the same day/campus as an existing appointment, or use telehealth if no exam is needed.",
+            "resource_record_id": null
+          },
+          {
+            "category": "ada_paratransit",
+            "text": "If fixed-route bus is not usable, apply for ADA Paratransit certification (312-663-HELP, weekdays 8:30-5); decision within 21 days of complete application.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 4,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-D001"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-D001"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-D001"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-D001"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-D001"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031260300"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_transit_trip",
+      "args": {
+        "appt_ref": "appt:1",
+        "arrive_by": "15:00"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_visit_transcript",
+      "args": {
+        "visit_id": "V-D001",
+        "topic": "transport"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031260300",
+        "need": "food",
+        "days": [
+          "Tue",
+          "Thu",
+          "Sat",
+          "Sun"
+        ]
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 27235,
+    "completion_tokens": 4651
+  },
+  "latency_ms": 234024,
+  "wall_s": 274.36,
+  "log": [
+    {
+      "prompt_sha256": "0904edb9eaae87930c86d5b0c2d0b67a0d05285828ab44e2bdfaf618acd22f52",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 7768,
+      "usage": {
+        "prompt_tokens": 4782,
+        "total_tokens": 4984,
+        "completion_tokens": 202,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 40
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I'll start by gathering the patient's full record and the visit transcript in parallel.",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-D001"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-D001"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-D001"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-D001"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-D001"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 71171,
+      "usage": {
+        "prompt_tokens": 6249,
+        "total_tokens": 7589,
+        "completion_tokens": 1340,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1191
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "Now let me check the neighborhood profile and whether the patient can reach the dialysis unit by transit, plus the nephrology appointment transit.",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031260300"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_transit_trip",
+          "args": {
+            "appt_ref": "appt:1",
+            "arrive_by": "15:00"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_visit_transcript",
+          "args": {
+            "visit_id": "V-D001",
+            "topic": "transport"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 79620,
+      "usage": {
+        "prompt_tokens": 7521,
+        "total_tokens": 8912,
+        "completion_tokens": 1391,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1285
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "Now I have a clear picture. Let me find food resources for the patient's tract (P2 food issue), matching non-dialysis days (Tue, Thu, Sat, Sun).",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031260300",
+            "need": "food",
+            "days": [
+              "Tue",
+              "Thu",
+              "Sat",
+              "Sun"
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 75465,
+      "usage": {
+        "prompt_tokens": 8683,
+        "total_tokens": 10401,
+        "completion_tokens": 1718,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 576
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I now have all the evidence needed. Let me submit the assessment.\n\nKey findings:\n- **P1 (dialysis MWF 3 PM):** Patient reports 2-bus rides, leaves by 1:30 PM, home by 8:30 PM, \"some days I just don't go.\" 3 no-shows this month (appt:2, appt:3, appt:5). Transit technically feasible (latest departure 1:25 PM, 84 min) but clearly burdensome. Coverage is dual Medicaid \u2192 NEMT benefit available.\n- **P2 (renal diet/fresh produce):** Patient eats corner-store food; grocery is a bus ride away; too wiped after treatment. Screener food_worry = sometimes_true; tract food insecurity signal.\n- **P3 (sevelamer):** Copay $4.90, patient says fine, no refill gaps \u2192 likely_ok.\n- **P4 (vascular surgery, downtown, ~2 weeks):** Patient reluctant (\"Another trip downtown? I'll try\") \u2192 at_risk for transport.\n- **P5 (paper weight/BP log):** No language/digital/cost barrier \u2192 likely_ok.",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Patient must take two buses each way, leaves by 1:30 PM and is not home until 8:30 PM; has already missed 3 dialysis sessions this month.",
+                    "evidence": [
+                      "turn:T04",
+                      "appt:2",
+                      "appt:3",
+                      "appt:5",
+                      "turn:T02",
+                      "tract:no_vehicle_share",
+                      "transit:appt:1"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "medicaid_nemt",
+                    "text": "Schedule Medicaid NEMT rides for MWF dialysis through Lakeshore Community Health Plan (call number on plan card); confirm standing-trip booking lead time.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask the DaVita unit for a later chair time or a day that matches an available ride, to shorten the long round trip.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "dialysis_social_worker",
+                    "text": "Message the dialysis unit social worker to help arrange transport and benefits for recurring in-center sessions.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "Patient relies on corner-store food because the grocery is a bus ride away and he is too exhausted after dialysis; screener shows food worry sometimes true.",
+                    "evidence": [
+                      "turn:T08",
+                      "screener:food_worry",
+                      "tract:places_foodinsecu"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "food_pantry",
+                    "text": "Legler Regional Library Food Pantry, 115 S Pulaski Rd, open Thu 4-7 PM and Sun 1-4 PM (non-dialysis days); call (312) 746-7730 to start.",
+                    "resource_record_id": "CUR001"
+                  },
+                  {
+                    "category": "renal_dietitian",
+                    "text": "Ask the dialysis unit dietitian to build a renal-friendly diet around foods the patient can actually obtain near home.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "snap",
+                    "text": "Apply for SNAP via Illinois ABE (abe.illinois.gov) to stretch food budget; expedited benefits possible within 7 days for very low income.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Patient is hesitant about another downtown trip given his existing two-bus burden and missed dialysis sessions.",
+                    "evidence": [
+                      "turn:T14",
+                      "turn:T04",
+                      "appt:2",
+                      "appt:3",
+                      "appt:5"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "medicaid_nemt",
+                    "text": "Use Medicaid NEMT (Lakeshore Community Health Plan) for the one-time vascular surgery visit; book in advance per plan rules.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "text": "Try to schedule the surgery visit on the same day/campus as an existing appointment, or use telehealth if no exam is needed.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "ada_paratransit",
+                    "text": "If fixed-route bus is not usable, apply for ADA Paratransit certification (312-663-HELP, weekdays 8:30-5); decision within 21 days of complete application.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

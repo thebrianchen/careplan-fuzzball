@@ -1,0 +1,295 @@
+{
+  "case_id": "T015",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "utilities",
+            "reason": "Insulin glargine pen needs refrigeration but the screener flags a utility shutoff risk, so cold storage may fail.",
+            "evidence": [
+              "med:3",
+              "screener:utilities_shutoff"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "utility_medical_certificate",
+            "resource_record_id": null,
+            "text": "Complete the utility medical certification form to delay disconnection so insulin stays refrigerated; an in-use pen can stay at room temperature up to 28 days."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "Wednesday 1 PM conflicts with warehouse 7:00-3:30 plus Uber until 10:00; patient already no-showed and cancelled 1 PM education visits.",
+            "evidence": [
+              "turn:T04",
+              "appt:1",
+              "appt:2"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the diabetes educator for a slot after 4:00 PM or Saturday morning, the times the patient said work (turn:T06)."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "food_access",
+            "reason": "Workday meals come from a gas station between the warehouse and driving, making a carb-consistent packed lunch hard to sustain.",
+            "evidence": [
+              "turn:T08",
+              "screener:food_worry",
+              "screener:food_ran_out"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "renal_dietitian",
+            "resource_record_id": null,
+            "text": "Ask the dialysis/renal dietitian to redesign the carb-consistent plan around gas-station and workday foods the patient can actually get."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 2,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T015"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T015"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T015"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T015"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T015"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 10522,
+    "completion_tokens": 2512
+  },
+  "latency_ms": 132036,
+  "wall_s": 132.07,
+  "log": [
+    {
+      "prompt_sha256": "615a98d92d40d4737837415112f47d17019af97ff7693d870d9955dab431e5a3",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 9439,
+      "usage": {
+        "prompt_tokens": 4728,
+        "total_tokens": 5001,
+        "completion_tokens": 273,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 105
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I'll start by gathering the patient's record, problems, medications, appointments, and screener all at once.",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T015"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T015"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T015"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T015"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T015"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 122597,
+      "usage": {
+        "prompt_tokens": 5794,
+        "total_tokens": 8033,
+        "completion_tokens": 2239,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1604
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I have the key evidence: Medicaid with a transport benefit, insulin glargine pen (needs refrigeration, $0 copay), two missed diabetes-education visits at 1 PM, a work shift 7:00\u20133:30 plus Uber until 10:00, gas-station meals on work days, no household food insecurity, and a positive utilities shutoff screener. The patient drives his own vehicle, so transport is not the barrier for the education visit \u2014 the work schedule is.\n\nLet me submit the assessment.",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "utilities",
+                    "reason": "Insulin glargine pen needs refrigeration but the screener flags a utility shutoff risk, so cold storage may fail.",
+                    "evidence": [
+                      "med:3",
+                      "screener:utilities_shutoff"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "utility_medical_certificate",
+                    "resource_record_id": null,
+                    "text": "Complete the utility medical certification form to delay disconnection so insulin stays refrigerated; an in-use pen can stay at room temperature up to 28 days."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Wednesday 1 PM conflicts with warehouse 7:00-3:30 plus Uber until 10:00; patient already no-showed and cancelled 1 PM education visits.",
+                    "evidence": [
+                      "turn:T04",
+                      "appt:1",
+                      "appt:2"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the diabetes educator for a slot after 4:00 PM or Saturday morning, the times the patient said work (turn:T06)."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "Workday meals come from a gas station between the warehouse and driving, making a carb-consistent packed lunch hard to sustain.",
+                    "evidence": [
+                      "turn:T08",
+                      "screener:food_worry",
+                      "screener:food_ran_out"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "renal_dietitian",
+                    "resource_record_id": null,
+                    "text": "Ask the dialysis/renal dietitian to redesign the carb-consistent plan around gas-station and workday foods the patient can actually get."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

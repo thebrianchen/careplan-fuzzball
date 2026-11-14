@@ -1,0 +1,202 @@
+{
+  "case_id": "T019",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "digital_access",
+            "reason": "Adherence reminders depend on the patient portal, but the patient's phone is cracked and could fail, making portal-based reminders unreliable.",
+            "evidence": [
+              "turn:T11",
+              "turn:T12"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "digital_access",
+            "resource_record_id": null,
+            "text": "Switch adherence and lab-date reminders from portal messages to case-manager phone calls or SMS to the patient's working phone, with a paper backup calendar."
+          },
+          {
+            "category": "digital_access",
+            "resource_record_id": null,
+            "text": "Ask the case manager to confirm the patient can receive portal messages and offer a lower-tech reminder option if the phone breaks."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "food_access",
+            "reason": "A high-calorie diet plus twice-daily supplements may not be affordable or obtainable given the patient's inconsistent eating and recent 9-pound weight loss.",
+            "evidence": [
+              "turn:T07",
+              "turn:T08"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "snap",
+            "resource_record_id": null,
+            "text": "Screen for SNAP through Illinois ABE (income-based; expedited benefits possible within 7 days for very low income) to help pay for food and supplements."
+          },
+          {
+            "category": "food_pantry",
+            "resource_record_id": null,
+            "text": "Refer to a Greater Chicago Food Depository pantry on the patient's non-treatment days, paired with dietitian guidance for renal/HIV-friendly choices."
+          },
+          {
+            "category": "medically_tailored_meals",
+            "resource_record_id": null,
+            "text": "Check whether the patient's Medicaid MCO or Medicare Advantage plan covers medically tailored meals; if covered, arrange home-delivered meals."
+          }
+        ]
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3032,
+    "completion_tokens": 1918
+  },
+  "latency_ms": 101678,
+  "wall_s": 101.7,
+  "log": [
+    {
+      "prompt_sha256": "3e6059ed66845b8019f0c495b608d4b32b4fa1a069f5c667e7eeefec92c54180",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 101678,
+      "usage": {
+        "prompt_tokens": 3032,
+        "total_tokens": 4950,
+        "completion_tokens": 1918,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1385
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "digital_access",
+                    "reason": "Adherence reminders depend on the patient portal, but the patient's phone is cracked and could fail, making portal-based reminders unreliable.",
+                    "evidence": [
+                      "turn:T11",
+                      "turn:T12"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "digital_access",
+                    "resource_record_id": null,
+                    "text": "Switch adherence and lab-date reminders from portal messages to case-manager phone calls or SMS to the patient's working phone, with a paper backup calendar."
+                  },
+                  {
+                    "category": "digital_access",
+                    "resource_record_id": null,
+                    "text": "Ask the case manager to confirm the patient can receive portal messages and offer a lower-tech reminder option if the phone breaks."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "A high-calorie diet plus twice-daily supplements may not be affordable or obtainable given the patient's inconsistent eating and recent 9-pound weight loss.",
+                    "evidence": [
+                      "turn:T07",
+                      "turn:T08"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "snap",
+                    "resource_record_id": null,
+                    "text": "Screen for SNAP through Illinois ABE (income-based; expedited benefits possible within 7 days for very low income) to help pay for food and supplements."
+                  },
+                  {
+                    "category": "food_pantry",
+                    "resource_record_id": null,
+                    "text": "Refer to a Greater Chicago Food Depository pantry on the patient's non-treatment days, paired with dietitian guidance for renal/HIV-friendly choices."
+                  },
+                  {
+                    "category": "medically_tailored_meals",
+                    "resource_record_id": null,
+                    "text": "Check whether the patient's Medicaid MCO or Medicare Advantage plan covers medically tailored meals; if covered, arrange home-delivered meals."
+                  }
+                ]
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,216 @@
+{
+  "case_id": "T010",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "Daily 8 AM clinic DOT conflicts with the 6 AM work-van pickup and lost daily pay, which already caused three missed doses.",
+            "evidence": [
+              "turn:T02"
+            ]
+          },
+          {
+            "barrier": "transport",
+            "reason": "Getting to the clinic before work requires relying on the work van schedule and costs a full day's wages.",
+            "evidence": [
+              "turn:T02"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Ask the TB clinic for a later DOT time or a weekday that does not conflict with the work-van pickup.",
+            "resource_record_id": null
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "text": "Use video DOT via WhatsApp (the patient already has a phone and uses WhatsApp daily) for doses that do not require an in-person visit.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "Monthly labs tied to a DOT encounter require the patient to come to the clinic during work hours, risking lost pay and missed draws.",
+            "evidence": [
+              "turn:T02"
+            ]
+          },
+          {
+            "barrier": "transport",
+            "reason": "Travel to the clinic for labs competes with the 6 AM work-van schedule and a full day's lost wages.",
+            "evidence": [
+              "turn:T02"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Schedule labs on a non-work day or align the draw with an already-planned DOT visit to avoid an extra trip.",
+            "resource_record_id": null
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "text": "Collect sputum and labs at the same time/campus as other TB visits, or ask whether a community lab closer to the patient's route can be used.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 3093,
+    "completion_tokens": 1048
+  },
+  "latency_ms": 57252,
+  "wall_s": 57.3,
+  "log": [
+    {
+      "prompt_sha256": "61aa5922b96e9261f435c9eb6b92d5814eb826b7c6362acf8550a0035f823bc0",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 57252,
+      "usage": {
+        "prompt_tokens": 3093,
+        "total_tokens": 4141,
+        "completion_tokens": 1048,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 492
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Daily 8 AM clinic DOT conflicts with the 6 AM work-van pickup and lost daily pay, which already caused three missed doses.",
+                    "evidence": [
+                      "turn:T02"
+                    ]
+                  },
+                  {
+                    "barrier": "transport",
+                    "reason": "Getting to the clinic before work requires relying on the work van schedule and costs a full day's wages.",
+                    "evidence": [
+                      "turn:T02"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask the TB clinic for a later DOT time or a weekday that does not conflict with the work-van pickup.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "text": "Use video DOT via WhatsApp (the patient already has a phone and uses WhatsApp daily) for doses that do not require an in-person visit.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Monthly labs tied to a DOT encounter require the patient to come to the clinic during work hours, risking lost pay and missed draws.",
+                    "evidence": [
+                      "turn:T02"
+                    ]
+                  },
+                  {
+                    "barrier": "transport",
+                    "reason": "Travel to the clinic for labs competes with the 6 AM work-van schedule and a full day's lost wages.",
+                    "evidence": [
+                      "turn:T02"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Schedule labs on a non-work day or align the draw with an already-planned DOT visit to avoid an extra trip.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "text": "Collect sputum and labs at the same time/campus as other TB visits, or ask whether a community lab closer to the patient's route can be used.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

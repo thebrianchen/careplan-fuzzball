@@ -1,0 +1,391 @@
+{
+  "case_id": "T014",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "caregiving",
+            "reason": "Patient is the only one who walks child to the 8:30 bus; rehab starts at 9:00 MWF and sister cannot cover three days a week.",
+            "evidence": [
+              "turn:T04",
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask cardiac rehab for a later start time or a different day that fits the child's bus schedule."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "utilities",
+            "reason": "Power has been off since Monday; CPAP requires electricity, so nightly use cannot happen as written.",
+            "evidence": [
+              "turn:T08",
+              "screener:utilities_shutoff"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "utility_medical_certificate",
+            "resource_record_id": null,
+            "text": "Complete a utility medical certification to delay disconnection while power is restored."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 5,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T014"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T014"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T014"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T014"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T014"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_visit_transcript",
+      "args": {
+        "visit_id": "V-T014",
+        "topic": "any"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031010702"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031010702",
+        "need": "utilities"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031010702",
+        "need": "caregiving"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 37596,
+    "completion_tokens": 4544
+  },
+  "latency_ms": 261945,
+  "wall_s": 262.0,
+  "log": [
+    {
+      "prompt_sha256": "02fcb7f665ffc637be97d84c170ab19b1d2e2e135414b616b4012657d44e4ffc",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 16754,
+      "usage": {
+        "prompt_tokens": 4768,
+        "total_tokens": 5049,
+        "completion_tokens": 281,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 95
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T014"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T014"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T014"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T014"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T014"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_visit_transcript",
+          "args": {
+            "visit_id": "V-T014",
+            "topic": "any"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 71130,
+      "usage": {
+        "prompt_tokens": 6464,
+        "total_tokens": 7661,
+        "completion_tokens": 1197,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1067
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031010702"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031010702",
+            "need": "utilities"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031010702",
+            "need": "caregiving"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 94908,
+      "usage": {
+        "prompt_tokens": 8279,
+        "total_tokens": 9881,
+        "completion_tokens": 1602,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1438
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "[{\"item_id\": \"P1\", \"status\": \"at_risk\", \"barriers\": [{\"barrier\": \"caregiving\", \"reason\": \"Patient is the only one who walks child to the 8:30 bus; rehab starts at 9:00 MWF and sister cannot cover three days a week.\", \"evidence\": [\"turn:T04\", \"turn:T06\"]}], \"alternatives\": [{\"category\": \"schedule_change\", \"resource_record_id\": null, \"text\": \"Ask cardiac rehab for a later start time or a different day that fits the child's bus schedule.\"}]}]})"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 28072,
+      "usage": {
+        "prompt_tokens": 8634,
+        "total_tokens": 9194,
+        "completion_tokens": 560,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 169
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "[{\"item_id\": \"P1\", \"status\": \"at_risk\", \"barriers\": [{\"barrier\": \"caregiving\", \"reason\": \"Patient is the only one who walks child to the 8:30 bus; rehab starts at 9:00 MWF and sister cannot cover three days a week.\", \"evidence\": [\"turn:T04\", \"turn:T06\"]}], \"alternatives\": [{\"category\": \"schedule_change\", \"resource_record_id\": null, \"text\": \"Ask cardiac rehab for a later start time or a different day that fits the child's bus schedule.\"}]}, {\"item_id\": \"P2\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}, {\"item_id\": \"P3\", \"status\": \"at_risk\", \"barriers\": [{\"barrier\": \"utilities\", \"reason\": \"Power has been off since Monday; CPAP requires electricity, so nightly use cannot happen as written.\", \"evidence\": [\"turn:T08\", \"screener:utilities_shutoff\"]}], \"alternatives\": [{\"category\": \"utility_medical_certificate\", \"resource_record_id\": null, \"text\": \"Complete a utility medical certification to delay disconnection while power is restored.\"}, {\"category\": \"nemt\", \"resource_record_id\": null, \"text\": \"Not applicable to power issue; address power first.\"}]}], \"item_id\": \"P4\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}, {\"item_id\": \"P5\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}]"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 5,
+      "latency_ms": 51081,
+      "usage": {
+        "prompt_tokens": 9451,
+        "total_tokens": 10355,
+        "completion_tokens": 904,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 543
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "caregiving",
+                    "reason": "Patient is the only one who walks child to the 8:30 bus; rehab starts at 9:00 MWF and sister cannot cover three days a week.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask cardiac rehab for a later start time or a different day that fits the child's bus schedule."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "utilities",
+                    "reason": "Power has been off since Monday; CPAP requires electricity, so nightly use cannot happen as written.",
+                    "evidence": [
+                      "turn:T08",
+                      "screener:utilities_shutoff"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "utility_medical_certificate",
+                    "resource_record_id": null,
+                    "text": "Complete a utility medical certification to delay disconnection while power is restored."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

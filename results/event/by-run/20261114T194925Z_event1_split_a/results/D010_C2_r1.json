@@ -1,0 +1,221 @@
+{
+  "case_id": "D010",
+  "condition": "C2",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 3,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-D010"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-D010"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-D010"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-D010"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-D010"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031100500"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 15500,
+    "completion_tokens": 1768
+  },
+  "latency_ms": 94715,
+  "wall_s": 94.75,
+  "log": [
+    {
+      "prompt_sha256": "886c630cf9fcd021cccab16a4fa2759e6c089c19d06fb349b7a280401d0f60dd",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 7406,
+      "usage": {
+        "prompt_tokens": 4489,
+        "total_tokens": 4664,
+        "completion_tokens": 175,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 18
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I'll gather the patient's record and neighborhood data first.",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-D010"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-D010"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-D010"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-D010"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-D010"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 30377,
+      "usage": {
+        "prompt_tokens": 5166,
+        "total_tokens": 5755,
+        "completion_tokens": 589,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 551
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031100500"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 56932,
+      "usage": {
+        "prompt_tokens": 5845,
+        "total_tokens": 6849,
+        "completion_tokens": 1004,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 606
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "I have all the evidence I need. Let me summarize:\n\n- **Patient**: 55M, commercial employer PPO (no transport benefit), home tract 17031100500, steady housing, English speaker.\n- **Screener**: transportation = \"no\" problems, food worry/ran out = never, utilities shutoff = no, no housing problems.\n- **Tract**: low no-vehicle share (3.6%), transit stops present, not a food desert (LILA = 0.0).\n- **Meds**: atorvastatin 20 mg, tier 1, $5 copay, no refill gaps; patient adherent, no side effects.\n- **Appointments**: only the current kept visit (appt:2). No separate lab/dialysis appointment exists yet for P3, so no transit trip to check.\n\nAll four plan items are supported by the evidence \u2014 no transport, cost, food, utilities, housing, caregiving, language, digital, or work-schedule barrier applies to any of them. The patient's busier weekends and tighter money don't conflict with a once-in-3-months flexible lab draw, a daily walk, an in-visit vaccine, or a low-copay statin increase.",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

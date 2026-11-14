@@ -1,0 +1,166 @@
+{
+  "case_id": "D003",
+  "condition": "C0",
+  "rep": 1,
+  "profile": "super35-vllm-think",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "The patient does not drive (never got a license; Harold always drove) and arrived today by cab, so three 9:00 AM trips per week for 12 weeks would require a reliable, recurring ride the patient has not established.",
+            "evidence": [
+              "turn:T05",
+              "turn:T06"
+            ]
+          },
+          {
+            "barrier": "caregiving",
+            "reason": "The patient is the primary caregiver for Harold, who wanders and cannot be left alone; the neighbor only watches him for two hours, which is unlikely to cover travel plus a rehab session.",
+            "evidence": [
+              "turn:T02",
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Ask the cardiac rehab program for a later start time or different days that fit available transport and neighbor coverage.",
+            "resource_record_id": null
+          },
+          {
+            "category": "ada_paratransit",
+            "text": "If a health condition prevents using fixed-route buses or trains, apply for ADA Paratransit certification through the Northern Illinois Transit Authority (312-663-HELP); certification is not immediate, so start early.",
+            "resource_record_id": null
+          },
+          {
+            "category": "nemt",
+            "text": "If the patient has Medicaid or dual coverage, contact the managed care plan about non-emergency medical transport for recurring rehab trips; original Medicare generally does not cover routine rides.",
+            "resource_record_id": null
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 2915,
+    "completion_tokens": 1592
+  },
+  "latency_ms": 90296,
+  "wall_s": 90.32,
+  "log": [
+    {
+      "prompt_sha256": "6dd8c9f1a99c57cb897b2412dde0eb86f24606f617d137406a7d6c54f2509408",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 90296,
+      "usage": {
+        "prompt_tokens": 2915,
+        "total_tokens": 4507,
+        "completion_tokens": 1592,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 1145
+        }
+      },
+      "served_model": "nemotron-3.5-super-vl",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "The patient does not drive (never got a license; Harold always drove) and arrived today by cab, so three 9:00 AM trips per week for 12 weeks would require a reliable, recurring ride the patient has not established.",
+                    "evidence": [
+                      "turn:T05",
+                      "turn:T06"
+                    ]
+                  },
+                  {
+                    "barrier": "caregiving",
+                    "reason": "The patient is the primary caregiver for Harold, who wanders and cannot be left alone; the neighbor only watches him for two hours, which is unlikely to cover travel plus a rehab session.",
+                    "evidence": [
+                      "turn:T02",
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask the cardiac rehab program for a later start time or different days that fit available transport and neighbor coverage.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "ada_paratransit",
+                    "text": "If a health condition prevents using fixed-route buses or trains, apply for ADA Paratransit certification through the Northern Illinois Transit Authority (312-663-HELP); certification is not immediate, so start early.",
+                    "resource_record_id": null
+                  },
+                  {
+                    "category": "nemt",
+                    "text": "If the patient has Medicaid or dual coverage, contact the managed care plan about non-emergency medical transport for recurring rehab trips; original Medicare generally does not cover routine rides.",
+                    "resource_record_id": null
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}
