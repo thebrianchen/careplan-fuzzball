@@ -4,28 +4,29 @@
 #     X-Fuzzball-Caller-Identity header; the gateway verifies it against the node's signing keys and its own
 #     endpoint id, and admits only the users or groups listed below (fails closed when unset)
 #   - every decision is logged to the "public" volume; rejected bodies are never logged or echoed
-#   - this workflow mounts no patient data
-# Before starting: fuzzball volume create team4 public --size 5GiB ; fill in the two ids below
-# (the `sub` and `account_id` claims of our own identity; decode a token from
-#  `fuzzball workflow endpoints generate-token <endpoint-id>` to read them).
+#   - this workflow mounts only the "public" volume: its own copy of Python, the packages and the code, with no
+#     cases, saved runs, training examples or case addresses (built by zones.fz.yaml; run that after a code upload)
+#   - the gateway process is started without the Fuzzball API token every job is given (FB_TOKEN)
+# The two ids are our own identity on this cluster (FB_ACCOUNT_ID inside any of our jobs): both sides run as team 4 here.
 version: v4
 volumes:
-  code: {use: team4, name: code}
   public: {use: team4, name: public}
 services:
   gateway:
     image: {uri: docker://rockylinux/rockylinux:9}
-    mounts: {/code: code, /public: public}
-    cwd: /code/app
+    mounts: {/public: public}
+    cwd: /public/code/app
     env:
-      - PYTHONPATH=/code/site
-      - PATH=/code/python/bin:/usr/local/bin:/usr/bin:/bin
-      - GATEWAY_ALLOWED_SUBS=FILL-IN-USER-ID
-      - GATEWAY_ALLOWED_ACCOUNTS=FILL-IN-GROUP-ID
+      - PYTHONPATH=/public/code/site
+      - PATH=/public/code/python/bin:/usr/local/bin:/usr/bin:/bin
+      - GATEWAY_ALLOWED_SUBS=3bf9469b-e11f-4da9-a9bc-bc041a31f341
+      - GATEWAY_ALLOWED_ACCOUNTS=3bf9469b-e11f-4da9-a9bc-bc041a31f341
       - GATEWAY_RATE_PER_MINUTE=120
       - GATEWAY_LOG=/public/gateway-log.jsonl
     script: |
       #!/bin/sh
+      echo "mounted volumes: $(ls -d /code /patient /models /public 2>/dev/null | tr '\n' ' ')"
+      unset FB_TOKEN
       exec python3 -m careplan.gateway
     network:
       ports:

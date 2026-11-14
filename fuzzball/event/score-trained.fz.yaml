@@ -1,0 +1,86 @@
+# Does training help? The small model (Nemotron 3 Nano 30B) with the add-on trained at the event by train.fz.yaml, against
+# the same model without it, on the 20 held-out patients with the physician-reviewed keys. One vLLM serves both: the
+# base model under its own name and the add-on as the LoRA module "planner" (profiles nano-base-vllm and nano-lora-vllm,
+# which read READER_URL). Same recipe as spark/score_lora.sh on our own GB10 (0.37 against 0.18 there).
+#   - start it only after train.fz.yaml has finished: it needs the GPU that training holds and the finished add-on
+#   - progress: the job prints "reviews N of 40 (P%)" once a minute
+# Results on the "code" volume: results/trained_<TAG>_test.json and results/stock_<TAG>_test.json; runs/*_<TAG>_trained, *_<TAG>_stock.
+version: v4
+volumes:
+  models: {use: team4, name: models}
+  code: {use: team4, name: code}
+services:
+  reader:
+    image: {uri: docker://vllm/vllm-openai:v0.32.0}
+    mounts: {/models: models, /code: code}
+    env:
+      - HOME=/models/home
+      - USER=careplan
+      - XDG_CACHE_HOME=/models/home/.cache
+      - HF_HUB_OFFLINE=1
+      - MAX_JOBS=2
+      - NVCC_THREADS=1
+      - ADAPTER=/code/adapters/lora-event1
+    script: |
+      #!/bin/bash
+      mkdir -p "$XDG_CACHE_HOME"
+      ls -la $ADAPTER | grep -E "adapter_(config|model)" || { echo "no finished add-on in $ADAPTER"; exit 1; }
+      exec vllm serve /models/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16 \
+        --served-model-name nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16 \
+        --enable-lora --max-lora-rank 16 --lora-modules planner=$ADAPTER \
+        --max-model-len 32768 --gpu-memory-utilization 0.80 \
+        --enable-auto-tool-choice --tool-call-parser qwen3_coder \
+        --host 0.0.0.0 --port 8000
+    resource:
+      cpu: {cores: 8}
+      memory: {size: 100GB}
+      devices: {nvidia.com/gpu: 1}
+    network:
+      ports:
+        - {name: openai, port: 8000, protocol: tcp}
+    readiness-probe:
+      http-get: {path: /health, port: 8000, scheme: HTTP}
+      initial-delay-seconds: 60
+      period-seconds: 15
+      timeout-seconds: 5
+      failure-threshold: 160
+jobs:
+  score:
+    image: {uri: docker://rockylinux/rockylinux:9}
+    mounts: {/code: code}
+    cwd: /code/app
+    env:
+      - PYTHONPATH=/code/site
+      - PATH=/code/python/bin:/usr/local/bin:/usr/bin:/bin
+      - READER_URL=http://reader:8000/v1
+      - VLLM_API_KEY=none
+      - TAG=event1
+    script: |
+      #!/bin/sh
+      T0=$(date +%s); N=$(ls cases/test/*.yaml | wc -l); M=$((N * 2)); mkdir -p /code/results
+      say() { echo "[$(date -u +%H:%M:%S) UTC, $(( ($(date +%s) - T0) / 60 )) min in] score trained: $*"; }
+      say "started on $(hostname); the small model is serving with and without the add-on. $N held-out patients x 2 = $M reviews"
+      pids=""
+      for pair in trained=nano-lora-vllm stock=nano-base-vllm; do
+        name=${pair%%=*}; prof=${pair##*=}
+        python3 -m careplan run --cases cases/test --conditions C3 --reps 1 --profile C3=$prof --tag ${TAG}_$name --allow-unfrozen \
+          > /code/results/${name}_${TAG}_test.log 2>&1 &
+        pids="$pids $!"
+      done
+      count() { n=$(ls runs/*_${TAG}_trained/results/*.json runs/*_${TAG}_stock/results/*.json 2>/dev/null | wc -l); }
+      ( while sleep 60; do count; el=$(( $(date +%s) - T0 ))
+          if [ "$n" -gt 0 ]; then left="about $(( el * (M - n) / n / 60 )) min left"; else left="no review finished yet"; fi
+          say "reviews $n of $M ($(( 100 * n / M ))%), $left"; done ) &
+      hb=$!; wait $pids; kill $hb 2>/dev/null
+      count; say "reviews finished: $n of $M; scoring against the physician-reviewed keys"
+      for name in trained stock; do
+        echo "== $name"
+        python3 scripts/h1_report.py $(ls -dt runs/*_${TAG}_$name | head -1) --cases cases/test --out /code/results/${name}_${TAG}_test.json | tail -2
+      done
+      say "SCORE TRAINED DONE: results/trained_${TAG}_test.json against results/stock_${TAG}_test.json"
+    depends-on:
+      - {name: reader, status: RUNNING}
+    policy: {timeout: {execute: 2h}}
+    resource:
+      cpu: {cores: 2}
+      memory: {size: 2GB}

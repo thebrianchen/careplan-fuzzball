@@ -1,0 +1,67 @@
+# A slice of the clinic panel on the event cluster (Nov 14, demo): 100 made-up patients from the clinic's neighbourhoods
+# (scripts/panel.py; the 100 are from the 300 our own GB10 is not reviewing), each plan reviewed by Care Plan Check, as a
+# task array of four tasks, three at a time to match the planner's three slots. Not scored: the reviews are counted by
+# neighbourhood for the clinic page.
+#   - no planner of its own: it uses the planner that splitcost.fz.yaml left serving, through that planner's Fuzzball
+#     endpoint, with an endpoint token kept as a secret (fuzzball workflow endpoints generate-token <planner endpoint id>
+#     --expiration 12h, first line, into `fuzzball secret create secret://user/planner-token --type value`). The endpoint
+#     id below changes if that workflow restarts.
+#   - before starting: fuzzball object put --force panel100.tgz fb://group/panel100.tgz   (t1..t4/, 25 patients each)
+#   - progress: each task prints "N of 25 (P%)" once a minute
+# Results: runs/*_<TAG>_panel_t? on the "code" volume.
+version: v4
+volumes:
+  code:
+    use: team4
+    name: code
+    ingress:
+      - source: {uri: "fb://group/panel100.tgz"}
+        destination: {uri: "file://panel100.tgz"}
+jobs:
+  unpack:
+    image: {uri: docker://rockylinux/rockylinux:9}
+    mounts: {/code: code}
+    script: |
+      #!/bin/sh
+      set -e
+      rm -rf /code/panel100 && mkdir -p /code/panel100 && tar -xzf /code/panel100.tgz -C /code/panel100
+      for t in 1 2 3 4; do echo "t$t: $(ls /code/panel100/t$t | wc -l) patients"; done
+    resource:
+      cpu: {cores: 1}
+      memory: {size: 1GB}
+  panel:
+    image: {uri: docker://rockylinux/rockylinux:9}
+    mounts: {/code: code}
+    cwd: /code/app
+    env:
+      - PYTHONPATH=/code/site
+      - PATH=/code/python/bin:/usr/local/bin:/usr/bin:/bin
+      - PLANNER_URL=https://endpoint-7ac60866cfc56d96be03cbc01dbab2cf1c5d5c78.endpoints.fb-hack.civilfritz.net/v1
+      - VLLM_API_KEY=secret://user/planner-token
+      - REQUESTS_CA_BUNDLE=/run/fuzzball-substrate/trusted-certs/root-ca.crt
+      - PROFILE=super35-vllm-think
+      - TAG=event1
+    script: |
+      #!/bin/sh
+      T0=$(date +%s); D=/code/panel100/t$FB_TASK_ID; M=$(ls $D | wc -l)
+      say() { echo "[$(date -u +%H:%M:%S) UTC, $(( ($(date +%s) - T0) / 60 )) min in] panel task $FB_TASK_ID: $*"; }
+      code=$(curl -s -m 20 --cacert $REQUESTS_CA_BUNDLE -o /dev/null -w '%{http_code}' -H "Authorization: Bearer $VLLM_API_KEY" $PLANNER_URL/models)
+      [ "$code" = 200 ] || { say "FAILED: the planner's endpoint answered $code; no review was run"; exit 1; }
+      say "started on $(hostname); planner reached through its endpoint; $M patients"
+      python3 -m careplan run --cases $D --conditions C2 --reps 1 --signals --allow-unfrozen \
+        --profile C2=$PROFILE --tag ${TAG}_panel_t$FB_TASK_ID > /code/results/panel_${TAG}_t$FB_TASK_ID.log 2>&1 &
+      pid=$!
+      count() { n=$(ls runs/*_${TAG}_panel_t$FB_TASK_ID/results/*.json 2>/dev/null | wc -l); bad=$(grep -L '"error": null' runs/*_${TAG}_panel_t$FB_TASK_ID/results/*.json 2>/dev/null | wc -l); }
+      ( while sleep 60; do count; el=$(( $(date +%s) - T0 ))
+          if [ "$n" -gt 0 ]; then left="about $(( el * (M - n) / n / 60 )) min left"; else left="no review finished yet"; fi
+          say "reviews $n of $M ($(( 100 * n / M ))%), $bad failed, $left"; done ) &
+      hb=$!; wait $pid; rc=$?; kill $hb 2>/dev/null
+      count; say "finished: $n of $M reviews, $bad failed, exit $rc"
+      exit $rc
+    depends-on:
+      - {name: unpack, status: FINISHED}
+    task-array: {start: 1, end: 4, concurrency: 3}
+    policy: {timeout: {execute: 3h}}
+    resource:
+      cpu: {cores: 1}
+      memory: {size: 2GB}

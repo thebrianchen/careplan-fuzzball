@@ -16,17 +16,41 @@ jobs:
       - USER=careplan
       - PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
       - OUT=/code/adapters/lora-event1
+      - TRAIN=data/synth/sft_e1_distill_gold/train.jsonl
+      - LOG=/code/results/train_event1.log
       - EPOCHS=1
+      - BEAT=60
     script: |
       #!/bin/bash
+      # Progress goes to this job's own log once a minute: the phase, then "step N of M (P%), time training, time left".
+      # The trainer's full output is kept in $LOG on the code volume (its progress bar redraws in place, so it is not echoed here).
       set -e
+      T0=$(date +%s)
+      say() { echo "[$(date -u +%H:%M:%S) UTC, $(( ($(date +%s) - T0) / 60 )) min in] train: $*"; }
+      n=$(( $(wc -l < $TRAIN) ))
+      say "started on $(hostname): $n examples, $EPOCHS pass, $(( (n + 7) / 8 )) steps of 8 examples (about 14 s an example on our own GB10)"
       pip install -q --no-index --find-links /code/bundle/wheels --no-deps --target /tmp/pkgs peft==0.21.2 accelerate==1.15.0
       export PYTHONPATH=/tmp/pkgs
-      mkdir -p "$(dirname $OUT)"
-      python3 training/train_lora.py --model /models/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16 --stream-load \
-        --targets q_proj,k_proj,v_proj,o_proj,in_proj --train data/synth/sft_e1_distill_gold/train.jsonl \
-        --max-len 10240 --epochs $EPOCHS --out $OUT
+      mkdir -p "$(dirname $OUT)" "$(dirname $LOG)"
+      [ -f $LOG ] && mv $LOG $LOG.before-$(date -u +%H%M)   # a restart: keep the earlier output, start a clean one
+      say "packages installed; reading the examples and loading the 59 GB model comes next, with no step count until it is done"
+      ( while sleep $BEAT; do
+          bar=$(tr '\r' '\n' < $LOG 2>/dev/null | grep -oE '[0-9]+%\|[^|]*\| *[0-9]+/[0-9]+ \[[0-9:]+<[0-9:?]+' | tail -1)
+          if [ -n "$bar" ]; then
+            say "$(echo "$bar" | sed -E 's/([0-9]+)%\|[^|]*\| *([0-9]+)\/([0-9]+) \[([0-9:]+)<([0-9:?]+)/step \2 of \3 (\1%), \4 training, about \5 left/'), latest $(grep -oE "'loss': [0-9.]+" $LOG | tail -n 1 | tr -d "':")"
+          else
+            say "loading, no step yet; latest: $(tr '\r' '\n' < $LOG 2>/dev/null | grep -v '^ *$' | tail -1 | cut -c1-160)"
+          fi
+        done ) &
+      HB=$!; trap 'kill $HB 2>/dev/null' EXIT
+      if ! python3 -u training/train_lora.py --model /models/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16 --stream-load \
+        --targets q_proj,k_proj,v_proj,o_proj,in_proj --train $TRAIN \
+        --max-len 10240 --epochs $EPOCHS --out $OUT > $LOG 2>&1; then
+        say "FAILED; the end of $LOG:"; tr '\r' '\n' < $LOG | grep -v '^ *$' | tail -n 30; exit 1
+      fi
+      say "training finished: $(grep -oE "'train_runtime': [0-9.]+|'train_loss': [0-9.]+" $LOG | tail -n 2 | tr '\n' ' ')"
       ls -la $OUT | grep adapter
+      say "add-on saved to $OUT; full trainer output in $LOG"
     policy: {timeout: {execute: 6h}}
     resource:
       cpu: {cores: 8}

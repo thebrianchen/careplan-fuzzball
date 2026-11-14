@@ -1,0 +1,19 @@
+# Question for the boundary (Nov 14): does `network: {isolated: true}` on a job cut outbound internet, and can such a
+# job still reach the Fuzzball API with the token every job is given? Two jobs, same image, same checks.
+version: v4
+jobs:
+  plain:
+    image: {uri: docker://rockylinux/rockylinux:9}
+    script: &probe |
+      #!/bin/sh
+      echo "job $FB_JOB_NAME"; echo "token in env: $([ -n "$FB_TOKEN" ] && echo yes || echo no)"
+      for u in https://example.com https://pypi.org; do printf "%s -> " $u; curl -s -m 8 -o /dev/null -w "%{http_code}\n" $u || echo unreachable; done
+      printf "dns example.com -> "; getent hosts example.com | head -1 || echo "no answer"
+      printf "fuzzball api -> "; curl -s -k -m 8 -o /dev/null -w "%{http_code}\n" -H "Authorization: Bearer $FB_TOKEN" "$FB_OPENAPI_URL/v4/workflows" || echo unreachable
+      ip -o addr 2>/dev/null | awk '{print $2, $4}' | head -6
+    resource: {cpu: {cores: 1}, memory: {size: 1GB}}
+  isolated:
+    image: {uri: docker://rockylinux/rockylinux:9}
+    script: *probe
+    network: {isolated: true}
+    resource: {cpu: {cores: 1}, memory: {size: 1GB}}

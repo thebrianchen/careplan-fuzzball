@@ -2,7 +2,9 @@
 # timings) and runs/ (every card and leak run) on the "code" volume, and exports both to the object cache, where
 # `fuzzball object get fb://group/results.tgz` fetches them. In case the export does not work, the small archive
 # is also printed to the job log in base64 between two marker lines (scripts/morning.sh pull decodes it).
-# Safe to run at any time and as often as wanted; it only reads.
+# Safe to run at any time; it only reads. The export refuses to overwrite an object whose content changed, so do not
+# start this file as it is twice: scripts/pull_via_mini.sh and `morning.sh pull` give each run its own object names
+# (fb://group/pull/results-<time>.tgz, runs-<time>.tgz) before starting it.
 version: v4
 volumes:
   code:
@@ -23,8 +25,9 @@ jobs:
       mkdir -p out results runs adapters
       tar -czf out/results.tgz results
       # the trained add-on's weights stay on the volume; its config and logs come along
+      # both the leak test and the case scores write under runs/ (app/runs points there)
       tar -czf out/runs.tgz --exclude='*.safetensors' --exclude='checkpoint-*' runs adapters
-      ls -l out; du -sh results runs adapters
+      ls -l out results; du -sh results runs adapters; ls runs | wc -l
       if [ $(stat -c %s out/results.tgz) -lt 4000000 ]; then
         echo "-----BEGIN RESULTS-----"; base64 -w 76 out/results.tgz; echo "-----END RESULTS-----"
       else
