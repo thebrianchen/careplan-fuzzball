@@ -1,0 +1,42 @@
+# The public zone's model: Nemotron 3 Nano 30B on the second GB10. It reads resource web pages and returns
+# records; it never sees patient data (this workflow mounts only the models volume).
+# Same vLLM image as the planner. Other workflows reach it at
+#   http://reader.svc.<this-workflow-id>.<account-id>.fuzzball:8000/v1      (set as READER_URL)
+version: v4
+volumes:
+  models: {use: team4, name: models}
+services:
+  reader:
+    image: {uri: docker://vllm/vllm-openai:v0.32.0}
+    mounts: {/models: models}
+    env:
+      - HOME=/models/home
+      - USER=careplan
+      - XDG_CACHE_HOME=/models/home/.cache
+      - HF_HUB_OFFLINE=1
+      - MAX_JOBS=2
+      - NVCC_THREADS=1
+    script: |
+      #!/bin/bash
+      mkdir -p "$XDG_CACHE_HOME"
+      exec vllm serve /models/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16 \
+        --served-model-name nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16 \
+        --max-model-len 32768 --gpu-memory-utilization 0.80 \
+        --enable-auto-tool-choice --tool-call-parser qwen3_coder \
+        --host 0.0.0.0 --port 8000
+    resource:
+      cpu: {cores: 8}
+      memory: {size: 100GB}
+      devices: {nvidia.com/gpu: 1}
+    network:
+      ports:
+        - {name: openai, port: 8000, protocol: tcp}
+      endpoints:
+        - {name: reader, port-name: openai, protocol: http, type: subdomain, scope: group}
+    persist: true
+    readiness-probe:
+      http-get: {path: /health, port: 8000, scheme: HTTP}
+      initial-delay-seconds: 60
+      period-seconds: 15
+      timeout-seconds: 5
+      failure-threshold: 160

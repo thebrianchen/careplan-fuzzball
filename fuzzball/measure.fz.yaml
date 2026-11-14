@@ -58,12 +58,13 @@ jobs:
       - PATH=/code/python/bin:/usr/local/bin:/usr/bin:/bin
       - PLANNER_URL=http://planner:8000/v1
       - VLLM_API_KEY=none
+      - PROFILE=super35-vllm
       - TAG=event1
       - SHARDS=4
       - REPS=3
     script: |
       #!/bin/sh
-      python3 -m leaktest.run --cases cases/dev --reps $REPS --profile super35-vllm \
+      python3 -m leaktest.run --cases cases/dev --reps $REPS --profile $PROFILE \
         --shard $((FB_TASK_ID - 1))/$SHARDS --tag $TAG --out-root /code/runs
     depends-on:
       - {name: planner, status: RUNNING}
@@ -98,13 +99,14 @@ jobs:
       - PATH=/code/python/bin:/usr/local/bin:/usr/bin:/bin
       - PLANNER_URL=http://planner:8000/v1
       - VLLM_API_KEY=none
+      - PROFILE=super35-vllm
       - TAG=event1
       - REPS=3
     script: |
       #!/bin/sh
       for set in test dev; do
         python3 -m careplan run --cases cases/$set --conditions C0,C2 --reps $REPS --signals --allow-unfrozen \
-          --profile C0=super35-vllm --profile C2=super35-vllm --tag ${TAG}_$set > /code/results/scores_${TAG}_$set.log 2>&1
+          --profile C0=$PROFILE --profile C2=$PROFILE --tag ${TAG}_$set > /code/results/scores_${TAG}_$set.log 2>&1
         python3 scripts/h1_report.py $(ls -dt runs/*_${TAG}_$set | head -1) --cases cases/$set --out /code/results/scores_${TAG}_$set.json | tail -3
       done
     depends-on:
