@@ -1,0 +1,106 @@
+{
+  "places_tract_il.csv": {
+    "source": "places_tract",
+    "url": "https://data.cdc.gov/resource/yjkw-uj5s.csv?$where=stateabbr=%27IL%27&$limit=50000",
+    "sha256": "0a0c3e7623f12ccaace4aa938de403a01bbb342c2d67f5975d92a0c72541d40a",
+    "bytes": 3132165,
+    "downloaded": "2026-10-25T15:21:45+00:00",
+    "what": "CDC PLACES census tract data (GIS-friendly), 2025 release, Illinois only"
+  },
+  "fara_2019.zip": {
+    "source": "fara_2019",
+    "url": "https://www.ers.usda.gov/media/5627/2019-large-retailer-access-map-lram-formerly-known-as-the-food-access-research-atlas-fara-data.zip?v=69176",
+    "sha256": "6a56bb6ab1f35874b850257f0d3f3657e335af1d2d12bf6a64b4868e5e54465d",
+    "bytes": 9072578,
+    "downloaded": "2026-10-25T15:21:46+00:00",
+    "what": "USDA Food Access Research Atlas 2019 (now 'LRAM'), on 2010 census tracts"
+  },
+  "tab20_tract20_tract10_natl.txt": {
+    "source": "tract_rel_2020_2010",
+    "url": "https://www2.census.gov/geo/docs/maps-data/data/rel2020/tract/tab20_tract20_tract10_natl.txt",
+    "sha256": "3c2ea8e13bf359349cc6ee042980e539d0a8032328ce8c5ae10679b9000e3d17",
+    "bytes": 18686287,
+    "downloaded": "2026-10-25T15:21:48+00:00",
+    "what": "Census 2020-to-2010 tract relationship file (national, pipe-delimited)"
+  },
+  "2020_gaz_tracts_17.txt": {
+    "source": "gazetteer_tracts",
+    "url": "https://www2.census.gov/geo/docs/maps-data/data/gazetteer/2020_Gazetteer/2020_gaz_tracts_17.txt",
+    "sha256": "b99ff962b8808995d344f24b838034fff89c6c2ea2b371881e92aa1a00e3e38b",
+    "bytes": 656456,
+    "downloaded": "2026-10-25T15:21:49+00:00",
+    "what": "2020 Census Gazetteer: tract internal points (lat/lon)"
+  },
+  "gtfs_cta.zip": {
+    "source": "gtfs_cta",
+    "url": "https://www.transitchicago.com/downloads/sch_data/google_transit.zip",
+    "sha256": "a9372be5b70fcee4ed98c9476433f86065637a9a500b8af6afbb84d000ef2746",
+    "bytes": 68738293,
+    "downloaded": "2026-10-25T15:21:52+00:00",
+    "what": "CTA GTFS schedule"
+  },
+  "gtfs_pace.zip": {
+    "source": "gtfs_pace",
+    "url": "https://www.pacebus.com/sites/default/files/2026-08/GTFS.zip",
+    "sha256": "f70c2e58850897c58da5c3bac1d92b07ee3196f42557e61188e3c953bc7fc00d",
+    "bytes": 8207869,
+    "downloaded": "2026-10-25T15:21:52+00:00",
+    "what": "Pace GTFS schedule (the URL changes with each feed release)"
+  },
+  "acs_b08201_17031.json": {
+    "source": "acs_vehicles",
+    "url": "https://api.census.gov/data/2023/acs/acs5?get=NAME,B08201_001E,B08201_002E&for=tract:*&in=state:17%20county:031",
+    "sha256": "412d6c5c76da51f0269d7d7c056bd5f4277b58bb8005c27d2d04c1026b4bc0ff",
+    "bytes": 105836,
+    "downloaded": "2026-10-25T15:37:08+00:00",
+    "what": "ACS 5-year B08201: households (001E) and households with no vehicle (002E), by 2020 tract"
+  },
+  "chi_warming_centers.json": {
+    "source": "chi_warming",
+    "url": "https://data.cityofchicago.org/resource/h243-v2q5.json?$limit=5000",
+    "sha256": "2c5c455b5aca2772853c53a97f450f24c5f7e4276ff0b17d8c5d90f5e450df1d",
+    "bytes": 147811,
+    "downloaded": "2026-10-26T02:16:34+00:00",
+    "what": "City of Chicago warming centers (libraries, parks, community centers) with hours"
+  },
+  "chi_cooling_centers.json": {
+    "source": "chi_cooling",
+    "url": "https://data.cityofchicago.org/resource/msrk-w9ih.json?$limit=5000",
+    "sha256": "3c96e3b17ce8a301e78707df8f3552c0fc145f2025b12f76999bf8428a61582e",
+    "bytes": 72884,
+    "downloaded": "2026-10-26T02:16:37+00:00",
+    "what": "City of Chicago cooling centers with hours"
+  },
+  "chi_libraries.json": {
+    "source": "chi_libraries",
+    "url": "https://data.cityofchicago.org/resource/x8fc-8rcq.json?$limit=500",
+    "sha256": "b01d90b8f4a4dacc503c7751fb79ccf691c73848cdb58cedc38a35489c77e40f",
+    "bytes": 53906,
+    "downloaded": "2026-10-26T02:16:39+00:00",
+    "what": "Chicago Public Library branches: hours, phone (free computers and wifi)"
+  },
+  "hrsa_health_center_sites.csv": {
+    "source": "hrsa_sites",
+    "url": "https://data.hrsa.gov/DataDownload/DD_Files/Health_Center_Service_Delivery_and_LookAlike_Sites.csv",
+    "sha256": "11d3b4ed7f087a742d10fc9d97c02844ee83df796ae4b6e52cff3279174628e9",
+    "bytes": 14178119,
+    "downloaded": "2026-10-26T02:16:40+00:00",
+    "what": "HRSA health center (FQHC + look-alike) service delivery sites, national"
+  },
+  "snap_retailers_2005_2025.zip": {
+    "source": "snap_retailers",
+    "url": "https://www.fns.usda.gov/sites/default/files/resource-files/snap-retailer-locator-data2005-2025.zip",
+    "sha256": "872a6f814a63514a1f1b0c4517a90309a9fbb01d97d6e4dbb1e8b20421c08cce",
+    "bytes": 24036753,
+    "downloaded": "2026-10-26T02:16:46+00:00",
+    "what": "USDA FNS SNAP retailer locator data 2005-2025 (current = no end date)"
+  },
+  "plentiful_chicago.json": {
+    "source": "plentiful_chicago",
+    "url": "https://directory.plentiful.org/illinois/chicago",
+    "sha256": "f772ae15d011b2887f09ef7290afb7ee32fb41cf6f17e4302a2f1a160411c3ce",
+    "bytes": 62972,
+    "downloaded": "2026-10-26T02:28:27+00:00",
+    "what": "Plentiful public directory: Chicago food pantry locations (no hours)"
+  }
+}

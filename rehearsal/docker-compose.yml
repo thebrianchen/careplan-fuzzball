@@ -1,0 +1,77 @@
+# REHEARSAL of the two-box boundary without Fuzzball (no Fuzzball access until kickoff).
+# Docker networks stand in for the two boxes and the firewall; identity_proxy.py stands in for
+# Fuzzball's endpoint proxy; model_shim.py stands in for on-box vLLM. The planner and gateway run
+# unmodified, so Friday night is a swap from this file to fuzzball/*.fz.yaml.
+#
+#   docker compose -f rehearsal/docker-compose.yml --env-file .env up --build -d
+#   open "http://localhost:8443/?token=rehearsal-clinician"
+#   ./rehearsal/check.sh
+#
+# Tokens below are rehearsal-only placeholders, not secrets.
+name: careplan-rehearsal
+
+x-image: &image
+  image: careplan:dev
+  build: {context: .., dockerfile: Dockerfile}
+
+networks:
+  box2_private: {internal: true}      # planner + model: no route out (box 2 has no internet)
+  box2_model_egress: {}               # REHEARSAL ONLY: lets the model shim reach OpenRouter
+  crossing_private: {internal: true}  # planner <-> endpoint proxy (both on box 2)
+  crossing_public: {internal: true}   # endpoint proxy <-> box 1 (box 1 may reach box 2 only here)
+  box1_public: {}                     # box 1: internet (allowlist enforced by nftables on the real box)
+  frontdoor: {}                       # clinician browser -> endpoint proxy
+
+volumes:
+  keys: {}                            # the proxy's JWKS, mounted where Fuzzball puts node trust keys
+
+services:
+  llm:                                # box 2; on the real box this is vLLM serving Super NVFP4
+    <<: *image
+    command: ["python", "rehearsal/model_shim.py"]
+    environment: [OPENROUTER_API_KEY]
+    networks: [box2_private, box2_model_egress]
+
+  planner:                            # box 2: card backend + planner (fuzzball/zone-private.fz.yaml "planner")
+    <<: *image
+    command: ["python", "-m", "careplan.serve"]
+    environment:
+      CAREPLAN_PROFILE: super-noreason
+      CAREPLAN_MODEL_BASE_URL: http://llm:8000/v1
+      CAREPLAN_GATEWAY_URL: http://proxy:8443/gateway
+      CAREPLAN_GATEWAY_TOKEN: rehearsal-svc-private
+    networks: [box2_private, crossing_private]
+    depends_on: [llm, proxy]
+
+  proxy:                              # box 2 control plane: stand-in for Fuzzball's endpoint proxy
+    <<: *image
+    command: ["python", "rehearsal/identity_proxy.py"]
+    user: root                        # writes the JWKS into the shared volume
+    environment:
+      PROXY_JWKS_OUT: /keys/signing-keys.json
+      PROXY_CALLERS: >-
+        {"rehearsal-svc-private": {"sub": "svc-private", "account_id": "zone-private", "routes": ["gateway"]},
+         "rehearsal-clinician": {"sub": "clinician-1", "account_id": "zone-private", "routes": ["card"]},
+         "rehearsal-svc-public": {"sub": "svc-public", "account_id": "zone-public", "routes": ["gateway"]}}
+      PROXY_ROUTES: >-
+        {"gateway": {"upstream": "http://gateway:8090", "endpoint_id": "ep-gateway-rehearsal"},
+         "card": {"upstream": "http://planner:8080", "endpoint_id": "ep-card-rehearsal"}}
+    volumes: ["keys:/keys"]
+    ports: ["8443:8443"]
+    networks: [frontdoor, crossing_private, crossing_public]
+
+  gateway:                            # box 1: the one crossing (fuzzball/zone-public.fz.yaml "gateway")
+    <<: *image
+    command: ["python", "-m", "careplan.gateway"]
+    environment:
+      FB_ENDPOINT_ID: ep-gateway-rehearsal
+      GATEWAY_ALLOWED_SUBS: svc-private
+      GATEWAY_RATE_PER_MINUTE: "30"
+    volumes: ["keys:/run/fuzzball-substrate/trusted-certs:ro"]
+    networks: [crossing_public, box1_public]
+    depends_on: [proxy]
+
+  attacker:                           # a fully compromised box 1 job, for the assumed-breach probes
+    <<: *image
+    command: ["sleep", "infinity"]
+    networks: [box1_public, crossing_public]
