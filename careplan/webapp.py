@@ -121,6 +121,16 @@ HELP_KM = 1.6                                     # "near" a neighborhood: withi
 PANEL_EDGE = 0.012                                # degrees beyond the outermost neighborhood centers that the map still shows
 
 
+def _nearest_of_each_kind(found: list, each: int = 2) -> list:
+    """The nearest places of every kind, nearest first: a pantry is not crowded out by three closer groceries."""
+    kept, seen = [], collections.Counter()
+    for d, x in sorted(found, key=lambda f: f[0]):
+        if seen[x.kind] < each:
+            seen[x.kind] += 1
+            kept.append((d, x))
+    return kept
+
+
 def panel(tracts, resources, county: dict[str, dict], samples: bool) -> dict | None:
     """The published counts by neighborhood, each joined with its place on the map, its public figures and how many places
     that could help are near. The reviews' file wins; the answer-key stand-in is used only when samples are on."""
@@ -150,7 +160,7 @@ def panel(tracts, resources, county: dict[str, dict], samples: bool) -> dict | N
                      "places_near": {barrier: len(found) for barrier, found in near.items()},
                      "kinds_near": {barrier: dict(collections.Counter(x.kind for _, x in found)) for barrier, found in near.items()},
                      "nearest": {barrier: [{"name": x.name, "kind": x.kind, "miles": round(d * 0.621371, 1), "address": x.address,
-                                            "hours": x.hours_text(), "phone": x.phone} for d, x in sorted(found, key=lambda f: f[0])[:3]]
+                                            "hours": x.hours_text(), "phone": x.phone} for d, x in _nearest_of_each_kind(found)]
                                  for barrier, found in near.items()},
                      "public_points_to": sorted({b for key, rule in RULES["tract_fields"].items() if _cmp(t.get(key), rule["rule"]) for b in rule["supports"]}),
                      "facts": hood_facts(t, county)})
@@ -162,7 +172,8 @@ def panel(tracts, resources, county: dict[str, dict], samples: bool) -> dict | N
                         for x in resources.resources if x.need == need and inside(x)]
               for barrier, (need, _) in sample.PLACES.items()} if rows else {}
     programs: dict[str, list] = collections.defaultdict(list)
-    for prog in yaml.safe_load(PROGRAMS_PATH.read_text())["programs"]:
+    # A clinic reads these for its whole panel, so the programs that apply to any patient come before the dialysis-only ones.
+    for prog in sorted(yaml.safe_load(PROGRAMS_PATH.read_text())["programs"], key=lambda g: "dialysis" in g["eligible_when"]):
         for barrier in prog["needs"]:
             programs[barrier].append({k: prog.get(k) for k in ("id", "category", "eligible_when", "how_to_start", "caveats", "source_url", "confidence")})
     return {"places": places, "programs": programs,

@@ -1,1 +1,32 @@
 /* Clinic page: the "Need against help" card (.cgaps). Its rules start with .cgaps. */
+.cgaps .cgaps-says{font-size:14px;color:var(--ink2);margin:-4px 0 12px;max-width:72ch}
+.cgaps .cgaps-list{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.cgaps .cgaps-row{border-radius:9px;padding:2px 0 4px}
+.cgaps .cgaps-row.on{background:#f4f9f8;box-shadow:inset 3px 0 0 var(--brand)}
+.cgaps .cgaps-go{display:grid;grid-template-columns:18px minmax(0,1fr) auto;column-gap:10px;row-gap:1px;align-items:baseline;width:100%;padding:7px 10px 4px;border:0;border-radius:9px;background:none;text-align:left;white-space:normal;color:var(--ink2);font-size:13.5px}
+.cgaps .cgaps-go:hover:not(:disabled){background:#f4f6f8}
+.cgaps .cgaps-row.on .cgaps-go:hover:not(:disabled){background:none}
+.cgaps .cgaps-n{font-size:12px;font-weight:700;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
+.cgaps .cgaps-where{font-weight:600;color:var(--ink);font-size:14.5px;min-width:0}
+.cgaps .cgaps-where span{font-weight:500;color:var(--ink2)}
+.cgaps .cgaps-score{font-size:13px;font-weight:600;color:var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums}
+.cgaps .cgaps-nums{grid-column:2/-1;line-height:1.45}
+.cgaps .cgaps-none{color:var(--risk);font-weight:600}
+.cgaps .cgaps-nohelp{color:var(--muted)}
+.cgaps .cgaps-move{display:none;margin:4px 10px 4px 38px;padding:8px 12px;background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--brand);border-radius:8px}
+.cgaps .cgaps-row.open .cgaps-move,.cgaps .cgaps-row.on .cgaps-move,.cgaps .cgaps-row:focus-within .cgaps-move{display:block}
+.cgaps .cgaps-k{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--brand-ink);margin-bottom:2px}
+.cgaps .cgaps-general{display:inline-block;margin-left:6px;font-size:11px;font-weight:600;letter-spacing:0;text-transform:none;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:0 7px}
+.cgaps .cgaps-do{font-size:14.5px;color:var(--ink);line-height:1.45}
+.cgaps .cgaps-do b{font-weight:600}
+.cgaps .cgaps-fine{font-size:12.5px;color:var(--muted);margin-top:3px;overflow-wrap:anywhere}
+.cgaps .cgaps-move .cgaps-none{font-size:13.5px;margin-bottom:6px}
+.cgaps .cgaps-empty{font-size:14px;color:var(--muted);margin-bottom:10px}
+.cgaps>.hint{margin:10px 0 0}
+@media (max-width:620px){
+  .cgaps .cgaps-go{grid-template-columns:18px minmax(0,1fr)}
+  .cgaps .cgaps-score{grid-column:2}
+  .cgaps .cgaps-move{margin-left:10px}
+}
+.cgaps .cgaps-same{margin:0 10px 2px 38px;font-size:12.5px;color:var(--muted)}
+.cgaps .cgaps-row.on .cgaps-same,.cgaps .cgaps-row:focus-within .cgaps-same{display:none}

@@ -270,7 +270,9 @@ class WebAppTests(unittest.TestCase):
         self.assertTrue(41 < t["lat"] < 43 and t["facts"] and set(t["places_near"]) == {"food_access", "utilities", "med_cost"})
         self.assertEqual(set(t) & {"name", "mrn", "dob", "address", "patient_id"}, set())  # counts and public figures only
         self.assertEqual(sum(t["kinds_near"]["food_access"].values()), t["places_near"]["food_access"])
-        self.assertLessEqual(len(t["nearest"]["food_access"]), 3)
+        kinds = [x["kind"] for x in t["nearest"]["food_access"]]
+        self.assertEqual(set(kinds), set(t["kinds_near"]["food_access"]))                  # every kind that is near is represented
+        self.assertNotIn("dialysis", p["programs"]["food_access"][0]["eligible_when"])     # a program for any patient leads
         self.assertTrue(set(t["public_points_to"]) <= set(p["public_kinds"]) == {"food_access", "housing", "transport", "utilities"})
         self.assertIn("how_to_start", p["programs"]["transport"][0])
 
