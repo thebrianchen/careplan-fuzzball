@@ -56,7 +56,7 @@ class WebAppTests(unittest.TestCase):
 
     def setUp(self):
         self.clinic.planner = lambda fresh=False: {"profile": "fake-stream", "model": "fake", "host": "test", "hosted": False,
-                                                   "answers": True, "why": None}
+                                                   "answers": True, "why": None, "skipped": []}
         self.post("reset/D001", {})
 
     def get(self, path):
@@ -141,7 +141,7 @@ class WebAppTests(unittest.TestCase):
 
     def test_live_review_fails_at_once_when_the_planner_does_not_answer(self):
         self.clinic.planner = lambda fresh=False: {"profile": "fake-stream", "model": "fake", "host": "test", "hosted": False,
-                                                   "answers": False, "why": "test did not answer"}
+                                                   "answers": False, "why": "test did not answer", "skipped": []}
         evs = self.review("mode=live")
         self.assertEqual((len(evs), evs[0]["type"], evs[0]["ok"]), (1, "end", False))
         self.assertIn("not answering", evs[0]["error"])
@@ -162,6 +162,28 @@ class WebAppTests(unittest.TestCase):
         self.assertIn("OPENROUTER_API_KEY", pl["why"])
         self.assertEqual((len(evs), evs[0]["type"], evs[0]["ok"]), (1, "end", False))
         self.assertIn(pl["why"], evs[0]["error"])
+
+    def test_the_first_planner_that_answers_is_used_and_the_page_is_told_which(self):
+        del self.clinic.planner                                            # the real check, not the stub
+        local = type("C", (), {"p": ModelProfile(name="event", model="m", base_url="http://cluster.internal:8000/v1"), "key": ""})()
+        client, self.app.client = self.app.client, local
+        self.clinic.fallbacks = ["http://spark.internal:8000/v1"]
+        up = {"spark.internal"}
+        answer = lambda url, **kw: mock.Mock(ok=any(host in url for host in up))
+        try:
+            with mock.patch("requests.get", side_effect=answer):
+                pl = self.clinic.planner(fresh=True)
+                self.assertEqual((pl["answers"], pl["host"], pl["skipped"]), (True, "spark.internal:8000", ["cluster.internal:8000 did not answer"]))
+                self.assertEqual(local.p.base_url, "http://spark.internal:8000/v1")          # where the next review goes
+                up.add("cluster.internal")                                                    # the first choice comes back
+                pl = self.clinic.planner(fresh=True)
+                self.assertEqual((pl["host"], pl["skipped"], local.p.base_url), ("cluster.internal:8000", [], "http://cluster.internal:8000/v1"))
+                up.clear()
+                pl = self.clinic.planner(fresh=True)
+                self.assertEqual((pl["answers"], pl["skipped"]), (False, []))
+                self.assertEqual(pl["why"], "cluster.internal:8000 did not answer; spark.internal:8000 did not answer")
+        finally:
+            self.app.client, self.clinic.fallbacks = client, []
 
     def test_a_saved_run_names_its_model_and_the_public_side(self):
         evs = self.review("mode=recorded&speed=1000")

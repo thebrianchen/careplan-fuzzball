@@ -14,7 +14,9 @@ Templates: careplan/web/templates (Jinja2), assets: careplan/web/static (served 
 POST /check/<case_id>  run again; returns the result JSON
 
 Environment (all optional):
-  CAREPLAN_PROFILE        model profile in config/models.yaml (default super-noreason)
+  CAREPLAN_PROFILE        model profile in config/models.yaml (default super35-vllm-think: the event planner, at PLANNER_URL
+                          or http://localhost:8000/v1)
+  CAREPLAN_PLANNER_FALLBACKS  the clinic app's other planner endpoints, comma-separated, tried in order when the first does not answer
   CAREPLAN_MODEL_BASE_URL override the profile's base URL (e.g. http://llm:8000/v1 for on-box vLLM)
   CAREPLAN_MODEL_API_KEY_ENV  env var holding the model key (default: the profile's)
   CAREPLAN_GATEWAY_URL    if set, find_resources crosses to box 1 over HTTP (through the endpoint proxy)
@@ -84,7 +86,7 @@ def replay_recording(name: str, write) -> dict | None:
 
 
 def make_client() -> ChatClient:
-    p = load_profiles()[os.environ.get("CAREPLAN_PROFILE", "super-noreason")]
+    p = load_profiles()[os.environ.get("CAREPLAN_PROFILE", "super35-vllm-think")]
     changes = {}
     if os.environ.get("CAREPLAN_MODEL_BASE_URL"):
         changes["base_url"] = os.environ["CAREPLAN_MODEL_BASE_URL"]

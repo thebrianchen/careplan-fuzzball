@@ -26,10 +26,14 @@ real review that was saved earlier, and labels it as a saved run. Each flag show
 dialysis, the visits he missed, and how his neighborhood compares with the county. Click a line of evidence to see where
 it comes from. Accept, edit or dismiss each flag, then prepare the patient handout.
 
-The other 31 visits have no saved run. To review them, start the server with a planner profile from `config/models.yaml`:
+The other 31 visits have no saved run, so they need the planner. The server looks for the event planner (Nemotron 3.5
+Super on vLLM) at `PLANNER_URL`, or at `http://localhost:8000/v1` when that is not set. On the cluster, `PLANNER_URL` is the
+planner service or its endpoint. `CAREPLAN_PLANNER_FALLBACKS` lists other planner endpoints, separated by commas. The
+server uses the first endpoint that answers, and the System page says which one. When no planner answers, the page says
+so and offers the saved run.
 
 ```sh
-CAREPLAN_PROFILE=super35-vllm-think VLLM_API_KEY=none PLANNER_URL=http://<planner host>:8000/v1 .venv/bin/python -m careplan.serve
+PLANNER_URL=http://<cluster planner>:8000/v1 CAREPLAN_PLANNER_FALLBACKS=http://<our GB10>:8000/v1 .venv/bin/python -m careplan.serve
 ```
 
 The map draws the bus and train trip only when the transit schedule cache is on the machine. To build the cache, run

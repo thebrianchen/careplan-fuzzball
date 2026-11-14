@@ -21,6 +21,7 @@ import copy
 import functools
 import ipaddress
 import json
+import os
 import statistics
 import time
 from pathlib import Path
@@ -119,7 +120,9 @@ class Clinic:
         self.shown: dict[str, dict] = {}                     # case_id -> the review as first shown: doc, assessment, source
         self.runs: collections.deque = collections.deque(maxlen=200)
         self.activity: collections.deque = collections.deque(maxlen=200)
-        self._probe: tuple[float, str | None] = (0.0, None)  # when the endpoint was last probed, and why it did not answer
+        self._probe: tuple[float, int, list] = (0.0, 0, [])   # when the endpoints were last probed, for which profile, and what was passed over
+        self._own_url: dict[int, str] = {}
+        self.fallbacks = [u.strip() for u in os.environ.get("CAREPLAN_PLANNER_FALLBACKS", "").split(",") if u.strip()]
         self.county = county(app.tracts)
 
     @functools.cached_property
@@ -140,27 +143,43 @@ class Clinic:
         from .serve import REC_DIR
         return REC_DIR / f"stream_{cid}.json"
 
-    def planner(self, fresh: bool = False) -> dict:
-        """Can the planner be asked for a review? `why` says why not, in words that follow "The planner is not answering: ".
-        Reachability only: a serving engine can answer the probe and still not generate."""
+    def _unusable(self, base_url: str) -> str | None:
+        """Why this endpoint cannot be asked for a review, or None when it answers. Reachability only: a serving engine can
+        answer the probe and still not generate."""
         p, key = self.app.client.p, getattr(self.app.client, "key", "")
-        url = urlparse(p.base_url)
-        host, hosted = url.netloc or p.base_url or "none", _hosted(url.hostname or "")
-        if hosted and not key:       # a hosted /models listing answers without a key, so the probe alone would say "answering"
+        url = urlparse(base_url)
+        if _hosted(url.hostname or "") and not key:   # a hosted /models listing answers without a key, so a probe would say "answering"
             env = getattr(p, "api_key_env", "")
-            why = f"no API key is set ({env})" if env else "no API key is set"
-        else:
-            at, why = self._probe
-            if fresh or time.time() - at > 15:
-                try:
-                    import requests
-                    ok = requests.get(p.base_url.rstrip("/") + "/models", timeout=2.5,
-                                      headers={"Authorization": f"Bearer {key}"} if key else {}).ok
-                except Exception:
-                    ok = False
-                why = None if ok else f"{host} did not answer"
-                self._probe = (time.time(), why)
-        return {"profile": p.name, "model": p.model, "host": host, "hosted": hosted, "answers": why is None, "why": why}
+            return f"no API key is set ({env})" if env else "no API key is set"
+        try:
+            import requests
+            ok = requests.get(base_url.rstrip("/") + "/models", timeout=2.5, headers={"Authorization": f"Bearer {key}"} if key else {}).ok
+        except Exception:
+            ok = False
+        return None if ok else f"{url.netloc or base_url or 'none'} did not answer"
+
+    def planner(self, fresh: bool = False) -> dict:
+        """Which planner the next review uses. The endpoints are tried in order: the profile's own (PLANNER_URL on the cluster),
+        then CAREPLAN_PLANNER_FALLBACKS. The first that answers is used, and `skipped` says why each earlier one was passed
+        over. When none answers, `why` says so in words that follow "The planner is not answering: "."""
+        p = self.app.client.p
+        own = self._own_url.setdefault(id(p), p.base_url)    # kept because base_url is repointed at whichever endpoint answers
+        at, whose, skipped = self._probe
+        if fresh or whose != id(p) or time.time() - at > 15:
+            skipped, p.base_url = [], own
+            for base_url in (own, *self.fallbacks):
+                why = self._unusable(base_url)
+                if why is None:
+                    p.base_url = base_url
+                    break
+                skipped.append(why)
+            else:
+                skipped = [None, *skipped]                     # nothing answered: no endpoint was chosen
+            self._probe = (time.time(), id(p), skipped)
+        answers = not skipped or skipped[0] is not None
+        url = urlparse(p.base_url)
+        return {"profile": p.name, "model": p.model, "host": url.netloc or p.base_url or "none", "hosted": _hosted(url.hostname or ""),
+                "answers": answers, "why": None if answers else "; ".join(skipped[1:]), "skipped": skipped if answers else []}
 
     # ---- the doctor's side
     def state(self, cid: str) -> dict | None:

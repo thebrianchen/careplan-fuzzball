@@ -16,7 +16,7 @@ function tiles(s) {
   return h`
     <div class="tile ${s.planner.answers ? 'up' : 'down'}"><span class="k">Planner</span>
       <b>${s.planner.answers ? 'Endpoint answering' : 'Not answering'}</b>
-      <small>${s.planner.answers ? '' : h`<span class="bad">${cap(s.planner.why)}.</span><br>`}${s.planner.profile} · ${s.planner.model}<br>${s.planner.host}${s.planner.answers ? ' · a reachability check, not a generation check' : ''}</small></div>
+      <small>${s.planner.answers ? (s.planner.skipped.length ? h`<span class="warn">Fallback in use: ${s.planner.skipped.join('; ')}.</span><br>` : '') : h`<span class="bad">${cap(s.planner.why)}.</span><br>`}${s.planner.profile} · ${s.planner.model}<br>${s.planner.host}${s.planner.answers ? ' · a reachability check, not a generation check' : ''}</small></div>
     <div class="tile"><span class="k">Reviews since this server started</span>
       <b>${live.length} live · ${ok.length - live.length} from saved runs</b>
       <small>${failed ? h`<span class="bad">${plural(failed, 'review')} did not finish</span> · ` : ''}server up ${uptime(s.uptime_s)}</small></div>

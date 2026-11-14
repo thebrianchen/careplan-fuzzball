@@ -43,6 +43,6 @@ export function setPlanner(p) {                    // the pill in the top bar
   el.hidden = false;
   el.className = 'tag planner ' + (p.answers ? 'up' : 'down');
   el.textContent = `Planner ${p.answers ? 'answering' : 'not answering'}`;
-  el.title = p.answers ? `${p.profile} (${p.model}) at ${p.host}. This checks that the endpoint answers, not that it generates.`
+  el.title = p.answers ? `${p.profile} (${p.model}) at ${p.host}.${p.skipped.length ? ` Passed over: ${p.skipped.join('; ')}.` : ''} This checks that the endpoint answers, not that it generates.`
     : `The planner is not answering: ${p.why}. ${p.profile} (${p.model}) at ${p.host}.`;
 }
