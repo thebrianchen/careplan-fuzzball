@@ -297,7 +297,11 @@ export async function clinic(root, query) {
   });
   el('.page').addEventListener('click', e => {
     const bar = e.target.closest('[data-barrier]'), order = e.target.closest('[data-order]'), hood = e.target.closest('[data-tract]');
-    if (bar) set({ barrier: bar.dataset.barrier && bar.dataset.barrier !== state.barrier ? bar.dataset.barrier : null });
+    const go = e.target.closest('[data-go-barrier],[data-go-tract]');     // a card below the map sends the manager to a view of it
+    if (go) {
+      set({ barrier: go.dataset.goBarrier ?? state.barrier, tract: go.dataset.goTract ?? state.tract });
+      el('.cgrid').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else if (bar) set({ barrier: bar.dataset.barrier && bar.dataset.barrier !== state.barrier ? bar.dataset.barrier : null });
     else if (order) set({ order: order.dataset.order });
     else if (e.target.closest('[data-clear]')) set({ tract: null });
     else if (hood) set({ tract: hood.dataset.tract });
