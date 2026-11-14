@@ -36,9 +36,9 @@ so and offers the saved run.
 PLANNER_URL=http://<cluster planner>:8000/v1 CAREPLAN_PLANNER_FALLBACKS=http://<our GB10>:8000/v1 .venv/bin/python -m careplan.serve
 ```
 
-The map draws the bus and train trip only when the transit schedule cache is on the machine. To build the cache, run
-`python -m pipeline.download --only gtfs_cta`, then the same command with `gtfs_pace`, then `python -m pipeline.transit build`.
-Without the cache, the map shows the straight-line distance.
+The map draws the bus and train trip from `data/processed/transit_wed.npz`, one weekday of CTA and Pace schedules. To
+rebuild it from the current feeds, run `python -m pipeline.download --only gtfs_cta`, then the same command with
+`gtfs_pace`, then `python -m pipeline.transit build`.
 
 To see the recorded demo page with no install, run `python3 -m http.server 8000 -d careplan/web/demo` and open
 http://localhost:8000/.

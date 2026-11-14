@@ -15,6 +15,7 @@ data/processed/*
 !data/processed/resources.csv
 !data/processed/SOURCES.json
 !data/processed/tracts.csv
+!data/processed/transit_wed.npz
 data/raw/
 data/synth/
 data/tokenizers/
