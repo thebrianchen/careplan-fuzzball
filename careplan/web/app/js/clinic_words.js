@@ -7,3 +7,10 @@ export const kindName = kind => LABEL[kind] || cap(kind.replace(/_/g, ' '));    
 export const nameOf = b => kindName(b.barrier);                                   // b: one of P.barriers
 export const tractName = id => `Tract ${+id.slice(5, 9)}${id.slice(9) === '00' ? '' : `.${id.slice(9)}`}`;
 export const pct = x => `${Math.round(x * 100)}%`;
+export const andList = xs => xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs.at(-1)}`;   // ['a','b','c'] -> 'a, b and c'
+// Kinds of located place, most useful first (for food a pantry before a grocery that takes SNAP): [one, many].
+export const PLACE_KINDS = {
+  food_pantry: ['food pantry', 'food pantries'], snap_grocery: ['grocery that takes SNAP', 'groceries that take SNAP'],
+  fqhc: ['community health center', 'community health centers'],
+  warming_center: ['warming center', 'warming centers'], cooling_center: ['cooling center', 'cooling centers'],
+};

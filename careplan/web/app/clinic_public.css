@@ -1,1 +1,59 @@
-/* Clinic page: the "Public data against the exam room" card (.cpublic). Its rules start with .cpublic. */
+/* Clinic page: the "Public data against the exam room" card (.cpublic). Its rules start with .cpublic.
+   Grey ink = what public figures say; teal = what the visits flagged. */
+.cpublic{--pub:#7d8995;--pub-soft:#e6eaee;min-width:0}
+.cpublic>h2{margin-bottom:2px}
+.cpublic>.hint{margin:0 0 12px}
+.cpublic h3{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:22px 0 8px}
+.cpublic h3 .hint{text-transform:none;letter-spacing:0;font-weight:400;margin-left:6px}
+.cpublic .plead{font-size:17px;font-weight:600;letter-spacing:-.01em;color:var(--ink);margin:0 0 10px;max-width:52ch}
+.cpublic .psplit{display:flex;height:14px;border-radius:4px;overflow:hidden;gap:2px}
+.cpublic .psplit .pm{background:var(--pub)}.cpublic .psplit .pu{background:var(--brand)}
+.cpublic .psides{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:10px}
+.cpublic .pside .k{display:flex;align-items:center;gap:6px;margin:0}
+.cpublic .pside .k i{width:10px;height:10px;border-radius:2px;background:var(--pub);flex:none}
+.cpublic .pside.u .k i{background:var(--brand)}
+.cpublic .pn{display:block;font-size:22px;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin:2px 0 4px}
+.cpublic .pn small{font-size:13px;font-weight:500}
+.cpublic .pside.u .pn{color:var(--brand-ink)}
+.cpublic .pk{display:flex;justify-content:space-between;align-items:baseline;gap:10px;width:calc(100% + 12px);margin:0 -6px;padding:2px 6px;border:0;border-radius:6px;background:none;font-size:13.5px;font-weight:400;color:var(--ink2);text-align:left;white-space:normal}
+.cpublic .pk:hover:not(:disabled){background:#f4f6f8}
+.cpublic .pk b{font-weight:600;font-variant-numeric:tabular-nums;color:var(--ink)}
+.cpublic .pk.on{background:var(--brand-soft);color:var(--ink);font-weight:600}
+.cpublic .pkey{display:flex;flex-wrap:wrap;gap:2px 16px;font-size:12.5px;color:var(--ink2);margin-bottom:6px}
+.cpublic .pkey>span{display:inline-flex;align-items:center}
+.cpublic .pkey i{display:inline-block;width:12px;margin-right:6px;border-radius:2px}
+.cpublic .ppub-key{height:5px;background:#98a3ae}.cpublic .pvis-key{height:10px;background:#3d998d}
+.cpublic .pkey .hint{flex-basis:100%}
+.cpublic .prows{list-style:none;margin:0;padding:0}
+.cpublic .prow{display:grid;grid-template-columns:118px minmax(0,1fr) 74px;gap:12px;align-items:center;padding:5px 0;border-top:1px solid var(--line2)}
+.cpublic .prow:first-child{border-top:0}
+.cpublic .prow .pk{width:auto;margin:0;padding:2px 6px 2px 0}
+.cpublic .pstrips{display:grid;gap:3px}
+.cpublic .pstrips svg{display:block;width:100%}
+.cpublic .ppub{height:5px}.cpublic .ppub rect{fill:none;stroke:#b3bdc7;stroke-width:1;vector-effect:non-scaling-stroke}.cpublic .ppub rect.on{fill:#98a3ae;stroke:none}
+.cpublic .pvis{height:24px;background:linear-gradient(var(--line2),var(--line2)) bottom/100% 1px no-repeat}
+.cpublic .pvis rect{fill:#3d998d}
+.cpublic .pnums{text-align:right;font-size:12.5px;line-height:1.35;color:var(--brand-ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+.cpublic .pnums b{display:block;font-weight:600;color:var(--ink2)}
+.cpublic .pcap,.cpublic .psay{margin:10px 0 14px;font-size:14px;color:var(--ink2);max-width:72ch}
+.cpublic .phood{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.cpublic .pcol{min-width:0}
+.cpublic .pcol>.k{padding-bottom:4px;border-bottom:2px solid var(--pub);margin-bottom:6px}
+.cpublic .pcol.vis>.k{border-color:var(--brand)}
+.cpublic .ppt{padding:2px 0 8px}
+.cpublic .ppt .pk{font-weight:600;color:var(--ink)}
+.cpublic .pfig{font-size:12.5px;color:var(--muted);margin-top:2px}
+.cpublic .pfig b{color:var(--ink2);font-weight:600}
+.cpublic .pfig .cbar.compact{height:28px;margin-top:4px}
+.cpublic .pflag{list-style:none;margin:0;padding:0}
+.cpublic .pflag li{display:flex;align-items:baseline;gap:8px;padding:1px 0}
+.cpublic .pflag li .pk{flex:1 1 auto;width:auto;margin:0;min-width:0}
+.cpublic .pflag li>b{font-size:13px;font-weight:600;color:var(--brand-ink);white-space:nowrap;font-variant-numeric:tabular-nums}
+.cpublic .pno{font-style:normal;font-size:11px;font-weight:600;color:var(--muted);border:1px dashed #b7c1cb;border-radius:999px;padding:0 6px;white-space:nowrap}
+.cpublic .psay{padding:10px 12px;background:#f7faf9;border-left:3px solid var(--brand);border-radius:0 8px 8px 0;color:var(--ink)}
+@media (max-width:620px){
+  .cpublic .psides,.cpublic .phood{grid-template-columns:1fr;gap:14px}
+  .cpublic .prow{grid-template-columns:minmax(0,1fr) 74px;row-gap:2px}
+  .cpublic .prow .pk{grid-column:1/-1}
+}
+.cpublic .pfig+.pfig{margin-top:8px}
