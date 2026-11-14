@@ -57,7 +57,7 @@ jobs:
       - PATH=/code/python/bin:/usr/local/bin:/usr/bin:/bin
       - PLANNER_URL=http://planner:8000/v1
       - VLLM_API_KEY=none
-      - PROFILE=super35-vllm
+      - PROFILE=super35-vllm-think
       - TAG=event1
     script: |
       #!/bin/sh
