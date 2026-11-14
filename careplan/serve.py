@@ -16,6 +16,8 @@ POST /check/<case_id>  run again; returns the result JSON
 Environment (all optional):
   CAREPLAN_PROFILE        model profile in config/models.yaml (default super35-vllm-think: the event planner, at PLANNER_URL
                           or http://localhost:8000/v1)
+  CAREPLAN_PLANNER_LABELS    names for those endpoints, in the same order, as the page should say them ("the event cluster,our own GB10")
+  CAREPLAN_STALL_S        a live review in the clinic app fails when the planner sends nothing for this many seconds (default 30)
   CAREPLAN_SAMPLE         if set to 1, the clinic app offers sample reviews built from the answer key (careplan/sample.py), for page work
   CAREPLAN_PLANNER_FALLBACKS  the clinic app's other planner endpoints, comma-separated, tried in order when the first does not answer
   CAREPLAN_MODEL_BASE_URL override the profile's base URL (e.g. http://llm:8000/v1 for on-box vLLM)
@@ -64,11 +66,11 @@ def _templates():
 REC_DIR = Path(os.environ.get("CAREPLAN_RECORDINGS", ROOT / "recordings"))
 
 
-def save_recording(name: str, events: list, rec: dict | None = None, profile: str = "") -> None:
+def save_recording(name: str, events: list, rec: dict | None = None, profile: str = "", where: str = "") -> None:
     """A real run's event stream with its timing, for the stage's recorded fallback (?record=1 saves, ?replay=1 plays)."""
     REC_DIR.mkdir(parents=True, exist_ok=True)
     (REC_DIR / f"{name}.json").write_text(json.dumps(
-        {"saved": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "profile": profile, "events": events, "rec": rec}, default=str))
+        {"saved": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "where": where, "profile": profile, "events": events, "rec": rec}, default=str))
 
 
 def replay_recording(name: str, write) -> dict | None:

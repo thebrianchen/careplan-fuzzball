@@ -153,7 +153,7 @@ export async function visit(root, id) {
             <div class="seg" role="group" aria-label="Where the review comes from">
               <button type="button" data-mode="recorded" ${doc.has_recording ? '' : 'disabled'} title="${doc.has_recording ? 'Replay a real run of this review that was saved earlier' : 'No run has been saved for this visit'}">Saved run</button>
               ${doc.can_sample ? h`<button type="button" data-mode="sample" title="Play a stand-in built from this visit's answer key. Not a model run.">Sample</button>` : ''}
-              <button type="button" data-mode="live" title="Run the planner now">Live</button>
+              <button type="button" data-mode="live" title="${doc.planner.answers ? `Run the planner now, on ${doc.planner.label}` : 'Run the planner now'}">Live</button>
             </div>
             <select id="speed" aria-label="Playback speed of the saved run" title="Playback speed of the saved run">${SPEEDS.map(s => h`<option value="${s}">${s === 1 ? 'Real time' : `${s}× speed`}</option>`)}</select>
             <label class="keep" id="keep" title="Keep this live run so the visit can be replayed without the planner. A saved run is never overwritten."><input type="checkbox" id="record"> Save this run</label>
@@ -208,10 +208,11 @@ export async function visit(root, id) {
     el('#runtag').className = `runtag ${src}`;
     el('#runtag').textContent = { recorded: 'Saved run', sample: 'Sample', live: 'Live' }[src];
     const when = info.saved || m.saved, model = info.model || m.model, profile = info.profile || m.profile;
+    const where = info.where || m.where, on = where ? ` on ${where}` : '';
     el('#runtext').title = profile ? `Profile ${profile} in config/models.yaml` : '';
     el('#runtext').textContent = src === 'sample' ? 'A stand-in built from this visit\'s answer key, for work on the pages. Not a model run.' : src === 'recorded'
-      ? (state === 'running' ? `A real run saved on ${date(when)}, shown ${info.speed > 1 ? `at ${info.speed}× speed` : 'in real time'}` : `A real run saved on ${date(when)}. It took ${secs(m.seconds)} on ${model}.`)
-      : (state === 'running' ? `The planner (${model}) is reviewing this plan now` : `Reviewed just now by the planner (${model}) in ${secs(m.seconds)}.`);
+      ? (state === 'running' ? `A real run recorded${on}, ${date(when)}, shown ${info.speed > 1 ? `at ${info.speed}× speed` : 'in real time'}` : `A real run recorded${on}, ${date(when)}. It took ${secs(m.seconds)} with ${model}.`)
+      : (state === 'running' ? `The planner (${model})${on} is reviewing this plan now` : `Reviewed just now by the planner (${model})${on} in ${secs(m.seconds)}.`);
     if (state !== 'running') el('#runclock').textContent = '';
   }
   function paintSummary() {
@@ -270,18 +271,21 @@ export async function visit(root, id) {
   function stop() { running = false; if (es) { es.close(); es = null; } clearInterval(tick); paintControls(); }
   async function failed(message, usedMode) {
     try { doc = await api(`case/${id}`); } catch (e) { /* keep what we have */ }
+    setPlanner(doc.planner);
+    // A live review that fails goes straight to this visit's recorded run, and says so: nobody should have to find a button.
+    if (usedMode === 'live' && doc.has_recording) return start('recorded', h`<b>The live review did not finish.</b> ${message} This is the recorded run of the same visit.`);
     paintAll();
     const f = el('#fail');
-    f.hidden = false;
-    f.innerHTML = h`<b>The review did not finish.</b> ${message}
-      ${usedMode === 'live' && doc.has_recording ? h`<button type="button" class="link" id="fallback">Play the saved run instead</button>` : ''}`;
-    setPlanner(doc.planner); paintControls();
+    f.hidden = false; f.className = 'notice bad';
+    f.innerHTML = h`<b>The review did not finish.</b> ${message}`;
+    paintControls();
   }
-  function start(useMode) {
+  function start(useMode, note) {
     if (running) return;
     running = true; savedAt = {}; showUnsaid(false);
     doc = { ...doc, items: [], steps: [], crossings: [], decisions: {}, meta: { ...doc.meta, source: 'none' } };
-    el('#fail').hidden = true; el('#summary').hidden = true; el('#after').hidden = true;
+    el('#fail').hidden = !note; el('#fail').className = 'notice'; el('#fail').innerHTML = note || '';
+    el('#summary').hidden = true; el('#after').hidden = true;
     clearItems('checking'); markCited(); paintControls();
     el('#go').textContent = 'Reviewing…';
     el('#boundary').innerHTML = boundary(doc, 'running');
@@ -357,7 +361,6 @@ export async function visit(root, id) {
     if (seg) { mode = seg.dataset.mode; localStorage.setItem('cp.mode', mode); return paintControls(); }
     if (t.closest('#go')) return start(mode);
     if (t.closest('#unsaid')) { showUnsaid(!onlyUnsaid); return paintSummary(); }
-    if (t.closest('#fallback')) return start('recorded');
     if (cites) return showSource(cites.dataset.ref);
     if (d) {
       const bar = d.closest('.decide'), box = $('.editbox', bar);

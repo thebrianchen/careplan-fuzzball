@@ -74,14 +74,15 @@ def resolve_item(case: Case, it: dict, t: float | None, tract: dict | None, reso
             "status": it["status"], "status_label": STATUS.get(it["status"], (it["status"],))[0], "barriers": barriers, "alternatives": alts}
 
 
-def build(case: Case, rec: dict, events: list | None, tracts: TractTable, resources: ResourceTable, source: str, saved: str | None = None) -> dict:
+def build(case: Case, rec: dict, events: list | None, tracts: TractTable, resources: ResourceTable, source: str, saved: str | None = None,
+          where: str | None = None) -> dict:
     tract = tracts.get(case.tract_geoid)
     item_t = {ev["item"]["item_id"]: t for t, ev in (events or []) if ev.get("type") == "item"}
     items = [resolve_item(case, it, item_t.get(it["item_id"]), tract, resources) for it in (rec.get("assessment") or {}).get("items", [])]
     p, visit = case.patient, case.visit
     age = int(visit["date"][:4]) - int(p["dob"][:4]) - (visit["date"][5:] < p["dob"][5:]) if p.get("dob") and visit.get("date") else None
     return {
-        "meta": {"case_id": case.case_id, "title": case.data.get("title", ""), "made_up_patient": True, "source": source, "saved": saved,
+        "meta": {"case_id": case.case_id, "title": case.data.get("title", ""), "made_up_patient": True, "source": source, "saved": saved, "where": where,
                  "profile": rec.get("profile"), "model": model_name(rec.get("profile")), "seconds": rec.get("wall_s") or (events[-1][0] if events else None)},
         "patient": {"name": p.get("name"), "age": age, "sex": p.get("sex"), "coverage": (p.get("coverage") or {}).get("plan"),
                     "problems": [x.get("display") for x in p.get("problems", [])][:5]},
@@ -100,7 +101,7 @@ def from_recording(case: Case, tracts: TractTable, resources: ResourceTable) -> 
     if not f.is_file():
         return None
     d = json.loads(f.read_text())
-    return build(case, d["rec"], d["events"], tracts, resources, "recorded", d.get("saved"))
+    return build(case, d["rec"], d["events"], tracts, resources, "recorded", d.get("saved"), d.get("where"))
 
 
 def main(argv=None) -> int:

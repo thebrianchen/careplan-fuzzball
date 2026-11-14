@@ -215,6 +215,8 @@ class Clinic:
         self._probe: tuple[float, int, list] = (0.0, 0, [])   # when the endpoints were last probed, for which profile, and what was passed over
         self._own_url: dict[int, str] = {}
         self.samples = os.environ.get("CAREPLAN_SAMPLE") == "1"       # stand-in reviews for page work; off unless asked for
+        self.labels = [u.strip() for u in os.environ.get("CAREPLAN_PLANNER_LABELS", "").split(",") if u.strip()]   # names for the endpoints, in order
+        self.stall_s = float(os.environ.get("CAREPLAN_STALL_S", "30"))    # a live review that hears nothing from the planner for this long has failed
         self.fallbacks = [u.strip() for u in os.environ.get("CAREPLAN_PLANNER_FALLBACKS", "").split(",") if u.strip()]
         self.county = county(app.tracts)
 
@@ -271,7 +273,9 @@ class Clinic:
             self._probe = (time.time(), id(p), skipped)
         answers = not skipped or skipped[0] is not None
         url = urlparse(p.base_url)
-        return {"profile": p.name, "model": p.model, "host": url.netloc or p.base_url or "none", "hosted": _hosted(url.hostname or ""),
+        host, nth = url.netloc or p.base_url or "none", len(skipped) if answers else 0
+        return {"profile": p.name, "model": p.model, "host": host, "hosted": _hosted(url.hostname or ""),
+                "label": self.labels[nth] if answers and nth < len(self.labels) else host, "fallback": answers and nth > 0,
                 "answers": answers, "why": None if answers else "; ".join(skipped[1:]), "skipped": skipped if answers else []}
 
     # ---- the doctor's side
@@ -376,7 +380,7 @@ class Clinic:
                     return send({"type": "end", "ok": False, "error": "There is no saved run for this visit."})
                 data = sample.run(case, tract, app.resources) if mode == "sample" else json.loads(f.read_text())
                 rec, speed = data["rec"], 1.0 if mode == "sample" else speed
-                send({"type": "start", "source": mode, "saved": data.get("saved"), "profile": data.get("profile"),
+                send({"type": "start", "source": mode, "saved": data.get("saved"), "where": data.get("where"), "profile": data.get("profile"),
                       "model": demo.model_name(data.get("profile")), "seconds": rec.get("wall_s"), "speed": speed})
                 t0 = time.time()
                 for off, ev in data["events"]:
@@ -384,13 +388,13 @@ class Clinic:
                     if delay > 0:
                         time.sleep(delay)
                     relay(off, ev)
-                doc = demo.build(case, rec, data["events"], app.tracts, app.resources, mode, data.get("saved"))
+                doc = demo.build(case, rec, data["events"], app.tracts, app.resources, mode, data.get("saved"), data.get("where"))
             else:
                 pl = self.planner(fresh=True)
                 if not pl["answers"]:
                     self.fail(cid, "live", f"planner not answering: {pl['why']}")
                     return send({"type": "end", "ok": False, "error": f"The planner is not answering: {pl['why']}."})
-                send({"type": "start", "source": "live", "profile": pl["profile"], "model": demo.model_name(pl["profile"])})
+                send({"type": "start", "source": "live", "where": pl["label"], "profile": pl["profile"], "model": demo.model_name(pl["profile"])})
                 t0, events = time.time(), []
 
                 def push(ev: dict) -> None:
@@ -399,20 +403,29 @@ class Clinic:
                         ev = {**ev, "args": {k: v for k, v in (ev.get("args") or {}).items() if k in SHOWN_ARGS}}
                     events.append([t, ev])
                     relay(t, ev)
+                # A hung engine accepts the request and then sends nothing. The planner streams, so a read timeout between
+                # bytes catches that; one attempt only, because a retry on stage is a silence of minutes.
+                client = app.client
+                patience = getattr(client, "timeout", None), getattr(client, "retries", None)
+                client.timeout, client.retries = (10, self.stall_s), 1
                 try:
                     rec = app.check(cid, on_event=push)
                 except (BrokenPipeError, ConnectionResetError):
                     raise
                 except Exception as ex:
                     self.fail(cid, "live", f"{type(ex).__name__}: {ex}")
-                    return send({"type": "end", "ok": False, "error": f"The planner call failed ({type(ex).__name__})."})
+                    stalled = "timed out" in str(ex).lower()
+                    return send({"type": "end", "ok": False, "error": f"The planner on {pl['label']} sent nothing for {self.stall_s:g} seconds."
+                                 if stalled else f"The planner call failed ({type(ex).__name__})."})
+                finally:
+                    client.timeout, client.retries = patience
                 if not rec.get("assessment"):
                     self.fail(cid, "live", rec.get("error") or "no finished review")
                     return send({"type": "end", "ok": False, "error": "The planner did not finish a review: " + (rec.get("error") or "no result") + "."})
-                doc = demo.build(case, rec, events, app.tracts, app.resources, "live")
+                doc = demo.build(case, rec, events, app.tracts, app.resources, "live", where=pl["label"])
                 if record and not self.recording(cid).is_file():
                     from .serve import save_recording
-                    save_recording(f"stream_{cid}", events, rec, app.client.p.name)
+                    save_recording(f"stream_{cid}", events, rec, app.client.p.name, where=pl["label"])
                     self.note("run saved", cid)
             self.install(cid, rec, doc, doc["meta"]["source"])
             send({"type": "end", "ok": True, "doc": self.case(cid)})

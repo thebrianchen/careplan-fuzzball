@@ -56,7 +56,7 @@ class WebAppTests(unittest.TestCase):
 
     def setUp(self):
         self.clinic.planner = lambda fresh=False: {"profile": "fake-stream", "model": "fake", "host": "test", "hosted": False,
-                                                   "answers": True, "why": None, "skipped": []}
+                                                   "label": "test", "fallback": False, "answers": True, "why": None, "skipped": []}
         self.post("reset/D001", {})
 
     def get(self, path):
@@ -141,11 +141,33 @@ class WebAppTests(unittest.TestCase):
 
     def test_live_review_fails_at_once_when_the_planner_does_not_answer(self):
         self.clinic.planner = lambda fresh=False: {"profile": "fake-stream", "model": "fake", "host": "test", "hosted": False,
-                                                   "answers": False, "why": "test did not answer", "skipped": []}
+                                                   "label": "test", "fallback": False, "answers": False, "why": "test did not answer", "skipped": []}
         evs = self.review("mode=live")
         self.assertEqual((len(evs), evs[0]["type"], evs[0]["ok"]), (1, "end", False))
         self.assertIn("not answering", evs[0]["error"])
         self.assertEqual(self.get("case/D001")["items"], [])
+
+    def test_a_planner_that_goes_silent_ends_the_live_review_and_the_saved_run_says_where_it_was_recorded(self):
+        seen = {}
+
+        class Silent(FakeStreamingClient):
+            timeout, retries = 300, 6
+
+            def chat_stream(self, messages, tools, on_delta):
+                seen["patience"] = (self.timeout, self.retries)
+                raise RuntimeError("model call failed after 1 attempts: HTTPConnectionPool(host='x', port=8000): Read timed out.")
+        client, self.app.client = self.app.client, Silent()
+        try:
+            evs = self.review("mode=live")
+            after = (self.app.client.timeout, self.app.client.retries)
+        finally:
+            self.app.client = client
+        self.assertEqual(seen["patience"], ((10, self.clinic.stall_s), 1))                 # one attempt, a short wait between bytes
+        self.assertEqual(after, (300, 6))                                                  # and the client is left as it was
+        self.assertEqual((evs[-1]["type"], evs[-1]["ok"]), ("end", False))
+        self.assertIn("sent nothing for 30 seconds", evs[-1]["error"])
+        recorded = self.review("mode=recorded&speed=1000")
+        self.assertEqual((recorded[0]["where"], recorded[-1]["doc"]["meta"]["where"]), ("our own GB10", "our own GB10"))
 
     def test_a_hosted_planner_without_a_key_is_not_answering_and_says_why(self):
         del self.clinic.planner                                            # the real check, not the stub
@@ -167,23 +189,25 @@ class WebAppTests(unittest.TestCase):
         del self.clinic.planner                                            # the real check, not the stub
         local = type("C", (), {"p": ModelProfile(name="event", model="m", base_url="http://cluster.internal:8000/v1"), "key": ""})()
         client, self.app.client = self.app.client, local
-        self.clinic.fallbacks = ["http://spark.internal:8000/v1"]
+        self.clinic.fallbacks, self.clinic.labels = ["http://spark.internal:8000/v1"], ["the event cluster", "our own GB10"]
         up = {"spark.internal"}
         answer = lambda url, **kw: mock.Mock(ok=any(host in url for host in up))
         try:
             with mock.patch("requests.get", side_effect=answer):
                 pl = self.clinic.planner(fresh=True)
                 self.assertEqual((pl["answers"], pl["host"], pl["skipped"]), (True, "spark.internal:8000", ["cluster.internal:8000 did not answer"]))
+                self.assertEqual((pl["label"], pl["fallback"]), ("our own GB10", True))
                 self.assertEqual(local.p.base_url, "http://spark.internal:8000/v1")          # where the next review goes
                 up.add("cluster.internal")                                                    # the first choice comes back
                 pl = self.clinic.planner(fresh=True)
                 self.assertEqual((pl["host"], pl["skipped"], local.p.base_url), ("cluster.internal:8000", [], "http://cluster.internal:8000/v1"))
+                self.assertEqual((pl["label"], pl["fallback"]), ("the event cluster", False))
                 up.clear()
                 pl = self.clinic.planner(fresh=True)
                 self.assertEqual((pl["answers"], pl["skipped"]), (False, []))
                 self.assertEqual(pl["why"], "cluster.internal:8000 did not answer; spark.internal:8000 did not answer")
         finally:
-            self.app.client, self.clinic.fallbacks = client, []
+            self.app.client, self.clinic.fallbacks, self.clinic.labels = client, [], []
 
     def test_a_saved_run_names_its_model_and_the_public_side(self):
         evs = self.review("mode=recorded&speed=1000")

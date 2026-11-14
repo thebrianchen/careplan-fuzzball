@@ -5,6 +5,7 @@
   "made_up_patient": true,
   "source": "recorded",
   "saved": "2026-11-11T16:29:08Z",
+  "where": "our own GB10",
   "profile": "super-vllm-raw",
   "model": "Nemotron-3-Super-120B-A12B-NVFP4",
   "seconds": 91.1
