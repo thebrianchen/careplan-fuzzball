@@ -59,6 +59,25 @@ function tripText(p) {
   return h`<span title="${t.assumes}">To arrive for ${when}, leave by ${clock(t.leave_by)}. ${t.minutes} min${n ? ` on ${plural(n, 'ride')}` : ''} by CTA or Pace, one way.</span>`;
 }
 
+const mins = hhmm => +hhmm.slice(0, 2) * 60 + +hhmm.slice(3, 5);
+
+// The trip against the clock, from leaving home to the appointment: each ride, the walking and waiting between rides,
+// and the time to spare on arrival.
+function tripBar(p) {
+  const t = p.trip, rs = rides(p);
+  if (!rs.length || !p.time) return '';
+  const marks = [t.leave_by, ...rs.flatMap(r => [r.board, r.alight]), t.arrive, p.time];
+  const segs = marks.slice(1).map((to, i) => ({ from: marks[i], to, min: mins(to) - mins(marks[i]),
+    kind: i === marks.length - 2 ? 'spare' : i % 2 ? 'ride' : 'between' })).filter(s => s.min > 0);
+  const total = kind => segs.filter(s => s.kind === kind).reduce((n, s) => n + s.min, 0);
+  const NAME = { ride: 'Riding', between: 'Walking or waiting', spare: 'Early' };
+  return h`<div class="tbar">
+    <div class="tbar-ends"><span>Leave ${clock(t.leave_by)}</span><span>Appointment ${clock(p.time)}</span></div>
+    <div class="tbar-track">${segs.map(s => h`<span class="${s.kind}" style="flex:${s.min}" title="${NAME[s.kind]}: ${clock(s.from)} to ${clock(s.to)}, ${s.min} min">${s.kind === 'ride' && s.min >= 10 ? s.min : ''}</span>`)}</div>
+    <small><span><i class="ride"></i>Riding ${total('ride')} min</span><span><i class="between"></i>Walking and waiting ${t.minutes - total('ride')} min</span>${total('spare') ? h`<span><i class="spare"></i>${total('spare')} min early</span>` : ''}</small>
+  </div>`;
+}
+
 export function map({ id, status, home, places, resources, animate = false }) {
   const ridden = places.flatMap(p => rides(p).flatMap(r => r.path.map(([lat, lon]) => ({ lat, lon }))));
   const view = viewOf([home, ...places, ...resources, ...ridden].filter(Boolean));
@@ -92,7 +111,7 @@ export function map({ id, status, home, places, resources, animate = false }) {
       <canvas data-view="${view.lat0},${view.lon0},${view.k}" aria-hidden="true"></canvas>
       <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" role="group" aria-label="Map: ${said}">${legs}${resMarks}${placeMarks}${homeMark}</svg>
     </div>
-    <figcaption>${places.map(p => h`<p>${places.length > 1 ? h`<b>${p.name}.</b> ` : ''}${tripText(p)}</p>`)}
+    <figcaption>${places.map(p => h`<p>${places.length > 1 ? h`<b>${p.name}.</b> ` : ''}${tripText(p)}</p>${tripBar(p)}`)}
       <small>${ridden.length ? 'The route is the last scheduled trip that arrives in time, which may not be the one the patient takes. ' : ''}Drawn here from tables already on the private side. Drawing it sends nothing anywhere.</small></figcaption>
   </figure>`;
 }

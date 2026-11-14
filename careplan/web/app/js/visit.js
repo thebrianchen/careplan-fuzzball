@@ -75,8 +75,8 @@ function exhibitsOf(it, chart) {
 
 const unsaid = e => e.said_in_visit ? '' : h`<span class="unsaid">not said in the visit</span>`;
 function evidenceRow({ e, strip, bar }, rows) {
-  if (strip) return h`<li><div class="ev strip-row"><span class="src ${srcKind(e)}">${e.source}</span><span class="ev-text">${visitStrip(strip)}</span>${unsaid(e)}</div></li>`;
-  return h`<li><button type="button" class="ev" data-ref="${e.ref}" title="Show where this comes from">
+  if (strip) return h`<li class="${e.said_in_visit ? 'said' : ''}"><div class="ev strip-row"><span class="src ${srcKind(e)}">${e.source}</span><span class="ev-text">${visitStrip(strip)}</span>${unsaid(e)}</div></li>`;
+  return h`<li class="${e.said_in_visit ? 'said' : ''}"><button type="button" class="ev" data-ref="${e.ref}" title="Show where this comes from">
     <span class="src ${srcKind(e)}">${e.source}</span><span class="ev-text">${evidenceText(e, rows)}${bar ? countyBar(bar) : ''}</span>${unsaid(e)}</button></li>`;
 }
 
@@ -90,7 +90,9 @@ function finding(it, rows, chart, animate) {
     ${ex.map ? map({ ...ex.map, animate }) : ''}
     ${ex.alts.length ? h`<div class="alts"><h4>What could work instead</h4><ul>${ex.alts.map(a => {
       const r = a.resource;
-      return h`<li${a.n ? h` data-res="${a.n}" tabindex="0"` : ''}><span class="cat">${category(a.label)}</span><span>${a.text}${r ? h`<small class="res">${a.n ? h`<span class="resnum">${a.n}</span>` : ''}${[r.name, hours(r.hours), r.miles_from_home != null && `${r.miles_from_home} mi from home`, r.phone].filter(Boolean).join(' · ')}</small>` : ''}</span></li>`;
+      return h`<li${a.n ? h` data-res="${a.n}" tabindex="0"` : ''}><span class="cat">${category(a.label)}</span><span>${a.text}${r ? h`<span class="res">
+        <b>${a.n ? h`<span class="resnum">${a.n}</span>` : ''}${r.name}</b>${r.miles_from_home != null ? h`<span class="far">${r.miles_from_home} mi from home</span>` : ''}
+        <small>${[r.address, hours(r.hours)].filter(Boolean).join(' · ')}${r.phone ? h` · <a href="tel:${r.phone.replace(/[^\d+]/g, '')}">${r.phone}</a>` : ''}</small></span>` : ''}</span></li>`;
     })}</ul></div>` : ''}`;
 }
 
@@ -126,7 +128,7 @@ function boundary(doc, state) {
 export async function visit(root, id) {
   let doc = await api(`case/${id}`);
   setPlanner(doc.planner);
-  let es = null, tick = null, running = false, savedAt = {};
+  let es = null, tick = null, running = false, savedAt = {}, onlyUnsaid = false;
   const canRun = m => m === 'recorded' ? doc.has_recording : doc.planner.answers;
   let mode = doc.has_recording && !(localStorage.getItem('cp.mode') === 'live' && canRun('live')) ? 'recorded' : 'live';
   let speed = SPEEDS.includes(+localStorage.getItem('cp.speed')) ? +localStorage.getItem('cp.speed') : 8;
@@ -216,9 +218,11 @@ export async function visit(root, id) {
     const unsaid = doc.items.flatMap(i => i.barriers.flatMap(b => b.evidence)).filter(e => !e.said_in_visit).length;
     const done = flagged.filter(i => doc.decisions[i.item_id]).length;
     s.innerHTML = h`<div><b>${flagged.length ? `${flagged.length} of ${doc.items.length} plan items may not work for this patient.` : 'No barrier found for any plan item.'}</b>
-      ${unsaid ? h`<span>${plural(unsaid, 'piece')} of evidence ${unsaid === 1 ? 'was' : 'were'} never said in the visit.</span>` : ''}</div>
+      ${unsaid ? h`<span>${plural(unsaid, 'piece')} of evidence ${unsaid === 1 ? 'was' : 'were'} never said in the visit.
+        <button type="button" id="unsaid" aria-pressed="${onlyUnsaid}" title="Dim what was said in the visit. What stays came from the chart, the neighborhood and the schedules.">${onlyUnsaid ? 'Show everything' : `Show only ${unsaid === 1 ? 'that' : 'those'}`}</button></span>` : ''}</div>
       ${flagged.length ? h`<span class="count ${done === flagged.length ? 'all' : ''}">${done} of ${flagged.length} decided</span>` : ''}`;
   }
+  function showUnsaid(on) { onlyUnsaid = on; el('.review').classList.toggle('only-unsaid', on); }
   function paintAfter() {
     const a = el('#after'), flagged = flaggedOf(doc);
     a.hidden = !doc.items.length;
@@ -272,7 +276,7 @@ export async function visit(root, id) {
   }
   function start(useMode) {
     if (running) return;
-    running = true; savedAt = {};
+    running = true; savedAt = {}; showUnsaid(false);
     doc = { ...doc, items: [], steps: [], crossings: [], decisions: {}, meta: { ...doc.meta, source: 'none' } };
     el('#fail').hidden = true; el('#summary').hidden = true; el('#after').hidden = true;
     clearItems('checking'); markCited(); paintControls();
@@ -349,6 +353,7 @@ export async function visit(root, id) {
     if (tab) return openTab(tab.dataset.tab);
     if (seg) { mode = seg.dataset.mode; localStorage.setItem('cp.mode', mode); return paintControls(); }
     if (t.closest('#go')) return start(mode);
+    if (t.closest('#unsaid')) { showUnsaid(!onlyUnsaid); return paintSummary(); }
     if (t.closest('#fallback')) return start('recorded');
     if (cites) return showSource(cites.dataset.ref);
     if (d) {
@@ -358,7 +363,7 @@ export async function visit(root, id) {
       return;
     }
     if (t.closest('[data-cancel]')) { t.closest('.editbox').hidden = true; return; }
-    if (t.closest('#reset')) { await api(`reset/${id}`, {}); doc = await api(`case/${id}`); savedAt = {}; el('#fail').hidden = true; paintAll(); paintControls(); }
+    if (t.closest('#reset')) { await api(`reset/${id}`, {}); doc = await api(`case/${id}`); savedAt = {}; el('#fail').hidden = true; showUnsaid(false); paintAll(); paintControls(); }
   });
   page.addEventListener('submit', e => {
     e.preventDefault();
