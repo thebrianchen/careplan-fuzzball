@@ -5,7 +5,8 @@
   "made_up_patient": true,
   "source": "recorded",
   "saved": "2026-11-11T16:29:08Z",
-  "model": "super-vllm-raw",
+  "profile": "super-vllm-raw",
+  "model": "Nemotron-3-Super-120B-A12B-NVFP4",
   "seconds": 91.1
  },
  "patient": {
@@ -147,7 +148,7 @@
   {
    "t": 36.08,
    "kind": "crossing",
-   "label": "Asked the public box for transport help near home",
+   "label": "Asked the public side for transport help near home",
    "crossed": {
     "tract_id": "17031260300",
     "need": "transport",
@@ -162,7 +163,7 @@
   {
    "t": 36.09,
    "kind": "crossing",
-   "label": "Asked the public box for food help near home",
+   "label": "Asked the public side for food help near home",
    "crossed": {
     "tract_id": "17031260300",
     "need": "food",

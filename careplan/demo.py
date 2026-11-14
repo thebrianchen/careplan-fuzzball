@@ -6,6 +6,7 @@ from a live result; the shape is the same either way.
 """
 from __future__ import annotations
 
+import functools
 import json
 import sys
 from pathlib import Path
@@ -22,11 +23,23 @@ STEP = {"get_visit_transcript": ("visit", "Read the visit"), "get_tract_profile"
         "get_transit_trip": ("transit", "Checked the bus trip to the appointment")}
 
 
+@functools.cache
+def _profiles() -> dict:
+    from .runner import load_profiles
+    return load_profiles()
+
+
+def model_name(profile: str | None) -> str | None:
+    """The model a config profile runs, as a reader would name it: 'super-vllm-raw' -> 'Nemotron-3-Super-120B-A12B-NVFP4'."""
+    p = _profiles().get(profile)
+    return p.model.split("/")[-1].removeprefix("NVIDIA-") if p else profile
+
+
 def step_for(t: float, ev: dict) -> dict:
     """One tool call as a plain step. A 'crossing' step is the only kind that leaves the private box."""
     if ev["tool"] == "find_resources":
         a = ev.get("args") or {}
-        return {"t": t, "kind": "crossing", "label": f"Asked the public box for {a.get('need', '?')} help near home",
+        return {"t": t, "kind": "crossing", "label": f"Asked the public side for {a.get('need', '?')} help near home",
                 "crossed": {"tract_id": a.get("tract_id"), "need": a.get("need"), "days": a.get("days") or []}, "results": ev.get("n_results")}
     kind, label = ("chart", "Read the chart") if ev["tool"] in CHART_TOOLS else STEP.get(ev["tool"], ("other", ev["tool"]))
     return {"t": t, "kind": kind, "label": label}
@@ -69,7 +82,7 @@ def build(case: Case, rec: dict, events: list | None, tracts: TractTable, resour
     age = int(visit["date"][:4]) - int(p["dob"][:4]) - (visit["date"][5:] < p["dob"][5:]) if p.get("dob") and visit.get("date") else None
     return {
         "meta": {"case_id": case.case_id, "title": case.data.get("title", ""), "made_up_patient": True, "source": source, "saved": saved,
-                 "model": rec.get("profile"), "seconds": rec.get("wall_s") or (events[-1][0] if events else None)},
+                 "profile": rec.get("profile"), "model": model_name(rec.get("profile")), "seconds": rec.get("wall_s") or (events[-1][0] if events else None)},
         "patient": {"name": p.get("name"), "age": age, "sex": p.get("sex"), "coverage": (p.get("coverage") or {}).get("plan"),
                     "problems": [x.get("display") for x in p.get("problems", [])][:5]},
         "visit": {"date": visit.get("date"), "setting": visit.get("setting"),

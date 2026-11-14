@@ -2,7 +2,7 @@
 // Right: the plan under review. Findings arrive over one event stream, live or from a saved real run:
 //   GET /api/app/review/<case>?mode=recorded|live   ->  start, step*, item*, [rewrite], end {ok, doc | error}
 // Decisions are saved with POST /api/app/decision/<case>; nothing is kept only on the page.
-import { $, $$, api, cap, clock, date, h, plural, secs, setPlanner, timeOfDay } from './ui.js';
+import { $, $$, api, cap, clock, date, h, hours, plural, secs, setPlanner, timeOfDay } from './ui.js';
 
 const SPEEDS = [1, 4, 8, 20];
 const srcKind = e => e.said_in_visit ? 'visit' : e.source === 'Neighborhood' ? 'hood' : e.source === 'Transit schedules' ? 'transit' : 'chart';
@@ -10,9 +10,9 @@ const target = ref => ref.startsWith('transit:') ? ref.slice(8) : ref;          
 const category = s => cap(s).replace(/\b(nemt|snap|wic|liheap|pcp|ed)\b/gi, m => m.toUpperCase());
 function evidenceText(e, rows) {                     // appointments and screener answers read better from the chart row than from the raw citation
   const r = rows[e.ref];
-  if (r && e.ref.startsWith('appt:')) return `${date(r.date)}, ${clock(r.time)}, ${r.dept}: ${(r.status || '').replace('_', ' ')}`;
+  if (r && e.ref.startsWith('appt:')) return `${date(r.date)}, ${clock(r.time)}, ${cap(r.dept)}: ${(r.status || '').replace('_', ' ')}`;
   if (r && e.ref.startsWith('screener:')) return `${r.question}: ${r.answer}`;
-  return e.text;
+  return cap(e.text);
 }
 const flaggedOf = doc => doc.items.filter(i => i.status !== 'likely_ok');
 
@@ -47,13 +47,13 @@ function context(doc) {
 function finding(it, rows) {
   if (it.status === 'likely_ok') return h`<p class="okline">No barrier found for this patient.</p>`;
   return h`${it.barriers.map(b => h`<div class="barrier">
-      <p class="why"><b>${cap(b.label)}.</b> ${b.reason}</p>
+      <p class="why"><b>${cap(b.label)}.</b> ${cap(b.reason)}</p>
       <ul class="evidence">${b.evidence.map(e => h`<li><button type="button" class="ev" data-ref="${e.ref}" title="Show where this comes from">
         <span class="src ${srcKind(e)}">${e.source}</span><span class="ev-text">${evidenceText(e, rows)}</span>${e.said_in_visit ? '' : h`<span class="unsaid">not said in the visit</span>`}</button></li>`)}</ul>
     </div>`)}
     ${it.alternatives.length ? h`<div class="alts"><h4>What could work instead</h4><ul>${it.alternatives.map(a => {
       const r = a.resource;
-      return h`<li><span class="cat">${category(a.label)}</span><span>${a.text}${r ? h`<small class="res">${[r.name, r.hours, r.miles_from_home != null && `${r.miles_from_home} mi from home`, r.phone].filter(Boolean).join(' · ')}</small>` : ''}</span></li>`;
+      return h`<li><span class="cat">${category(a.label)}</span><span>${a.text}${r ? h`<small class="res">${[r.name, hours(r.hours), r.miles_from_home != null && `${r.miles_from_home} mi from home`, r.phone].filter(Boolean).join(' · ')}</small>` : ''}</span></li>`;
     })}</ul></div>` : ''}`;
 }
 
@@ -90,7 +90,8 @@ export async function visit(root, id) {
   let doc = await api(`case/${id}`);
   setPlanner(doc.planner);
   let es = null, tick = null, running = false, savedAt = {};
-  let mode = (localStorage.getItem('cp.mode') === 'live' || !doc.has_recording) ? 'live' : 'recorded';
+  const canRun = m => m === 'recorded' ? doc.has_recording : doc.planner.answers;
+  let mode = doc.has_recording && !(localStorage.getItem('cp.mode') === 'live' && canRun('live')) ? 'recorded' : 'live';
   let speed = SPEEDS.includes(+localStorage.getItem('cp.speed')) ? +localStorage.getItem('cp.speed') : 8;
   const p = doc.patient, el = sel => $(sel, root);
   const rows = Object.fromEntries([...doc.chart.appointments, ...doc.chart.screener.answers].map(r => [r.ref, r]));
@@ -117,6 +118,7 @@ export async function visit(root, id) {
             <button type="button" id="go" class="primary">Review the plan</button>
           </div>
         </div>
+        <div class="notice" id="blocked" hidden></div>
         <div class="runline" id="runline" hidden><span class="runtag" id="runtag"></span><span id="runtext"></span><span class="runclock" id="runclock"></span></div>
         <ul class="steps" id="steps" hidden></ul>
         <div class="notice bad" id="fail" hidden></div>
@@ -152,7 +154,7 @@ export async function visit(root, id) {
   function paintSteps(phase) {                       // phase: a pending label while running, or null when done
     const s = el('#steps');
     s.hidden = !doc.steps.length && !phase;
-    s.innerHTML = h`${doc.steps.map(x => h`<li class="step ${x.kind}"><span class="tick" aria-hidden="true">${x.kind === 'crossing' ? '→' : '✓'}</span>${x.crossed ? `Asked the public side for ${x.crossed.need} help near home` : x.label}<small>${secs(x.t)}</small></li>`)}
+    s.innerHTML = h`${doc.steps.map(x => h`<li class="step ${x.kind}"><span class="tick" aria-hidden="true">${x.kind === 'crossing' ? '→' : '✓'}</span>${x.label}<small>${secs(x.t)}</small></li>`)}
       ${phase ? h`<li class="step pending"><span class="spin" aria-hidden="true"></span>${phase}</li>` : ''}`;
   }
   function paintRunline(state, info = {}) {
@@ -162,7 +164,8 @@ export async function visit(root, id) {
     if (line.hidden) return;
     el('#runtag').className = `runtag ${src}`;
     el('#runtag').textContent = src === 'recorded' ? 'Saved run' : 'Live';
-    const when = info.saved || m.saved, model = info.model || m.model;
+    const when = info.saved || m.saved, model = info.model || m.model, profile = info.profile || m.profile;
+    el('#runtext').title = profile ? `Profile ${profile} in config/models.yaml` : '';
     el('#runtext').textContent = src === 'recorded'
       ? (state === 'running' ? `A real run saved on ${date(when)}, shown ${info.speed > 1 ? `at ${info.speed}× speed` : 'in real time'}` : `A real run saved on ${date(when)}. It took ${secs(m.seconds)} on ${model}.`)
       : (state === 'running' ? `The planner (${model}) is reviewing this plan now` : `Reviewed just now by the planner (${model}) in ${secs(m.seconds)}.`);
@@ -204,11 +207,17 @@ export async function visit(root, id) {
   function paintControls() {
     $$('.seg button', root).forEach(b => b.classList.toggle('on', b.dataset.mode === mode));
     el('#speed').hidden = mode !== 'recorded';
-    el('#keep').hidden = mode !== 'live' || doc.has_recording;
+    const blocked = !canRun(mode);
+    el('#keep').hidden = mode !== 'live' || doc.has_recording || blocked;
+    el('#blocked').hidden = running || !blocked || !el('#fail').hidden;
+    if (blocked) el('#blocked').innerHTML = doc.has_recording
+      ? h`<b>A live review needs the planner.</b> The planner is not answering: ${doc.planner.why}. Choose Saved run to replay a real review of this visit.`
+      : h`<b>This visit cannot be reviewed right now.</b> It has no saved run, and a live review needs the planner. The planner is not answering: ${doc.planner.why}.
+        <a href="#/">Back to the visits</a>: the ones with a saved run are listed first.`;
     const saved = root.querySelector('.seg [data-mode=recorded]');
     saved.title = doc.has_recording ? 'Replay a real run of this review that was saved earlier' : 'No run has been saved for this visit';
     el('#speed').value = String(speed);
-    el('#go').disabled = running;
+    el('#go').disabled = running || blocked;
     $$('.seg button, #speed, #record', root).forEach(b => { if (b.dataset.mode !== 'recorded' || doc.has_recording) b.disabled = running; });
   }
 
@@ -221,6 +230,7 @@ export async function visit(root, id) {
     f.hidden = false;
     f.innerHTML = h`<b>The review did not finish.</b> ${message}
       ${usedMode === 'live' && doc.has_recording ? h`<button type="button" class="link" id="fallback">Play the saved run instead</button>` : ''}`;
+    setPlanner(doc.planner); paintControls();
   }
   function start(useMode) {
     if (running) return;
@@ -310,7 +320,7 @@ export async function visit(root, id) {
       return;
     }
     if (t.closest('[data-cancel]')) { t.closest('.editbox').hidden = true; return; }
-    if (t.closest('#reset')) { await api(`reset/${id}`, {}); doc = await api(`case/${id}`); savedAt = {}; el('#fail').hidden = true; paintAll(); }
+    if (t.closest('#reset')) { await api(`reset/${id}`, {}); doc = await api(`case/${id}`); savedAt = {}; el('#fail').hidden = true; paintAll(); paintControls(); }
   });
   page.addEventListener('submit', e => {
     e.preventDefault();

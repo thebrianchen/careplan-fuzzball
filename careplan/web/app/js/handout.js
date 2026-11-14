@@ -1,12 +1,12 @@
 // The patient handout, built from the reviewed plan and the doctor's decisions.
 // Two versions: a draft assembled on the page from the review (no model needed), and the plain-language version in the
 // patient's language, which the planner writes (POST /summarize/<case>, the app's existing route).
-import { $, api, date, h, plural, setPlanner } from './ui.js';
+import { $, api, cap, date, h, hours, plural, setPlanner } from './ui.js';
 
 function draftSteps(it, dec) {
   if (it.status === 'likely_ok' || (dec && dec.decision === 'dismiss')) return ['Keep doing this as planned.'];
-  const alts = it.alternatives.map(a => a.text + (a.resource ? ` (${[a.resource.name, a.resource.hours, a.resource.phone].filter(Boolean).join(', ')})` : ''));
-  return [...it.barriers.map(b => `What can make this hard: ${b.reason}`), ...(dec && dec.decision === 'edit' ? [dec.note, ...alts.slice(0, 2)] : alts)];
+  const alts = it.alternatives.map(a => a.text + (a.resource ? ` (${[a.resource.name, hours(a.resource.hours), a.resource.phone].filter(Boolean).join(', ')})` : ''));
+  return [...it.barriers.map(b => `What can make this hard: ${cap(b.reason)}`), ...(dec && dec.decision === 'edit' ? [dec.note, ...alts.slice(0, 2)] : alts)];
 }
 
 export async function handout(root, id) {
@@ -50,7 +50,7 @@ export async function handout(root, id) {
       e.target.disabled = true; e.target.textContent = 'Writing…';
       const pl = (await api('system')).planner;          // ask first: a planner that is down would keep this waiting for minutes
       setPlanner(pl);
-      if (!pl.answers) return paint(`The planner (${pl.profile}) is not answering at ${pl.host}, and this step needs it. The draft below is unchanged.`);
+      if (!pl.answers) return paint(`The planner is not answering: ${pl.why}. This step needs it; the draft below is unchanged.`);
       const r = await fetch(`/summarize/${id}`, { method: 'POST' }).catch(() => null);
       if (r && r.ok) { doc.handout = await r.json(); return paint(); }
       const why = r ? String((await r.json().catch(() => ({}))).error || '').slice(0, 160) : '';

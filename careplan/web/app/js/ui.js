@@ -26,6 +26,12 @@ export function clock(hhmm) {                      // '15:00' -> '3:00 PM'
   const m = /^(\d\d):(\d\d)/.exec(hhmm || '');
   return m ? `${(+m[1] + 11) % 12 + 1}:${m[2]} ${+m[1] < 12 ? 'AM' : 'PM'}` : (hhmm || '');
 }
+export function hours(text) {                     // resource hours: 'Mon 13:00-15:00' -> 'Mon 1:00–3:00 PM'
+  return String(text || '').replace(/\b(\d\d:\d\d)-(\d\d:\d\d)\b/g, (_, a, b) => {
+    const from = clock(a), to = clock(b);
+    return `${from.slice(-2) === to.slice(-2) ? from.slice(0, -3) : from}–${to}`;
+  });
+}
 export const timeOfDay = iso => iso ? new Date(iso).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', second: '2-digit' }) : '';
 export const secs = s => s == null ? '—' : `${Math.round(s)} s`;
 export const cap = s => s ? s[0].toUpperCase() + s.slice(1) : '';
@@ -37,5 +43,6 @@ export function setPlanner(p) {                    // the pill in the top bar
   el.hidden = false;
   el.className = 'tag planner ' + (p.answers ? 'up' : 'down');
   el.textContent = `Planner ${p.answers ? 'answering' : 'not answering'}`;
-  el.title = `${p.profile} (${p.model}) at ${p.host}. This checks that the endpoint answers, not that it generates.`;
+  el.title = p.answers ? `${p.profile} (${p.model}) at ${p.host}. This checks that the endpoint answers, not that it generates.`
+    : `The planner is not answering: ${p.why}. ${p.profile} (${p.model}) at ${p.host}.`;
 }

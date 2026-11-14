@@ -79,7 +79,7 @@ class Clinic:
         self.shown: dict[str, dict] = {}                     # case_id -> the review as first shown: doc, assessment, source
         self.runs: collections.deque = collections.deque(maxlen=200)
         self.activity: collections.deque = collections.deque(maxlen=200)
-        self._probe: tuple[float, bool | None] = (0.0, None)
+        self._probe: tuple[float, str | None] = (0.0, None)  # when the endpoint was last probed, and why it did not answer
 
     def note(self, event: str, case_id: str | None = None, **detail) -> None:
         self.activity.append({"ts": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "event": event, "case_id": case_id, **detail})
@@ -89,21 +89,26 @@ class Clinic:
         return REC_DIR / f"stream_{cid}.json"
 
     def planner(self, fresh: bool = False) -> dict:
-        """Does the planner's endpoint answer? Reachability only: a serving engine can answer this and still not generate."""
-        p = self.app.client.p
-        at, ok = self._probe
-        if fresh or time.time() - at > 15:
-            try:
-                import requests
-                key = getattr(self.app.client, "key", "")
-                ok = requests.get(p.base_url.rstrip("/") + "/models", timeout=2.5,
-                                  headers={"Authorization": f"Bearer {key}"} if key else {}).ok
-            except Exception:
-                ok = False
-            self._probe = (time.time(), ok)
+        """Can the planner be asked for a review? `why` says why not, in words that follow "The planner is not answering: ".
+        Reachability only: a serving engine can answer the probe and still not generate."""
+        p, key = self.app.client.p, getattr(self.app.client, "key", "")
         url = urlparse(p.base_url)
-        return {"profile": p.name, "model": p.model, "host": url.netloc or p.base_url or "none", "answers": ok,
-                "hosted": _hosted(url.hostname or "")}
+        host, hosted = url.netloc or p.base_url or "none", _hosted(url.hostname or "")
+        if hosted and not key:       # a hosted /models listing answers without a key, so the probe alone would say "answering"
+            env = getattr(p, "api_key_env", "")
+            why = f"no API key is set ({env})" if env else "no API key is set"
+        else:
+            at, why = self._probe
+            if fresh or time.time() - at > 15:
+                try:
+                    import requests
+                    ok = requests.get(p.base_url.rstrip("/") + "/models", timeout=2.5,
+                                      headers={"Authorization": f"Bearer {key}"} if key else {}).ok
+                except Exception:
+                    ok = False
+                why = None if ok else f"{host} did not answer"
+                self._probe = (time.time(), why)
+        return {"profile": p.name, "model": p.model, "host": host, "hosted": hosted, "answers": why is None, "why": why}
 
     # ---- the doctor's side
     def state(self, cid: str) -> dict | None:
@@ -191,8 +196,8 @@ class Clinic:
                     return send({"type": "end", "ok": False, "error": "There is no saved run for this visit."})
                 data = json.loads(f.read_text())
                 rec = data["rec"]
-                send({"type": "start", "source": "recorded", "saved": data.get("saved"), "model": data.get("profile"),
-                      "seconds": rec.get("wall_s"), "speed": speed})
+                send({"type": "start", "source": "recorded", "saved": data.get("saved"), "profile": data.get("profile"),
+                      "model": demo.model_name(data.get("profile")), "seconds": rec.get("wall_s"), "speed": speed})
                 t0 = time.time()
                 for off, ev in data["events"]:
                     delay = off / speed - (time.time() - t0)
@@ -203,9 +208,9 @@ class Clinic:
             else:
                 pl = self.planner(fresh=True)
                 if not pl["answers"]:
-                    self.fail(cid, "live", "planner not answering")
-                    return send({"type": "end", "ok": False, "error": f"The planner ({pl['profile']}) is not answering at {pl['host']}."})
-                send({"type": "start", "source": "live", "model": pl["profile"]})
+                    self.fail(cid, "live", f"planner not answering: {pl['why']}")
+                    return send({"type": "end", "ok": False, "error": f"The planner is not answering: {pl['why']}."})
+                send({"type": "start", "source": "live", "profile": pl["profile"], "model": demo.model_name(pl["profile"])})
                 t0, events = time.time(), []
 
                 def push(ev: dict) -> None:

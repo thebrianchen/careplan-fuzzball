@@ -1,7 +1,7 @@
 // The operator's view (and the judges'): is the planner up, what crossed the boundary, what was reviewed, what the
 // doctors decided. Case ids and counts only: no patient fields are sent to this page. Refreshes every few seconds.
 //   GET /api/app/system     GET /redteam/live (leak-test counts, the app's existing route)
-import { $, api, date, h, plural, secs, setPlanner, timeOfDay } from './ui.js';
+import { $, api, cap, date, h, plural, secs, setPlanner, timeOfDay } from './ui.js';
 
 const median = xs => { const s = [...xs].sort((a, b) => a - b); return s.length ? s[Math.floor((s.length - 1) / 2)] : null; };
 const num = n => n == null ? '—' : Number(n).toLocaleString();
@@ -16,7 +16,7 @@ function tiles(s) {
   return h`
     <div class="tile ${s.planner.answers ? 'up' : 'down'}"><span class="k">Planner</span>
       <b>${s.planner.answers ? 'Endpoint answering' : 'Not answering'}</b>
-      <small>${s.planner.profile} · ${s.planner.model}<br>${s.planner.host} · a reachability check, not a generation check</small></div>
+      <small>${s.planner.answers ? '' : h`<span class="bad">${cap(s.planner.why)}.</span><br>`}${s.planner.profile} · ${s.planner.model}<br>${s.planner.host}${s.planner.answers ? ' · a reachability check, not a generation check' : ''}</small></div>
     <div class="tile"><span class="k">Reviews since this server started</span>
       <b>${live.length} live · ${ok.length - live.length} from saved runs</b>
       <small>${failed ? h`<span class="bad">${plural(failed, 'review')} did not finish</span> · ` : ''}server up ${uptime(s.uptime_s)}</small></div>

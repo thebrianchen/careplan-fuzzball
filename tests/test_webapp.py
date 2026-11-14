@@ -8,8 +8,9 @@ import unittest
 import urllib.error
 import urllib.request
 from pathlib import Path
+from unittest import mock
 
-from careplan.llm import Reply, ToolCall
+from careplan.llm import ModelProfile, Reply, ToolCall
 
 ASSESSMENT = {"items": [
     {"item_id": "P1", "status": "blocked", "barriers": [{"barrier": "transport", "reason": "No car, two buses.", "evidence": ["turn:T02", "appt:2"]}],
@@ -54,7 +55,8 @@ class WebAppTests(unittest.TestCase):
         cls.tmp.cleanup()
 
     def setUp(self):
-        self.clinic.planner = lambda fresh=False: {"profile": "fake-stream", "model": "fake", "host": "test", "answers": True, "hosted": False}
+        self.clinic.planner = lambda fresh=False: {"profile": "fake-stream", "model": "fake", "host": "test", "hosted": False,
+                                                   "answers": True, "why": None}
         self.post("reset/D001", {})
 
     def get(self, path):
@@ -138,11 +140,36 @@ class WebAppTests(unittest.TestCase):
             saved.write_bytes(before)
 
     def test_live_review_fails_at_once_when_the_planner_does_not_answer(self):
-        self.clinic.planner = lambda fresh=False: {"profile": "fake-stream", "model": "fake", "host": "test", "answers": False, "hosted": False}
+        self.clinic.planner = lambda fresh=False: {"profile": "fake-stream", "model": "fake", "host": "test", "hosted": False,
+                                                   "answers": False, "why": "test did not answer"}
         evs = self.review("mode=live")
         self.assertEqual((len(evs), evs[0]["type"], evs[0]["ok"]), (1, "end", False))
         self.assertIn("not answering", evs[0]["error"])
         self.assertEqual(self.get("case/D001")["items"], [])
+
+    def test_a_hosted_planner_without_a_key_is_not_answering_and_says_why(self):
+        del self.clinic.planner                                            # the real check, not the stub
+        hosted = type("C", (), {"p": ModelProfile(name="super", model="nvidia/nemotron-3-super-120b-a12b"), "key": ""})()
+        client, self.app.client = self.app.client, hosted
+        try:
+            with mock.patch("requests.get", side_effect=AssertionError("no network call")) as get:
+                pl = self.get("cases")["planner"]
+                evs = self.review("mode=live")
+            self.assertFalse(get.called)
+        finally:
+            self.app.client = client
+        self.assertEqual((pl["answers"], pl["hosted"]), (False, True))
+        self.assertIn("OPENROUTER_API_KEY", pl["why"])
+        self.assertEqual((len(evs), evs[0]["type"], evs[0]["ok"]), (1, "end", False))
+        self.assertIn(pl["why"], evs[0]["error"])
+
+    def test_a_saved_run_names_its_model_and_the_public_side(self):
+        evs = self.review("mode=recorded&speed=1000")
+        meta = evs[-1]["doc"]["meta"]
+        self.assertEqual((meta["profile"], meta["model"]), ("super-vllm-raw", "Nemotron-3-Super-120B-A12B-NVFP4"))
+        self.assertEqual((evs[0]["profile"], evs[0]["model"]), ("super-vllm-raw", "Nemotron-3-Super-120B-A12B-NVFP4"))
+        crossings = [s["label"] for s in evs[-1]["doc"]["steps"] if s["kind"] == "crossing"]
+        self.assertEqual(crossings, ["Asked the public side for transport help near home", "Asked the public side for food help near home"])
 
     def test_pages_are_served_and_nothing_outside_them(self):
         with urllib.request.urlopen(f"{self.url}/app/") as r:
