@@ -111,6 +111,7 @@ def hood_facts(tract: dict | None, county: dict[str, dict]) -> list[dict]:
 PANEL = {"reviews": ROOT / "reports" / "panel_aggregates.json", "sample": ROOT / "reports" / "panel_aggregates_sample.json"}
 PANEL_CLINIC = "17031260300"                      # scripts/panel.py draws the panel from the tracts nearest this one
 HELP_KM = 1.6                                     # "near" a neighborhood: within a mile of its center
+PANEL_EDGE = 0.012                                # degrees beyond the outermost neighborhood centers that the map still shows
 
 
 def panel(tracts, resources, county: dict[str, dict], samples: bool) -> dict | None:
@@ -132,7 +133,11 @@ def panel(tracts, resources, county: dict[str, dict], samples: bool) -> dict | N
                      **{k: r[k] for k in ("patients", "reviewed", "flagged_patients", "flagged_items", "appointments", "no_shows", "barriers")},
                      "places_near": {barrier: near[barrier] for barrier in sample.PLACES}, "facts": hood_facts(t, county)})
     clinic = tracts.get(PANEL_CLINIC)
-    return {"source": "sample" if agg.get("source") == "answer_key" else "reviews", "built": agg["built"], "k": agg["k"],
+    lats, lons = [r["lat"] for r in rows], [r["lon"] for r in rows]
+    inside = lambda x: min(lats) - PANEL_EDGE <= x.lat <= max(lats) + PANEL_EDGE and min(lons) - PANEL_EDGE <= x.lon <= max(lons) + PANEL_EDGE
+    places = {barrier: [{"name": x.name, "lat": x.lat, "lon": x.lon} for x in resources.resources if x.need == need and inside(x)]
+              for barrier, (need, _) in sample.PLACES.items()} if rows else {}
+    return {"places": places, "source": "sample" if agg.get("source") == "answer_key" else "reviews", "built": agg["built"], "k": agg["k"],
             "patients": agg["patients"], "reviewed": agg["reviewed"], "hidden_tracts": agg["tracts_suppressed_under_k"],
             "clinic": {"tract_id": PANEL_CLINIC, "lat": clinic["intpt_lat"], "lon": clinic["intpt_lon"]} if clinic else None,
             "barriers": [{"barrier": b, "label": b.replace("_", " "), "flags": n, "places": b in sample.PLACES} for b, n in totals.most_common()],
@@ -261,11 +266,24 @@ class Clinic:
         doc["planner"] = self.planner()
         return doc
 
-    def install(self, cid: str, rec: dict, doc: dict, source: str) -> None:
+    def prefill(self) -> None:
+        """With samples on, the day starts with most visits already reviewed: every visit without a saved run gets its sample
+        review. Visits with a saved run stay unreviewed, to be played. These do not count as reviews on the System page."""
+        app = self.app
+        for cid, case in app.cases.items():
+            if cid in self.shown or self.recording(cid).is_file():
+                continue
+            data = sample.run(case, app.tracts.get(case.tract_geoid), app.resources)
+            doc = demo.build(case, data["rec"], data["events"], app.tracts, app.resources, "sample")
+            self.install(cid, data["rec"], doc, "sample", log=False)
+
+    def install(self, cid: str, rec: dict, doc: dict, source: str, log: bool = True) -> None:
         with self.app.lock:
             self.app.results[cid] = rec
             self.app.summaries.pop(cid, None)
             self.shown[cid] = {"doc": doc, "assessment": copy.deepcopy(rec["assessment"]), "source": source}
+        if not log:
+            return
         usage = rec.get("usage") or {}
         self.runs.append({"ts": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "case_id": cid, "source": source, "ok": True,
                           "profile": rec.get("profile"), "seconds": rec.get("wall_s"), "steps": rec.get("steps"),
@@ -404,8 +422,11 @@ class Clinic:
 def clinic(app) -> Clinic:
     if not hasattr(app, "clinic"):
         with app.lock:
-            if not hasattr(app, "clinic"):
+            new = not hasattr(app, "clinic")
+            if new:
                 app.clinic = Clinic(app)
+        if new and app.clinic.samples:            # after the lock is released: installing a review takes it
+            app.clinic.prefill()
     return app.clinic
 
 

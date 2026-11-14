@@ -5,9 +5,10 @@ function status(c, planner, samples) {
   const r = c.review;
   if (!r) return h`<span class="chip none">Not reviewed</span>${c.has_recording ? h`<span class="hint">saved run available</span>`
     : samples ? h`<span class="hint">sample review</span>` : planner.answers ? '' : h`<span class="hint" title="The planner is not answering: ${planner.why}">needs the planner</span>`}`;
-  if (!r.flagged) return h`<span class="chip likely_ok">Reviewed, no flags</span>`;
+  const sample = r.source === 'sample' ? h`<span class="hint" title="A stand-in built from this visit's answer key. Not a model run.">· sample</span>` : '';
+  if (!r.flagged) return h`<span class="chip likely_ok">Reviewed, no flags</span>${sample}`;
   return h`<span class="chip ${r.decided === r.flagged ? 'likely_ok' : 'at_risk'}">${r.flagged} of ${r.items} flagged</span>
-    <span class="hint">${r.decided === r.flagged ? 'all decided' : `${r.decided} of ${r.flagged} decided`}</span>`;
+    <span class="hint">${r.decided === r.flagged ? 'all decided' : `${r.decided} of ${r.flagged} decided`}</span>${sample}`;
 }
 
 export async function worklist(root) {

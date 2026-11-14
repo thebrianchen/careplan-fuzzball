@@ -238,6 +238,22 @@ class WebAppTests(unittest.TestCase):
         self.assertTrue(any(a["resource"] for a in flagged["P1"]["alternatives"]))            # a real place from the resource table
         self.assertEqual([c["need"] for c in doc["crossings"]], ["utilities"])
 
+    def test_with_samples_on_the_day_starts_reviewed_except_the_visits_that_have_a_saved_run(self):
+        self.clinic.samples = True
+        before = len(self.get("system")["runs"])
+        try:
+            self.clinic.prefill()
+            rows = {c["case_id"]: c for c in self.get("cases")["cases"]}
+            added = len(self.get("system")["runs"]) - before
+        finally:
+            self.clinic.samples = False
+            for cid in list(self.clinic.shown):
+                self.post(f"reset/{cid}", {})
+        self.assertIsNone(rows["D001"]["review"])                                          # it has a saved run: left to be played
+        self.assertEqual(rows["D002"]["review"]["source"], "sample")
+        self.assertEqual(sum(1 for c in rows.values() if c["review"]), len(rows) - 1)
+        self.assertEqual(added, 0)                                                         # a stand-in is not a review on the System page
+
     def test_the_panel_is_counts_by_neighborhood_and_the_stand_in_is_shown_only_when_samples_are_on(self):
         from careplan import webapp
         real, webapp.PANEL["reviews"] = webapp.PANEL["reviews"], Path(self.tmp.name) / "no_reviews_yet.json"
