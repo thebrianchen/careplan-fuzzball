@@ -1,10 +1,12 @@
 // The clinic manager's view: every plan in the panel checked, counted by the patient's neighborhood (census tract).
 // Counts only: no patient reaches this page, and a neighborhood with fewer than k patients is not in the data at all.
-//   GET /api/app/panel -> {panel: null | P}     GET /api/app/city (the map's backdrop)
-// The view lives in the address: #/clinic?b=<barrier>&order=share&t=<tract>, kept current with replaceState.
-import { $, $$, api, cap, date, h, plural } from './ui.js';
-import { at, countyBar, mount, viewAttr, viewOf } from './exhibits.js';
-import { HELPS, nameOf, pct, tractName } from './clinic_words.js';
+//   GET /api/app/panel -> {panel: null | P}     GET /api/app/basemap -> {basemap: null | B} (drawn by clinic_map.js)
+// The view lives in the address: #/clinic?b=<barrier>&order=share&t=<tract>&p=<place>, kept current with replaceState.
+// The map's center and zoom are the map's own and stay out of the address.
+import { $, api, cap, date, h, plural } from './ui.js';
+import { countyBar } from './exhibits.js';
+import { HELPS, PLACE_KINDS, nameOf, pct, tractName } from './clinic_words.js';
+import { clinicMap, pinKey, placeKind } from './clinic_map.js';
 import { gaps } from './clinic_gaps.js';
 import { publicView } from './clinic_public.js';
 
@@ -38,19 +40,23 @@ const selected = (P, s) => s.tract || ranked(P, s.barrier, s.order)[0].t.tract_i
 const placesFor = (P, barrier) => P.barriers.find(b => b.barrier === barrier)?.places ? P.places?.[barrier] || [] : null;
 const nearText = n => n ? `${plural(n, 'place')} nearby` : 'no place nearby';
 
+// A place stays open only while its barrier is chosen and its kind is shown.
+const fix = (P, s, hidden) => ({ ...s, place: (placesFor(P, s.barrier) || []).some(p => p.id === s.place && !hidden.has(p.kind)) ? s.place : null });
 function readAddress(P, query) {
   const q = new URLSearchParams(query || ''), b = q.get('b'), t = q.get('t');
-  return {
+  return fix(P, {
     barrier: P.barriers.some(x => x.barrier === b) ? b : null,
     order: q.get('order') === 'share' ? 'share' : 'count',
     tract: P.tracts.some(x => x.tract_id === t) ? t : null,
-  };
+    place: q.get('p'),
+  }, new Set());
 }
 function address(s) {
   const q = new URLSearchParams();
   if (s.barrier) q.set('b', s.barrier);
   if (s.order !== 'count') q.set('order', s.order);
   if (s.tract) q.set('t', s.tract);
+  if (s.place) q.set('p', s.place);
   return `#/clinic${q.toString() ? `?${q}` : ''}`;
 }
 
@@ -64,66 +70,36 @@ function shades(P, barrier) {
   return { bin, labels, none: all.some(x => x === 0) };
 }
 const measureText = barrier => barrier ? 'flags per reviewed patient' : 'reviewed patients with any flag';
-const r1 = v => Math.round(v * 10) / 10;
-const pin = (x, y, k) => `M${r1(x)} ${r1(y)}l${r1(-3 * k)} ${r1(-5.2 * k)}a${r1(3.5 * k)} ${r1(3.5 * k)} 0 1 1 ${r1(6 * k)} 0z`;   // a teardrop, tip on the place
 
-let cityData = null;                                 // the backdrop (~0.5 MB), fetched once per page load
-const city = () => cityData || (cityData = api('city'));
+let basemapData = null;                              // the street map (~2 MB), fetched once per page load
+const basemap = () => basemapData || (basemapData = api('basemap').then(d => d.basemap, err => {
+  console.warn(`The street map could not load, so neighborhoods are drawn as dots: ${err.message}`);
+  basemapData = null;
+  return null;
+}));
 
-// Circle AREA is proportional to patients. The core is the box's own size in px, so marks and text keep their size on screen.
-function geometry(P, w) {
-  const hgt = Math.round(Math.min(Math.max(w * 0.8, 300), 540));
-  const most = Math.max(...P.tracts.map(t => t.patients)), rmax = Math.max(22, Math.min(40, w * 0.07));
-  const r = n => rmax * Math.sqrt(n / most);
-  const pad = rmax + 8;
-  const view = viewOf([...P.tracts, ...(P.clinic ? [P.clinic] : [])], { w, h: hgt, padX: pad, padY: pad, minKm: 1 });
-  return { w, h: hgt, view, r, most };
+function legend(P, state, hidden) {
+  const b = state.barrier, sh = shades(P, b), pts = placesFor(P, b), chosen = P.barriers.find(x => x.barrier === b);
+  const kinds = pts ? Object.keys(PLACE_KINDS).map(k => [k, pts.filter(p => p.kind === k).length]).filter(([, n]) => n) : [];
+  return h`<div class="lg-shade-row"><span class="k">Shade: share, ${b ? `${nameOf(chosen).toLowerCase()} ` : ''}${measureText(b)}</span>
+      <span class="lg-shade">${sh.labels.map((l, i) => i || sh.none ? h`<span><i class="b${i}"></i>${l}</span>` : '')}<span class="lg-out"><i></i>No shading: outside the panel, or fewer than ${P.k} patients</span></span></div>
+    ${kinds.length ? h`<div class="lg-pins"><span class="k">${plural(pts.length, 'place')} that could help with ${HELPS[b]}</span>
+      <span class="lg-kinds">${kinds.map(([k, n]) => h`<button type="button" data-kind="${k}" aria-pressed="${String(!hidden.has(k))}" title="${hidden.has(k) ? 'Show' : 'Hide'} these on the map">${pinKey(k)}${placeKind(k)} <b>${n}</b></button>`)}</span></div>` : ''}
+    <div class="lg-keys"><span><b class="rank-key">1</b>Top ${Math.min(TOP, P.tracts.length)} in the list, by ${ORDERS[state.order].toLowerCase()}</span>
+      <span><i class="clinic-key"></i>The clinic</span></div>`;
 }
-
-function mapMarks(P, g) {
-  const circles = [...P.tracts].sort((a, b) => b.patients - a.patients).map(t => {
-    const [x, y] = at(g.view, t), r = g.r(t.patients);
-    return h`<g class="hood" data-tract="${t.tract_id}" data-x="${r1(x)}" data-y="${r1(y)}" data-r="${r1(r)}" tabindex="0" role="button" aria-label="${tractName(t.tract_id)}">
-      <circle class="dot" cx="${r1(x)}" cy="${r1(y)}" r="${r1(r)}"/>${r < 9 ? h`<circle class="hit" cx="${r1(x)}" cy="${r1(y)}" r="9"/>` : ''}</g>`;
-  });
-  const c = P.clinic && at(g.view, P.clinic);
-  const clinic = c ? h`<g class="clinic" aria-hidden="true"><path class="lead"/><rect x="${r1(c[0] - 5)}" y="${r1(c[1] - 5)}" width="10" height="10" rx="2.5"/>
-    <path d="M${r1(c[0])} ${r1(c[1] - 2.8)}v5.6M${r1(c[0] - 2.8)} ${r1(c[1])}h5.6"/>
-    <text data-x="${r1(c[0])}" data-y="${r1(c[1])}">Clinic</text></g>` : '';
-  return h`${circles}<g class="pins"></g><circle class="sel" r="0"/>${clinic}<g class="ranks" aria-hidden="true"></g>`;
-}
-
-function legend(P, g, state) {
-  const b = state.barrier, sizes = [...new Set([Math.min(...P.tracts.map(t => t.patients)), median(P.tracts.map(t => t.patients)), g.most])];
-  const big = g.r(g.most), bottom = 2 * big + 6;
-  let ly = -Infinity;
-  const rings = [...sizes].reverse().map(n => { const r = g.r(n), top = bottom - 2 * r; ly = Math.max(top, ly + 11);
-    return h`<circle cx="${r1(big + 1)}" cy="${r1(bottom - r)}" r="${r1(r)}"/><path d="M${r1(big + 1)} ${r1(top)}H${r1(2 * big + 5)}L${r1(2 * big + 10)} ${r1(ly)}"/><text x="${r1(2 * big + 13)}" y="${r1(ly + 3.5)}">${n}</text>`; });
-  const sh = shades(P, b), pts = placesFor(P, b), chosen = P.barriers.find(x => x.barrier === b);
-  const ranks = Math.min(TOP, P.tracts.length);
-  return h`<div class="lg lg-sizes"><span class="k">Size: patients</span>
-      <svg width="${Math.ceil(2 * big + 34)}" height="${Math.ceil(bottom + 2)}" class="lg-size" aria-hidden="true">${rings}</svg></div>
-    <div class="lg lg-rest">
-      <div><span class="k">Shade: share, ${b ? `${nameOf(chosen).toLowerCase()} ` : ''}${measureText(b)}</span>
-        <span class="lg-shade">${sh.labels.map((l, i) => i || sh.none ? h`<span><i class="b${i}"></i>${l}</span>` : '')}</span></div>
-      <div class="lg-keys">
-        <span><b class="rank-key">1</b>Top ${ranks} in the list, by ${ORDERS[state.order].toLowerCase()}</span>
-        ${pts ? h`<span><svg class="pin-key" width="9" height="12" aria-hidden="true"><path class="pin" d="${pin(4.5, 11, 1)}"/></svg>${plural(pts.length, 'place')} that could help with ${HELPS[b]}</span>` : ''}
-        <span><i class="clinic-key"></i>The clinic</span></div></div>`;
-}
-const median = xs => { const s = [...xs].sort((a, b) => a - b); return s[Math.floor((s.length - 1) / 2)]; };
 
 function barChart(P, barrier) {
   const most = Math.max(...P.barriers.map(b => b.flags));
-  return h`<button type="button" class="ball" data-barrier="" aria-pressed="${!barrier}">All barriers</button>
-    <ol class="bbars">${P.barriers.map(b => h`<li><button type="button" class="bbar" data-barrier="${b.barrier}" aria-pressed="${b.barrier === barrier}">
+  return h`<button type="button" class="ball" data-barrier="" aria-pressed="${String(!barrier)}">All barriers</button>
+    <ol class="bbars">${P.barriers.map(b => h`<li><button type="button" class="bbar" data-barrier="${b.barrier}" aria-pressed="${String(b.barrier === barrier)}">
       <span class="bl">${nameOf(b)}</span><span class="bt"><i style="width:${(b.flags / most * 100).toFixed(1)}%"></i></span><span class="bn">${b.flags}</span></button></li>`)}</ol>`;
 }
 
 function rankList(P, state, sel) {
   const b = state.barrier, rows = ranked(P, b, state.order), near = placesFor(P, b) && b;
   const shown = rows.slice(0, TOP), pos = rows.findIndex(x => x.t.tract_id === sel);
-  const row = ({ t, m }, i) => h`<li><button type="button" class="rrow${t.tract_id === sel ? ' on' : ''}" data-tract="${t.tract_id}" aria-pressed="${t.tract_id === sel}">
+  const row = ({ t, m }, i) => h`<li><button type="button" class="rrow${t.tract_id === sel ? ' on' : ''}" data-tract="${t.tract_id}" aria-pressed="${String(t.tract_id === sel)}">
     <span class="rn">${i + 1}</span><span class="rt">${tractName(t.tract_id)}
       <small>${who(t)}${state.order === 'share' && t.reviewed < FEW ? h`<em class="few">few patients</em>` : ''}${near ? h`<span class="near${t.places_near[near] ? '' : ' none'}">${nearText(t.places_near[near])}</span>` : ''}</small></span>
     <span class="rc"><b>${m.n} of ${m.of}</b> ${pct(m.share)}</span><span class="rb"><i style="width:${(m.share * 100).toFixed(1)}%"></i></span></button></li>`;
@@ -132,7 +108,7 @@ function rankList(P, state, sel) {
     ? `Ranked by the number of ${what}; ties go to the higher share. Neighborhoods have ${Math.min(...sizes)} to ${Math.max(...sizes)} reviewed patients, so the larger ones gather more ${b ? 'flags' : 'of them'}.`
     : `Ranked by share; ties go to the larger neighborhood. "Few patients" marks a neighborhood with fewer than ${FEW} reviewed, where a few ${b ? 'flags' : 'patients'} make a high share.`;
   return h`<div class="seg rorder" role="group" aria-label="Rank by">${Object.entries(ORDERS).map(([k, l]) =>
-      h`<button type="button" data-order="${k}" class="${k === state.order ? 'on' : ''}" aria-pressed="${k === state.order}">${l}</button>`)}</div>
+      h`<button type="button" data-order="${k}" class="${k === state.order ? 'on' : ''}" aria-pressed="${String(k === state.order)}">${l}</button>`)}</div>
     <ol class="rank">${shown.map(row)}${pos >= TOP ? h`<li class="gap" aria-hidden="true">…</li>${row(rows[pos], pos)}` : ''}</ol>
     <p class="hint">${how}${b ? ' A patient can carry more than one flag.' : ''}</p>`;
 }
@@ -189,7 +165,7 @@ function head(P) {
 }
 
 export async function clinic(root, query) {
-  const { panel: P } = await api('panel');
+  const [{ panel: P }, B] = await Promise.all([api('panel'), basemap()]);
   if (!P) {
     root.innerHTML = h`<div class="page narrow"><div class="page-head"><h1>Clinic</h1></div>
       <div class="notice"><b>This server has no panel results.</b><div class="muted">The clinic view counts reviews over the whole panel. None have been published on this server yet.</div></div></div>`;
@@ -200,7 +176,7 @@ export async function clinic(root, query) {
     <div class="cgrid">
       <section class="card cbars"><h2>Barriers flagged</h2><p class="hint">Flags across ${P.reviewed} reviewed plans. Choose one to see where it clusters.</p><div id="bars"></div></section>
       <section class="card cmapcard"><h2 id="map-title"></h2><p class="csays" id="says"></p>
-        <figure class="exmap cmap"><div class="exmap-box cmap-box"></div><div class="cmap-tip" role="status" hidden></div></figure>
+        <figure class="cmap"><div class="cmap-stack"></div>${B ? h`<figcaption class="cmap-src">Map: ${B.source}</figcaption>` : ''}</figure>
         <div class="legend" id="legend"></div>
         <p class="cfrom">This map is built from what clinicians' plans ran into in visits, not from public data alone. Only counts left the patient side, and a neighborhood with fewer than ${P.k} patients is withheld.</p></section>
       <section class="card crank"><h2 id="rank-title"></h2><div id="rank"></div></section>
@@ -211,15 +187,16 @@ export async function clinic(root, query) {
       <section class="card cpublic" id="public"></section>
     </div>
     <p class="cladder">One flag helps one patient keep a plan. A panel of flags tells a clinic where to find partners. The counts alone, with no patient in them, can go to the county.</p></div>`;
-  const el = sel => $(sel, root), box = el('.cmap-box');
-  const g = geometry(P, Math.round(box.clientWidth));
-  box.style.aspectRatio = `${g.w} / ${g.h}`;
-  box.innerHTML = h`<canvas data-view="${viewAttr(g.view)}" aria-hidden="true"></canvas>
-    <svg viewBox="0 0 ${g.w} ${g.h}" preserveAspectRatio="xMidYMid meet" role="group" aria-label="Map of the panel's neighborhoods">${mapMarks(P, g)}</svg>`;
-  mount(root, city);
+  const el = sel => $(sel, root);
   const byId = Object.fromEntries(P.tracts.map(t => [t.tract_id, t]));
+  const hidden = new Set();                            // kinds of place the manager switched off in the legend, for this visit only
   let state = readAddress(P, query);
-  const set = patch => { state = { ...state, ...patch }; paint(); };
+  const set = patch => { state = fix(P, { ...state, ...patch }, hidden); paint(); };
+  const map = clinicMap(el('.cmap-stack'), { basemap: B, tracts: P.tracts, clinic: P.clinic, pick: tract => set({ tract }), place: place => set({ place }) });
+  const tip = id => {
+    const t = byId[id], m = measure(t, state.barrier), chosen = P.barriers.find(x => x.barrier === state.barrier);
+    return h`<b>${tractName(id)}</b> · ${who(t)}<br>${chosen ? nameOf(chosen) : 'Any flag'}: <b>${m.n} of ${m.of}</b> (${pct(m.share)})`;
+  };
 
   function paint() {
     const b = state.barrier, chosen = P.barriers.find(x => x.barrier === b), sh = shades(P, b), sel = selected(P, state);
@@ -228,20 +205,12 @@ export async function clinic(root, query) {
     el('#map-title').textContent = chosen ? `${nameOf(chosen)}: where flags fall` : 'Where flagged plans live';
     el('#says').textContent = says(P, state);
     el('#rank-title').textContent = chosen ? `Where ${nameOf(chosen).toLowerCase()} clusters` : 'Where flagged patients cluster';
-    $$('.hood', box).forEach(n => {
-      const m = measure(byId[n.dataset.tract], b);
-      n.dataset.bin = sh.bin(m);
-      n.classList.toggle('on', n.dataset.tract === sel);
+    map.update({
+      bins: Object.fromEntries(P.tracts.map(t => [t.tract_id, sh.bin(measure(t, b))])),
+      ranks: ranked(P, b, state.order).slice(0, TOP).map(x => x.t.tract_id),
+      selected: sel, places: (placesFor(P, b) || []).filter(p => !hidden.has(p.kind)), place: state.place, tip,
     });
-    const pts = placesFor(P, b) || [], k = g.w < 500 ? 0.8 : 1;
-    $('.pins', box).innerHTML = h`${pts.map(p => { const [x, y] = at(g.view, p); return h`<path class="pin" d="${pin(x, y, k)}"><title>${p.name}</title></path>`; })}`;
-    const nums = ranked(P, b, state.order).slice(0, TOP).map(({ t }, i) => { const n = $(`.hood[data-tract="${t.tract_id}"]`, box);
-      return { x: +n.dataset.x, y: +n.dataset.y + (t.tract_id === P.clinic?.tract_id ? -11 : 4), i }; });
-    $('.ranks', box).innerHTML = h`${nums.map(p => h`<text x="${p.x}" y="${p.y}">${p.i + 1}</text>`)}`;
-    placeClinicLabel(nums);
-    const ring = $('.sel', box), on = $(`.hood[data-tract="${sel}"]`, box);
-    ring.setAttribute('cx', on.dataset.x); ring.setAttribute('cy', on.dataset.y); ring.setAttribute('r', Math.max(+on.dataset.r, 6) + 2.5);
-    el('#legend').innerHTML = legend(P, g, state);
+    el('#legend').innerHTML = legend(P, state, hidden);
     el('#rank').innerHTML = rankList(P, state, sel);
     el('#detail').innerHTML = detail(P, state, sel);
     el('#gaps').innerHTML = gaps(P, state, sel);
@@ -249,62 +218,21 @@ export async function clinic(root, query) {
     el('.page').classList.toggle('one-barrier', !!b);
   }
 
-  // The clinic sits among the densest circles, so its label goes where it covers the fewest circles and rank numbers,
-  // on a short leader line when it has to move away from the marker.
-  function placeClinicLabel(nums) {
-    const lab = $('.clinic text', box);
-    if (!lab) return;
-    const x = +lab.dataset.x, y = +lab.dataset.y, w = 36, hh = 14;
-    const hoods = $$('.hood', box).map(n => [+n.dataset.x, +n.dataset.y, +n.dataset.r]);
-    const near = (qx, qy, ax, ay, bx, by) => {   // distance from a point to the segment a-b
-      const f = Math.max(0, Math.min(1, ((qx - ax) * (bx - ax) + (qy - ay) * (by - ay)) / ((bx - ax) ** 2 + (by - ay) ** 2 || 1)));
-      return Math.hypot(qx - ax - f * (bx - ax), qy - ay - f * (by - ay));
-    };
-    const hits = (l, t) => hoods.filter(([cx, cy, r]) => Math.hypot(cx - Math.max(l, Math.min(cx, l + w)), cy - Math.max(t, Math.min(cy, t + hh))) < r).length;
-    const best = [9, 28, 46].flatMap(d => [0, 180, -40, -140, 40, 140, -90, 90].map(a => {
-      const dx = Math.round(Math.cos(a * Math.PI / 180) * d), dy = Math.round(Math.sin(a * Math.PI / 180) * d);
-      const px = x + dx, py = y + dy, l = dx > 4 ? px : dx < -4 ? px - w : px - w / 2, t = py - hh / 2;
-      const out = l < 2 || t < 2 || l + w > g.w - 2 || t + hh > g.h - 2;
-      const crossed = d > 9 && nums.some(p => near(p.x, p.y - 4, x, y, px, py) < 7);
-      const score = hits(l, t) + 3 * nums.filter(p => p.x > l - 6 && p.x < l + w + 6 && p.y > t - 2 && p.y < t + hh + 10).length + (crossed ? 3 : 0) + (out ? 99 : 0) + d / 100;
-      return { px, py, l, t, d, a, score };
-    })).sort((p, q) => p.score - q.score)[0];
-    lab.setAttribute('x', r1(best.l)); lab.setAttribute('y', r1(best.t + 11)); lab.setAttribute('text-anchor', 'start');
-    const a = best.a * Math.PI / 180;
-    $('.clinic .lead', box).setAttribute('d', best.d > 9 ? `M${r1(x + 7 * Math.cos(a))} ${r1(y + 7 * Math.sin(a))}L${r1(best.px)} ${r1(best.py)}` : '');
-  }
-
-  const tip = el('.cmap-tip');
-  function showTip(n) {
-    const t = byId[n.dataset.tract], m = measure(t, state.barrier), chosen = P.barriers.find(x => x.barrier === state.barrier);
-    tip.innerHTML = h`<b>${tractName(t.tract_id)}</b> · ${who(t)}<br>${chosen ? nameOf(chosen) : 'Any flag'}: <b>${m.n} of ${m.of}</b> (${pct(m.share)})`;
-    tip.hidden = false;
-    const s = box.clientWidth / g.w, half = tip.offsetWidth / 2;
-    const x = Math.min(Math.max(+n.dataset.x * s, half + 4), box.clientWidth - half - 4);
-    const above = (+n.dataset.y - +n.dataset.r) * s - 8;
-    tip.classList.toggle('below', above < tip.offsetHeight + 4);
-    tip.style.left = `${x}px`;
-    tip.style.top = `${above < tip.offsetHeight + 4 ? (+n.dataset.y + +n.dataset.r) * s + 8 : above}px`;
-  }
-  const svg = $('svg', box);
-  svg.addEventListener('pointerover', e => { const n = e.target.closest('.hood'); if (n) showTip(n); });
-  svg.addEventListener('pointerleave', () => { tip.hidden = true; });
-  svg.addEventListener('focusin', e => { const n = e.target.closest('.hood'); if (n) showTip(n); });
-  svg.addEventListener('focusout', () => { tip.hidden = true; });
-  svg.addEventListener('keydown', e => {
-    const n = e.target.closest('.hood');
-    if (n && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); set({ tract: n.dataset.tract }); n.focus(); }
-  });
   el('.page').addEventListener('click', e => {
     const bar = e.target.closest('[data-barrier]'), order = e.target.closest('[data-order]'), hood = e.target.closest('[data-tract]');
     const go = e.target.closest('[data-go-barrier],[data-go-tract]');     // a card below the map sends the manager to a view of it
+    const kind = e.target.closest('.lg-kinds [data-kind]');
     if (go) {
       set({ barrier: go.dataset.goBarrier ?? state.barrier, tract: go.dataset.goTract ?? state.tract });
       el('.cgrid').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else if (kind) {
+      if (!hidden.delete(kind.dataset.kind)) hidden.add(kind.dataset.kind);
+      set({});
     } else if (bar) set({ barrier: bar.dataset.barrier && bar.dataset.barrier !== state.barrier ? bar.dataset.barrier : null });
     else if (order) set({ order: order.dataset.order });
     else if (e.target.closest('[data-clear]')) set({ tract: null });
     else if (hood) set({ tract: hood.dataset.tract });
   });
   paint();
+  return () => map.destroy();
 }

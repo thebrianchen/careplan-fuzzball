@@ -70,7 +70,7 @@ export function gaps(P, state, sel) {
   const moves = rows.map(p => move(p, P)), keys = moves.map(m => JSON.stringify(m));
   const row = (p, i) => { const first = keys.indexOf(keys[i]);   // a move already shown above is not repeated in full
     return h`<li class="cgaps-row${i < OPEN && first === i ? ' open' : ''}${p.t.tract_id === sel ? ' on' : ''}">
-    <button type="button" class="cgaps-go" data-go-barrier="${p.b.barrier}" data-go-tract="${p.t.tract_id}" aria-pressed="${p.t.tract_id === sel}">
+    <button type="button" class="cgaps-go" data-go-barrier="${p.b.barrier}" data-go-tract="${p.t.tract_id}" aria-pressed="${p.t.tract_id === sel ? 'true' : 'false'}">
       <span class="cgaps-n">${i + 1}</span><span class="cgaps-where">${tractName(p.t.tract_id)}${b ? '' : h`<span> · ${kindName(p.b.barrier)}</span>`}</span>
       <span class="cgaps-score">${score(p.g)}</span><span class="cgaps-nums">${numbers(p)}</span></button>
     ${first < i ? h`<p class="cgaps-same">Same move as row ${first + 1}.</p>` : ''}<div class="cgaps-move">${showMove(moves[i], p.b)}</div></li>`; };

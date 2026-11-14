@@ -1,1 +1,84 @@
-/* Clinic page: the map (.cmap and what is inside it). */
+/* Clinic page map: a light street map under the panel's neighborhoods. Teal shades the measure; ink marks the clinic,
+   the selection and the places that could help, so a pin never reads as a flag. Layers stack bottom to top in the DOM. */
+.cmap{margin:10px 0 0}
+.cmap-stack{position:relative;height:520px;overflow:hidden;border:1px solid var(--line);border-radius:10px;background:#fafbfb;touch-action:pan-x pan-y;cursor:grab;outline:none;user-select:none;-webkit-user-select:none}
+.cmap-stack:focus-visible{box-shadow:0 0 0 2px var(--brand)}
+.cmap-stack.dragging{cursor:grabbing}
+.cmap-stack>canvas,.cmap-stack>svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.cmap-names,.cmap-marks{pointer-events:none}
+/* multiply lets the streets under a neighborhood show through its shade */
+.cmap-fills{mix-blend-mode:multiply}
+.hood{fill:transparent;fill-opacity:var(--fo,1);stroke:#7fa9a3;stroke-width:.8;vector-effect:non-scaling-stroke;cursor:pointer;outline:none;transition:fill .35s}
+.hood[data-bin="0"]{fill:#f3f6f6;stroke:#9fb4b1;stroke-dasharray:3 2}
+.hood[data-bin="1"]{fill:#d3ebe7}.hood[data-bin="2"]{fill:#9fd0c7}.hood[data-bin="3"]{fill:#54a89c}.hood[data-bin="4"]{fill:#1d7a70}
+.hood[data-bin="3"],.hood[data-bin="4"]{stroke:#0e5b53}
+.hood:hover,.hood:focus-visible{stroke:var(--ink);stroke-width:1.6;stroke-dasharray:none}
+.cmap-marks .sel-halo,.cmap-marks .sel{fill:none;vector-effect:non-scaling-stroke;stroke-linejoin:round}
+.cmap-marks .sel-halo{stroke:#fff;stroke-width:5.5}
+.cmap-marks .sel{stroke:var(--ink);stroke-width:2.6}
+.rk circle{fill:#fff;stroke:var(--ink);stroke-width:1.2}
+.rk text{font-size:10.5px;font-weight:700;fill:var(--ink);text-anchor:middle;dominant-baseline:middle;font-variant-numeric:tabular-nums}
+.cmap .clinic rect{fill:var(--ink);stroke:#fff;stroke-width:1.6}
+.cmap .clinic path{stroke:#fff;stroke-width:1.8;stroke-linecap:round}
+.cmap .clinic text{font-weight:700;fill:var(--ink);font-size:12.5px;paint-order:stroke;stroke:#fff;stroke-width:3.5px;stroke-linejoin:round}
+.pin{cursor:pointer;outline:none}
+.pin .hit{fill:transparent;pointer-events:all}
+.pin .glyph{transform:scale(var(--ps,1));pointer-events:all}
+.glyph>*{fill:var(--ink2);stroke:#fff;stroke-width:1.4;paint-order:stroke}
+.glyph>.open{fill:#fff;stroke:var(--ink2);stroke-width:1.8}
+.pin:hover .glyph>*,.pin:focus-visible .glyph>*,.pin.on .glyph>*{fill:var(--ink)}
+.pin:hover .glyph>.open,.pin:focus-visible .glyph>.open,.pin.on .glyph>.open{fill:#fff;stroke:var(--ink)}
+.pin.on .glyph{transform:scale(calc(var(--ps,1) * 1.45))}
+.pin:focus-visible .hit{stroke:var(--brand);stroke-width:2}
+.cmap-ctl{position:absolute;top:10px;right:10px;display:flex;flex-direction:column;gap:0;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--surface);box-shadow:0 1px 3px rgba(23,33,43,.1);z-index:2}
+.cmap-ctl button{width:34px;height:32px;border:0;border-radius:0;background:var(--surface);color:var(--ink2);font-size:18px;line-height:1;padding:0;cursor:pointer}
+.cmap-ctl button+button{border-top:1px solid var(--line2)}
+.cmap-ctl button:hover{background:#f4f6f8;color:var(--ink)}
+.cmap-ctl .fit{font-size:11.5px;font-weight:600}
+.cmap-tip{position:absolute;z-index:3;pointer-events:none;background:var(--ink);color:#fff;font-size:12.5px;line-height:1.4;border-radius:7px;padding:5px 9px;white-space:nowrap;box-shadow:0 2px 8px rgba(23,33,43,.18)}
+.cmap-tip b{font-weight:600}
+.cmap-card{position:absolute;z-index:4;width:250px;max-width:calc(100% - 8px);background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:0 6px 20px rgba(23,33,43,.16);padding:10px 30px 10px 12px;font-size:13px;line-height:1.4;color:var(--ink2);cursor:auto;user-select:text;-webkit-user-select:text}
+.cmap-card .nm{display:block;color:var(--ink);font-size:14px;font-weight:600}
+.cmap-card .kd{display:block;margin-bottom:5px}
+.cmap-card p{margin:0 0 3px}
+.cmap-card .tel{display:inline-block;font-weight:600;margin:1px 0 4px}
+.cmap-card .el{font-size:12.5px;color:var(--muted);margin:2px 0 0}
+.cmap-card .x{position:absolute;top:5px;right:5px;width:26px;height:26px;border:0;border-radius:6px;background:none;color:var(--muted);font-size:18px;line-height:1;padding:0;cursor:pointer}
+.cmap-card .x:hover{background:#f4f6f8;color:var(--ink)}
+.cmap-src{margin:5px 2px 0;font-size:11px;color:var(--muted)}
+.legend{display:grid;gap:9px;margin-top:12px}
+.legend .k{display:block;font-size:11px;margin-bottom:4px;color:var(--muted)}
+.lg-shade,.lg-keys,.lg-kinds{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12.5px;color:var(--ink2)}
+.lg-shade>span,.lg-keys>span{display:inline-flex;align-items:center}
+.lg-shade i,.clinic-key{display:inline-block;width:14px;height:11px;border-radius:3px;margin-right:5px;border:1px solid #7fa9a3}
+.lg-shade .b0{background:#f3f6f6;border:1px dashed #9fb4b1}.lg-shade .b1{background:#d3ebe7}.lg-shade .b2{background:#9fd0c7}
+.lg-shade .b3{background:#54a89c;border-color:#0e5b53}.lg-shade .b4{background:#1d7a70;border-color:#0e5b53}
+.lg-shade .lg-out{color:var(--muted)}.lg-shade .lg-out i{background:#fafbfb;border-color:#d9dee3}
+.lg-kinds button{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;padding:3px 10px 3px 7px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink2);cursor:pointer}
+.lg-kinds button b{font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+.lg-kinds button[aria-pressed=false]{color:var(--muted);background:#f4f6f8;text-decoration:line-through;text-decoration-color:rgba(99,112,130,.5)}
+.lg-kinds button[aria-pressed=false] .pin-key{opacity:.35}
+.pin-key{overflow:visible}
+.rank-key{display:inline-flex;align-items:center;justify-content:center;width:17px;height:17px;border-radius:50%;border:1.2px solid var(--ink);background:#fff;font-size:10.5px;font-weight:700;color:var(--ink);margin-right:6px}
+.clinic-key{background:var(--ink);border-color:#fff;box-shadow:0 0 0 1px var(--ink);width:11px}
+@media (max-width:620px){
+  .cmap-stack{height:360px}
+  .cmap-ctl{top:auto;bottom:10px;flex-direction:row}
+  .cmap-ctl button{width:44px;height:40px}
+  .cmap-ctl button+button{border-top:0;border-left:1px solid var(--line2)}
+  .lg-kinds button{padding:6px 12px 6px 9px}
+}
+.cmap-card::after{content:"";position:absolute;width:10px;height:10px;background:var(--surface);border:1px solid var(--line);transform:rotate(45deg)}
+.cmap-card[data-side=above]::after{bottom:-6px;left:calc(var(--ax) - 6px);border-width:0 1px 1px 0}
+.cmap-card[data-side=below]::after{top:-6px;left:calc(var(--ax) - 6px);border-width:1px 0 0 1px}
+.cmap-card[data-side=right]::after{left:-6px;top:calc(var(--ay) - 6px);border-width:0 0 1px 1px}
+.cmap-card[data-side=left]::after{right:-6px;top:calc(var(--ay) - 6px);border-width:1px 1px 0 0}
+@media (max-width:620px){
+  .cmap-card{width:236px;padding:8px 28px 8px 10px;font-size:12.5px}
+  .cmap-card .nm{font-size:13.5px}.cmap-card .el{font-size:12px}
+}
+@media (max-width:620px){
+  .cmap-card .nm,.cmap-card .el{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+  .cmap-card .ad{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+}
+.pin.on .hit{fill:rgba(255,255,255,.85);stroke:var(--ink);stroke-width:1.5}
