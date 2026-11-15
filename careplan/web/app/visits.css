@@ -53,8 +53,6 @@
 .visit .review-head .actions{margin-left:auto;flex-wrap:nowrap;gap:6px}
 .visit .review-head button,.visit .review-head select{font-size:12px;padding:7px 9px}
 .review-action{position:relative;display:flex;align-items:center}
-.review-action>#boundary{display:none;position:absolute;right:0;top:calc(100% + 8px);width:340px;max-width:80vw;z-index:40;box-shadow:0 6px 24px #17212b22;background:var(--surface);font-size:13px;margin:0}
-.review-action:hover>#boundary,.review-action:focus-within>#boundary{display:block}
 .visit .review:not(.review-results) .plan>.pitem,.blank-category{background:transparent;border:0;box-shadow:none;border-radius:0;padding:0;margin-bottom:16px;list-style:none}
 .visit .review:not(.review-results) .pitem-head{display:block}
 .visit .review:not(.review-results) .num{display:none}

@@ -17,6 +17,17 @@ function evidenceText(e, rows) {                     // appointments and screene
   return cap(e.text);
 }
 const flaggedOf = doc => doc.items.filter(i => i.status !== 'likely_ok');
+// Flagged items that raise no barrier an earlier flagged item has not already raised: they tuck under one line, so the page
+// shows each kind of problem once.
+function repeats(doc, plan) {
+  const seen = new Set(), out = [];
+  for (const it of plan.map(p => doc.items.find(i => i.item_id === p.item_id)).filter(i => i && i.status !== 'likely_ok')) {
+    const kinds = it.barriers.map(b => b.barrier);
+    if (kinds.length && kinds.every(k => seen.has(k))) out.push(it.item_id);
+    kinds.forEach(k => seen.add(k));
+  }
+  return out;
+}
 let cityData = null;                                 // the maps' backdrop (~0.5 MB), fetched once per page load and only when a map appears
 const city = () => cityData || (cityData = api('city'));
 
@@ -121,25 +132,14 @@ function decideBar(it, dec, saved) {
   </div>`;
 }
 
-function boundary(doc, state) {
-  const n = doc.crossings.length;
-  if (state === 'before') return h`<h3>What leaves the private side</h3>
-    <p class="muted">Nothing yet. To find help near the patient's home the review may ask the public side, and such a request can carry only a census tract, a kind of need, days and a time window.</p>`;
-  return h`<h3>What left the private side${state === 'running' ? ' so far' : ''}</h3>
-    ${n ? h`<p class="muted">To find help near home, the review asked the public side ${plural(n, 'time')}. This is everything those requests carried:</p>
-      <table class="mini cross"><thead><tr><th>Census tract</th><th>Kind of need</th><th>Days</th></tr></thead><tbody>${doc.crossings.map(c => h`<tr class="in">
-        <td class="mono">${c.tract_id}</td><td>${c.need}</td><td>${c.days.length === 7 ? 'Every day' : c.days.join(' ') || 'Any day'}</td></tr>`)}</tbody></table>
-      <p class="muted small">A request has no field for a name, a date of birth, a record number or free text. <a href="#/system">System view</a></p>`
-      : h`<p class="muted">${state === 'running' ? 'Nothing yet.' : 'Nothing. This review did not ask the public side for anything.'}</p>`}`;
-}
-
 export async function visit(root, id) {
   let doc = await api(`case/${id}`);
   setPlanner(doc.planner);
   let es = null, tick = null, poll = null, running = false, savedAt = {}, onlyUnsaid = false;
   let open = new Set();                              // the flagged items whose evidence is unfolded; the rest show one line
   const MODES = ['recorded', 'sample', 'live'];        // in the order a visit falls back to them
-  const canRun = m => m === 'recorded' ? doc.has_recording : m === 'sample' ? doc.can_sample : doc.planner.answers;
+  // A stand-in review is offered only for a visit that has no recorded run to play.
+  const canRun = m => m === 'recorded' ? doc.has_recording : m === 'sample' ? doc.can_sample && !doc.has_recording : doc.planner.answers;
   const kept = localStorage.getItem('cp.mode');
   let mode = MODES.includes(kept) && canRun(kept) ? kept : MODES.find(canRun) || 'live';
   let speed = SPEEDS.includes(+localStorage.getItem('cp.speed')) ? +localStorage.getItem('cp.speed') : 8;
@@ -161,7 +161,7 @@ export async function visit(root, id) {
           <div class="actions">
             <div class="seg" role="group" aria-label="Where the review comes from">
               <button type="button" data-mode="recorded" ${doc.has_recording ? '' : 'disabled'} title="${doc.has_recording ? 'Replay a real run of this review that was saved earlier' : 'No run has been saved for this visit'}">Saved run</button>
-              ${doc.can_sample ? h`<button type="button" data-mode="sample" title="Play a stand-in built from this visit's answer key. Not a model run.">Sample</button>` : ''}
+              ${doc.can_sample && !doc.has_recording ? h`<button type="button" data-mode="sample" title="Play a stand-in built from this visit's answer key. Not a model run.">Sample</button>` : ''}
               <button type="button" data-mode="live" title="${doc.planner.answers ? `Run the planner now, on ${doc.planner.label}` : 'Run the planner now'}">Live</button>
             </div>
             <select id="speed" aria-label="Playback speed of the saved run" title="Playback speed of the saved run">${SPEEDS.map(s => h`<option value="${s}">${s === 1 ? 'Real time' : `${s}× speed`}</option>`)}</select>
@@ -177,7 +177,7 @@ export async function visit(root, id) {
         <ol class="plan" id="plan">${doc.plan.map((x, i) => h`<li class="pitem" id="p-${x.item_id}">
           <div class="pitem-head"><span class="num">${i + 1}</span><div class="ptext">${x.text}<small>${(x.type || '').replace('_', ' ')}</small></div><span class="slot"></span></div>
           <div class="brief"></div><div class="pitem-body"></div></li>`)}</ol>
-        <section class="boundary" id="boundary"></section>
+        <button type="button" class="tucked" id="tucked" hidden></button>
         <div class="after" id="after" hidden></div>
       </section>
     </div>
@@ -198,6 +198,7 @@ export async function visit(root, id) {
     $('.brief', node).innerHTML = flagged ? brief(it, dec) : '';
     $('.pitem-body', node).innerHTML = h`${finding(it, rows, doc.chart, animate)}${decidable && it.status !== 'likely_ok' ? decideBar(it, dec, savedAt[it.item_id]) : ''}`;
     mount(node, city);
+    tuck();
   }
   function fold(itemId, on) {                         // the map behind a fold draws when it is first shown (it watches its own size)
     on ? open.add(itemId) : open.delete(itemId);
@@ -205,7 +206,16 @@ export async function visit(root, id) {
     node.classList.toggle('shut', !on);
     $('.fold', node).setAttribute('aria-expanded', String(on));
   }
-  const nextUndecided = () => flaggedOf(doc).find(i => !doc.decisions[i.item_id]);
+  let untucked = false;
+  const tuckedNow = () => untucked ? [] : repeats(doc, doc.plan);
+  function tuck() {                                   // after every paint: which repeats are folded away, and the line that says so
+    const ids = repeats(doc, doc.plan), names = ids.map(i => doc.plan.findIndex(p => p.item_id === i) + 1);
+    $$('.pitem', root).forEach(n => n.classList.toggle('tuck', !untucked && ids.includes(n.id.slice(2))));
+    const b = el('#tucked');
+    b.hidden = !ids.length;
+    b.textContent = untucked ? `Hide ${plural(ids.length, 'item')} with the same barriers` : `${plural(ids.length, 'more plan item')} (${names.join(' and ')}) ${ids.length === 1 ? 'has' : 'have'} the same barriers. Show ${ids.length === 1 ? 'it' : 'them'}`;
+  }
+  const nextUndecided = () => flaggedOf(doc).find(i => !doc.decisions[i.item_id] && !tuckedNow().includes(i.item_id));
   function openNext() { const next = nextUndecided(); open = new Set(next ? [next.item_id] : []); }
   function clearItems(state) {                       // '' = as written, 'checking' = waiting for the review
     $$('.pitem', root).forEach(n => {
@@ -213,6 +223,7 @@ export async function visit(root, id) {
       $('.slot', n).innerHTML = state ? h`<span class="chip wait">Checking</span>` : '';
       $('.pitem-body', n).innerHTML = ''; $('.brief', n).innerHTML = '';
     });
+    untucked = false; tuck();
   }
   function paintSteps(phase) {                       // phase: a pending label while running, or null when done
     const s = el('#steps');
@@ -268,7 +279,6 @@ export async function visit(root, id) {
     layout.setResults(reviewed);
     if (reviewed) { openNext(); doc.items.forEach(it => paintItem(it, { decidable: true })); } else clearItems('');
     paintSteps(null); paintRunline('done'); paintSummary(); paintAfter(); markCited();
-    el('#boundary').innerHTML = boundary(doc, reviewed ? 'done' : 'before');
     el('#go').textContent = reviewed ? 'Review again' : 'Review Plan';
   }
   function paintControls() {
@@ -310,7 +320,6 @@ export async function visit(root, id) {
     layout.setResults(true);
     clearItems('checking'); markCited(); paintControls();
     el('#go').textContent = 'Reviewing…';
-    el('#boundary').innerHTML = boundary(doc, 'running');
     paintSteps('Starting');
     let rate = 1;
     const t0 = performance.now();
@@ -332,7 +341,7 @@ export async function visit(root, id) {
         paintRunline('running', ev); paintSteps('Reading');
       } else if (ev.type === 'step') {
         doc.steps.push(ev.step);
-        if (ev.step.crossed) { doc.crossings.push(ev.step.crossed); el('#boundary').innerHTML = boundary(doc, 'running'); }
+        if (ev.step.crossed) doc.crossings.push(ev.step.crossed);
         paintSteps('Weighing the plan against what it read');
       } else if (ev.type === 'item') {
         doc.items = [...doc.items.filter(i => i.item_id !== ev.item.item_id), ev.item];
@@ -350,7 +359,6 @@ export async function visit(root, id) {
         let late = 0;                                   // items that did not stream (the planner sent the card whole) fade in one after another
         doc.items.forEach(it => paintItem(it, { decidable: true, animate: !shown.has(it.item_id), delay: shown.has(it.item_id) ? 0 : 90 * late++ }));
         paintSteps(null); paintRunline('done'); paintSummary(); paintAfter(); markCited();
-        el('#boundary').innerHTML = boundary(doc, 'done');
         el('#go').textContent = 'Review again';
       }
     }
@@ -399,6 +407,7 @@ export async function visit(root, id) {
     if (seg) { mode = seg.dataset.mode; localStorage.setItem('cp.mode', mode); return paintControls(); }
     if (t.closest('#go')) return start(mode);
     if (t.closest('#unsaid')) { showUnsaid(!onlyUnsaid); return paintSummary(); }
+    if (t.closest('#tucked')) { untucked = !untucked; return tuck(); }
     const head = t.closest('.pitem.folds .pitem-head, .pitem.folds .brief');
     if (head) { const node = head.closest('.pitem'); return fold(node.id.slice(2), node.classList.contains('shut')); }
     if (cites) return showSource(cites.dataset.ref);

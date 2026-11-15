@@ -75,10 +75,9 @@ export function setupVisitLayout(root, doc) {
     window.scrollTo({ left: position.x, top: position.y, behavior: 'instant' });
   });
 
-  const go = review.querySelector('#go'), boundary = review.querySelector('#boundary');
+  const go = review.querySelector('#go');
   const action = document.createElement('div'); action.className = 'review-action';
-  go.before(action); action.append(go, boundary);
-  boundary.setAttribute('role', 'tooltip'); go.setAttribute('aria-describedby', 'boundary');
+  go.before(action); action.append(go);
   review.querySelector('.review-head p').hidden = true;
 
   const originals = [...plan.querySelectorAll('.pitem')].map(item => ({ item, text: item.querySelector('.ptext'), html: item.querySelector('.ptext').innerHTML }));

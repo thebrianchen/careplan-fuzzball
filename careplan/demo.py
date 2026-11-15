@@ -41,7 +41,7 @@ def step_for(t: float, ev: dict) -> dict:
         a = ev.get("args") or {}
         return {"t": t, "kind": "crossing", "label": f"Asked the public side for {a.get('need', '?')} help near home",
                 "crossed": {"tract_id": a.get("tract_id"), "need": a.get("need"), "days": a.get("days") or []}, "results": ev.get("n_results")}
-    kind, label = ("chart", "Read the chart") if ev["tool"] in CHART_TOOLS else STEP.get(ev["tool"], ("other", ev["tool"]))
+    kind, label = ("chart", "Read the patient chart") if ev["tool"] in CHART_TOOLS else STEP.get(ev["tool"], ("other", ev["tool"]))
     return {"t": t, "kind": kind, "label": label}
 
 

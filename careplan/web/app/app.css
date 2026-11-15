@@ -420,3 +420,5 @@ html.stage .cbar-track{background:var(--line2)}html.stage .cbar-zone{background:
 .cmore{display:block;margin-top:10px}
 .cgaps.folded .cgaps-row:nth-child(n+4),.cgaps.folded>.hint{display:none}
 .cpublic.folded #public-spread,.cpublic.folded #public-hood,.cpublic.folded>.hint{display:none}
+.pitem.tuck{display:none}
+.tucked{display:block;width:100%;margin:0 0 10px;padding:9px 14px;text-align:left;font-size:14px;color:var(--ink2);background:none;border:1px dashed var(--line);border-radius:var(--radius)}
