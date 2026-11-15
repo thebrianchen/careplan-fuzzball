@@ -107,19 +107,22 @@ function evidenceRow({ e, strip, bar }, rows) {
   const text = evidenceText(e, rows), cut = bar ? text.lastIndexOf(' (') : -1;     // a neighborhood figure: the comparison goes under the line
   return evRow({ ...base, summary: cut > 0 ? text.slice(0, cut) : text, more: bar ? h`${cut > 0 ? h`<p>${cap(text.slice(cut + 2).replace(/\)$/, ''))}</p>` : ''}${countyBar(bar)}` : '' });
 }
-// Every piece of evidence for the item in one list: the visits strip, then what the visit never said, the trip, and what was said.
+// The three strongest pieces of evidence for the item's main barrier: the visits strip, what the visit never said, the trip,
+// then what was said. A screener answer of "no" does not support a flag, so it comes last. A second barrier's evidence is not listed.
+const SHOWN = 3;
 function evidenceRows(ex, rows, animate) {
   const seen = new Set(), out = [];
-  for (const r of ex.barriers.flatMap(b => b.rows)) {
+  for (const r of ex.barriers[0].rows) {
     if (seen.has(r.e.ref)) continue;
     seen.add(r.e.ref);
-    out.push({ rank: r.strip ? 0 : r.e.said_in_visit ? 3 : 1, html: evidenceRow(r, rows) });
+    const denied = r.e.ref.startsWith('screener:') && /^(no|never|false)\b/i.test(String((rows[r.e.ref] || {}).answer || ''));
+    out.push({ rank: denied ? 4 : r.strip ? 0 : r.e.said_in_visit ? 3 : 1, html: evidenceRow(r, rows) });
   }
   const p = ex.map && ex.map.places[0], t = p && p.trip, n = t && t.feasible ? (t.rides || []).length : 0;
   if (p) out.push({ rank: 2, html: evRow({ ref: 'map', kind: 'transit', source: 'Transit', e: { said_in_visit: false },
     summary: t && t.feasible ? `${t.minutes} min ${n ? `on ${plural(n, 'ride')}` : 'by bus or train'} to ${p.name}, ${p.miles_from_home} mi` : `${p.name} is ${p.miles_from_home} mi from home`,
     more: map({ ...ex.map, animate }) }) });
-  return out.sort((x, y) => x.rank - y.rank).map(x => x.html);
+  return out.sort((x, y) => x.rank - y.rank).slice(0, SHOWN).map(x => x.html);
 }
 
 // One thing the doctor can choose for a flagged item: a row with a name and one line under it. `key` is what the page
