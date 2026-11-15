@@ -1,0 +1,33 @@
+{
+ "items": [
+  {
+   "item_id": "P1",
+   "heading": "Hemodialysis",
+   "steps": [
+    "Call Lakeshore Community Health Plan number on plan card to schedule rides",
+    "Ask DaVita Park Manor dialysis unit for an earlier chair time",
+    "Message DaVita Park Manor dialysis unit social worker for transport assistance and benefits coordination"
+   ]
+  },
+  {
+   "item_id": "P2",
+   "heading": "Renal diet",
+   "steps": [
+    "Go to Manna Food Pantry Mondays 1:00-3:00 PM at 1230 S Millard Ave"
+   ]
+  },
+  {
+   "item_id": "P5",
+   "heading": "Weight and blood pressure log",
+   "steps": [
+    "Keep doing your daily weight and blood pressure log on paper; bring it to each hemodialysis session."
+   ]
+  }
+ ],
+ "closing": "Contact your care team with any questions.",
+ "language": "English",
+ "profile": "super35-vllm-think",
+ "saved": "2026-11-15T03:50:41Z",
+ "where": "our own GB10",
+ "model": "nemotron-3.5-super-vl"
+}

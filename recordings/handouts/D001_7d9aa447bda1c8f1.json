@@ -1,0 +1,31 @@
+{
+ "items": [
+  {
+   "item_id": "P1",
+   "heading": "Dialysis rides",
+   "steps": [
+    "Call Lakeshore Community Health Plan using the number on your plan card to schedule rides."
+   ]
+  },
+  {
+   "item_id": "P2",
+   "heading": "Food help",
+   "steps": [
+    "Go to Manna Food Pantry Mondays 1:00-3:00 PM at 1230 S Millard Ave."
+   ]
+  },
+  {
+   "item_id": "P5",
+   "heading": "Daily weight and blood pressure",
+   "steps": [
+    "Keep writing down your weight and blood pressure every day on paper, and bring it to each session."
+   ]
+  }
+ ],
+ "closing": "Follow these steps and bring your log to each dialysis session.",
+ "language": "English",
+ "profile": "super35-vllm-think",
+ "saved": "2026-11-15T03:54:07Z",
+ "where": "our own GB10",
+ "model": "nemotron-3.5-super-vl"
+}

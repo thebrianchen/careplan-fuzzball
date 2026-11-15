@@ -1,0 +1,33 @@
+{
+ "items": [
+  {
+   "item_id": "P1",
+   "heading": "Getting to Dialysis",
+   "steps": [
+    "Call Lakeshore Community Health Plan using the number on your plan card to schedule rides."
+   ]
+  },
+  {
+   "item_id": "P2",
+   "heading": "Getting Kidney-Friendly Food",
+   "steps": [
+    "Go to Manna Food Pantry on Mondays 1:00-3:00 PM at 1230 S Millard Ave.",
+    "Ask the DaVita Park Manor dietitian to adapt your renal diet around corner store foods you can get.",
+    "Go to Greater Garfield MB Church pantry on Fridays 10:00 AM-12:00 PM at 3757 W Douglas Blvd."
+   ]
+  },
+  {
+   "item_id": "P5",
+   "heading": "Daily Weight and Blood Pressure",
+   "steps": [
+    "Keep writing down your weight and blood pressure each day and bring the log to each session."
+   ]
+  }
+ ],
+ "closing": "Tell your care team if you have trouble following this plan.",
+ "language": "English",
+ "profile": "super35-vllm-think",
+ "saved": "2026-11-15T03:50:22Z",
+ "where": "our own GB10",
+ "model": "nemotron-3.5-super-vl"
+}

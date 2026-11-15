@@ -1,7 +1,7 @@
 // The patient handout, built from the reviewed plan and the doctor's decisions.
 // Two versions: a draft assembled on the page from the review (no model needed), and the plain-language version in the
-// patient's language, which the planner writes (POST /summarize/<case>, the app's existing route).
-import { $, api, date, h, hours, setPlanner } from './ui.js';
+// patient's language, which the planner writes once for a given set of decisions (POST /api/app/handout/<case>).
+import { $, api, date, h, hours } from './ui.js';
 import { repeats } from './visit.js';
 
 function draftSteps(it, dec) {
@@ -13,7 +13,6 @@ function draftSteps(it, dec) {
 
 export async function handout(root, id) {
   let doc = await api(`case/${id}`);
-  setPlanner(doc.planner);
   const lang = doc.patient.handout_language;
 
   function paint(message) {
@@ -46,13 +45,8 @@ export async function handout(root, id) {
     $('#print', root).onclick = () => window.print();
     $('#write', root).onclick = async e => {
       e.target.disabled = true; e.target.textContent = 'Writing…';
-      const pl = (await api('system')).planner;          // ask first: a planner that is down would keep this waiting for minutes
-      setPlanner(pl);
-      if (!pl.answers) return paint(`The planner is not answering: ${pl.why}. This step needs it; the draft below is unchanged.`);
-      const r = await fetch(`/summarize/${id}`, { method: 'POST' }).catch(() => null);
-      if (r && r.ok) { doc.handout = await r.json(); return paint(); }
-      const why = r ? String((await r.json().catch(() => ({}))).error || '').slice(0, 160) : '';
-      paint(`The plain-language version was not written${why ? ` (${why})` : ''}. This step needs the planner; the draft below is unchanged.`);
+      try { doc.handout = (await api(`handout/${id}`, { again: !!w })).handout; paint(); }
+      catch (err) { paint(`The plain-language version was not written: ${err.message} The draft below is unchanged.`); }
     };
   }
   paint();

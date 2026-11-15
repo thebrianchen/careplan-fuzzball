@@ -340,6 +340,36 @@ class WebAppTests(unittest.TestCase):
         self.assertEqual(len(self.get("progress/D001?rid=abc&after=2")["events"]), len(asked) - 3)
         self.assertEqual(self.get("progress/D001?rid=nobody")["events"], [])
 
+    def test_the_handout_is_written_once_for_the_items_shown_and_the_alternatives_chosen(self):
+        asked = []
+
+        class Writer(FakeStreamingClient):
+            def chat(self, messages, tools):
+                asked.append(messages[0]["content"])
+                if len(asked) == 1:                                                        # a sheet with no sections is asked for again
+                    return Reply(json.dumps({"items": [], "closing": "x"}), [], {}, 5, {})
+                return Reply(json.dumps({"items": [{"item_id": "P1", "heading": "Dialysis", "steps": ["Call your plan for a ride."]},
+                                                   {"item_id": "P2", "heading": "Diet", "steps": ["Go to the pantry."]},
+                                                   {"item_id": "P3", "heading": "not shown", "steps": ["x"]},
+                                                   {"item_id": "P5", "heading": "Log", "steps": ["Keep it up."]}], "closing": "Call us."}), [], {}, 5, {})
+        client, self.app.client = self.app.client, Writer()
+        try:
+            self.review("mode=recorded&speed=1000")
+            first, second = self.get("case/D001")["items"][0]["alternatives"][:2]
+            self.post("decision/D001", {"item_id": "P1", "decision": "accept", "note": first["text"]})
+            self.assertIsNone(self.get("case/D001")["handout"])                            # nothing written for these decisions yet
+            code, out = self.post("handout/D001", {})
+            self.assertEqual((code, [i["item_id"] for i in out["handout"]["items"]], out["handout"]["where"]), (200, ["P1", "P2", "P5"], "test"))
+            self.assertTrue(first["text"] in asked[1] and second["text"] not in asked[1])  # only the alternative the doctor chose
+            self.assertTrue("- P1:" in asked[1] and "- P3:" not in asked[1] and "- P4:" not in asked[1])   # only the items shown
+            self.assertEqual(self.post("handout/D001", {})[1]["handout"]["saved"], out["handout"]["saved"])
+            self.assertEqual(self.get("case/D001")["handout"]["closing"], "Call us.")
+            self.assertEqual(len(asked), 2)                                                # kept: not asked again for the same decisions
+            self.post("decision/D001", {"item_id": "P1", "decision": "accept", "note": second["text"]})
+            self.assertIsNone(self.get("case/D001")["handout"])                            # other decisions, another handout
+        finally:
+            self.app.client = client
+
     def test_pages_are_served_and_nothing_outside_them(self):
         with urllib.request.urlopen(f"{self.url}/app/") as r:
             self.assertIn("Care Plan Check", r.read().decode())

@@ -11,6 +11,8 @@ POST /api/app/decision/<id>   {item_id, decision: accept|edit|dismiss, note}: th
 POST /api/app/reset/<id>      forget this visit's review and its decisions on screen (the decision log keeps its rows)
 GET  /api/app/progress/<id>   ?rid=R&after=N: the events of review R after the Nth, for a page behind a proxy that holds an event
                               stream back until it ends (a Cloudflare quick tunnel does)
+POST /api/app/handout/<id>    the reviewed plan in plain language, in the patient's language: one planner call for the items shown
+                              and the alternatives the doctor chose. Kept on disk, so the same decisions get the same handout at once.
 GET  /api/app/system          the operator's view: planner, reviews, crossings, decisions, activity. Case ids only, no patient fields.
 GET  /api/app/panel           the clinic manager's view: counts by neighborhood from the reviews of a whole panel (careplan.aggregates).
                               Counts only; neighborhoods with fewer than k patients are not in it.
@@ -26,6 +28,7 @@ from __future__ import annotations
 import collections
 import copy
 import functools
+import hashlib
 import ipaddress
 import json
 import os
@@ -362,7 +365,7 @@ class Clinic:
                           "pcp": case.patient.get("pcp")}
         doc["chart"] = chart(case, app.tracts.get(case.tract_geoid), self.county)
         doc["decisions"] = dict((app.results.get(cid) or {}).get("decisions") or {}) if s else {}
-        doc["handout"] = app.summaries.get(cid) if s else None
+        doc["handout"] = self.handout(cid) if s else None
         doc["has_recording"] = self.recording(cid).is_file()
         doc["tucked"] = self.tucked(cid)
         doc["can_sample"] = self.samples
@@ -510,6 +513,53 @@ class Clinic:
         self.note("decision", cid, item_id=item_id, decision=decision)
         return {"saved": row["ts"], "decisions": rec.get("decisions") or {}}
 
+    def handout_card(self, cid: str) -> dict | None:
+        """What the handout is written from: the plan items the page shows, each with the alternatives the doctor chose when
+        accepting (all of them when none was chosen). Dismissals and edits are already in the review."""
+        rec = self.app.results.get(cid)
+        if not rec or not rec.get("assessment"):
+            return None
+        away, decisions, items = set(self.tucked(cid)), rec.get("decisions") or {}, []
+        for it in rec["assessment"]["items"]:
+            if it["item_id"] in away:
+                continue
+            it, d = copy.deepcopy(it), decisions.get(it["item_id"])
+            if d and d["decision"] == "accept" and d.get("note"):
+                lines = d["note"].split("\n")
+                it["alternatives"] = [a for a in it.get("alternatives", []) if any(a["text"] in line for line in lines)] or it.get("alternatives", [])
+            items.append(it)
+        return {"items": items}
+
+    def handout(self, cid: str, write: bool = False, again: bool = False) -> dict | None:
+        """The plain-language handout for the decisions as they stand. A written one is kept beside the saved runs, keyed by
+        what it was written from, so it is shown at once the next time; `write` asks the planner when there is none."""
+        from .serve import REC_DIR
+        from .summary import build
+        card = self.handout_card(cid)
+        if card is None:
+            return None
+        key = hashlib.sha256(json.dumps(card, sort_keys=True).encode()).hexdigest()[:16]
+        f = REC_DIR / "handouts" / f"{cid}_{key}.json"
+        if f.is_file() and not again:
+            return json.loads(f.read_text())
+        if not write:
+            return None
+        pl = self.planner(fresh=True)
+        if not pl["answers"]:
+            raise RuntimeError(f"the planner is not answering: {pl['why']}")
+        want = [i["item_id"] for i in card["items"]]
+        for attempt in range(3):                  # the planner sometimes returns a sheet with a section missing: ask again, never keep it
+            out = build(self.app.cases[cid], {"assessment": card}, self.app.client, items=want, why=False)
+            if [i["item_id"] for i in out["items"]] == want and all(i["steps"] for i in out["items"]):
+                break
+        else:
+            raise RuntimeError("the planner did not write a section for every plan item")
+        out.update(saved=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), where=pl["label"], model=demo.model_name(pl["profile"]))
+        f.parent.mkdir(parents=True, exist_ok=True)
+        f.write_text(json.dumps(out, ensure_ascii=False, indent=1))
+        self.note("handout written", cid, where=pl["label"])
+        return out
+
     def reset(self, cid: str) -> dict:
         with self.app.lock:
             for d in (self.shown, self.app.results, self.app.summaries):
@@ -618,6 +668,13 @@ def handle(app, h, method: str, path: str, query: str) -> None:
             return js(200, c.decide(cid, body))
         except (ValueError, json.JSONDecodeError) as ex:
             return js(400, {"error": str(ex)})
+    if method == "POST" and route == "handout" and cid:
+        try:
+            body = json.loads(h.rfile.read(int(h.headers.get("Content-Length") or 0)) or b"{}")
+            out = c.handout(cid, write=True, again=bool(body.get("again")))
+        except (ValueError, RuntimeError, json.JSONDecodeError) as ex:
+            return js(502, {"error": str(ex)[:200]})
+        return js(200, {"handout": out}) if out else js(400, {"error": "review this visit before writing the handout"})
     if method == "POST" and route == "reset" and cid:
         return js(200, c.reset(cid))
     return js(404, {"error": "not found"})
