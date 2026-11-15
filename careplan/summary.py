@@ -37,7 +37,10 @@ WITH_WHY = """- For items at_risk or blocked: say plainly what makes it hard (fr
   alternatives: name the place, its hours, the phone number or how to start, the bus to leave by, exactly as given."""
 STEPS_ONLY = """- For items at_risk or blocked: write one short step for each alternative in the input, as an instruction to the
   patient ("Call ...", "Go to ..."). Keep every name, address, day, hour and phone number exactly as given. Do not restate
-  the problem or why it is hard; the patient knows."""
+  the problem or why it is hard; the patient knows.
+- For clinician_edit alternatives, preserve every requested action. If the clinician says to explain a reason to an
+  insurer, include that instruction. Keep any suitability checks, approval checks, and instructions to continue current
+  treatment while waiting for a new plan."""
 
 
 def build(case: Case, rec: dict, client: ChatClient, items: list[str] | None = None, why: bool = True) -> dict:

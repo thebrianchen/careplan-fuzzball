@@ -7,6 +7,11 @@ import { countyBar, linkResources, map, mount, visitStrip } from './exhibits.js'
 import { setupVisitLayout } from './visit_layout.js';
 
 const SPEEDS = [1, 4, 8, 20];
+const DIALYSIS_ACTIONS = [
+  { label: 'Request covered rides', text: 'Call the health plan using the number on the insurance card. Explain that long bus trips and lack of a car have led to missed dialysis. Request covered round-trip rides to dialysis, and confirm approval and pickup times. Keep attending scheduled dialysis while rides are arranged.' },
+  { label: 'Assess home dialysis', text: 'Ask the dialysis team to assess whether home dialysis is suitable. Review support at home, training, space and insurance coverage with the team. Continue scheduled in-center dialysis until the team agrees on a new plan.' },
+];
+const dialysisTransport = it => /\bdialysis\b/i.test(it.plan_text) && it.barriers.some(b => b.barrier === 'transport');
 const srcKind = e => e.said_in_visit ? 'visit' : e.source === 'Neighborhood' ? 'hood' : e.source === 'Transit schedules' ? 'transit' : 'chart';
 const target = ref => ref.startsWith('transit:') ? ref.slice(8) : ref;          // a bus-trip citation points at its appointment
 const category = s => cap(s).replace(/\b(nemt|snap|wic|liheap|pcp|ed)\b/gi, m => m.toUpperCase());
@@ -100,14 +105,15 @@ function barrierBlock(b, i, rows) {
 function finding(it, rows, chart, animate) {
   if (it.status === 'likely_ok') return h`<p class="okline">No barrier found for this patient.</p>`;
   const ex = exhibitsOf(it, chart);
-  return h`${ex.barriers.map((b, i) => barrierBlock(b, i, rows))}
-    ${ex.map ? map({ ...ex.map, animate }) : ''}
-    ${ex.alts.length ? h`<div class="alts"><h4>What could work instead</h4><ul>${ex.alts.map(a => {
+  const alternatives = ex.alts.length ? h`<div class="alts"><h4>What could work instead</h4><ul>${ex.alts.map(a => {
       const r = a.resource;
       return h`<li data-alt="${ex.alts.indexOf(a)}"${a.n ? h` data-res="${a.n}" tabindex="0"` : ''} title="Choose this for the patient's plan"><span class="cat">${category(a.label)}</span><span>${a.text}${r ? h`<span class="res">
         <b>${a.n ? h`<span class="resnum">${a.n}</span>` : ''}${r.name}</b>${r.miles_from_home != null ? h`<span class="far">${r.miles_from_home} mi from home</span>` : ''}
         <small>${[r.address, hours(r.hours)].filter(Boolean).join(' · ')}${r.phone ? h` · <a href="tel:${r.phone.replace(/[^\d+]/g, '')}">${r.phone}</a>` : ''}</small></span>` : ''}</span></li>`;
-    })}</ul></div>` : ''}`;
+    })}</ul></div>` : '';
+  return h`${ex.barriers.map((b, i) => barrierBlock(b, i, rows))}
+    ${ex.map ? map({ ...ex.map, animate }) : ''}
+    ${dialysisTransport(it) && ex.alts.length ? h`<details class="more-ev"><summary>Suggestions from this review</summary>${alternatives}</details>` : alternatives}`;
 }
 
 const DECIDED = { accept: 'Accepted', edit: 'Changed', dismiss: 'Dismissed' };
@@ -122,6 +128,7 @@ const decided = dec => !dec ? '' : dec.decision === 'accept' ? 'Accepted.' : dec
 function decideBar(it, dec, saved) {
   const on = d => dec && dec.decision === d ? 'on' : '';
   return h`<div class="decide" data-item="${it.item_id}">
+    ${dialysisTransport(it) ? h`<div class="care-actions"><b>Clinician’s next step</b><div>${DIALYSIS_ACTIONS.map((a, i) => h`<button type="button" data-care-action="${i}">${a.label}</button>`)}</div></div>` : ''}
     <div class="decide-btns" role="group" aria-label="Your decision on this flag">
       <button type="button" data-d="accept" class="${on('accept')}" title="The flag is right. The handout carries these alternatives.">Accept</button>
       <button type="button" data-d="edit" class="${on('edit')}" title="Write what this plan item should say instead.">Edit</button>
@@ -129,7 +136,7 @@ function decideBar(it, dec, saved) {
     </div>
     <span class="decided">${decided(dec)}${saved ? h` <small>Saved ${timeOfDay(saved)}</small>` : ''}</span>
     <form class="editbox" hidden><label>What should this plan item say instead?
-      <textarea rows="2" maxlength="400">${dec && dec.note || ''}</textarea></label>
+      <textarea rows="${dialysisTransport(it) ? 4 : 2}" maxlength="400">${dec && dec.note || ''}</textarea></label>
       <div><button type="submit" class="primary small">Save change</button><button type="button" class="link" data-cancel>Cancel</button></div></form>
   </div>`;
 }
@@ -429,6 +436,13 @@ export async function visit(root, id) {
     if (seg) { mode = seg.dataset.mode; localStorage.setItem('cp.mode', mode); return paintControls(); }
     if (t.closest('#go')) return start(mode);
     if (t.closest('#steps-toggle')) { stepsOpen = !stepsOpen; return paintSteps(running ? 'Reviewing' : null); }
+    const care = t.closest('[data-care-action]');
+    if (care) {
+      const box = $('.editbox', care.closest('.decide')), text = $('textarea', box);
+      text.value = DIALYSIS_ACTIONS[+care.dataset.careAction].text;
+      box.hidden = false; text.focus();
+      return;
+    }
     const alt = t.closest('.alts li[data-alt]');
     if (alt && !t.closest('a')) {                       // choose which alternatives go on the patient's plan, then Accept
       const itemId = alt.closest('.pitem').id.slice(2), set = picked[itemId] || (picked[itemId] = new Set()), n = +alt.dataset.alt;

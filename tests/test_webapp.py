@@ -368,6 +368,14 @@ class WebAppTests(unittest.TestCase):
             self.assertEqual(len(asked), 2)                                                # kept: not asked again for the same decisions
             self.post("decision/D001", {"item_id": "P1", "decision": "accept", "note": second["text"]})
             self.assertIsNone(self.get("case/D001")["handout"])                            # other decisions, another handout
+            note = "Ask the dialysis team to assess home dialysis. Continue scheduled dialysis until a new plan is agreed."
+            self.post("decision/D001", {"item_id": "P1", "decision": "edit", "note": note})
+            code, _ = self.post("handout/D001", {})
+            self.assertEqual(code, 200)
+            self.assertIn(note, asked[-1])
+            self.assertNotIn(first["text"], asked[-1])
+            self.assertNotIn(second["text"], asked[-1])
+            self.assertEqual(len(asked), 3)
         finally:
             self.app.client = client
 

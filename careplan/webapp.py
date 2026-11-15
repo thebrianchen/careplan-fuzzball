@@ -547,7 +547,9 @@ class Clinic:
             if it["item_id"] in away:
                 continue
             it, d = copy.deepcopy(it), decisions.get(it["item_id"])
-            if d and d["decision"] == "accept" and d.get("note"):
+            if d and d["decision"] == "edit":
+                it["alternatives"] = [a for a in it.get("alternatives", []) if a["category"] == "clinician_edit"]
+            elif d and d["decision"] == "accept" and d.get("note"):
                 lines = d["note"].split("\n")
                 it["alternatives"] = [a for a in it.get("alternatives", []) if any(a["text"] in line for line in lines)] or it.get("alternatives", [])
             items.append(it)

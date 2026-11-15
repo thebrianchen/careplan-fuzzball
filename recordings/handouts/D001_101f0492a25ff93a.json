@@ -1,0 +1,33 @@
+{
+ "items": [
+  {
+   "item_id": "P1",
+   "heading": "In-Center Hemodialysis",
+   "steps": [
+    "Ask the dialysis team to assess whether home dialysis is suitable.",
+    "Review support at home, training, space, and insurance coverage with the team.",
+    "Continue scheduled in-center dialysis until the team agrees on a new plan."
+   ]
+  },
+  {
+   "item_id": "P2",
+   "heading": "Renal Diet and Food Access",
+   "steps": [
+    "Go to Manna Food Pantry open Mondays 1:00-3:00 PM at 1230 S Millard Ave (1.56 miles away)."
+   ]
+  },
+  {
+   "item_id": "P5",
+   "heading": "Daily Weight and Blood Pressure Log",
+   "steps": [
+    "Keep writing down your weight and blood pressure every day on paper, and bring the log to each dialysis session."
+   ]
+  }
+ ],
+ "closing": "Follow these steps and talk to your care team if you have questions.",
+ "language": "English",
+ "profile": "super35-vllm-think",
+ "saved": "2026-11-15T04:34:52Z",
+ "where": "our own GB10",
+ "model": "nemotron-3.5-super-vl"
+}

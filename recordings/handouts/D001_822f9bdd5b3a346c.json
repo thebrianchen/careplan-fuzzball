@@ -1,0 +1,35 @@
+{
+ "items": [
+  {
+   "item_id": "P1",
+   "heading": "Getting Rides to Dialysis",
+   "steps": [
+    "Call the health plan using the number on the insurance card.",
+    "Explain that long bus trips and lack of a car have led to missed dialysis.",
+    "Request covered round-trip rides to dialysis.",
+    "Confirm approval and pickup times.",
+    "Keep attending scheduled dialysis while rides are arranged."
+   ]
+  },
+  {
+   "item_id": "P2",
+   "heading": "Getting Food",
+   "steps": [
+    "Go to Manna Food Pantry on Mondays 1:00-3:00 PM at 1230 S Millard Ave."
+   ]
+  },
+  {
+   "item_id": "P5",
+   "heading": "Weight and Blood Pressure Log",
+   "steps": [
+    "Keep doing your daily weight and blood pressure log on paper and bring it to each session."
+   ]
+  }
+ ],
+ "closing": "Follow these steps to stay on track with your care plan.",
+ "language": "English",
+ "profile": "super35-vllm-think",
+ "saved": "2026-11-15T04:34:28Z",
+ "where": "our own GB10",
+ "model": "nemotron-3.5-super-vl"
+}
