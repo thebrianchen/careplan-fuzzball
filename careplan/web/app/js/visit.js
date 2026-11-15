@@ -299,16 +299,15 @@ export async function visit(root, id) {
   function paintRunline(state, info = {}) {
     const m = doc.meta, line = el('#runline');
     const src = info.source || m.source;
-    line.hidden = src === 'none' || (src === 'recorded' && state !== 'running');   // a saved run shows only its clock while it plays
+    line.hidden = src === 'none';
     if (line.hidden) return;
-    el('#runtag').hidden = src === 'recorded';
     el('#runtag').className = `runtag ${src}`;
     el('#runtag').textContent = { recorded: 'Saved run', sample: 'Sample', live: 'Live' }[src];
     const when = info.saved || m.saved, model = info.model || m.model, profile = info.profile || m.profile;
     const where = info.where || m.where, on = where ? ` on ${where}` : '';
     el('#runtext').title = profile ? `Profile ${profile} in config/models.yaml` : '';
     el('#runtext').textContent = src === 'sample' ? 'A stand-in built from this visit\'s answer key, for work on the pages. Not a model run.' : src === 'recorded'
-      ? ''                                               // the tag says it is a saved run; where and when it was recorded is its tooltip
+      ? `Recorded${on}, ${date(when)}.${state === 'running' ? '' : ` It took ${secs(m.seconds)}.`}`     // a saved run always says that it is one
       : (state === 'running' ? `The planner (${model})${on} is reviewing this plan now` : `Reviewed just now by the planner (${model})${on} in ${secs(m.seconds)}.`);
     if (state !== 'running') el('#runclock').textContent = '';
   }
