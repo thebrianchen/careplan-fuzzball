@@ -384,7 +384,6 @@ table.grid td.mono{white-space:nowrap}
 .careas{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
 .carea{display:inline-flex;align-items:baseline;gap:7px;padding:3px 10px;border:1px solid var(--line);border-radius:999px;font-size:13px;color:var(--ink2);white-space:nowrap}
 .carea b{font-weight:600;color:var(--ink)}
-.carea.top{border-color:var(--brand);background:var(--brand-soft)}
 
 /* ---- projector mode (html.stage): a washed-out projector eats light greys and thin text, so greys go darker, borders
    stronger and the smallest text larger. Overall size is the browser's zoom, which also scales the map correctly. */
@@ -445,3 +444,14 @@ html.stage .cbar-track{background:var(--line2)}html.stage .cbar-zone{background:
 .page.clinic.focus .cgaps-row:nth-child(n+3){display:none}
 .cfocus{display:flex;flex-wrap:wrap;max-width:100%}
 @media (max-width:620px){.cfocus button{padding:7px 10px;font-size:14px;flex:1 1 auto}.cfocus small{display:block;margin:0}}
+
+/* ---- the panel by neighborhood: one aligned row each, highest share first */
+.cfocus{display:inline-flex;flex-wrap:nowrap;max-width:100%}
+.careas{display:grid;gap:5px;list-style:none;margin:2px 0 14px;padding:0;max-width:640px}
+.carea{display:grid;grid-template-columns:160px minmax(60px,1fr) 240px;align-items:center;gap:12px;padding:0;border:0;border-radius:0;background:none;font-size:14px;color:var(--ink2);white-space:nowrap}
+.carea-bar{display:block;height:8px;border-radius:4px;background:var(--line2);overflow:hidden}
+.carea-bar i{display:block;height:100%;border-radius:4px;background:#7dbdb5}
+.carea.lead b{color:var(--brand-ink)}.carea.lead .carea-bar i{background:var(--brand)}
+.page.clinic.focus .csays{display:none}
+@media (max-width:620px){.carea{grid-template-columns:1fr;gap:2px;white-space:normal}.cfocus{display:flex}}
+.carea>span:last-child{font-variant-numeric:tabular-nums}

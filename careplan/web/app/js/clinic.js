@@ -121,10 +121,11 @@ function rankList(P, state, sel) {
 
 // The panel by neighborhood, for the current barrier: the line a presenter can say aloud.
 function areaStrip(P, barrier) {
-  const of = a => barrier ? a.barriers[barrier] || 0 : a.flagged_patients;
-  const most = Math.max(0, ...(P.areas || []).map(of));
-  return h`${(P.areas || []).map(a => h`<span class="carea${of(a) === most && most ? ' top' : ''}"><b>${a.name}</b>
-    <span>${barrier ? `${plural(of(a), 'flag')} · ${plural(a.reviewed, 'patient')}` : `${of(a)} of ${a.reviewed} with a flag`}</span></span>`)}`;
+  const of = a => barrier ? a.barriers[barrier] || 0 : a.flagged_patients, share = a => a.reviewed ? of(a) / a.reviewed : 0;
+  const rows = [...(P.areas || [])].sort((x, y) => share(y) - share(x)), most = Math.max(0, ...rows.map(share));
+  return h`${rows.map((a, i) => h`<li class="carea${i === 0 && most ? ' lead' : ''}"><b>${a.name}</b>
+    <span class="carea-bar"><i style="width:${most ? (share(a) / most * 100).toFixed(1) : 0}%"></i></span>
+    <span>${of(a)} ${barrier ? 'flags' : 'with a flag'} among ${a.reviewed} patients · ${pct(share(a))}</span></li>`)}`;
 }
 
 // What the map shows for the current barrier and order, in numbers taken straight from the panel.
@@ -189,7 +190,7 @@ export async function clinic(root, query) {
     ${head(P)}
     <div class="cgrid">
       <section class="card cbars"><h2>Barriers flagged</h2><p class="hint">Flags across ${P.reviewed} reviewed plans</p><div id="bars"></div></section>
-      <section class="card cmapcard"><div class="seg cfocus" id="focus" role="group" aria-label="Barrier"></div><h2 id="map-title"></h2><p class="csays" id="says"></p><div class="careas" id="areas"></div>
+      <section class="card cmapcard"><div class="seg cfocus" id="focus" role="group" aria-label="Barrier"></div><h2 id="map-title"></h2><p class="csays" id="says"></p><ol class="careas" id="areas"></ol>
         <figure class="cmap"><div class="cmap-stack"></div>${B || W ? h`<figcaption class="cmap-src">Map: ${(B || W).source}</figcaption>` : ''}</figure>
         <div class="legend" id="legend"></div>
         <p class="cfrom">This map is built from what clinicians' plans ran into in visits, not from public data alone. Only counts left the patient side.</p></section>
