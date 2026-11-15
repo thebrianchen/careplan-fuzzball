@@ -18,9 +18,8 @@ const FACTS = {
   housing: ['tract:places_housinsecu'],
 };
 const TOP = 8;
-const FOCUS = ['transport', 'food_access'];     // the two barriers the page leads with; everything else is behind "Show everything"
-const focusOf = P => FOCUS.filter(k => P.barriers.some(b => b.barrier === k));
-const topOf = s => s.full ? TOP : 5;
+const LEADERS = 2;                     // the barriers flagged most are marked in the list; which ones is the data's call
+const topOf = s => s.full ? TOP : 0;   // the first view has no tract ranking, so the map carries no rank badges
 const FEW = 10;            // below this many reviewed patients one or two flags swing the share
 const ORDERS = { count: 'Most flags', share: 'Highest share' };
 
@@ -47,10 +46,9 @@ const nearText = n => n ? `${plural(n, 'place')} nearby` : 'no place nearby';
 const fix = (P, s, hidden) => ({ ...s, place: (placesFor(P, s.barrier) || []).some(p => p.id === s.place && !hidden.has(p.kind)) ? s.place : null });
 function readAddress(P, query) {
   const q = new URLSearchParams(query || ''), b = q.get('b'), t = q.get('t');
-  const full = q.get('full') === '1' || !focusOf(P).length;
   return fix(P, {
-    full,
-    barrier: P.barriers.some(x => x.barrier === b) && (full || focusOf(P).includes(b)) ? b : full ? null : focusOf(P)[0],
+    full: q.get('full') === '1',
+    barrier: P.barriers.some(x => x.barrier === b) ? b : null,
     order: q.get('order') === 'share' ? 'share' : 'count',
     tract: P.tracts.some(x => x.tract_id === t) ? t : null,
     place: q.get('p'),
@@ -98,7 +96,7 @@ function legend(P, state, hidden) {
 function barChart(P, barrier) {
   const most = Math.max(...P.barriers.map(b => b.flags));
   return h`<button type="button" class="ball" data-barrier="" aria-pressed="${String(!barrier)}">All barriers</button>
-    <ol class="bbars">${P.barriers.map(b => h`<li><button type="button" class="bbar" data-barrier="${b.barrier}" aria-pressed="${String(b.barrier === barrier)}">
+    <ol class="bbars">${P.barriers.map((b, i) => h`<li class="${i < LEADERS ? 'lead' : ''}"><button type="button" class="bbar" data-barrier="${b.barrier}" aria-pressed="${String(b.barrier === barrier)}">
       <span class="bl">${nameOf(b)}</span><span class="bt"><i style="width:${(b.flags / most * 100).toFixed(1)}%"></i></span><span class="bn">${b.flags}</span></button></li>`)}</ol>`;
 }
 
@@ -125,7 +123,7 @@ function areaStrip(P, barrier) {
   const rows = [...(P.areas || [])].sort((x, y) => share(y) - share(x)), most = Math.max(0, ...rows.map(share));
   return h`${rows.map((a, i) => h`<li class="carea${i === 0 && most ? ' lead' : ''}"><b>${a.name}</b>
     <span class="carea-bar"><i style="width:${most ? (share(a) / most * 100).toFixed(1) : 0}%"></i></span>
-    <span>${of(a)} ${barrier ? 'flags' : 'with a flag'} among ${a.reviewed} patients · ${pct(share(a))}</span></li>`)}`;
+    <span>${of(a)} of ${a.reviewed} · ${pct(share(a))}</span></li>`)}`;
 }
 
 // What the map shows for the current barrier and order, in numbers taken straight from the panel.
@@ -189,8 +187,8 @@ export async function clinic(root, query) {
   root.innerHTML = h`<div class="page clinic">
     ${head(P)}
     <div class="cgrid">
-      <section class="card cbars"><h2>Barriers flagged</h2><p class="hint">Flags across ${P.reviewed} reviewed plans</p><div id="bars"></div></section>
-      <section class="card cmapcard"><div class="seg cfocus" id="focus" role="group" aria-label="Barrier"></div><h2 id="map-title"></h2><p class="csays" id="says"></p><ol class="careas" id="areas"></ol>
+      <section class="card cbars"><h2>Barriers flagged</h2><p class="hint">Flags across ${P.reviewed} reviewed plans</p><div id="bars"></div><h3 class="k careas-h" id="areas-title"></h3><ol class="careas" id="areas"></ol></section>
+      <section class="card cmapcard"><h2 id="map-title"></h2><p class="csays" id="says"></p>
         <figure class="cmap"><div class="cmap-stack"></div>${B || W ? h`<figcaption class="cmap-src">Map: ${(B || W).source}</figcaption>` : ''}</figure>
         <div class="legend" id="legend"></div>
         <p class="cfrom">This map is built from what clinicians' plans ran into in visits, not from public data alone. Only counts left the patient side.</p></section>
@@ -218,8 +216,7 @@ export async function clinic(root, query) {
     const b = state.barrier, chosen = P.barriers.find(x => x.barrier === b), sh = shades(P, b), sel = selected(P, state);
     if (location.hash.startsWith('#/clinic') && location.hash !== address(state)) history.replaceState(null, '', address(state));
     el('.page').classList.toggle('focus', !state.full);
-    el('#focus').innerHTML = h`${focusOf(P).map(k => { const x = P.barriers.find(y => y.barrier === k);
-      return h`<button type="button" data-barrier="${k}" class="${k === b ? 'on' : ''}" aria-pressed="${String(k === b)}">${nameOf(x)} <small>${x.flags} flags</small></button>`; })}`;
+    el('#areas-title').textContent = chosen ? `${nameOf(chosen)} by neighborhood` : 'Patients with a flag, by neighborhood';
     el('#whole').textContent = state.full ? 'Show less' : 'Show everything';
     el('#bars').innerHTML = barChart(P, b);
     el('#map-title').textContent = chosen ? `${nameOf(chosen)}: where flags fall` : 'Where flagged plans live';
@@ -246,14 +243,14 @@ export async function clinic(root, query) {
     const bar = e.target.closest('[data-barrier]'), order = e.target.closest('[data-order]'), hood = e.target.closest('[data-tract]');
     const go = e.target.closest('[data-go-barrier],[data-go-tract]');     // a card below the map sends the manager to a view of it
     const kind = e.target.closest('.lg-kinds [data-kind]');
-    if (e.target.closest('#whole')) set(state.full ? { full: false, barrier: focusOf(P).includes(state.barrier) ? state.barrier : focusOf(P)[0] } : { full: true });
+    if (e.target.closest('#whole')) set({ full: !state.full });
     else if (go) {
       set({ barrier: go.dataset.goBarrier ?? state.barrier, tract: go.dataset.goTract ?? state.tract });
       el('.cgrid').scrollIntoView({ behavior: 'smooth', block: 'start' });
     } else if (kind) {
       if (!hidden.delete(kind.dataset.kind)) hidden.add(kind.dataset.kind);
       set({});
-    } else if (bar) set({ barrier: bar.dataset.barrier && (bar.dataset.barrier !== state.barrier || !state.full) ? bar.dataset.barrier : null });
+    } else if (bar) set({ barrier: bar.dataset.barrier && bar.dataset.barrier !== state.barrier ? bar.dataset.barrier : null });
     else if (order) set({ order: order.dataset.order });
     else if (e.target.closest('[data-more]')) { const id = e.target.closest('[data-more]').dataset.more; unfolded.has(id) ? unfolded.delete(id) : unfolded.add(id); paint(); }
     else if (e.target.closest('[data-clear]')) set({ tract: null });
