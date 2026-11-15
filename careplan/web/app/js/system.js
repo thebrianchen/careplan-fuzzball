@@ -14,36 +14,10 @@ function tiles(s) {
   const dec = { accept: 0, edit: 0, dismiss: 0 };
   s.decisions.forEach(d => { if (d.decision in dec) dec[d.decision]++; });
   return h`
-    <div class="tile ${s.planner.answers ? 'up' : 'down'}"><span class="k">Planner</span>
-      <b>${s.planner.answers ? 'Endpoint answering' : 'Not answering'}</b>
-      <small>${s.planner.answers ? (s.planner.skipped.length ? h`<span class="warn">Fallback in use: ${s.planner.skipped.join('; ')}.</span><br>` : '') : h`<span class="bad">${cap(s.planner.why)}.</span><br>`}${s.planner.profile} · ${s.planner.model}<br>${s.planner.host}${s.planner.answers ? ' · a reachability check, not a generation check' : ''}</small></div>
-    <div class="tile"><span class="k">Reviews since this server started</span>
-      <b>${live.length} live · ${ok.length - live.length} from saved runs</b>
-      <small>${failed ? h`<span class="bad">${plural(failed, 'review')} did not finish</span> · ` : ''}server up ${uptime(s.uptime_s)}</small></div>
-    <div class="tile"><span class="k">Live review time</span>
-      <b>${med == null ? '—' : secs(med)}</b>
-      <small>${med == null ? 'No live review yet on this server' : `Median of ${plural(live.length, 'live review')}`}</small></div>
-    <div class="tile"><span class="k">Requests to the public side</span>
-      <b>${s.crossings.length}</b>
-      <small>Each can carry a census tract, a kind of need, days and a time window</small></div>
-    <div class="tile"><span class="k">Clinician decisions</span>
-      <b>${dec.accept} accepted · ${dec.edit} edited · ${dec.dismiss} dismissed</b>
-      <small>The latest ${s.decisions.length} rows of the decision log</small></div>`;
-}
-
-function split(s) {
-  return h`<div class="zones">
-      <div class="zone private"><span class="k">Private side</span><b>The visit, the chart, the planner, this app</b>
-        <small>Everything that names a patient is read here.</small></div>
-      <div class="wire"><span>census tract · kind of need · days · time window</span><i aria-hidden="true"></i><small>the only fields a request has</small></div>
-      <div class="zone public"><span class="k">Public side</span><b>Neighborhood services, built from the open web</b>
-        <small>Answers "what help is near this tract". Never sees a patient.</small></div>
-    </div>
-    <p class="muted small">${s.config.gateway
-      ? 'On this server, lookups cross to the public side through the gateway, which checks who is calling.'
-      : 'On this server no gateway is configured, so lookups are answered from a local copy of the services table. The request has the same fields either way.'}</p>
-    ${s.planner.hosted ? h`<div class="notice bad"><b>This server's planner is a hosted endpoint (${s.planner.host}).</b> A live review sends the visit and the chart there.
-      That is acceptable only because every patient here is made up; the private side is meant to run the planner on its own machine.</div>` : ''}`;
+    <div class="tile"><span class="k">Reviews</span><b>${ok.length}${failed ? h` <span class="bad">· ${failed} failed</span>` : ''}</b></div>
+    <div class="tile"><span class="k">Live review time</span><b>${med == null ? '—' : secs(med)}</b></div>
+    <div class="tile"><span class="k">Requests to the public side</span><b>${s.crossings.length}</b></div>
+    <div class="tile"><span class="k">Clinician decisions</span><b>${dec.accept} accepted · ${dec.edit} edited · ${dec.dismiss} dismissed</b></div>`;
 }
 
 const table = (head, rows, empty) => h`<table class="grid"><thead><tr>${head.map(x => h`<th>${x}</th>`)}</tr></thead>
@@ -51,19 +25,16 @@ const table = (head, rows, empty) => h`<table class="grid"><thead><tr>${head.map
 
 export async function system(root) {
   root.innerHTML = h`<div class="page system">
-    <div class="page-head"><div><h1>System</h1>
-      <p class="muted">For whoever keeps this running. Case ids and counts only: no patient's name, words or chart reach this page.</p></div>
+    <div class="page-head"><div><h1>System</h1></div>
       <div class="page-tools"><span class="muted" id="asof"></span></div></div>
     <div class="tiles" id="tiles"></div>
-    <section class="card extra"><h2>How a review is split</h2><div id="split"></div></section>
-    <section class="card extra"><h2>Leak test</h2><div id="leak" class="muted">Checking…</div></section>
+    <section class="card" hidden><h2>Leak test</h2><div id="leak" class="muted">Checking…</div></section>
     <section class="card sruns"><h2>Reviews</h2><div id="runs"></div></section>
-    <div class="two extra">
+    <div class="two">
       <section class="card"><h2>Requests to the public side</h2><div id="crossings"></div></section>
       <section class="card"><h2>Clinician decisions</h2><div id="decisions"></div></section>
     </div>
-    <section class="card extra"><h2>Activity</h2><div id="activity"></div></section>
-    <button type="button" class="link swhole" id="swhole">Show everything</button>
+    <section class="card"><h2>Activity</h2><div id="activity"></div></section>
   </div>`;
   const el = sel => $(sel, root);
 
@@ -73,7 +44,6 @@ export async function system(root) {
     setPlanner(s.planner);
     el('#asof').textContent = `As of ${timeOfDay(s.now)} · ${plural(s.config.cases, 'visit')} loaded · rule signals ${s.config.signals ? 'on' : 'off'}`;
     el('#tiles').innerHTML = tiles(s);
-    el('#split').innerHTML = split(s);
     el('#runs').innerHTML = table(['When', 'Visit', 'Source', 'Planner', 'Time', 'Model turns', 'Tokens in / out', 'Lookups', 'Crossings', 'Flagged', 'Result'],
       s.runs.map(r => h`<tr><td>${timeOfDay(r.ts)}</td><td class="mono"><a href="#/visit/${r.case_id}">${r.case_id}</a></td><td><span class="runtag ${r.source}">${SOURCE[r.source] || r.source}</span></td>
         <td class="mono">${r.profile}</td><td>${secs(r.seconds)}</td><td>${r.steps ?? '—'}</td><td>${num(r.prompt_tokens)} / ${num(r.completion_tokens)}</td>
@@ -96,17 +66,15 @@ export async function system(root) {
   async function leak() {
     try {
       const r = await (await fetch('/redteam/live')).json(), a = r.single_agent, b = r.split;
+      el('#leak').closest('.card').hidden = !(a.runs || b.runs);     // shown only when there are results to show
       el('#leak').innerHTML = a.runs || b.runs
         ? h`<div class="leak"><div><b class="${a.leaked ? 'bad' : ''}">${a.leaked} of ${a.runs}</b><span>runs leaked patient identifiers with one agent holding the chart and the web</span></div>
             <div><b class="${b.leaked ? 'bad' : 'good'}">${b.leaked} of ${b.runs}</b><span>runs leaked with the split design</span></div></div>
-            <p class="muted small">Counted from the leak-test result files on this machine as they land.</p>`
+            `
         : 'No leak-test results on this machine. The counts appear here while a leak test writes its results.';
     } catch (err) { el('#leak').textContent = 'The leak-test counts could not be read.'; }
   }
   await refresh(); leak();
-  const page = el('.page');                          // the first view is four figures and the reviews; the rest opens on request
-  page.classList.add('focus');
-  el('#swhole').onclick = e => { e.target.textContent = page.classList.toggle('focus') ? 'Show everything' : 'Show less'; };
   const timers = [setInterval(refresh, 4000), setInterval(leak, 10000)];
   return () => timers.forEach(clearInterval);
 }

@@ -451,10 +451,6 @@ html.stage .cbar-track{background:var(--line2)}html.stage .cbar-zone{background:
 .carea.lead b{color:var(--brand-ink)}.carea.lead .carea-bar i{background:var(--brand)}
 .page.clinic.focus:not(.one-barrier) .cgrid2{display:none}
 
-/* ---- the System page's first view: four figures and the reviews */
-.swhole{display:block;margin:16px 2px 0;color:var(--muted)}
-.page.system.focus .extra,.page.system.focus .tile:nth-child(n+5){display:none}
-.page.system.focus .sruns th:nth-child(4),.page.system.focus .sruns td:nth-child(4),.page.system.focus .sruns th:nth-child(6),.page.system.focus .sruns td:nth-child(6),
-.page.system.focus .sruns th:nth-child(7),.page.system.focus .sruns td:nth-child(7),.page.system.focus .sruns th:nth-child(8),.page.system.focus .sruns td:nth-child(8),
-.page.system.focus .sruns th:nth-child(9),.page.system.focus .sruns td:nth-child(9){display:none}
-.page.system.focus .page-head p.muted{display:none}
+/* ---- the System page: each table scrolls inside its card, so a long log does not stretch the page */
+.page.system .card>div{max-height:280px;overflow:auto}
+.page.system table.grid thead th{position:sticky;top:0;background:var(--surface);z-index:1}
