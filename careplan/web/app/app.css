@@ -426,3 +426,9 @@ html.stage .cbar-track{background:var(--line2)}html.stage .cbar-zone{background:
 .barrier.also{margin-top:10px}
 .barrier.also>summary,.more-ev>summary{cursor:pointer;font-size:14px;color:var(--ink2)}
 .more-ev{margin:2px 0 0}.more-ev>summary{color:var(--brand);font-weight:500}
+.steps-toggle{display:block;margin:0 2px 8px;font-size:13px}
+.steps.brief-steps .step:not(.pending){display:none}
+.alts li[data-alt]{cursor:pointer}
+.alts li[data-alt]:hover{background:var(--brand-soft)}
+.alts li.picked{background:var(--brand-soft);box-shadow:inset 3px 0 0 var(--brand)}
+.alts li.picked .cat::before{content:"✓ "}

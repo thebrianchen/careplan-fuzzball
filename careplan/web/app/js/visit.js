@@ -19,7 +19,7 @@ function evidenceText(e, rows) {                     // appointments and screene
 const flaggedOf = doc => doc.items.filter(i => i.status !== 'likely_ok');
 // Flagged items that raise no barrier an earlier flagged item has not already raised: they tuck under one line, so the page
 // shows each kind of problem once.
-function repeats(doc, plan) {
+export function repeats(doc, plan) {
   const seen = new Set(), out = [];
   for (const it of plan.map(p => doc.items.find(i => i.item_id === p.item_id)).filter(i => i && i.status !== 'likely_ok')) {
     const kinds = it.barriers.map(b => b.barrier);
@@ -110,7 +110,7 @@ function finding(it, rows, chart, animate) {
     ${ex.map ? map({ ...ex.map, animate }) : ''}
     ${ex.alts.length ? h`<div class="alts"><h4>What could work instead</h4><ul>${ex.alts.map(a => {
       const r = a.resource;
-      return h`<li${a.n ? h` data-res="${a.n}" tabindex="0"` : ''}><span class="cat">${category(a.label)}</span><span>${a.text}${r ? h`<span class="res">
+      return h`<li data-alt="${ex.alts.indexOf(a)}"${a.n ? h` data-res="${a.n}" tabindex="0"` : ''} title="Choose this for the patient's plan"><span class="cat">${category(a.label)}</span><span>${a.text}${r ? h`<span class="res">
         <b>${a.n ? h`<span class="resnum">${a.n}</span>` : ''}${r.name}</b>${r.miles_from_home != null ? h`<span class="far">${r.miles_from_home} mi from home</span>` : ''}
         <small>${[r.address, hours(r.hours)].filter(Boolean).join(' · ')}${r.phone ? h` · <a href="tel:${r.phone.replace(/[^\d+]/g, '')}">${r.phone}</a>` : ''}</small></span>` : ''}</span></li>`;
     })}</ul></div>` : ''}`;
@@ -150,7 +150,7 @@ export async function visit(root, id) {
   const canRun = m => m === 'recorded' ? doc.has_recording : m === 'sample' ? doc.can_sample && !doc.has_recording : doc.planner.answers;
   const kept = localStorage.getItem('cp.mode');
   let mode = MODES.includes(kept) && canRun(kept) ? kept : MODES.find(canRun) || 'live';
-  let speed = SPEEDS.includes(+localStorage.getItem('cp.speed')) ? +localStorage.getItem('cp.speed') : 8;
+  let speed = SPEEDS.includes(+localStorage.getItem('cp.speed')) ? +localStorage.getItem('cp.speed') : 20;
   const p = doc.patient, el = sel => $(sel, root);
   const rows = Object.fromEntries([...doc.chart.appointments, ...doc.chart.screener.answers].map(r => [r.ref, r]));
 
@@ -179,6 +179,7 @@ export async function visit(root, id) {
         </div>
         <div class="notice" id="blocked" hidden></div>
         <div class="runline" id="runline" hidden><span class="runtag" id="runtag"></span><span id="runtext"></span><span class="runclock" id="runclock"></span></div>
+        <button type="button" class="link steps-toggle" id="steps-toggle" hidden></button>
         <ul class="steps" id="steps" hidden></ul>
         <div class="notice bad" id="fail" hidden></div>
         <div class="summary" id="summary" hidden></div>
@@ -214,7 +215,8 @@ export async function visit(root, id) {
     node.classList.toggle('shut', !on);
     $('.fold', node).setAttribute('aria-expanded', String(on));
   }
-  let untucked = false;
+  let untucked = false, stepsOpen = false;
+  const picked = {};                                  // item id -> the alternatives the doctor chose, by position
   const tuckedNow = () => untucked ? [] : repeats(doc, doc.plan);
   const shown = () => doc.items.filter(i => !tuckedNow().includes(i.item_id));     // what the page counts is what it shows
   function tuck() {                                   // after every paint: which repeats are folded away, and the line that says so
@@ -226,8 +228,7 @@ export async function visit(root, id) {
       if (!away) $('.num', node).textContent = ++n;
     });
     const b = el('#tucked');
-    b.hidden = !ids.length;
-    b.textContent = untucked ? `Hide the ${plural(ids.length, 'item')} with the same barriers` : `${plural(ids.length, 'more plan item')} with the same barriers`;
+    b.hidden = true;                                   // the page shows each kind of problem once and does not offer the repeats
   }
   const nextUndecided = () => flaggedOf(doc).find(i => !doc.decisions[i.item_id] && !tuckedNow().includes(i.item_id));
   function openNext() { const next = nextUndecided(); open = new Set(next ? [next.item_id] : []); }
@@ -240,8 +241,11 @@ export async function visit(root, id) {
     untucked = false; tuck();
   }
   function paintSteps(phase) {                       // phase: a pending label while running, or null when done
-    const s = el('#steps');
-    s.hidden = !doc.steps.length && !phase;
+    const s = el('#steps'), t = el('#steps-toggle');
+    t.hidden = !doc.steps.length;
+    t.textContent = `${stepsOpen ? 'Hide' : 'Show'} the ${plural(doc.steps.length, 'check')}`;
+    s.classList.toggle('brief-steps', !stepsOpen);     // closed: only what it is doing now
+    s.hidden = !phase && !(stepsOpen && doc.steps.length);
     s.innerHTML = h`${doc.steps.map(x => h`<li class="step ${x.kind}"><span class="tick" aria-hidden="true">${x.kind === 'crossing' ? '→' : '✓'}</span>${x.label}<small>${secs(x.t)}</small></li>`)}
       ${phase ? h`<li class="step pending"><span class="spin" aria-hidden="true"></span>${phase}</li>` : ''}`;
   }
@@ -421,13 +425,23 @@ export async function visit(root, id) {
     if (seg) { mode = seg.dataset.mode; localStorage.setItem('cp.mode', mode); return paintControls(); }
     if (t.closest('#go')) return start(mode);
     if (t.closest('#unsaid')) { showUnsaid(!onlyUnsaid); return paintSummary(); }
-    if (t.closest('#tucked')) { untucked = !untucked; tuck(); paintSummary(); return paintAfter(); }
+    if (t.closest('#steps-toggle')) { stepsOpen = !stepsOpen; return paintSteps(running ? 'Reviewing' : null); }
+    const alt = t.closest('.alts li[data-alt]');
+    if (alt && !t.closest('a')) {                       // choose which alternatives go on the patient's plan, then Accept
+      const itemId = alt.closest('.pitem').id.slice(2), set = picked[itemId] || (picked[itemId] = new Set()), n = +alt.dataset.alt;
+      set.has(n) ? set.delete(n) : set.add(n);
+      return alt.classList.toggle('picked', set.has(n));
+    }
     const head = t.closest('.pitem.folds .pitem-head, .pitem.folds .brief');
     if (head) { const node = head.closest('.pitem'); return fold(node.id.slice(2), node.classList.contains('shut')); }
     if (cites) return showSource(cites.dataset.ref);
     if (d) {
       const bar = d.closest('.decide'), box = $('.editbox', bar);
-      if (d.dataset.d !== 'edit') return save(bar, d.dataset.d);
+      if (d.dataset.d !== 'edit') {
+        const itemId = bar.dataset.item, it = doc.items.find(i => i.item_id === itemId);
+        const chosen = d.dataset.d === 'accept' ? [...(picked[itemId] || [])].sort().map(n => it.alternatives[n]).filter(Boolean) : [];
+        return save(bar, d.dataset.d, chosen.map(a => a.resource && !a.text.includes(a.resource.name) ? `${a.resource.name}: ${a.text}` : a.text).join('\n') || undefined);
+      }
       box.hidden = false; $('textarea', box).focus();
       return;
     }
