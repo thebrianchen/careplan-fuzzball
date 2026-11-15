@@ -331,6 +331,14 @@ class WebAppTests(unittest.TestCase):
         self.assertTrue(any(w["name"] == "Lk Michigan" for w in wide["water"]))
         self.assertEqual(len(wide["areas"]), 77)
 
+    def test_a_page_that_cannot_hear_the_stream_gets_the_same_events_by_asking(self):
+        streamed = self.review("mode=recorded&speed=1000&rid=abc")
+        asked = self.get("progress/D001?rid=abc&after=-1")["events"]
+        self.assertEqual([e["type"] for e in asked], [e["type"] for e in streamed])
+        self.assertEqual([e["i"] for e in asked], list(range(len(asked))))
+        self.assertEqual(len(self.get("progress/D001?rid=abc&after=2")["events"]), len(asked) - 3)
+        self.assertEqual(self.get("progress/D001?rid=nobody")["events"], [])
+
     def test_pages_are_served_and_nothing_outside_them(self):
         with urllib.request.urlopen(f"{self.url}/app/") as r:
             self.assertIn("Care Plan Check", r.read().decode())

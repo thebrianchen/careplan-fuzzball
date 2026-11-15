@@ -136,7 +136,7 @@ function boundary(doc, state) {
 export async function visit(root, id) {
   let doc = await api(`case/${id}`);
   setPlanner(doc.planner);
-  let es = null, tick = null, running = false, savedAt = {}, onlyUnsaid = false;
+  let es = null, tick = null, poll = null, running = false, savedAt = {}, onlyUnsaid = false;
   let open = new Set();                              // the flagged items whose evidence is unfolded; the rest show one line
   const MODES = ['recorded', 'sample', 'live'];        // in the order a visit falls back to them
   const canRun = m => m === 'recorded' ? doc.has_recording : m === 'sample' ? doc.can_sample : doc.planner.answers;
@@ -289,7 +289,7 @@ export async function visit(root, id) {
   }
 
   // ---- the review
-  function stop() { running = false; if (es) { es.close(); es = null; } clearInterval(tick); paintControls(); }
+  function stop() { running = false; if (es) { es.close(); es = null; } clearInterval(tick); clearInterval(poll); paintControls(); }
   async function failed(message, usedMode) {
     try { doc = await api(`case/${id}`); } catch (e) { /* keep what we have */ }
     setPlanner(doc.planner);
@@ -316,9 +316,17 @@ export async function visit(root, id) {
     const t0 = performance.now();
     tick = setInterval(() => { el('#runclock').textContent = secs((performance.now() - t0) / 1000 * rate); }, 200);
     const keep = useMode === 'live' && !doc.has_recording && el('#record').checked;
-    es = new EventSource(`/api/app/review/${id}?mode=${useMode}&speed=${speed}${keep ? '&record=1' : ''}`);
-    es.onmessage = m => {
-      const ev = JSON.parse(m.data);
+    const rid = Math.random().toString(36).slice(2);
+    let seen = -1;
+    es = new EventSource(`/api/app/review/${id}?mode=${useMode}&speed=${speed}&rid=${rid}${keep ? '&record=1' : ''}`);
+    es.onmessage = m => apply(JSON.parse(m.data));
+    // Some proxies hold an event stream back until it ends, so the same events are also asked for; each is applied once.
+    poll = setInterval(async () => {
+      try { (await api(`progress/${id}?rid=${rid}&after=${seen}`)).events.forEach(apply); } catch (e) { /* the stream may still deliver */ }
+    }, 700);
+    function apply(ev) {
+      if (!running || ev.i <= seen) return;
+      seen = ev.i;
       if (ev.type === 'start') {
         rate = ev.speed || 1;
         paintRunline('running', ev); paintSteps('Reading');
@@ -345,7 +353,7 @@ export async function visit(root, id) {
         el('#boundary').innerHTML = boundary(doc, 'done');
         el('#go').textContent = 'Review again';
       }
-    };
+    }
     es.onerror = () => { if (running) { stop(); failed('The connection to the app server dropped during the review.', useMode); } };
   }
 
@@ -414,5 +422,5 @@ export async function visit(root, id) {
 
   const layout = setupVisitLayout(root, doc);
   paintAll(); paintControls();
-  return () => { running = false; if (es) es.close(); clearInterval(tick); };
+  return () => { running = false; if (es) es.close(); clearInterval(tick); clearInterval(poll); };
 }

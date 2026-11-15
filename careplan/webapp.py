@@ -9,6 +9,8 @@ GET  /api/app/review/<id>     event stream of a review. ?mode=recorded replays a
                               (&record=1 keeps a finished live run as this visit's saved run, if it has none; a saved run is never overwritten)
 POST /api/app/decision/<id>   {item_id, decision: accept|edit|dismiss, note}: the clinician's call on one flagged item
 POST /api/app/reset/<id>      forget this visit's review and its decisions on screen (the decision log keeps its rows)
+GET  /api/app/progress/<id>   ?rid=R&after=N: the events of review R after the Nth, for a page behind a proxy that holds an event
+                              stream back until it ends (a Cloudflare quick tunnel does)
 GET  /api/app/system          the operator's view: planner, reviews, crossings, decisions, activity. Case ids only, no patient fields.
 GET  /api/app/panel           the clinic manager's view: counts by neighborhood from the reviews of a whole panel (careplan.aggregates).
                               Counts only; neighborhoods with fewer than k patients are not in it.
@@ -254,6 +256,7 @@ class Clinic:
         self.stall_s = float(os.environ.get("CAREPLAN_STALL_S", "30"))    # a live review that hears nothing from the planner for this long has failed
         self.fallbacks = [u.strip() for u in os.environ.get("CAREPLAN_PLANNER_FALLBACKS", "").split(",") if u.strip()]
         self.county = county(app.tracts)
+        self.progress: collections.OrderedDict[str, list] = collections.OrderedDict()   # review id -> its events so far, for pages that poll
 
     @functools.cached_property
     def city(self) -> dict:
@@ -379,7 +382,7 @@ class Clinic:
                           "profile": self.app.client.p.name, "error": error[:200]})
         self.note("review failed", cid, source=source)
 
-    def review(self, h, cid: str, mode: str, speed: float, record: bool = False) -> None:
+    def review(self, h, cid: str, mode: str, speed: float, record: bool = False, rid: str = "") -> None:
         app, case = self.app, self.app.cases[cid]
         tract = app.tracts.get(case.tract_geoid)
         h.send_response(200)
@@ -387,8 +390,13 @@ class Clinic:
         h.send_header("Cache-Control", "no-cache")
         h.end_headers()
         steps: list[dict] = []
+        log = self.progress[rid] = []
+        while len(self.progress) > 40:
+            self.progress.popitem(last=False)
 
         def send(ev: dict) -> None:
+            ev = {**ev, "i": len(log)}               # numbered, so a page that hears an event twice (stream and poll) applies it once
+            log.append(ev)
             h.wfile.write(f"data: {json.dumps(ev, default=str, ensure_ascii=False)}\n\n".encode())
             h.wfile.flush()
 
@@ -572,7 +580,14 @@ def handle(app, h, method: str, path: str, query: str) -> None:
             speed = min(1000.0, max(1.0, float(q.get("speed", 1))))
         except ValueError:
             speed = 1.0
-        return c.review(h, cid, q.get("mode") if q.get("mode") in ("live", "sample") else "recorded", speed, record=q.get("record") == "1")
+        return c.review(h, cid, q.get("mode") if q.get("mode") in ("live", "sample") else "recorded", speed, record=q.get("record") == "1",
+                        rid=q.get("rid", ""))
+    if method == "GET" and route == "progress" and cid:
+        try:
+            after = int(q.get("after", -1))
+        except ValueError:
+            after = -1
+        return js(200, {"events": c.progress.get(q.get("rid", ""), [])[after + 1:]})
     if method == "POST" and route == "decision" and cid:
         try:
             body = json.loads(h.rfile.read(int(h.headers.get("Content-Length") or 0)) or b"{}")
