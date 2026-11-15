@@ -94,7 +94,8 @@ class WebAppTests(unittest.TestCase):
         doc = evs[-1]["doc"]
         self.assertEqual((doc["meta"]["source"], len(doc["items"]), len(doc["crossings"])), ("recorded", 5, 2))
         row = next(c for c in self.get("cases")["cases"] if c["case_id"] == "D001")
-        self.assertEqual((row["review"]["flagged"], row["review"]["decided"]), (4, 0))
+        self.assertEqual((row["review"]["flagged"], row["review"]["items"], row["plan_items"], row["review"]["decided"]), (2, 3, 3, 0))
+        self.assertEqual(doc["tucked"], ["P3", "P4"])                      # the same two everywhere: list, visit and handout
 
     def test_a_changed_mind_starts_from_the_finding_as_first_shown(self):
         self.assertEqual(self.post("decision/D001", {"item_id": "P1", "decision": "accept"})[0], 400)        # nothing reviewed yet

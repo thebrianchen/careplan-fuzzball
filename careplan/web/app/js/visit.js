@@ -19,14 +19,8 @@ function evidenceText(e, rows) {                     // appointments and screene
 const flaggedOf = doc => doc.items.filter(i => i.status !== 'likely_ok');
 // Flagged items that raise no barrier an earlier flagged item has not already raised: they tuck under one line, so the page
 // shows each kind of problem once.
-export function repeats(doc, plan) {
-  const seen = new Set(), out = [];
-  for (const it of plan.map(p => doc.items.find(i => i.item_id === p.item_id)).filter(i => i && i.status !== 'likely_ok')) {
-    const kinds = it.barriers.map(b => b.barrier);
-    if (kinds.length && kinds.every(k => seen.has(k))) out.push(it.item_id);
-    kinds.forEach(k => seen.add(k));
-  }
-  return out;
+export function repeats(doc) {                       // decided by the server (Clinic.tucked), so every page agrees
+  return doc.tucked || [];
 }
 let cityData = null;                                 // the maps' backdrop (~0.5 MB), fetched once per page load and only when a map appears
 const city = () => cityData || (cityData = api('city'));

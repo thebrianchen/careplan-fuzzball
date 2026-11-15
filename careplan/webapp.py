@@ -317,13 +317,29 @@ class Clinic:
                 "answers": answers, "why": None if answers else "; ".join(skipped[1:]), "skipped": skipped if answers else []}
 
     # ---- the doctor's side
+    def tucked(self, cid: str) -> list[str]:
+        """The flagged plan items that raise no barrier an earlier flagged item has not raised. Every page leaves them out,
+        so the counts on the visits list, the visit and the handout agree. Known from the review shown, or the saved run."""
+        s, f = self.shown.get(cid), self.recording(cid)
+        items = s["doc"]["items"] if s else (json.loads(f.read_text())["rec"].get("assessment") or {}).get("items", []) if f.is_file() else []
+        by, seen, out = {i["item_id"]: i for i in items}, set(), []
+        for p in self.app.cases[cid].plan:
+            it = by.get(p["item_id"])
+            if it and it["status"] != "likely_ok":
+                kinds = [b["barrier"] for b in it.get("barriers", [])]
+                if kinds and all(k in seen for k in kinds):
+                    out.append(it["item_id"])
+                seen.update(kinds)
+        return out
+
     def state(self, cid: str) -> dict | None:
         s = self.shown.get(cid)
         if not s:
             return None
-        flagged = [i["item_id"] for i in s["doc"]["items"] if i["status"] != "likely_ok"]
+        away = self.tucked(cid)
+        flagged = [i["item_id"] for i in s["doc"]["items"] if i["status"] != "likely_ok" and i["item_id"] not in away]
         decided = (self.app.results.get(cid) or {}).get("decisions") or {}
-        return {"source": s["source"], "seconds": s["doc"]["meta"].get("seconds"), "items": len(s["doc"]["items"]),
+        return {"source": s["source"], "seconds": s["doc"]["meta"].get("seconds"), "items": len(s["doc"]["items"]) - len(away),
                 "flagged": len(flagged), "decided": sum(i in decided for i in flagged)}
 
     def cases(self) -> dict:
@@ -333,7 +349,7 @@ class Clinic:
             out.append({"case_id": cid, "name": p.get("name"), "age": _age(p, v), "sex": p.get("sex"),
                         "language": LANGUAGE.get((p.get("language") or "en").lower(), p.get("language")),
                         "setting": v.get("setting"), "date": v.get("date"), "problems": [x.get("display") for x in p.get("problems", [])][:2],
-                        "plan_items": len(c.plan), "has_recording": self.recording(cid).is_file(), "review": self.state(cid)})
+                        "plan_items": len(c.plan) - len(self.tucked(cid)), "has_recording": self.recording(cid).is_file(), "review": self.state(cid)})
         return {"cases": out, "planner": self.planner(), "samples": self.samples}
 
     def case(self, cid: str) -> dict:
@@ -347,6 +363,7 @@ class Clinic:
         doc["decisions"] = dict((app.results.get(cid) or {}).get("decisions") or {}) if s else {}
         doc["handout"] = app.summaries.get(cid) if s else None
         doc["has_recording"] = self.recording(cid).is_file()
+        doc["tucked"] = self.tucked(cid)
         doc["can_sample"] = self.samples
         doc["planner"] = self.planner()
         return doc
