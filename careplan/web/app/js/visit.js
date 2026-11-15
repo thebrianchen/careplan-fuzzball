@@ -215,7 +215,7 @@ export async function visit(root, id) {
       <aside class="context" aria-label="What the doctor already has">${context(doc)}</aside>
       <section class="review">
         <div class="review-head">
-          <div><h2>The plan</h2><p class="muted">${plural(doc.plan.length, 'item')} written in this visit</p></div>
+          <div><button type="button" class="link back-draft" id="back-draft" hidden>← Back to the draft plan</button><h2>The plan</h2><p class="muted">${plural(doc.plan.length, 'item')} written in this visit</p></div>
           <div class="actions">
             <div class="seg" role="group" aria-label="Where the review comes from">
               <button type="button" data-mode="recorded" ${doc.has_recording ? '' : 'disabled'} title="${doc.has_recording ? 'Replay a real run of this review that was saved earlier' : 'No run has been saved for this visit'}">Saved run</button>
@@ -322,6 +322,7 @@ export async function visit(root, id) {
       ${flagged.length ? h`<span class="count ${done === flagged.length ? 'all' : ''}">${done} of ${flagged.length} decided</span>` : ''}`;
   }
   function paintAfter() {
+    el('#back-draft').hidden = !doc.items.length;      // once there is a review, one click goes back to the plan as written
     const a = el('#after'), flagged = shown().filter(i => i.status !== 'likely_ok');
     a.hidden = !doc.items.length;
     if (a.hidden) return;
@@ -388,7 +389,7 @@ export async function visit(root, id) {
     el('#summary').hidden = true; el('#after').hidden = true;
     layout.setResults(true);
     clearItems('checking'); markCited(); paintControls();
-    el('#go').textContent = 'Reviewing…';
+    el('#go').textContent = 'Reviewing…'; el('#back-draft').hidden = true;
     paintSteps('Starting');
   }
   // A review runs on the server to its end, whether or not this page stays. The page follows it by its id: over the stream
@@ -513,7 +514,7 @@ export async function visit(root, id) {
       return;
     }
     if (t.closest('[data-cancel]')) { t.closest('.editbox').hidden = true; return; }
-    if (t.closest('#reset')) { await api(`reset/${id}`, {}); doc = await api(`case/${id}`); savedAt = {}; Object.keys(picked).forEach(k => delete picked[k]); el('#fail').hidden = true; paintAll(); paintControls(); }
+    if (t.closest('#reset, #back-draft')) { await api(`reset/${id}`, {}); doc = await api(`case/${id}`); savedAt = {}; Object.keys(picked).forEach(k => delete picked[k]); el('#fail').hidden = true; paintAll(); paintControls(); }
   });
   page.addEventListener('keydown', e => {
     if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('.alts li[data-opt]')) { e.preventDefault(); e.target.click(); }
