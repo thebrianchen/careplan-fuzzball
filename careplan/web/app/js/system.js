@@ -55,14 +55,15 @@ export async function system(root) {
       <p class="muted">For whoever keeps this running. Case ids and counts only: no patient's name, words or chart reach this page.</p></div>
       <div class="page-tools"><span class="muted" id="asof"></span></div></div>
     <div class="tiles" id="tiles"></div>
-    <section class="card"><h2>How a review is split</h2><div id="split"></div></section>
-    <section class="card"><h2>Leak test</h2><div id="leak" class="muted">Checking…</div></section>
-    <section class="card"><h2>Reviews</h2><div id="runs"></div></section>
-    <div class="two">
+    <section class="card extra"><h2>How a review is split</h2><div id="split"></div></section>
+    <section class="card extra"><h2>Leak test</h2><div id="leak" class="muted">Checking…</div></section>
+    <section class="card sruns"><h2>Reviews</h2><div id="runs"></div></section>
+    <div class="two extra">
       <section class="card"><h2>Requests to the public side</h2><div id="crossings"></div></section>
       <section class="card"><h2>Clinician decisions</h2><div id="decisions"></div></section>
     </div>
-    <section class="card"><h2>Activity</h2><div id="activity"></div></section>
+    <section class="card extra"><h2>Activity</h2><div id="activity"></div></section>
+    <button type="button" class="link swhole" id="swhole">Show everything</button>
   </div>`;
   const el = sel => $(sel, root);
 
@@ -103,6 +104,9 @@ export async function system(root) {
     } catch (err) { el('#leak').textContent = 'The leak-test counts could not be read.'; }
   }
   await refresh(); leak();
+  const page = el('.page');                          // the first view is four figures and the reviews; the rest opens on request
+  page.classList.add('focus');
+  el('#swhole').onclick = e => { e.target.textContent = page.classList.toggle('focus') ? 'Show everything' : 'Show less'; };
   const timers = [setInterval(refresh, 4000), setInterval(leak, 10000)];
   return () => timers.forEach(clearInterval);
 }
