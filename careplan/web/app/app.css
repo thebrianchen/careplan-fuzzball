@@ -470,3 +470,10 @@ html.stage .cbar-track{background:var(--line2)}html.stage .cbar-zone{background:
 .evidence li.clip:not(.open) .ev-text{display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
 .evidence .caret{align-self:center;width:7px;height:7px;margin:0 4px 2px 6px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);transition:transform .15s}
 .evidence li.open .caret{transform:rotate(225deg);margin-bottom:-3px}
+
+/* ---- what is folded under the evidence: short labels on one row; an opened one takes the row */
+.folds-row{display:flex;flex-wrap:wrap;gap:0 18px;margin-top:2px}
+.folds-row:empty{display:none}
+.folds-row>.more-ev{margin:0}
+.folds-row>.more-ev[open]{flex-basis:100%;order:2}
+.folds-row .why{margin:4px 0 0;font-size:14px}

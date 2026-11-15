@@ -97,14 +97,14 @@ function evidenceRow({ e, strip, bar }, rows) {
 const KEEP = 3;
 function evidenceList(b, rows) {
   const ordered = [...b.rows].sort((x, y) => x.e.said_in_visit - y.e.said_in_visit), rest = ordered.slice(KEEP);
-  return h`<ul class="evidence">${ordered.slice(0, KEEP).map(r => evidenceRow(r, rows))}</ul>
-    ${rest.length ? h`<details class="more-ev"><summary>${plural(rest.length, 'more piece')} of evidence</summary><ul class="evidence">${rest.map(r => evidenceRow(r, rows))}</ul></details>` : ''}`;
+  return { top: h`<ul class="evidence">${ordered.slice(0, KEEP).map(r => evidenceRow(r, rows))}</ul>`,
+    more: rest.length ? h`<details class="more-ev"><summary>${rest.length} more</summary><ul class="evidence">${rest.map(r => evidenceRow(r, rows))}</ul></details>` : '' };
 }
 // The map in one line, shown while the map itself is folded away.
 function mapLine(m) {
   const p = m.places[0], t = p && p.trip, n = t && t.feasible ? (t.rides || []).length : 0;
-  if (p) return t && t.feasible ? `${t.minutes} min ${n ? `on ${plural(n, 'ride')}` : 'by bus or train'} to ${p.name}, ${p.miles_from_home} mi` : `${p.name}, ${p.miles_from_home} mi from home`;
-  return `${plural(m.resources.length, 'place')} that could help, near home`;
+  if (p) return t && t.feasible ? `${t.minutes} min${n ? `, ${plural(n, 'ride')}` : ''}` : `${p.miles_from_home} mi`;
+  return plural(m.resources.length, 'place');
 }
 
 // One thing the doctor can choose for a flagged item: a row with a name and one line under it. `key` is what the page
@@ -131,9 +131,10 @@ function finding(it, rows, chart, animate, picks = new Set()) {
   const care = dialysisTransport(it) ? DIALYSIS_ACTIONS.map((a, i) => option({ key: `c${i}`, title: a.label, detail: a.text, long: true }, picks)) : [];
   const [main, ...also] = ex.barriers;
   return h`<p class="why"><b>${cap(main.label)}.</b> ${cap(main.reason)}</p>
-    <div class="sec barrier"><h4>Evidence</h4>${evidenceList(main, rows)}
-      ${also.map(b => h`<details class="more-ev also"><summary>Also ${b.label}: ${b.reason}</summary>${evidenceList(b, rows)}</details>`)}
-      ${ex.map ? h`<details class="more-ev mapfold"><summary>Map: ${mapLine(ex.map)}</summary>${map({ ...ex.map, animate })}</details>` : ''}</div>
+    <div class="sec barrier"><h4>Evidence</h4>${evidenceList(main, rows).top}
+      <div class="folds-row">${evidenceList(main, rows).more}
+        ${also.map(b => { const ev = evidenceList(b, rows); return h`<details class="more-ev also"><summary>Also: ${b.label}</summary><p class="why">${cap(b.reason)}</p>${ev.top}${ev.more}</details>`; })}
+        ${ex.map ? h`<details class="more-ev mapfold"><summary>Map: ${mapLine(ex.map)}</summary>${map({ ...ex.map, animate })}</details>` : ''}</div></div>
     ${care.length || alts.length ? h`<div class="sec alts"><h4>What could work instead</h4><ul>${care.length ? care : alts}</ul>
       ${care.length && alts.length ? h`<details><summary>${plural(alts.length, 'more suggestion')} from this review</summary><ul>${alts}</ul></details>` : ''}</div>` : ''}`;
 }
