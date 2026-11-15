@@ -165,11 +165,11 @@ def _nearest_of_each_kind(found: list, each: int = 2) -> list:
     return kept
 
 
-def panel(tracts, resources, county: dict[str, dict], samples: bool) -> dict | None:
+def panel(tracts, resources, county: dict[str, dict]) -> dict | None:
     """The published counts by neighborhood, each joined with its place on the map, its public figures and how many places
-    that could help are near. The reviews' file wins; the answer-key stand-in is used only when samples are on."""
+    that could help are near. The reviews' file wins; without it the answer-key stand-in is shown, and the page labels it."""
     agg = None
-    for f in [PANEL["reviews"]] + ([PANEL["sample"]] if samples else []):
+    for f in (PANEL["reviews"], PANEL["sample"]):
         if f.is_file():
             agg = json.loads(f.read_text())
             if all(k in r for r in agg["tracts"] for k in PANEL_COUNTS):
@@ -326,10 +326,11 @@ class Clinic:
 
     # ---- the doctor's side
     def tucked(self, cid: str) -> list[str]:
-        """The flagged plan items that raise no barrier an earlier flagged item has not raised. Every page leaves them out,
-        so the counts on the visits list, the visit and the handout agree. Known from the review shown, or the saved run."""
-        s, f = self.shown.get(cid), self.recording(cid)
-        items = s["doc"]["items"] if s else (json.loads(f.read_text())["rec"].get("assessment") or {}).get("items", []) if f.is_file() else []
+        """The flagged plan items that raise no barrier an earlier flagged item has not raised. The visit page folds them under
+        one line that says how many there are and opens them; the handout leaves them out. Counts include them. Known only
+        from the review shown: before a review, every page shows the plan as the doctor wrote it."""
+        s = self.shown.get(cid)
+        items = s["doc"]["items"] if s else []
         by, seen, out = {i["item_id"]: i for i in items}, set(), []
         for p in self.app.cases[cid].plan:
             it = by.get(p["item_id"])
@@ -344,10 +345,9 @@ class Clinic:
         s = self.shown.get(cid)
         if not s:
             return None
-        away = self.tucked(cid)
-        flagged = [i["item_id"] for i in s["doc"]["items"] if i["status"] != "likely_ok" and i["item_id"] not in away]
+        flagged = [i["item_id"] for i in s["doc"]["items"] if i["status"] != "likely_ok"]
         decided = (self.app.results.get(cid) or {}).get("decisions") or {}
-        return {"source": s["source"], "seconds": s["doc"]["meta"].get("seconds"), "items": len(s["doc"]["items"]) - len(away),
+        return {"source": s["source"], "seconds": s["doc"]["meta"].get("seconds"), "items": len(s["doc"]["items"]),
                 "flagged": len(flagged), "decided": sum(i in decided for i in flagged)}
 
     def cases(self) -> dict:
@@ -357,7 +357,7 @@ class Clinic:
             out.append({"case_id": cid, "name": p.get("name"), "age": _age(p, v), "sex": p.get("sex"),
                         "language": LANGUAGE.get((p.get("language") or "en").lower(), p.get("language")),
                         "setting": v.get("setting"), "date": v.get("date"), "problems": [x.get("display") for x in p.get("problems", [])][:2],
-                        "plan_items": len(c.plan) - len(self.tucked(cid)), "has_recording": self.recording(cid).is_file(), "review": self.state(cid),
+                        "plan_items": len(c.plan), "has_recording": self.recording(cid).is_file(), "review": self.state(cid),
                         "running": cid in self.running and not self.running[cid].get("done")})
         return {"cases": out, "planner": self.planner(), "samples": self.samples}
 
@@ -708,7 +708,7 @@ def handle(app, h, method: str, path: str, query: str) -> None:
         part = lambda f: f.read_text() if f.is_file() else "null"       # the files are JSON already: no parse and re-dump of megabytes
         return h._send(200, '{"basemap":' + part(BASEMAP) + ',"wide":' + part(BASEMAP_WIDE) + "}", "application/json; charset=utf-8")
     if method == "GET" and route == "panel":
-        return js(200, {"panel": panel(app.tracts, app.resources, c.county, c.samples)})
+        return js(200, {"panel": panel(app.tracts, app.resources, c.county)})
     if method == "GET" and route == "case" and cid:
         return js(200, c.case(cid))
     if method == "GET" and route == "review" and cid:

@@ -95,8 +95,8 @@ class WebAppTests(unittest.TestCase):
         doc = evs[-1]["doc"]
         self.assertEqual((doc["meta"]["source"], len(doc["items"]), len(doc["crossings"])), ("recorded", 5, 2))
         row = next(c for c in self.get("cases")["cases"] if c["case_id"] == "D001")
-        self.assertEqual((row["review"]["flagged"], row["review"]["items"], row["plan_items"], row["review"]["decided"]), (2, 3, 3, 0))
-        self.assertEqual(doc["tucked"], ["P3", "P4"])                      # the same two everywhere: list, visit and handout
+        self.assertEqual((row["review"]["flagged"], row["review"]["items"], row["plan_items"], row["review"]["decided"]), (4, 5, 5, 0))
+        self.assertEqual(doc["tucked"], ["P3", "P4"])                      # folded on the visit page and left off the handout, but counted
 
     def test_a_changed_mind_starts_from_the_finding_as_first_shown(self):
         self.assertEqual(self.post("decision/D001", {"item_id": "P1", "decision": "accept"})[0], 400)        # nothing reviewed yet
@@ -280,15 +280,13 @@ class WebAppTests(unittest.TestCase):
         self.assertEqual(sum(1 for c in rows.values() if c["review"]), len(rows) - 1)
         self.assertEqual(added, 0)                                                         # a stand-in is not a review on the System page
 
-    def test_the_panel_is_counts_by_neighborhood_and_the_stand_in_is_shown_only_when_samples_are_on(self):
+    def test_the_panel_is_counts_by_neighborhood_and_the_stand_in_is_shown_when_there_are_no_reviews(self):
         from careplan import webapp
         real, webapp.PANEL["reviews"] = webapp.PANEL["reviews"], Path(self.tmp.name) / "no_reviews_yet.json"
         try:
-            self.assertIsNone(self.get("panel")["panel"])
-            self.clinic.samples = True
             p = self.get("panel")["panel"]
         finally:
-            self.clinic.samples, webapp.PANEL["reviews"] = False, real
+            webapp.PANEL["reviews"] = real
         self.assertEqual((p["source"], p["patients"]), ("sample", 600))
         self.assertTrue(all(t["patients"] >= p["k"] for t in p["tracts"]))                 # nothing under the threshold is published
         clinic = next(t for t in p["tracts"] if t["tract_id"] == p["clinic"]["tract_id"])
@@ -306,14 +304,14 @@ class WebAppTests(unittest.TestCase):
         self.assertTrue(set(t["public_points_to"]) <= set(p["public_kinds"]) == {"food_access", "housing", "transport", "utilities"})
         self.assertIn("how_to_start", p["programs"]["transport"][0])
 
-    def test_panel_counts_written_by_an_older_aggregates_are_not_shown(self):
+    def test_panel_counts_written_by_an_older_aggregates_are_not_shown(self):     # the labelled stand-in is shown instead
         from careplan import webapp
         old = Path(self.tmp.name) / "old_counts.json"
         old.write_text(json.dumps({"built": "x", "k": 5, "tracts_suppressed_under_k": 0,
                                    "tracts": [{"tract_geoid": "17031260300", "patients": 9, "appointments": 1, "no_shows": 0, "flagged_items": 3, "barriers": {}}]}))
         real, webapp.PANEL["reviews"] = webapp.PANEL["reviews"], old
         try:
-            self.assertIsNone(self.get("panel")["panel"])
+            self.assertEqual(self.get("panel")["panel"]["source"], "sample")
         finally:
             webapp.PANEL["reviews"] = real
 

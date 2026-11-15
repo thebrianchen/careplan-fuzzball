@@ -22,8 +22,8 @@ function evidenceText(e, rows) {                     // appointments and screene
   return cap(e.text);
 }
 const flaggedOf = doc => doc.items.filter(i => i.status !== 'likely_ok');
-// Flagged items that raise no barrier an earlier flagged item has not already raised: they tuck under one line, so the page
-// shows each kind of problem once.
+// Flagged items that raise no barrier an earlier flagged item has not already raised: they fold under one line that says how
+// many there are, so the page shows each kind of problem once and still lets the doctor open every flag.
 export function repeats(doc) {                       // decided by the server (Clinic.tucked), so every page agrees
   return doc.tucked || [];
 }
@@ -267,7 +267,6 @@ export async function visit(root, id) {
   let untucked = false;
   const picked = {};                                  // item id -> the keys of the options the doctor chose (see option())
   const tuckedNow = () => untucked ? [] : repeats(doc, doc.plan);
-  const shown = () => doc.items.filter(i => !tuckedNow().includes(i.item_id));     // what the page counts is what it shows
   function tuck() {                                   // after every paint: which repeats are folded away, and the line that says so
     const ids = repeats(doc, doc.plan);
     let n = 0;                                         // the items on screen are numbered 1, 2, 3 with no gaps
@@ -277,7 +276,10 @@ export async function visit(root, id) {
       if (!away) $('.num', node).textContent = ++n;
     });
     const b = el('#tucked');
-    b.hidden = true;                                   // the page shows each kind of problem once and does not offer the repeats
+    b.hidden = !ids.length;
+    b.textContent = untucked ? `Hide the ${plural(ids.length, 'flagged item')} with the same barriers`
+      : `${plural(ids.length, 'more flagged item')} with the same barriers`;
+    b.setAttribute('aria-expanded', String(untucked));
   }
   const nextUndecided = () => flaggedOf(doc).find(i => !doc.decisions[i.item_id] && !tuckedNow().includes(i.item_id));
   function openNext() { const next = nextUndecided(); open = new Set(next ? [next.item_id] : []); }
@@ -311,8 +313,8 @@ export async function visit(root, id) {
       : (state === 'running' ? `The planner (${model})${on} is reviewing this plan now` : `Reviewed just now by the planner (${model})${on} in ${secs(m.seconds)}.`);
     if (state !== 'running') el('#runclock').textContent = '';
   }
-  function paintSummary() {
-    const items = shown(), flagged = items.filter(i => i.status !== 'likely_ok'), s = el('#summary');
+  function paintSummary() {                         // counts the whole plan, folded items included, as every other page does
+    const items = doc.items, flagged = items.filter(i => i.status !== 'likely_ok'), s = el('#summary');
     s.hidden = !doc.items.length;
     if (s.hidden) return;
     const unsaid = items.flatMap(i => i.barriers.flatMap(b => b.evidence)).filter(e => !e.said_in_visit).length;
@@ -323,7 +325,7 @@ export async function visit(root, id) {
   }
   function paintAfter() {
     el('#back-draft').hidden = !doc.items.length;      // once there is a review, one click goes back to the plan as written
-    const a = el('#after'), flagged = shown().filter(i => i.status !== 'likely_ok');
+    const a = el('#after'), flagged = doc.items.filter(i => i.status !== 'likely_ok');
     a.hidden = !doc.items.length;
     if (a.hidden) return;
     const open = flagged.filter(i => !doc.decisions[i.item_id]).length;
@@ -481,6 +483,7 @@ export async function visit(root, id) {
     if (tab) return openTab(tab.dataset.tab);
     if (seg) { mode = seg.dataset.mode; localStorage.setItem('cp.mode', mode); return paintControls(); }
     if (t.closest('#go')) return start(mode);
+    if (t.closest('#tucked')) { untucked = !untucked; return tuck(); }
     const opt = t.closest('.alts li[data-opt]');
     if (opt && !t.closest('a')) {                       // choose what goes on the patient's plan, then Accept
       const node = opt.closest('.pitem'), set = picked[node.id.slice(2)] || (picked[node.id.slice(2)] = new Set()), key = opt.dataset.opt;
