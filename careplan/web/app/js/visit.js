@@ -288,8 +288,9 @@ export async function visit(root, id) {
     const when = info.saved || m.saved, model = info.model || m.model, profile = info.profile || m.profile;
     const where = info.where || m.where, on = where ? ` on ${where}` : '';
     el('#runtext').title = profile ? `Profile ${profile} in config/models.yaml` : '';
+    el('#runtag').title = src === 'recorded' && when ? `Recorded${on}, ${date(when)}${m.seconds ? `. It took ${secs(m.seconds)} with ${model}.` : ''}` : '';
     el('#runtext').textContent = src === 'sample' ? 'A stand-in built from this visit\'s answer key, for work on the pages. Not a model run.' : src === 'recorded'
-      ? (state === 'running' ? `A real run recorded${on}, ${date(when)}, shown ${info.speed > 1 ? `at ${info.speed}× speed` : 'in real time'}` : `A real run recorded${on}, ${date(when)}. It took ${secs(m.seconds)} with ${model}.`)
+      ? ''                                               // the tag says it is a saved run; where and when it was recorded is its tooltip
       : (state === 'running' ? `The planner (${model})${on} is reviewing this plan now` : `Reviewed just now by the planner (${model})${on} in ${secs(m.seconds)}.`);
     if (state !== 'running') el('#runclock').textContent = '';
   }
@@ -309,7 +310,7 @@ export async function visit(root, id) {
     if (a.hidden) return;
     const open = flagged.filter(i => !doc.decisions[i.item_id]).length;
     a.innerHTML = h`<a class="btn primary" href="#/handout/${id}">Prepare the patient handout</a>
-      <span class="muted">${open ? `${plural(open, 'flagged item')} still ${open === 1 ? 'has' : 'have'} no decision.` : flagged.length ? 'Every flag has a decision.' : ''}</span>
+      <span class="muted">${open ? `${plural(open, 'flagged item')} still ${open === 1 ? 'has' : 'have'} no decision.` : ''}</span>
       <button type="button" class="link" id="reset" title="Forget this review on screen. The decision log keeps its rows.">Clear this review</button>`;
   }
   function markCited() {
