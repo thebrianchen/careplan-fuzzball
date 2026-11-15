@@ -1,0 +1,9 @@
+{
+ "saved": "2026-11-15T15:33:09Z",
+ "where": "our own GB10",
+ "model": "nemotron-3.5-super-vl",
+ "lines": {
+  "turn:T01": "Patient missed three doses last week",
+  "turn:T02": "Patient loses a day's pay to attend"
+ }
+}

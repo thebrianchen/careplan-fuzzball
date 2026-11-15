@@ -406,6 +406,27 @@ class WebAppTests(unittest.TestCase):
         self.assertEqual(self.review("mode=recorded&speed=1000")[-1]["ok"], True)          # a failed one does not block the next
         self.assertIsNone(self.get("case/D001")["running"])
 
+    def test_what_was_said_is_stated_once_by_the_planner_and_kept(self):
+        asked = []
+
+        class Stater(FakeStreamingClient):
+            def chat(self, messages, tools):
+                asked.append(messages[0]["content"])
+                refs = [line[1:line.index("]")] for line in messages[0]["content"].splitlines() if line.startswith("[turn:")]
+                return Reply(json.dumps({"lines": {r: f"Patient said {r}." for r in refs}}), [], {}, 5, {})
+        client, self.app.client = self.app.client, Stater()
+        try:
+            self.assertEqual(self.get("case/D001")["said"], {})                            # nothing until it is written
+            code, out = self.post("said/D001", {})
+            self.assertEqual(code, 200)
+            self.assertIn("turn:T04", out["said"])
+            self.assertEqual(out["said"]["turn:T04"], "Patient said turn:T04")              # no trailing full stop
+            self.assertIn("Two buses", asked[0])                                           # the planner was given the line itself
+            self.assertEqual((self.post("said/D001", {})[1], len(asked)), (out, 1))        # kept: asked once
+            self.assertEqual(self.get("case/D001")["said"], out["said"])
+        finally:
+            self.app.client = client
+
     def test_pages_are_served_and_nothing_outside_them(self):
         with urllib.request.urlopen(f"{self.url}/app/") as r:
             self.assertIn("Care Plan Check", r.read().decode())

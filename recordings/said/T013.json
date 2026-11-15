@@ -1,0 +1,9 @@
+{
+ "saved": "2026-11-15T15:33:38Z",
+ "where": "our own GB10",
+ "model": "nemotron-3.5-super-vl",
+ "lines": {
+  "turn:T04": "Patient cannot get to appointments alone",
+  "turn:T08": "Caregiver works inflexible hours Thursday mornings"
+ }
+}

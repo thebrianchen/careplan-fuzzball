@@ -1,0 +1,10 @@
+{
+ "saved": "2026-11-15T15:32:35Z",
+ "where": "our own GB10",
+ "model": "nemotron-3.5-super-vl",
+ "lines": {
+  "turn:T02": "Patient's power has been cut off",
+  "turn:T04": "Patient cannot keep things cold reliably",
+  "turn:T06": "Patient works during appointments with no sick leave"
+ }
+}

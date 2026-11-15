@@ -1,0 +1,13 @@
+{
+ "saved": "2026-11-15T15:32:16Z",
+ "where": "our own GB10",
+ "model": "nemotron-3.5-super-vl",
+ "lines": {
+  "turn:T02": "Patient sold car and no longer drives",
+  "turn:T04": "Patient takes two buses each way to dialysis",
+  "turn:T06": "Patient lacks nearby regular caregiver support",
+  "turn:T08": "Patient relies on corner store for food",
+  "turn:T10": "Patient takes pills only when eating",
+  "turn:T14": "Patient may make another downtown trip"
+ }
+}

@@ -1,0 +1,9 @@
+{
+ "saved": "2026-11-15T15:32:45Z",
+ "where": "our own GB10",
+ "model": "nemotron-3.5-super-vl",
+ "lines": {
+  "turn:T02": "Work schedule prevents clinic attendance",
+  "turn:T04": "Ten o'clock appointments conflict with work"
+ }
+}

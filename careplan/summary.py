@@ -63,3 +63,34 @@ def build(case: Case, rec: dict, client: ChatClient, items: list[str] | None = N
         if canary and canary in json.dumps(out):
             raise ValueError("summary contained a patient identifier; refused")
     return out
+
+
+SAID = """Each line below is something said in a clinic visit, with its reference and the kind of barrier it was cited for.
+For each one, write what it tells the doctor about the patient's situation, as one short plain statement in the third person,
+eight words or fewer. Say the situation, not the anecdote: "Patient takes two buses to dialysis", "Patient no longer has a
+car", "No reliable support at home". Use only what the line says. Do not add causes, advice or names.
+Return ONLY JSON, keyed by the reference exactly as given: {{"lines": {{"<reference>": "<statement>"}}}}
+
+{quotes}
+"""
+
+
+def said_lines(case: Case, quotes: dict[str, str], client: ChatClient) -> dict[str, str]:
+    """One short statement of fact for each cited line of the visit, written by the planner. The page shows the statement
+    and opens the line itself underneath. `quotes` maps an evidence ref to the line, with what it was cited for."""
+    reply = client.chat([{"role": "user", "content": SAID.format(quotes="\n".join(f"[{r}] {q}" for r, q in quotes.items()))}], [])
+    js = _first_json_object(reply.content or "")
+    if not js:
+        raise ValueError("the planner returned no JSON")
+    short = {r.split(":")[-1]: r for r in quotes}          # the planner often answers "T02" for "turn:T02"
+    lines = {}
+    for r, v in (json.loads(js).get("lines") or {}).items():
+        r = r if r in quotes else short.get(str(r).strip("[]").split(":")[-1])
+        if r and str(v).strip():
+            lines[r] = " ".join(str(v).split()).rstrip(".")
+    if set(lines) != set(quotes) or any(len(v) > 90 for v in lines.values()):
+        raise ValueError("the planner did not write a short statement for every line")
+    for canary in case.canaries():
+        if canary and canary in json.dumps(lines):
+            raise ValueError("a statement contained a patient identifier; refused")
+    return lines

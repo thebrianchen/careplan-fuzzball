@@ -100,7 +100,10 @@ function firstSentence(text) {
 function evidenceRow({ e, strip, bar }, rows) {
   const base = { ref: e.ref, kind: srcKind(e), source: e.source, e };
   if (strip) return evRow({ ...base, ref: 'visits', summary: stripCount(strip), more: visitStrip(strip) });
-  if (e.said_in_visit) { const f = firstSentence(e.text); return evRow({ ...base, summary: f.summary, more: f.whole ? '' : cap(e.text) }); }
+  if (e.said_in_visit) {                              // what the line tells the doctor, when the planner has written it; the line itself opens under it
+    const f = firstSentence(e.text), stated = rows.said && rows.said[e.ref];
+    return evRow({ ...base, summary: stated || f.summary, more: stated || !f.whole ? cap(e.text) : '' });
+  }
   const text = evidenceText(e, rows), cut = bar ? text.lastIndexOf(' (') : -1;     // a neighborhood figure: the comparison goes under the line
   return evRow({ ...base, summary: cut > 0 ? text.slice(0, cut) : text, more: bar ? h`${cut > 0 ? h`<p>${cap(text.slice(cut + 2).replace(/\)$/, ''))}</p>` : ''}${countyBar(bar)}` : '' });
 }
@@ -196,6 +199,7 @@ export async function visit(root, id) {
   let speed = SPEEDS.includes(+localStorage.getItem('cp.speed')) ? +localStorage.getItem('cp.speed') : 1;
   const p = doc.patient, el = sel => $(sel, root);
   const rows = Object.fromEntries([...doc.chart.appointments, ...doc.chart.screener.answers].map(r => [r.ref, r]));
+  Object.defineProperty(rows, 'said', { get: () => doc.said || {} });     // read at paint time: the document is replaced when a review ends
 
   root.innerHTML = h`<div class="page visit">
     <section class="banner">

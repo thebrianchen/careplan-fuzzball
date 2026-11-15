@@ -1,0 +1,11 @@
+{
+ "saved": "2026-11-15T15:33:54Z",
+ "where": "our own GB10",
+ "model": "nemotron-3.5-super-vl",
+ "lines": {
+  "turn:T04": "Patient is Danny's only morning caregiver",
+  "turn:T06": "Patient has infrequent sister support",
+  "turn:T08": "Patient's power has been off since Monday",
+  "turn:T10": "Patient's lights and fridge are off"
+ }
+}

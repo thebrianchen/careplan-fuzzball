@@ -13,6 +13,7 @@ POST /api/app/decision/<id>   {item_id, decision: accept|edit|dismiss, note}: th
 POST /api/app/reset/<id>      forget this visit's review and its decisions on screen (the decision log keeps its rows)
 GET  /api/app/progress/<id>   ?rid=R&after=N: the events of review R after the Nth, for a page behind a proxy that holds an event
                               stream back until it ends (a Cloudflare quick tunnel does)
+POST /api/app/said/<id>       one short statement of fact for each line of the visit the review cites, written by the planner once and kept
 POST /api/app/handout/<id>    the reviewed plan in plain language, in the patient's language: one planner call for the items shown
                               and the alternatives the doctor chose. Kept on disk, so the same decisions get the same handout at once.
 GET  /api/app/system          the operator's view: planner, reviews, crossings, decisions, activity. Case ids only, no patient fields.
@@ -370,6 +371,7 @@ class Clinic:
         doc["chart"] = chart(case, app.tracts.get(case.tract_geoid), self.county)
         doc["decisions"] = dict((app.results.get(cid) or {}).get("decisions") or {}) if s else {}
         doc["handout"] = self.handout(cid) if s else None
+        doc["said"] = self.said(cid)
         doc["has_recording"] = self.recording(cid).is_file()
         cur = self.running.get(cid)
         doc["running"] = cur if cur and (not cur.get("done") or (not s and time.time() - cur["started"] < 900)) else None
@@ -536,6 +538,39 @@ class Clinic:
         self.note("decision", cid, item_id=item_id, decision=decision)
         return {"saved": row["ts"], "decisions": rec.get("decisions") or {}}
 
+    def said(self, cid: str, write: bool = False) -> dict:
+        """Evidence ref -> a short statement of what that line of the visit says ("Patient no longer has a car"). Written by
+        the planner once per visit and kept beside the saved runs; empty until then, and the page shows the line's first sentence."""
+        from .serve import REC_DIR
+        from .summary import said_lines
+        f = REC_DIR / "said" / f"{cid}.json"
+        if f.is_file():
+            return json.loads(f.read_text())["lines"]
+        if not write:
+            return {}
+        s, run = self.shown.get(cid), self.recording(cid)
+        items = s["doc"]["items"] if s else (json.loads(run.read_text())["rec"].get("assessment") or {}).get("items", []) if run.is_file() else []
+        cited: dict[str, list[str]] = {}                    # evidence ref -> the kinds of barrier it was cited for
+        for i in items:
+            for b in i.get("barriers", []):
+                for e in b.get("evidence", []):
+                    kinds = cited.setdefault(e["ref"] if isinstance(e, dict) else e, [])
+                    if b["barrier"] not in kinds:
+                        kinds.append(b["barrier"])
+        case = self.app.cases[cid]
+        quotes = {r: f"(cited for: {', '.join(k.replace('_', ' ') for k in cited[r])}) {t['speaker']}: {t['text']}" for t in case.visit["transcript"]
+                  for r in (t["ref"] if t["ref"].startswith("turn:") else f"turn:{t['ref']}",) if r in cited}
+        if not quotes:
+            return {}
+        pl = self.planner(fresh=True)
+        if not pl["answers"]:
+            raise RuntimeError(f"the planner is not answering: {pl['why']}")
+        lines = said_lines(case, quotes, self.app.client)
+        f.parent.mkdir(parents=True, exist_ok=True)
+        f.write_text(json.dumps({"saved": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "where": pl["label"],
+                                 "model": demo.model_name(pl["profile"]), "lines": lines}, ensure_ascii=False, indent=1))
+        return lines
+
     def handout_card(self, cid: str) -> dict | None:
         """What the handout is written from: the plan items the page shows, each with the alternatives the doctor chose when
         accepting (all of them when none was chosen). Dismissals and edits are already in the review."""
@@ -695,6 +730,11 @@ def handle(app, h, method: str, path: str, query: str) -> None:
             return js(200, c.decide(cid, body))
         except (ValueError, json.JSONDecodeError) as ex:
             return js(400, {"error": str(ex)})
+    if method == "POST" and route == "said" and cid:
+        try:
+            return js(200, {"said": c.said(cid, write=True)})
+        except (ValueError, RuntimeError) as ex:
+            return js(502, {"error": str(ex)[:200]})
     if method == "POST" and route == "handout" and cid:
         try:
             body = json.loads(h.rfile.read(int(h.headers.get("Content-Length") or 0)) or b"{}")
