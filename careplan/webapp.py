@@ -422,7 +422,7 @@ class Clinic:
             cur = self.running.get(cid)
             busy = bool(cur and not cur.get("done"))
             if not busy:
-                self.running[cid] = {"rid": rid, "mode": mode, "started": time.time()}
+                mine = self.running[cid] = {"rid": rid, "mode": mode, "started": time.time()}
         if busy:                                     # the page is pointed at the review already in progress
             h.wfile.write(f"data: {json.dumps({'type': 'busy', **cur})}\n\n".encode())
             return h.wfile.flush()
@@ -445,6 +445,8 @@ class Clinic:
                 gone = True
 
         def relay(t: float, ev: dict) -> None:
+            if self.running.get(cid) is not mine:    # the visit was reset, or another review took its place: stop here
+                raise _Cancelled()
             if ev.get("type") == "tool":
                 step = demo.step_for(t, ev)
                 if not steps or (steps[-1]["kind"], steps[-1]["label"]) != (step["kind"], step["label"]):
@@ -513,17 +515,26 @@ class Clinic:
                     from .serve import save_recording
                     save_recording(f"stream_{cid}", events, rec, app.client.p.name, where=pl["label"])
                     self.note("run saved", cid)
+            if self.running.get(cid) is not mine:
+                raise _Cancelled()
             self.install(cid, rec, doc, doc["meta"]["source"])
             self.running.pop(cid, None)
             ok = True
             send({"type": "end", "ok": True, "doc": self.case(cid)})
+        except _Cancelled:
+            pass
         finally:
-            if not ok:                               # kept, so a page that was away learns the review failed and why
-                self.running[cid] = {**self.running.get(cid, {}), "done": True}
+            if not ok and self.running.get(cid) is mine:     # kept, so a page that was away learns the review failed and why
+                self.running[cid] = {**mine, "done": True}
 
     def decide(self, cid: str, body: dict) -> dict:
         s, rec = self.shown.get(cid), self.app.results.get(cid)
         item_id, decision = body.get("item_id"), body.get("decision")
+        if (not s or not rec) and self.recording(cid).is_file():      # the server restarted under an open page: bring the saved review back
+            data, case = json.loads(self.recording(cid).read_text()), self.app.cases[cid]
+            doc = demo.build(case, data["rec"], data["events"], self.app.tracts, self.app.resources, "recorded", data.get("saved"), data.get("where"))
+            self.install(cid, data["rec"], doc, "recorded", log=False)
+            s, rec = self.shown.get(cid), self.app.results.get(cid)
         if not s or not rec:
             raise ValueError("review this visit before deciding")
         if decision not in DECISIONS or (decision == "edit" and not (body.get("note") or "").strip()):
@@ -624,8 +635,7 @@ class Clinic:
         with self.app.lock:
             for d in (self.shown, self.app.results, self.app.summaries):
                 d.pop(cid, None)
-            if self.running.get(cid, {}).get("done"):
-                del self.running[cid]
+            self.running.pop(cid, None)           # a review in progress is cancelled: it stops at its next event
         self.note("reset", cid)
         return {"ok": True}
 
@@ -657,6 +667,10 @@ def clinic(app) -> Clinic:
         if new and app.clinic.samples:            # after the lock is released: installing a review takes it
             app.clinic.prefill()
     return app.clinic
+
+
+class _Cancelled(BaseException):
+    """Raised inside a review whose visit was reset. Not an Exception, so the planner's error handling lets it through."""
 
 
 def _plain(text: str) -> str:

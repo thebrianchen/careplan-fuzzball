@@ -326,7 +326,7 @@ export async function visit(root, id) {
       ${flagged.length ? h`<span class="count ${done === flagged.length ? 'all' : ''}">${done} of ${flagged.length} decided</span>` : ''}`;
   }
   function paintAfter() {
-    el('#back-draft').hidden = !doc.items.length;      // once there is a review, one click goes back to the plan as written
+    el('#back-draft').hidden = !doc.items.length; el('#back-draft').textContent = '← Back to the draft plan';      // once there is a review, one click goes back to the plan as written
     const a = el('#after'), flagged = doc.items.filter(i => i.status !== 'likely_ok');
     a.hidden = !doc.items.length;
     if (a.hidden) return;
@@ -395,7 +395,8 @@ export async function visit(root, id) {
     el('#summary').hidden = true; el('#after').hidden = true;
     layout.setResults(true);
     clearItems('checking'); markCited(); paintControls();
-    el('#go').textContent = 'Reviewing…'; el('#back-draft').hidden = true;
+    el('#go').textContent = 'Reviewing…';
+    el('#back-draft').hidden = false; el('#back-draft').textContent = '← Cancel review';
     paintSteps('Starting');
   }
   // A review runs on the server to its end, whether or not this page stays. The page follows it by its id: over the stream
@@ -521,7 +522,9 @@ export async function visit(root, id) {
       return;
     }
     if (t.closest('[data-cancel]')) { t.closest('.editbox').hidden = true; return; }
-    if (t.closest('#reset, #back-draft')) { await api(`reset/${id}`, {}); doc = await api(`case/${id}`); savedAt = {}; Object.keys(picked).forEach(k => delete picked[k]); el('#fail').hidden = true; paintAll(); paintControls(); }
+    if (t.closest('#reset, #back-draft')) {
+      if (running) stop();                              // pressed during a review: it is cancelled
+      await api(`reset/${id}`, {}); doc = await api(`case/${id}`); savedAt = {}; Object.keys(picked).forEach(k => delete picked[k]); el('#fail').hidden = true; paintAll(); paintControls(); }
   });
   page.addEventListener('keydown', e => {
     if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('.alts li[data-opt]')) { e.preventDefault(); e.target.click(); }
@@ -537,6 +540,11 @@ export async function visit(root, id) {
 
   const layout = setupVisitLayout(root, doc);
   paintAll(); paintControls();
-  if (doc.running) { begin(); follow(doc.running.rid, doc.running.mode, doc.running.started, null); }   // a review started before this page loaded
+  // A reload of this page while its review runs cancels the review and shows the draft plan: the way out of a stuck run.
+  // Coming back from another page picks the review up instead.
+  const nav = performance.getEntriesByType('navigation')[0];
+  if (doc.running && nav && nav.type === 'reload' && performance.now() < 4000) {
+    await api(`reset/${id}`, {}); doc = await api(`case/${id}`); paintAll(); paintControls();
+  } else if (doc.running) { begin(); follow(doc.running.rid, doc.running.mode, doc.running.started, null); }   // a review started before this page loaded
   return () => { running = false; if (es) es.close(); clearInterval(tick); clearInterval(poll); };
 }

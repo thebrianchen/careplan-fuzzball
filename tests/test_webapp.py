@@ -99,7 +99,9 @@ class WebAppTests(unittest.TestCase):
         self.assertEqual(doc["tucked"], ["P3", "P4"])                      # folded on the visit page and left off the handout, but counted
 
     def test_a_changed_mind_starts_from_the_finding_as_first_shown(self):
-        self.assertEqual(self.post("decision/D001", {"item_id": "P1", "decision": "accept"})[0], 400)        # nothing reviewed yet
+        self.assertEqual(self.post("decision/D002", {"item_id": "P1", "decision": "accept"})[0], 400)        # nothing reviewed, no saved run
+        self.assertEqual(self.post("decision/D001", {"item_id": "P1", "decision": "accept"})[0], 200)        # a saved run is brought back for the decision
+        self.post("reset/D001", {})
         self.review("mode=recorded&speed=1000")
         self.assertEqual(self.post("decision/D001", {"item_id": "P1", "decision": "edit"})[0], 400)          # an edit needs its wording
         self.assertEqual(self.post("decision/D001", {"item_id": "P9", "decision": "accept"})[0], 400)
@@ -424,6 +426,18 @@ class WebAppTests(unittest.TestCase):
             self.assertEqual(self.get("case/D001")["said"], out["said"])
         finally:
             self.app.client = client
+
+    def test_resetting_a_visit_cancels_its_review_in_progress(self):
+        r = urllib.request.urlopen(f"{self.url}/api/app/review/D001?mode=recorded&speed=30&rid=stop1")     # about 3 s at this speed
+        r.readline()
+        r.close()
+        self.assertEqual(self.get("case/D001")["running"]["rid"], "stop1")
+        self.post("reset/D001", {})
+        self.assertIsNone(self.get("case/D001")["running"])
+        time.sleep(4)                                                                      # long enough for the run to have finished
+        doc = self.get("case/D001")
+        self.assertEqual((doc["running"], doc["items"], doc["meta"]["source"]), (None, [], "none"))
+        self.assertEqual(self.review("mode=recorded&speed=1000")[-1]["ok"], True)          # and the visit can be reviewed again
 
     def test_pages_are_served_and_nothing_outside_them(self):
         with urllib.request.urlopen(f"{self.url}/app/") as r:
