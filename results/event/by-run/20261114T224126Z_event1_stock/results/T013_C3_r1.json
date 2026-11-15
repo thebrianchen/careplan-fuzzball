@@ -1,0 +1,385 @@
+{
+  "case_id": "T013",
+  "condition": "C3",
+  "rep": 1,
+  "profile": "nano-base-vllm",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P2",
+        "status": "blocked",
+        "barriers": [
+          {
+            "barrier": "caregiving",
+            "reason": "Caregiver can't drop off by 8 AM due to work schedule",
+            "evidence": [
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Ask the day program if they offer flexible drop-off times or alternative scheduling that matches caregiver's 6:15 AM departure"
+          },
+          {
+            "category": "ada_paratransit",
+            "text": "Apply for ADA Paratransit certification through NICTA (312-663-HELP) to access weekday service matching fixed-route times"
+          },
+          {
+            "category": "transport",
+            "text": "Use Medicaid non-emergency medical transport (e.g., Transdev) for scheduled pickups; confirm advance booking with MCO"
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "blocked",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "Caregiver's work requires presence during Thursday 10 AM sessions",
+            "evidence": [
+              "turn:T08"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "text": "Request alternative session times from the caregiver education program; consider virtual sessions or weekend options"
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "text": "Combine caregiver education with other scheduled appointments or support groups on days when caregiver is available"
+          },
+          {
+            "category": "transport",
+            "text": "Explore community shuttle or rideshare services that operate Thursday mornings; confirm availability and cost"
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 4,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 24187,
+    "completion_tokens": 1798
+  },
+  "latency_ms": 88949,
+  "wall_s": 88.98,
+  "log": [
+    {
+      "prompt_sha256": "dafedb7622b2699e34b8b5b8bf26ae9eef20bf967e5dc7fccd70c5cc7e2cf912",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 32465,
+      "usage": {
+        "prompt_tokens": 4681,
+        "total_tokens": 5333,
+        "completion_tokens": 652,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "",
+            "item_id": "P1",
+            "status": "likely_ok",
+            "barriers": "[]",
+            "alternatives": "[]"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "",
+            "item_id": "P2",
+            "status": "blocked",
+            "barriers": "[{\"barrier\": \"caregiving\", \"reason\": \"Caregiver can't drop off by 8 AM due to work schedule\", \"evidence\": [\"turn:T04\"]}]",
+            "alternatives": "[{\"category\": \"schedule_change\", \"resource_record_id\": null, \"text\": \"Ask the day program if they offer flexible drop-off times or alternative scheduling that matches caregiver's 6:15 AM departure\"}, {\"category\": \"ada_paratransit\", \"resource_record_id\": null, \"text\": \"Apply for ADA Paratransit certification through NICTA (312-663-HELP) to access weekday service matching fixed-route times\"}, {\"category\": \"transport\", \"resource_record_id\": null, \"text\": \"Use Medicaid non-emergency medical transport (e.g., Transdev) for scheduled pickups; confirm advance booking with MCO\"}]}"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "",
+            "item_id": "P3",
+            "status": "blocked",
+            "barriers": "[{\"barrier\": \"work_schedule\", \"reason\": \"Caregiver's work requires presence during Thursday 10 AM sessions\", \"evidence\": [\"turn:T08\"]}]",
+            "alternatives": "[{\"category\": \"schedule_change\", \"resource_record_id\": null, \"text\": \"Request alternative session times from the caregiver education program; consider virtual sessions or weekend options\"}, {\"category\": \"coordinate_with_existing_visit\", \"resource_record_id\": null, \"text\": \"Combine caregiver education with other scheduled appointments or support groups on days when caregiver is available\"}, {\"category\": \"transport\", \"resource_record_id\": null, \"text\": \"Explore community shuttle or rideshare services that operate Thursday mornings; confirm availability and cost\"}}"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "",
+            "item_id": "P4",
+            "status": "likely_ok",
+            "barriers": "[]",
+            "alternatives": "[]"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "",
+            "item_id": "P5",
+            "status": "likely_ok",
+            "barriers": "[]",
+            "alternatives": "[]"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 28922,
+      "usage": {
+        "prompt_tokens": 5656,
+        "total_tokens": 6246,
+        "completion_tokens": 590,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ],
+            "item_id": "P1",
+            "status": "likely_ok",
+            "barriers": "[]",
+            "alternatives": "[]"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "[{\"item_id\": \"P2\", \"status\": \"blocked\", \"barriers\": [{\"barrier\": \"caregiving\", \"reason\": \"Caregiver can't drop off by 8 AM due to work schedule\", \"evidence\": [\"turn:T04\"]}], \"alternatives\": [{\"category\": \"schedule_change\", \"text\": \"Ask the day program if they offer flexible drop-off times or alternative scheduling that matches caregiver's 6:15 AM departure\"}, {\"category\": \"ada_paratransit\", \"text\": \"Apply for ADA Paratransit certification through NICTA (312-663-HELP) to access weekday service matching fixed-route times\"}, {\"category\": \"transport\", \"text\": \"Use Medicaid non-emergency medical transport (e.g., Transdev) for scheduled pickups; confirm advance booking with MCO\"}]}"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "[{\"item_id\": \"P3\", \"status\": \"blocked\", \"barriers\": [{\"barrier\": \"work_schedule\", \"reason\": \"Caregiver's work requires presence during Thursday 10 AM sessions\", \"evidence\": [\"turn:T08\"]}], \"alternatives\": [{\"category\": \"schedule_change\", \"text\": \"Request alternative session times from the caregiver education program; consider virtual sessions or weekend options\"}, {\"category\": \"coordinate_with_existing_visit\", \"text\": \"Combine caregiver education with other scheduled appointments or support groups on days when caregiver is available\"}, {\"category\": \"transport\", \"text\": \"Explore community shuttle or rideshare services that operate Thursday mornings; confirm availability and cost\"}]}"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 5836,
+      "usage": {
+        "prompt_tokens": 6846,
+        "total_tokens": 6947,
+        "completion_tokens": 101,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P2",
+                "status": "blocked"
+              },
+              {
+                "item_id": "P3",
+                "status": "blocked"
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok"
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 21726,
+      "usage": {
+        "prompt_tokens": 7004,
+        "total_tokens": 7459,
+        "completion_tokens": 455,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P2",
+                "status": "blocked",
+                "barriers": [
+                  {
+                    "barrier": "caregiving",
+                    "reason": "Caregiver can't drop off by 8 AM due to work schedule",
+                    "evidence": [
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Ask the day program if they offer flexible drop-off times or alternative scheduling that matches caregiver's 6:15 AM departure"
+                  },
+                  {
+                    "category": "ada_paratransit",
+                    "text": "Apply for ADA Paratransit certification through NICTA (312-663-HELP) to access weekday service matching fixed-route times"
+                  },
+                  {
+                    "category": "transport",
+                    "text": "Use Medicaid non-emergency medical transport (e.g., Transdev) for scheduled pickups; confirm advance booking with MCO"
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "blocked",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Caregiver's work requires presence during Thursday 10 AM sessions",
+                    "evidence": [
+                      "turn:T08"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "text": "Request alternative session times from the caregiver education program; consider virtual sessions or weekend options"
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "text": "Combine caregiver education with other scheduled appointments or support groups on days when caregiver is available"
+                  },
+                  {
+                    "category": "transport",
+                    "text": "Explore community shuttle or rideshare services that operate Thursday mornings; confirm availability and cost"
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

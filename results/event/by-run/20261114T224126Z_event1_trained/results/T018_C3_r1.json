@@ -1,0 +1,453 @@
+{
+  "case_id": "T018",
+  "condition": "C3",
+  "rep": 1,
+  "profile": "nano-lora-vllm",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "No reliable way to get there as scheduled.",
+            "evidence": [
+              "turn:T04",
+              "turn:T06",
+              "tract:no_vehicle_share",
+              "tract:places_lacktrpt"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "nemt",
+            "resource_record_id": null,
+            "text": "Offer nemt."
+          },
+          {
+            "category": "paratransit",
+            "resource_record_id": null,
+            "text": "Offer paratransit."
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "Offer coordinate_with_existing_visit."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "med_cost",
+            "reason": "Out-of-pocket cost may lead to nonadherence.",
+            "evidence": [
+              "med:1",
+              "screener:med_cost_worry"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "med_assistance_program",
+            "resource_record_id": "HC10584",
+            "text": "Benito Juarez Community Academy: hours not listed; call ahead, 0.21 mi away."
+          },
+          {
+            "category": "generic_or_formulary_switch",
+            "resource_record_id": null,
+            "text": "Offer generic_or_formulary_switch."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok"
+      },
+      {
+        "item_id": "P4",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "housing",
+            "reason": "No accessible bathroom or shower at home.",
+            "evidence": [
+              "note:1"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "home_modification_assistance",
+            "resource_record_id": null,
+            "text": "Offer home_modification_assistance."
+          },
+          {
+            "category": "utility_assistance",
+            "resource_record_id": null,
+            "text": "Offer utility_assistance."
+          }
+        ]
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok"
+      }
+    ]
+  },
+  "error": null,
+  "steps": 5,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T018"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T018"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T018"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T018"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T018"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031260101"
+      },
+      "ok": false
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031310700"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031310700",
+        "need": "transport"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031310700",
+        "need": "med_cost"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031310700",
+        "need": "housing"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 32595,
+    "completion_tokens": 891
+  },
+  "latency_ms": 48296,
+  "wall_s": 48.36,
+  "log": [
+    {
+      "prompt_sha256": "959daacc8b941ffe6bd5b8d5e80af43b095c23087fe2b67b706bee169479ba16",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 9495,
+      "usage": {
+        "prompt_tokens": 4647,
+        "total_tokens": 4827,
+        "completion_tokens": 180,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T018"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T018"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T018"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T018"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T018"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031260101"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 2258,
+      "usage": {
+        "prompt_tokens": 5930,
+        "total_tokens": 5967,
+        "completion_tokens": 37,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031310700"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 7556,
+      "usage": {
+        "prompt_tokens": 6597,
+        "total_tokens": 6736,
+        "completion_tokens": 139,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031310700",
+            "need": "transport"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031310700",
+            "need": "med_cost"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031310700",
+            "need": "housing"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 2728,
+      "usage": {
+        "prompt_tokens": 7665,
+        "total_tokens": 7713,
+        "completion_tokens": 48,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031310700",
+            "need": "housing"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 5,
+      "latency_ms": 26259,
+      "usage": {
+        "prompt_tokens": 7756,
+        "total_tokens": 8243,
+        "completion_tokens": 487,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "No reliable way to get there as scheduled.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T06",
+                      "tract:no_vehicle_share",
+                      "tract:places_lacktrpt"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Offer nemt."
+                  },
+                  {
+                    "category": "paratransit",
+                    "resource_record_id": null,
+                    "text": "Offer paratransit."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Offer coordinate_with_existing_visit."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "med_cost",
+                    "reason": "Out-of-pocket cost may lead to nonadherence.",
+                    "evidence": [
+                      "med:1",
+                      "screener:med_cost_worry"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "med_assistance_program",
+                    "resource_record_id": "HC10584",
+                    "text": "Benito Juarez Community Academy: hours not listed; call ahead, 0.21 mi away."
+                  },
+                  {
+                    "category": "generic_or_formulary_switch",
+                    "resource_record_id": null,
+                    "text": "Offer generic_or_formulary_switch."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P4",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "housing",
+                    "reason": "No accessible bathroom or shower at home.",
+                    "evidence": [
+                      "note:1"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "home_modification_assistance",
+                    "resource_record_id": null,
+                    "text": "Offer home_modification_assistance."
+                  },
+                  {
+                    "category": "utility_assistance",
+                    "resource_record_id": null,
+                    "text": "Offer utility_assistance."
+                  }
+                ]
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok"
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

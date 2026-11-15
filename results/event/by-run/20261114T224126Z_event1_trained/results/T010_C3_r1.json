@@ -1,0 +1,393 @@
+{
+  "case_id": "T010",
+  "condition": "C3",
+  "rep": 1,
+  "profile": "nano-lora-vllm",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "blocked",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "No reliable way to get there as scheduled.",
+            "evidence": [
+              "turn:T02"
+            ]
+          },
+          {
+            "barrier": "work_schedule",
+            "reason": "Work hours conflict with the schedule.",
+            "evidence": [
+              "turn:T02"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Offer flexible scheduling."
+          },
+          {
+            "category": "nemt",
+            "resource_record_id": null,
+            "text": "Offer nemt."
+          },
+          {
+            "category": "paratransit",
+            "resource_record_id": null,
+            "text": "Offer paratransit."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok"
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "language_literacy",
+            "reason": "Written material in English may not be readable or understandable.",
+            "evidence": [
+              "screener:language"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "interpreter",
+            "resource_record_id": null,
+            "text": "Offer interpreter."
+          },
+          {
+            "category": "plain_language_materials",
+            "resource_record_id": null,
+            "text": "Offer plain language materials."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok"
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok"
+      }
+    ]
+  },
+  "error": null,
+  "steps": 4,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T010"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T010"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T010"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T010"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T010"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "73321010830"
+      },
+      "ok": false
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031140200"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031140200",
+        "need": "language"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031140200",
+        "need": "transport"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031140200",
+        "need": "med_cost"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 25158,
+    "completion_tokens": 703
+  },
+  "latency_ms": 38770,
+  "wall_s": 38.83,
+  "log": [
+    {
+      "prompt_sha256": "3203135bca2135837743159b96c67eaa48837fdcaf7d3832fefdba064769904e",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 9470,
+      "usage": {
+        "prompt_tokens": 4630,
+        "total_tokens": 4810,
+        "completion_tokens": 180,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T010"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T010"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T010"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T010"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T010"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "73321010830"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 2296,
+      "usage": {
+        "prompt_tokens": 6036,
+        "total_tokens": 6073,
+        "completion_tokens": 37,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031140200"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 10307,
+      "usage": {
+        "prompt_tokens": 6704,
+        "total_tokens": 6842,
+        "completion_tokens": 138,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031140200",
+            "need": "language"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031140200",
+            "need": "transport"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031140200",
+            "need": "med_cost"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 16697,
+      "usage": {
+        "prompt_tokens": 7788,
+        "total_tokens": 8136,
+        "completion_tokens": 348,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "blocked",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "No reliable way to get there as scheduled.",
+                    "evidence": [
+                      "turn:T02"
+                    ]
+                  },
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Work hours conflict with the schedule.",
+                    "evidence": [
+                      "turn:T02"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Offer flexible scheduling."
+                  },
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Offer nemt."
+                  },
+                  {
+                    "category": "paratransit",
+                    "resource_record_id": null,
+                    "text": "Offer paratransit."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "language_literacy",
+                    "reason": "Written material in English may not be readable or understandable.",
+                    "evidence": [
+                      "screener:language"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "interpreter",
+                    "resource_record_id": null,
+                    "text": "Offer interpreter."
+                  },
+                  {
+                    "category": "plain_language_materials",
+                    "resource_record_id": null,
+                    "text": "Offer plain language materials."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok"
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

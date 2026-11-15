@@ -1,0 +1,490 @@
+{
+  "case_id": "T008",
+  "condition": "C3",
+  "rep": 1,
+  "profile": "nano-base-vllm",
+  "assessment": {
+    "items": [
+      {
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the unit or clinic for a later chair time or a day that matches the patient's ride; cite turn:T03"
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "Schedule the new visit on the same day and campus as an existing one; cite turn:T03"
+          },
+          {
+            "category": "home_dialysis_evaluation",
+            "resource_record_id": null,
+            "text": "Refer to the home dialysis program for a peritoneal or home hemodialysis evaluation; cite turn:T03"
+          }
+        ],
+        "barriers": [
+          {
+            "barrier": "transport",
+            "evidence": [
+              "turn:T05",
+              "turn:T06"
+            ],
+            "reason": "Must be transported twice weekly for six weeks before he can drive; caregiver availability may be limited."
+          },
+          {
+            "barrier": "transport",
+            "evidence": [
+              "turn:T04",
+              "turn:T05"
+            ],
+            "reason": "Without a ride, therapy appointments cannot be kept."
+          }
+        ],
+        "item_id": "P1",
+        "status": "at_risk"
+      },
+      {
+        "alternatives": [
+          {
+            "category": "medication",
+            "resource_record_id": null,
+            "text": "Medication list shows aspirin and docusate are low\u2011cost (cost tier\u202f1, $0 copay) and prescribed for limited duration; no cost barrier noted."
+          }
+        ],
+        "barriers": [],
+        "item_id": "P2",
+        "status": "likely_ok"
+      },
+      {
+        "alternatives": [
+          {
+            "category": "activity",
+            "resource_record_id": null,
+            "text": "Activity instructions involve no external resources; patient has a ranch home, shower chair, and caregiver support."
+          }
+        ],
+        "barriers": [],
+        "item_id": "P3",
+        "status": "likely_ok"
+      },
+      {
+        "alternatives": [
+          {
+            "category": "medication",
+            "resource_record_id": null,
+            "text": "Acetaminophen is low\u2011cost; oxycodone taper can be managed by the patient\u2019s current dosing schedule."
+          }
+        ],
+        "barriers": [],
+        "item_id": "P4",
+        "status": "likely_ok"
+      },
+      {
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the orthopedic clinic for a later chair time or a day that aligns with caregiver\u2019s schedule; cite turn:T03"
+          },
+          {
+            "category": "medicaid_nemt",
+            "resource_record_id": null,
+            "text": "Call the MCO number on the back of the plan card for scheduling; advance\u2011booking may be required; cite turn:T05"
+          },
+          {
+            "category": "ada_paratransit",
+            "resource_record_id": null,
+            "text": "Apply for ADA Paratransit certification through NICTA (312\u2011663\u2011HELP), note 21\u2011day decision wait; cite turn:T05"
+          }
+        ],
+        "barriers": [
+          {
+            "barrier": "transport",
+            "evidence": [
+              "turn:T05",
+              "turn:T06"
+            ],
+            "reason": "Must attend appointment without self\u2011drive; caregiver may not be available or may need to arrange additional transport."
+          }
+        ],
+        "item_id": "P5",
+        "status": "at_risk"
+      }
+    ]
+  },
+  "error": null,
+  "steps": 8,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T008"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T008"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T008"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T008",
+        "dept": "orthopedic",
+        "window_days": 90
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T008"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031100200",
+        "need": "transport",
+        "days": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri"
+        ],
+        "start": "09:00",
+        "end": "17:00"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 43708,
+    "completion_tokens": 2713
+  },
+  "latency_ms": 152001,
+  "wall_s": 152.05,
+  "log": [
+    {
+      "prompt_sha256": "9f28056c1d5f55108c03bddb5c61aa22df90711e8b9a4548f3abaf12ac172d3a",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 5130,
+      "usage": {
+        "prompt_tokens": 4536,
+        "total_tokens": 4566,
+        "completion_tokens": 30,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T008"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 1832,
+      "usage": {
+        "prompt_tokens": 4693,
+        "total_tokens": 4723,
+        "completion_tokens": 30,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T008"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 1837,
+      "usage": {
+        "prompt_tokens": 4862,
+        "total_tokens": 4893,
+        "completion_tokens": 31,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T008"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 2991,
+      "usage": {
+        "prompt_tokens": 5179,
+        "total_tokens": 5234,
+        "completion_tokens": 55,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T008",
+            "dept": "orthopedic",
+            "window_days": 90
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 5,
+      "latency_ms": 1922,
+      "usage": {
+        "prompt_tokens": 5251,
+        "total_tokens": 5282,
+        "completion_tokens": 31,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T008"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 6,
+      "latency_ms": 5121,
+      "usage": {
+        "prompt_tokens": 5488,
+        "total_tokens": 5588,
+        "completion_tokens": 100,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031100200",
+            "need": "transport",
+            "days": [
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri"
+            ],
+            "start": "09:00",
+            "end": "17:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 7,
+      "latency_ms": 89555,
+      "usage": {
+        "prompt_tokens": 5605,
+        "total_tokens": 7313,
+        "completion_tokens": 1708,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "**Item: P1 (referral): Outpatient physical therapy twice weekly for 6 weeks at the Northwest Highway therapy clinic [schedule: 2x/week x6 weeks]**\n- **Status:** at_risk\n- **Barrier 1:** Patient cannot drive until cleared at 6\u2011week visit; relies on caregiver for transport.\n  - **Reason:** Must be transported twice weekly for six weeks before he can drive; caregiver availability may be limited.\n  - **Evidence:** turn:T05; turn:T06\n- **Barrier 2:** Clinic is 5\u202fminutes from home but patient lacks personal transport during early recovery period.\n  - **Reason:** Without a ride, therapy appointments cannot be kept.\n  - **Evidence:** turn:T04; turn:T05\n- **Alternative 1:** schedule_change \u2013 Request a later chair time that aligns with caregiver\u2019s availability or use the same day as another regular outing.\n  - **Category:** schedule_change\n  - **Text:** Ask the unit or clinic for a later chair time or a day that matches the patient's ride; cite turn:T03\n- **Alternative 2:** coordinated transport \u2013 Use the caregiver\u2019s existing ride schedule to include therapy trips.\n  - **Category:** coordinate_with_existing_visit\n  - **Text:** Schedule the new visit on the same day and campus as an existing one; cite turn:T03\n- **Alternative 3:** home_dialysis_evaluation \u2013 Consider home\u2011based therapy if feasible, pending clinical assessment.\n  - **Category:** home_dialysis_evaluation\n  - **Text:** Refer to the home dialysis program for a peritoneal or home hemodialysis evaluation; cite turn:T03\n\n**Item: P2 (medication): Aspirin 81\u202fmg twice daily for 2 more weeks; docusate while taking oxycodone**\n- **Status:** likely_ok\n- **Reason:** Medication list shows aspirin and docusate are low\u2011cost (cost tier\u202f1, $0 copay) and prescribed for limited duration; no cost barrier noted.\n  - **Evidence:** med:1; med:2\n\n**Item: P3 (activity): Walk daily with the walker, progressing to a cane as therapy directs; keep hip precautions**\n- **Status:** likely_ok\n- **Reason:** Activity instructions involve no extern",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "[{\"alternatives\": [{\"category\": \"schedule_change\", \"resource_record_id\": null, \"text\": \"Ask the unit or clinic for a later chair time or a day that matches the patient's ride; cite turn:T03\"}, {\"category\": \"coordinate_with_existing_visit\", \"resource_record_id\": null, \"text\": \"Schedule the new visit on the same day and campus as an existing one; cite turn:T03\"}, {\"category\": \"home_dialysis_evaluation\", \"resource_record_id\": null, \"text\": \"Refer to the home dialysis program for a peritoneal or home hemodialysis evaluation; cite turn:T03\"}], \"item_id\": \"P1\", \"status\": \"at_risk\", \"barriers\": [{\"barrier\": \"transport\", \"evidence\": [\"turn:T05\", \"turn:T06\"], \"reason\": \"Must be transported twice weekly for six weeks before he can drive; caregiver availability may be limited.\"}, {\"barrier\": \"transport\", \"evidence\": [\"turn:T04\", \"turn:T05\"], \"reason\": \"Without a ride, therapy appointments cannot be kept.\"}]}]}, {\"alternatives\": [{\"category\": \"medication\", \"resource_record_id\": null, \"text\": \"Medication list shows aspirin and docusate are low\u2011cost (cost tier\u202f1, $0 copay) and prescribed for limited duration; no cost barrier noted.\"}], \"item_id\": \"P2\", \"status\": \"likely_ok\", \"barriers\": []}, {\"alternatives\": [{\"category\": \"activity\", \"resource_record_id\": null, \"text\": \"Activity instructions involve no external resources; patient has a ranch home, shower chair, and caregiver support.\"}], \"item_id\": \"P3\", \"status\": \"likely_ok\", \"barriers\": []}, {\"alternatives\": [{\"category\": \"medication\", \"resource_record_id\": null, \"text\": \"Acetaminophen is low\u2011cost; oxycodone taper can be managed by the patient\u2019s current dosing schedule.\"}], \"item_id\": \"P4\", \"status\": \"likely_ok\", \"barriers\": []}, {\"alternatives\": [{\"category\": \"schedule_change\", \"resource_record_id\": null, \"text\": \"Ask the orthopedic clinic for a later chair time or a day that aligns with caregiver\u2019s schedule; cite turn:T03\"}, {\"category\": \"medicaid_nemt\", \"resource_record_id\": null, \"text\": \"Call the MCO number on the back of the plan card for scheduling; advance\u2011booking may be required; cite turn:T05\"}, {\"category\": \"ada_paratransit\", \"resource_record_id\": null, \"text\": \"Apply for ADA Paratransit certification through NICTA (312\u2011663\u2011HELP), note 21\u2011day decision wait; cite turn:T05\"}], \"item_id\": \"P5\", \"status\": \"at_risk\", \"barriers\": [{\"barrier\": \"transport\", \"evidence\": [\"turn:T05\", \"turn:T06\"], \"reason\": \"Must attend appointment without self\u2011drive; caregiver may not be available or may need to arrange additional transport.\"}]}]"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 8,
+      "latency_ms": 43613,
+      "usage": {
+        "prompt_tokens": 8094,
+        "total_tokens": 8822,
+        "completion_tokens": 728,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the unit or clinic for a later chair time or a day that matches the patient's ride; cite turn:T03"
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Schedule the new visit on the same day and campus as an existing one; cite turn:T03"
+                  },
+                  {
+                    "category": "home_dialysis_evaluation",
+                    "resource_record_id": null,
+                    "text": "Refer to the home dialysis program for a peritoneal or home hemodialysis evaluation; cite turn:T03"
+                  }
+                ],
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "evidence": [
+                      "turn:T05",
+                      "turn:T06"
+                    ],
+                    "reason": "Must be transported twice weekly for six weeks before he can drive; caregiver availability may be limited."
+                  },
+                  {
+                    "barrier": "transport",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T05"
+                    ],
+                    "reason": "Without a ride, therapy appointments cannot be kept."
+                  }
+                ],
+                "item_id": "P1",
+                "status": "at_risk"
+              },
+              {
+                "alternatives": [
+                  {
+                    "category": "medication",
+                    "resource_record_id": null,
+                    "text": "Medication list shows aspirin and docusate are low\u2011cost (cost tier\u202f1, $0 copay) and prescribed for limited duration; no cost barrier noted."
+                  }
+                ],
+                "barriers": [],
+                "item_id": "P2",
+                "status": "likely_ok"
+              },
+              {
+                "alternatives": [
+                  {
+                    "category": "activity",
+                    "resource_record_id": null,
+                    "text": "Activity instructions involve no external resources; patient has a ranch home, shower chair, and caregiver support."
+                  }
+                ],
+                "barriers": [],
+                "item_id": "P3",
+                "status": "likely_ok"
+              },
+              {
+                "alternatives": [
+                  {
+                    "category": "medication",
+                    "resource_record_id": null,
+                    "text": "Acetaminophen is low\u2011cost; oxycodone taper can be managed by the patient\u2019s current dosing schedule."
+                  }
+                ],
+                "barriers": [],
+                "item_id": "P4",
+                "status": "likely_ok"
+              },
+              {
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the orthopedic clinic for a later chair time or a day that aligns with caregiver\u2019s schedule; cite turn:T03"
+                  },
+                  {
+                    "category": "medicaid_nemt",
+                    "resource_record_id": null,
+                    "text": "Call the MCO number on the back of the plan card for scheduling; advance\u2011booking may be required; cite turn:T05"
+                  },
+                  {
+                    "category": "ada_paratransit",
+                    "resource_record_id": null,
+                    "text": "Apply for ADA Paratransit certification through NICTA (312\u2011663\u2011HELP), note 21\u2011day decision wait; cite turn:T05"
+                  }
+                ],
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "evidence": [
+                      "turn:T05",
+                      "turn:T06"
+                    ],
+                    "reason": "Must attend appointment without self\u2011drive; caregiver may not be available or may need to arrange additional transport."
+                  }
+                ],
+                "item_id": "P5",
+                "status": "at_risk"
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

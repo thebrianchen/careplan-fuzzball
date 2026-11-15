@@ -1,0 +1,277 @@
+{
+  "case_id": "T004",
+  "condition": "C3",
+  "rep": 1,
+  "profile": "nano-base-vllm",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "Patient cannot miss work; two unexcused absences allowed before termination",
+            "evidence": [
+              "turn:T02"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Ask the unit to move her chair time to after 3\u202fPM on a Tuesday when she can stay after her shift, if slots are available."
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "Schedule the prenatal visit on a day she already travels to the hospital for another appointment (e.g., combine with the glucose test later that day)."
+          },
+          {
+            "category": "transport",
+            "resource_record_id": null,
+            "text": "Use Medicaid Non-Emergency Medical Transportation (MEDICARE_NEMT) to arrange a ride after her shift, confirming advance\u2011booking rules with her MCO."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "blocked",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "Saturday morning rides may not be available via bus or Medicaid transport after shift work",
+            "evidence": [
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "transport",
+            "resource_record_id": null,
+            "text": "Use Medicaid Non-Emergency Medical Transportation for a Saturday morning slot, if her MCO offers weekend service."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Request a Saturday session at a different satellite location that aligns with her husband\u2019s drop\u2011off schedule."
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "Pair the Saturday class with another recurring hospital visit (e.g., the glucose test) to reduce separate travel."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "food_access",
+            "reason": "Her work shift ends at 2:30\u202fPM and she relies on bus/ride, limiting time to shop for iron\u2011rich foods",
+            "evidence": [
+              "turn:T02"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "food_pantry",
+            "resource_record_id": null,
+            "text": "Utilize the Greater Chicago Food Depository\u2019s weekday pantry open after 3\u202fPM on Wednesdays."
+          },
+          {
+            "category": "medically_tailored_meals",
+            "resource_record_id": null,
+            "text": "Check whether her Medicaid MCO offers a medically\u2011tailored meals benefit for renal\u2011friendly iron\u2011rich foods."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Adjust prenatal visit timing to later in the day when she can attend a nutrition counseling session at the clinic."
+          }
+        ]
+      }
+    ]
+  },
+  "error": null,
+  "steps": 2,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 11092,
+    "completion_tokens": 1618
+  },
+  "latency_ms": 88503,
+  "wall_s": 88.54,
+  "log": [
+    {
+      "prompt_sha256": "7e6a4304f69dee4eaf96084a0452c7fc57ed5c60b5a92ae0b2c8f37db55e2d52",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 45239,
+      "usage": {
+        "prompt_tokens": 4610,
+        "total_tokens": 5425,
+        "completion_tokens": 815,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "[{\n  \"item_id\": \"P1\",\n  \"status\": \"at_risk\",\n  \"barriers\": [{\n    \"barrier\": \"work_schedule\",\n    \"reason\": \"Patient cannot miss work; two unexcused absences allowed before termination\",\n    \"evidence\": [\"turn:T02\"]\n  },\n  \"alternatives\": [{\n    \"category\": \"schedule_change\",\n    \"resource_record_id\": null,\n    \"text\": \"Ask the unit to move her chair time to after 3\u202fPM on a Tuesday when she can stay after her shift, if slots are available.\"\n  }],\n  \"alternatives\": [{\n    \"category\": \"coordinate_with_existing_visit\",\n    \"resource_record_id\": null,\n    \"text\": \"Schedule the prenatal visit on a day she already travels to the hospital for another appointment (e.g., combine with the glucose test later that day).\"\n  }],\n  \"alternatives\": [{\n    \"category\": \"transport\",\n    \"resource_record_id\": null,\n    \"text\": \"Use Medicaid Non-Emergency Medical Transportation (MEDICARE_NEMT) to arrange a ride after her shift, confirming advance\u2011booking rules with her MCO.\"\n  }]\n},\n{\n  \"item_id\": \"P2\",\n  \"status\": \"likely_ok\",\n  \"barriers\": [],\n  \"alternatives\": []\n},\n{\n  \"item_id\": \"P3\",\n  \"status\": \"blocked\",\n  \"barriers\": [{\n    \"barrier\": \"transport\",\n    \"reason\": \"Saturday morning rides may not be available via bus or Medicaid transport after shift work\",\n    \"evidence\": [\"turn:T04\"]\n  },\n  \"alternatives\": [{\n    \"category\": \"transport\",\n    \"resource_record_id\": null,\n    \"text\": \"Use Medicaid Non-Emergency Medical Transportation for a Saturday morning slot, if her MCO offers weekend service.\"\n  }],\n  \"alternatives\": [{\n    \"category\": \"schedule_change\",\n    \"resource_record_id\": null,\n    \"text\": \"Request a Saturday session at a different satellite location that aligns with her husband\u2019s drop\u2011off schedule.\"\n  }],\n  \"alternatives\": [{\n    \"category\": \"coordinate_with_existing_visit\",\n    \"resource_record_id\": null,\n    \"text\": \"Pair the Saturday class with another recurring hospital visit (e.g., the glucose test) to reduce separate travel.\"\n  }]\n},\n{\n  \"item_id\": \"P4\",\n  \"status\": \"likely_ok\",\n  \"barriers\": [],\n  \"alternatives\": []\n},\n{\n  \"item_id\": \"P5\",\n  \"status\": \"at_risk\",\n  \"barriers\": [{\n    \"barrier\": \"food_access\",\n    \"reason\": \"Her work shift ends at 2:30\u202fPM and she relies on bus/ride, limiting time to shop for iron\u2011rich foods\",\n    \"evidence\": [\"turn:T02\"]\n  }],\n  \"alternatives\": [{\n    \"category\": \"food_pantry\",\n    \"resource_record_id\": null,\n    \"text\": \"Utilize the Greater Chicago Food Depository\u2019s weekday pantry open after 3\u202fPM on Wednesdays.\"\n  }],\n  \"alternatives\": [{\n    \"category\": \"medically_tailored_meals\",\n    \"resource_record_id\": null,\n    \"text\": \"Check whether her Medicaid MCO offers a medically\u2011tailored meals benefit for renal\u2011friendly iron\u2011rich foods.\"\n  }],\n  \"alternatives\": [{\n    \"category\": \"schedule_change\",\n    \"resource_record_id\": null,\n    \"text\": \"Adjust prenatal visit timing to later in the day when she can attend a nutrition counseling session at the clinic.\"\n  }]\n}]"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 43264,
+      "usage": {
+        "prompt_tokens": 6482,
+        "total_tokens": 7285,
+        "completion_tokens": 803,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Patient cannot miss work; two unexcused absences allowed before termination",
+                    "evidence": [
+                      "turn:T02"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Ask the unit to move her chair time to after 3\u202fPM on a Tuesday when she can stay after her shift, if slots are available."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Schedule the prenatal visit on a day she already travels to the hospital for another appointment (e.g., combine with the glucose test later that day)."
+                  },
+                  {
+                    "category": "transport",
+                    "resource_record_id": null,
+                    "text": "Use Medicaid Non-Emergency Medical Transportation (MEDICARE_NEMT) to arrange a ride after her shift, confirming advance\u2011booking rules with her MCO."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "blocked",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Saturday morning rides may not be available via bus or Medicaid transport after shift work",
+                    "evidence": [
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "transport",
+                    "resource_record_id": null,
+                    "text": "Use Medicaid Non-Emergency Medical Transportation for a Saturday morning slot, if her MCO offers weekend service."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Request a Saturday session at a different satellite location that aligns with her husband\u2019s drop\u2011off schedule."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Pair the Saturday class with another recurring hospital visit (e.g., the glucose test) to reduce separate travel."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "Her work shift ends at 2:30\u202fPM and she relies on bus/ride, limiting time to shop for iron\u2011rich foods",
+                    "evidence": [
+                      "turn:T02"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "food_pantry",
+                    "resource_record_id": null,
+                    "text": "Utilize the Greater Chicago Food Depository\u2019s weekday pantry open after 3\u202fPM on Wednesdays."
+                  },
+                  {
+                    "category": "medically_tailored_meals",
+                    "resource_record_id": null,
+                    "text": "Check whether her Medicaid MCO offers a medically\u2011tailored meals benefit for renal\u2011friendly iron\u2011rich foods."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Adjust prenatal visit timing to later in the day when she can attend a nutrition counseling session at the clinic."
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

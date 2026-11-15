@@ -1,0 +1,813 @@
+{
+  "case_id": "T012",
+  "condition": "C3",
+  "rep": 1,
+  "profile": "nano-base-vllm",
+  "assessment": {
+    "items": [
+      {
+        "alternatives": [],
+        "barriers": [
+          {
+            "barrier": "transport",
+            "evidence": [
+              "turn:T02",
+              "turn:T04"
+            ],
+            "reason": "Patient lacks a personal vehicle and relies on multiple buses, requiring a 6:15\u202fam departure that risks lateness to 8:00\u202fam appointments."
+          }
+        ],
+        "item_id": "P1",
+        "status": "blocked"
+      },
+      {
+        "alternatives": [
+          {
+            "category": "transport",
+            "resource_record_id": null,
+            "text": "Use Medicaid NEMT (Lakeshore Community Health Plan) to schedule a ride; call the plan number on the back of the member card to arrange advance booking for Monday and Thursday trips."
+          }
+        ],
+        "barriers": [
+          {
+            "barrier": "transport",
+            "evidence": [
+              "turn:T02",
+              "turn:T04"
+            ],
+            "reason": "Patient lacks a personal vehicle and relies on multiple buses, requiring a 6:15\u202fam departure that risks lateness to 8:00\u202fam appointments."
+          }
+        ],
+        "item_id": "P2",
+        "status": "likely_ok"
+      },
+      {
+        "alternatives": [
+          {
+            "category": "dialysis_social_worker",
+            "resource_record_id": null,
+            "text": "Contact the wound care center's dialysis social worker for assistance with transport coordination and potential NEMT benefits."
+          }
+        ],
+        "barriers": [
+          {
+            "barrier": "transport",
+            "evidence": [
+              "turn:T02",
+              "turn:T04"
+            ],
+            "reason": "Patient lacks a personal vehicle and relies on multiple buses, requiring a 6:15\u202fam departure that risks lateness to 8:00\u202fam appointments."
+          }
+        ],
+        "item_id": "P3",
+        "status": "blocked"
+      },
+      {
+        "alternatives": [
+          {
+            "category": "medication",
+            "resource_record_id": null,
+            "text": "Continue current metformin regimen; no cost barriers identified."
+          }
+        ],
+        "barriers": [],
+        "item_id": "P4",
+        "status": "likely_ok"
+      },
+      {
+        "alternatives": [
+          {
+            "category": "education",
+            "resource_record_id": null,
+            "text": "Provide written and verbal instructions in plain language; confirm understanding of wound redness, fever, and drainage signs."
+          }
+        ],
+        "barriers": [],
+        "item_id": "P5",
+        "status": "likely_ok"
+      }
+    ]
+  },
+  "error": null,
+  "steps": 15,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T012"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T012"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T012"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T012",
+        "dept": "Wound Care Center",
+        "window_days": 90
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T012"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "need": "transport",
+        "days": [
+          "Mon"
+        ],
+        "tract_id": "17031461000",
+        "start": "06:15",
+        "end": "08:00"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "need": "transport",
+        "days": [
+          "Mon"
+        ],
+        "tract_id": "17031461000",
+        "start": "05:45",
+        "end": "08:15"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "need": "transport",
+        "days": [
+          "Mon"
+        ],
+        "tract_id": "17031461000",
+        "start": "05:15",
+        "end": "08:30"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "need": "transport",
+        "days": [
+          "Mon"
+        ],
+        "tract_id": "17031461000",
+        "start": "04:45",
+        "end": "08:45"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "need": "transport",
+        "days": [
+          "Thu"
+        ],
+        "tract_id": "17031461000",
+        "start": "05:15",
+        "end": "08:30"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "need": "transport",
+        "days": [
+          "Thu"
+        ],
+        "tract_id": "17031461000",
+        "start": "05:45",
+        "end": "08:15"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "need": "transport",
+        "days": [
+          "Thu"
+        ],
+        "tract_id": "17031461000",
+        "start": "06:15",
+        "end": "08:00"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "need": "transport",
+        "days": [
+          "Mon",
+          "Thu"
+        ],
+        "tract_id": "17031461000",
+        "start": "04:45",
+        "end": "09:00"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 85100,
+    "completion_tokens": 1948
+  },
+  "latency_ms": 101404,
+  "wall_s": 101.5,
+  "log": [
+    {
+      "prompt_sha256": "b71f73294ccd437825d7812d936e07f85dda70a62351bba9e400efe2520ecb90",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 2438,
+      "usage": {
+        "prompt_tokens": 4590,
+        "total_tokens": 4619,
+        "completion_tokens": 29,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T012"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 1778,
+      "usage": {
+        "prompt_tokens": 4740,
+        "total_tokens": 4770,
+        "completion_tokens": 30,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T012"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 1852,
+      "usage": {
+        "prompt_tokens": 4931,
+        "total_tokens": 4962,
+        "completion_tokens": 31,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T012"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 3119,
+      "usage": {
+        "prompt_tokens": 5190,
+        "total_tokens": 5247,
+        "completion_tokens": 57,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T012",
+            "dept": "Wound Care Center",
+            "window_days": 90
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 5,
+      "latency_ms": 1914,
+      "usage": {
+        "prompt_tokens": 5264,
+        "total_tokens": 5295,
+        "completion_tokens": 31,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T012"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 6,
+      "latency_ms": 5469,
+      "usage": {
+        "prompt_tokens": 5503,
+        "total_tokens": 5589,
+        "completion_tokens": 86,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "need": "transport",
+            "days": [
+              "Mon"
+            ],
+            "tract_id": "17031461000",
+            "start": "06:15",
+            "end": "08:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 7,
+      "latency_ms": 4514,
+      "usage": {
+        "prompt_tokens": 5606,
+        "total_tokens": 5692,
+        "completion_tokens": 86,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "need": "transport",
+            "days": [
+              "Mon"
+            ],
+            "tract_id": "17031461000",
+            "start": "05:45",
+            "end": "08:15"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 8,
+      "latency_ms": 4522,
+      "usage": {
+        "prompt_tokens": 5709,
+        "total_tokens": 5795,
+        "completion_tokens": 86,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "need": "transport",
+            "days": [
+              "Mon"
+            ],
+            "tract_id": "17031461000",
+            "start": "05:15",
+            "end": "08:30"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 9,
+      "latency_ms": 4546,
+      "usage": {
+        "prompt_tokens": 5812,
+        "total_tokens": 5898,
+        "completion_tokens": 86,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "need": "transport",
+            "days": [
+              "Mon"
+            ],
+            "tract_id": "17031461000",
+            "start": "04:45",
+            "end": "08:45"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 10,
+      "latency_ms": 4576,
+      "usage": {
+        "prompt_tokens": 5915,
+        "total_tokens": 6001,
+        "completion_tokens": 86,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "need": "transport",
+            "days": [
+              "Thu"
+            ],
+            "tract_id": "17031461000",
+            "start": "05:15",
+            "end": "08:30"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 11,
+      "latency_ms": 4564,
+      "usage": {
+        "prompt_tokens": 6018,
+        "total_tokens": 6104,
+        "completion_tokens": 86,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "need": "transport",
+            "days": [
+              "Thu"
+            ],
+            "tract_id": "17031461000",
+            "start": "05:45",
+            "end": "08:15"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 12,
+      "latency_ms": 4574,
+      "usage": {
+        "prompt_tokens": 6121,
+        "total_tokens": 6207,
+        "completion_tokens": 86,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "need": "transport",
+            "days": [
+              "Thu"
+            ],
+            "tract_id": "17031461000",
+            "start": "06:15",
+            "end": "08:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 13,
+      "latency_ms": 4686,
+      "usage": {
+        "prompt_tokens": 6224,
+        "total_tokens": 6312,
+        "completion_tokens": 88,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "need": "transport",
+            "days": [
+              "Mon",
+              "Thu"
+            ],
+            "tract_id": "17031461000",
+            "start": "04:45",
+            "end": "09:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 14,
+      "latency_ms": 27864,
+      "usage": {
+        "prompt_tokens": 6356,
+        "total_tokens": 6911,
+        "completion_tokens": 555,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "alternatives": [],
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "evidence": [
+                      "screener:transportation:yes",
+                      "turn:T02",
+                      "turn:T04"
+                    ],
+                    "reason": "Patient lacks a personal vehicle and relies on multiple buses, requiring a 6:15\u202fam departure that risks lateness to 8:00\u202fam appointments."
+                  }
+                ],
+                "item_id": "P1",
+                "status": "blocked"
+              },
+              {
+                "alternatives": [
+                  {
+                    "category": "transport",
+                    "resource_record_id": null,
+                    "text": "Use Medicaid NEMT (Lakeshore Community Health Plan) to schedule a ride; call the plan number on the back of the member card to arrange advance booking for Monday and Thursday trips."
+                  }
+                ],
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "evidence": [
+                      "screener:transportation:yes",
+                      "turn:T02",
+                      "turn:T04"
+                    ],
+                    "reason": "Patient lacks a personal vehicle and relies on multiple buses, requiring a 6:15\u202fam departure that risks lateness to 8:00\u202fam appointments."
+                  }
+                ],
+                "item_id": "P2",
+                "status": "likely_ok"
+              },
+              {
+                "alternatives": [
+                  {
+                    "category": "dialysis_social_worker",
+                    "resource_record_id": null,
+                    "text": "Contact the wound care center's dialysis social worker for assistance with transport coordination and potential NEMT benefits."
+                  }
+                ],
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "evidence": [
+                      "screener:transportation:yes",
+                      "turn:T02",
+                      "turn:T04"
+                    ],
+                    "reason": "Patient lacks a personal vehicle and relies on multiple buses, requiring a 6:15\u202fam departure that risks lateness to 8:00\u202fam appointments."
+                  }
+                ],
+                "item_id": "P3",
+                "status": "blocked"
+              },
+              {
+                "alternatives": [
+                  {
+                    "category": "medication",
+                    "resource_record_id": null,
+                    "text": "Continue current metformin regimen; no cost barriers identified."
+                  }
+                ],
+                "barriers": [],
+                "item_id": "P4",
+                "status": "likely_ok"
+              },
+              {
+                "alternatives": [
+                  {
+                    "category": "education",
+                    "resource_record_id": null,
+                    "text": "Provide written and verbal instructions in plain language; confirm understanding of wound redness, fever, and drainage signs."
+                  }
+                ],
+                "barriers": [],
+                "item_id": "P5",
+                "status": "likely_ok"
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 15,
+      "latency_ms": 24988,
+      "usage": {
+        "prompt_tokens": 7121,
+        "total_tokens": 7646,
+        "completion_tokens": 525,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "alternatives": [],
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "evidence": [
+                      "turn:T02",
+                      "turn:T04"
+                    ],
+                    "reason": "Patient lacks a personal vehicle and relies on multiple buses, requiring a 6:15\u202fam departure that risks lateness to 8:00\u202fam appointments."
+                  }
+                ],
+                "item_id": "P1",
+                "status": "blocked"
+              },
+              {
+                "alternatives": [
+                  {
+                    "category": "transport",
+                    "resource_record_id": null,
+                    "text": "Use Medicaid NEMT (Lakeshore Community Health Plan) to schedule a ride; call the plan number on the back of the member card to arrange advance booking for Monday and Thursday trips."
+                  }
+                ],
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "evidence": [
+                      "turn:T02",
+                      "turn:T04"
+                    ],
+                    "reason": "Patient lacks a personal vehicle and relies on multiple buses, requiring a 6:15\u202fam departure that risks lateness to 8:00\u202fam appointments."
+                  }
+                ],
+                "item_id": "P2",
+                "status": "likely_ok"
+              },
+              {
+                "alternatives": [
+                  {
+                    "category": "dialysis_social_worker",
+                    "resource_record_id": null,
+                    "text": "Contact the wound care center's dialysis social worker for assistance with transport coordination and potential NEMT benefits."
+                  }
+                ],
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "evidence": [
+                      "turn:T02",
+                      "turn:T04"
+                    ],
+                    "reason": "Patient lacks a personal vehicle and relies on multiple buses, requiring a 6:15\u202fam departure that risks lateness to 8:00\u202fam appointments."
+                  }
+                ],
+                "item_id": "P3",
+                "status": "blocked"
+              },
+              {
+                "alternatives": [
+                  {
+                    "category": "medication",
+                    "resource_record_id": null,
+                    "text": "Continue current metformin regimen; no cost barriers identified."
+                  }
+                ],
+                "barriers": [],
+                "item_id": "P4",
+                "status": "likely_ok"
+              },
+              {
+                "alternatives": [
+                  {
+                    "category": "education",
+                    "resource_record_id": null,
+                    "text": "Provide written and verbal instructions in plain language; confirm understanding of wound redness, fever, and drainage signs."
+                  }
+                ],
+                "barriers": [],
+                "item_id": "P5",
+                "status": "likely_ok"
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

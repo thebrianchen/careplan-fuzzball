@@ -1,0 +1,206 @@
+{
+  "case_id": "T019",
+  "condition": "C3",
+  "rep": 1,
+  "profile": "nano-base-vllm",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "relies on Halsted bus; no guarantee of timely arrival",
+            "evidence": [
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "nmt",
+            "resource_record_id": null,
+            "text": "Medicaid non-emergency medical transportation (call number on plan card or Transdev 877-725-0569) for scheduled lab appointment"
+          },
+          {
+            "category": "paratransit",
+            "resource_record_id": null,
+            "text": "Apply for ADA Paratransit through NICTA (312-663-HELP) \u2013 eligible if bus use is not feasible"
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Request a later lab draw time that aligns with bus schedule or arrange ride with clinic staff"
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "food_access",
+            "reason": "patient eats when able; limited resources may restrict high-calorie diet",
+            "evidence": [
+              "turn:T08"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "food_pantry",
+            "resource_record_id": null,
+            "text": "Greater Chicago Food Depository pantry (open Mon\u2011Fri 9\u202fam\u20111\u202fpm) \u2013 call 312\u2011341\u20111111 to confirm renal\u2011friendly options"
+          },
+          {
+            "category": "renal_dietitian",
+            "resource_record_id": null,
+            "text": "Speak with dialysis unit dietitian (if applicable) for affordable high\u2011protein foods and supplement options"
+          },
+          {
+            "category": "medically_tailored_meals",
+            "resource_record_id": null,
+            "text": "Check if Medicaid MCO offers medically tailored meals; eligibility may provide delivered high\u2011calorie kits"
+          }
+        ]
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 1,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 4569,
+    "completion_tokens": 597
+  },
+  "latency_ms": 23135,
+  "wall_s": 23.16,
+  "log": [
+    {
+      "prompt_sha256": "240670b2a9b9afea91e6fa38342082032619a2eba6fd0e73822c3a038506027c",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 23135,
+      "usage": {
+        "prompt_tokens": 4569,
+        "total_tokens": 5166,
+        "completion_tokens": 597,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "relies on Halsted bus; no guarantee of timely arrival",
+                    "evidence": [
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nmt",
+                    "resource_record_id": null,
+                    "text": "Medicaid non-emergency medical transportation (call number on plan card or Transdev 877-725-0569) for scheduled lab appointment"
+                  },
+                  {
+                    "category": "paratransit",
+                    "resource_record_id": null,
+                    "text": "Apply for ADA Paratransit through NICTA (312-663-HELP) \u2013 eligible if bus use is not feasible"
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Request a later lab draw time that aligns with bus schedule or arrange ride with clinic staff"
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "patient eats when able; limited resources may restrict high-calorie diet",
+                    "evidence": [
+                      "turn:T08"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "food_pantry",
+                    "resource_record_id": null,
+                    "text": "Greater Chicago Food Depository pantry (open Mon\u2011Fri 9\u202fam\u20111\u202fpm) \u2013 call 312\u2011341\u20111111 to confirm renal\u2011friendly options"
+                  },
+                  {
+                    "category": "renal_dietitian",
+                    "resource_record_id": null,
+                    "text": "Speak with dialysis unit dietitian (if applicable) for affordable high\u2011protein foods and supplement options"
+                  },
+                  {
+                    "category": "medically_tailored_meals",
+                    "resource_record_id": null,
+                    "text": "Check if Medicaid MCO offers medically tailored meals; eligibility may provide delivered high\u2011calorie kits"
+                  }
+                ]
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,375 @@
+{
+  "case_id": "T005",
+  "condition": "C3",
+  "rep": 1,
+  "profile": "nano-lora-vllm",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "No reliable way to get there as scheduled.",
+            "evidence": [
+              "screener:transportation"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "nemt",
+            "resource_record_id": null,
+            "text": "Offer nemt."
+          },
+          {
+            "category": "paratransit",
+            "resource_record_id": null,
+            "text": "Offer paratransit."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Offer schedule_change."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "housing",
+            "reason": "Mold and pests in the home can worsen asthma.",
+            "evidence": [
+              "note:6"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "housing_assistance",
+            "resource_record_id": null,
+            "text": "Offer housing_assistance."
+          },
+          {
+            "category": "utility_assistance",
+            "resource_record_id": null,
+            "text": "Offer utility_assistance."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 4,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T005"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T005"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T005"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T005"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T005"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031000100"
+      },
+      "ok": false
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031843000"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031843000",
+        "need": "housing"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031843000",
+        "need": "transport"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 23122,
+    "completion_tokens": 660
+  },
+  "latency_ms": 35876,
+  "wall_s": 35.93,
+  "log": [
+    {
+      "prompt_sha256": "9c8789d639cb93c2f34a1f6a9b0a355b92d7a99e140dc966ad8aaa33cce74ec4",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 10057,
+      "usage": {
+        "prompt_tokens": 4640,
+        "total_tokens": 4820,
+        "completion_tokens": 180,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T005"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T005"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T005"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T005"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T005"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031000100"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 2536,
+      "usage": {
+        "prompt_tokens": 5677,
+        "total_tokens": 5714,
+        "completion_tokens": 37,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031843000"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 5644,
+      "usage": {
+        "prompt_tokens": 6345,
+        "total_tokens": 6438,
+        "completion_tokens": 93,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031843000",
+            "need": "housing"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031843000",
+            "need": "transport"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 17639,
+      "usage": {
+        "prompt_tokens": 6460,
+        "total_tokens": 6810,
+        "completion_tokens": 350,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "No reliable way to get there as scheduled.",
+                    "evidence": [
+                      "screener:transportation"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Offer nemt."
+                  },
+                  {
+                    "category": "paratransit",
+                    "resource_record_id": null,
+                    "text": "Offer paratransit."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Offer schedule_change."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "housing",
+                    "reason": "Mold and pests in the home can worsen asthma.",
+                    "evidence": [
+                      "note:6"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "housing_assistance",
+                    "resource_record_id": null,
+                    "text": "Offer housing_assistance."
+                  },
+                  {
+                    "category": "utility_assistance",
+                    "resource_record_id": null,
+                    "text": "Offer utility_assistance."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

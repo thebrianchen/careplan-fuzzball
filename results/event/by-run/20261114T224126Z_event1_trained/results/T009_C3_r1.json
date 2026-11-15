@@ -1,0 +1,1633 @@
+{
+  "case_id": "T009",
+  "condition": "C3",
+  "rep": 1,
+  "profile": "nano-lora-vllm",
+  "assessment": null,
+  "error": "no valid assessment after 16 steps",
+  "steps": 16,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T009"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T009"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T009"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T009"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T009"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031260202"
+      },
+      "ok": false
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031410800"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_transit_trip",
+      "args": {
+        "appt_ref": "appt:2"
+      },
+      "ok": false
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031410800",
+        "need": "food"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031410800",
+        "need": "language"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031410800",
+        "need": "digital"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_visit_transcript",
+      "args": {
+        "visit_id": "V-T009",
+        "topic": "any"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 185580,
+    "completion_tokens": 7871
+  },
+  "latency_ms": 427442,
+  "wall_s": 427.53,
+  "log": [
+    {
+      "prompt_sha256": "cfbe788a59e0accd6189007e57599302c0faeddea26fae7aa21bda40eb12de3a",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 12281,
+      "usage": {
+        "prompt_tokens": 4494,
+        "total_tokens": 4674,
+        "completion_tokens": 180,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T009"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T009"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T009"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T009"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T009"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031260202"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 3571,
+      "usage": {
+        "prompt_tokens": 5260,
+        "total_tokens": 5327,
+        "completion_tokens": 67,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031410800"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_transit_trip",
+          "args": {
+            "appt_ref": "appt:2"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 6915,
+      "usage": {
+        "prompt_tokens": 5969,
+        "total_tokens": 6106,
+        "completion_tokens": 137,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031410800",
+            "need": "food"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031410800",
+            "need": "language"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031410800",
+            "need": "digital"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 42471,
+      "usage": {
+        "prompt_tokens": 8155,
+        "total_tokens": 8971,
+        "completion_tokens": 816,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "No reliable way to get to the scheduled follow-up visits as written.",
+                    "evidence": [
+                      "tract:no_vehicle_share",
+                      "tract:places_lacktrpt"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Offer nemt."
+                  },
+                  {
+                    "category": "paratransit",
+                    "resource_record_id": null,
+                    "text": "Offer paratransit."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Offer schedule_change."
+                  }
+                ]
+              },
+              {
+                "item_id": "P6",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "Limited access to foods that fit the recommended diet.",
+                    "evidence": [
+                      "screener:food_worry"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "food_pantry",
+                    "resource_record_id": "SNAP1480852",
+                    "text": "Hyde Park Farmers Market: hours not listed; call ahead, 0.05 mi away."
+                  },
+                  {
+                    "category": "snap",
+                    "resource_record_id": "SNAP1480852",
+                    "text": "Hyde Park Farmers Market: hours not listed; call ahead, 0.05 mi away."
+                  },
+                  {
+                    "category": "medically_tailored_meals",
+                    "resource_record_id": null,
+                    "text": "Offer medically_tailored_meals."
+                  }
+                ]
+              },
+              {
+                "item_id": "P7",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "digital_access",
+                    "reason": "No device or reliable internet for patient portal or telehealth.",
+                    "evidence": [
+                      "screener:digital_access"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "library",
+                    "resource_record_id": "LIB010",
+                    "text": "Chicago Public Library, Blackstone branch: Mon 12:00-20:00; Tue 10:00-18:00; Wed 12:00-20:00; Thu 10:00-18:00; Fri 09:00-17:00; Sat 09:00-17:00; Sun 13:00-17:00, 0.52 mi away."
+                  },
+                  {
+                    "category": "telehealth",
+                    "resource_record_id": null,
+                    "text": "Offer telehealth."
+                  },
+                  {
+                    "category": "phone_calls",
+                    "resource_record_id": null,
+                    "text": "Offer phone_calls."
+                  }
+                ]
+              },
+              {
+                "item_id": "P8",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "language_literacy",
+                    "reason": "Risk of misunderstanding instructions or labels.",
+                    "evidence": [
+                      "screener:language_literacy"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "interpreter",
+                    "resource_record_id": null,
+                    "text": "Offer interpreter."
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 5,
+      "latency_ms": 41844,
+      "usage": {
+        "prompt_tokens": 9026,
+        "total_tokens": 9841,
+        "completion_tokens": 815,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "[{\"item_id\": \"P1\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}, {\"item_id\": \"P2\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}, {\"item_id\": \"P3\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}, {\"item_id\": \"P4\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}, {\"item_id\": \"P5\", \"status\": \"at_risk\", \"barriers\": [{\"barrier\": \"transport\", \"reason\": \"No reliable way to get to the scheduled follow-up visits as written.\", \"evidence\": [\"tract:no_vehicle_share\", \"tract:places_lacktrpt\"]}], \"alternatives\": [{\"category\": \"nemt\", \"resource_record_id\": null, \"text\": \"Offer nemt.\"}, {\"category\": \"paratransit\", \"resource_record_id\": null, \"text\": \"Offer paratransit.\"}, {\"category\": \"schedule_change\", \"resource_record_id\": null, \"text\": \"Offer schedule_change.\"}]}, {\"item_id\": \"P6\", \"status\": \"at_risk\", \"barriers\": [{\"barrier\": \"food_access\", \"reason\": \"Limited access to foods that fit the recommended diet.\", \"evidence\": [\"screener:food_worry\"]}], \"alternatives\": [{\"category\": \"food_pantry\", \"resource_record_id\": \"SNAP1480852\", \"text\": \"Hyde Park Farmers Market: hours not listed; call ahead, 0.05 mi away.\"}, {\"category\": \"snap\", \"resource_record_id\": \"SNAP1480852\", \"text\": \"Hyde Park Farmers Market: hours not listed; call ahead, 0.05 mi away.\"}, {\"category\": \"medically_tailored_meals\", \"resource_record_id\": null, \"text\": \"Offer medically_tailored_meals.\"}]}, {\"item_id\": \"P7\", \"status\": \"at_risk\", \"barriers\": [{\"barrier\": \"digital_access\", \"reason\": \"No device or reliable internet for patient portal or telehealth.\", \"evidence\": [\"screener:digital_access\"]}], \"alternatives\": [{\"category\": \"library\", \"resource_record_id\": \"LIB010\", \"text\": \"Chicago Public Library, Blackstone branch: Mon 12:00-20:00; Tue 10:00-18:00; Wed 12:00-20:00; Thu 10:00-18:00; Fri 09:00-17:00; Sat 09:00-17:00; Sun 13:00-17:00, 0.52 mi away.\"}, {\"category\": \"telehealth\", \"resource_record_id\": null, \"text\": \"Offer telehealth.\"}, {\"category\": \"phone_calls\", \"resource_record_id\": null, \"text\": \"Offer phone_calls.\"}]}, {\"item_id\": \"P8\", \"status\": \"at_risk\", \"barriers\": [{\"barrier\": \"language_literacy\", \"reason\": \"Risk of misunderstanding instructions or labels.\", \"evidence\": [\"screener:language_literacy\"]}], \"alternatives\": [{\"category\": \"interpreter\", \"resource_record_id\": null, \"text\": \"Offer interpreter.\"}]}"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 6,
+      "latency_ms": 47366,
+      "usage": {
+        "prompt_tokens": 10708,
+        "total_tokens": 11480,
+        "completion_tokens": 772,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P5",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "No reliable way to get to the scheduled follow-up visits as written.",
+                    "evidence": [
+                      "tract:no_vehicle_share",
+                      "tract:places_lacktrpt"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Offer nemt."
+                  },
+                  {
+                    "category": "paratransit",
+                    "resource_record_id": null,
+                    "text": "Offer paratransit."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Offer schedule_change."
+                  }
+                ]
+              },
+              {
+                "item_id": "P6",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "Limited access to foods that fit the recommended diet.",
+                    "evidence": [
+                      "screener:food_worry"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "food_pantry",
+                    "resource_record_id": "SNAP1480852",
+                    "text": "Hyde Park Farmers Market: hours not listed; call ahead, 0.05 mi away."
+                  },
+                  {
+                    "category": "snap",
+                    "resource_record_id": "SNAP1480852",
+                    "text": "Hyde Park Farmers Market: hours not listed; call ahead, 0.05 mi away."
+                  },
+                  {
+                    "category": "medically_tailored_meals",
+                    "resource_record_id": null,
+                    "text": "Offer medically_tailored_meals."
+                  }
+                ]
+              },
+              {
+                "item_id": "P7",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "digital_access",
+                    "reason": "No device or reliable internet for patient portal or telehealth.",
+                    "evidence": [
+                      "screener:digital_access"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "library",
+                    "resource_record_id": "LIB010",
+                    "text": "Chicago Public Library, Blackstone branch: Mon 12:00-20:00; Tue 10:00-18:00; Wed 12:00-20:00; Thu 10:00-18:00; Fri 09:00-17:00; Sat 09:00-17:00; Sun 13:00-17:00, 0.52 mi away."
+                  },
+                  {
+                    "category": "telehealth",
+                    "resource_record_id": null,
+                    "text": "Offer telehealth."
+                  },
+                  {
+                    "category": "phone_calls",
+                    "resource_record_id": null,
+                    "text": "Offer phone_calls."
+                  }
+                ]
+              },
+              {
+                "item_id": "P8",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "language_literacy",
+                    "reason": "Risk of misunderstanding instructions or labels.",
+                    "evidence": [
+                      "screener:language_literacy"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "interpreter",
+                    "resource_record_id": null,
+                    "text": "Offer interpreter."
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 7,
+      "latency_ms": 2427,
+      "usage": {
+        "prompt_tokens": 11535,
+        "total_tokens": 11577,
+        "completion_tokens": 42,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_visit_transcript",
+          "args": {
+            "visit_id": "V-T009",
+            "topic": "any"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 8,
+      "latency_ms": 41093,
+      "usage": {
+        "prompt_tokens": 11994,
+        "total_tokens": 12766,
+        "completion_tokens": 772,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P5",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "No reliable way to get to the scheduled follow-up visits as written.",
+                    "evidence": [
+                      "tract:no_vehicle_share",
+                      "tract:places_lacktrpt"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Offer nemt."
+                  },
+                  {
+                    "category": "paratransit",
+                    "resource_record_id": null,
+                    "text": "Offer paratransit."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Offer schedule_change."
+                  }
+                ]
+              },
+              {
+                "item_id": "P6",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "Limited access to foods that fit the recommended diet.",
+                    "evidence": [
+                      "screener:food_worry"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "food_pantry",
+                    "resource_record_id": "SNAP1480852",
+                    "text": "Hyde Park Farmers Market: hours not listed; call ahead, 0.05 mi away."
+                  },
+                  {
+                    "category": "snap",
+                    "resource_record_id": "SNAP1480852",
+                    "text": "Hyde Park Farmers Market: hours not listed; call ahead, 0.05 mi away."
+                  },
+                  {
+                    "category": "medically_tailored_meals",
+                    "resource_record_id": null,
+                    "text": "Offer medically_tailored_meals."
+                  }
+                ]
+              },
+              {
+                "item_id": "P7",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "digital_access",
+                    "reason": "No device or reliable internet for patient portal or telehealth.",
+                    "evidence": [
+                      "screener:digital_access"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "library",
+                    "resource_record_id": "LIB010",
+                    "text": "Chicago Public Library, Blackstone branch: Mon 12:00-20:00; Tue 10:00-18:00; Wed 12:00-20:00; Thu 10:00-18:00; Fri 09:00-17:00; Sat 09:00-17:00; Sun 13:00-17:00, 0.52 mi away."
+                  },
+                  {
+                    "category": "telehealth",
+                    "resource_record_id": null,
+                    "text": "Offer telehealth."
+                  },
+                  {
+                    "category": "phone_calls",
+                    "resource_record_id": null,
+                    "text": "Offer phone_calls."
+                  }
+                ]
+              },
+              {
+                "item_id": "P8",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "language_literacy",
+                    "reason": "Risk of misunderstanding instructions or labels.",
+                    "evidence": [
+                      "screener:language_literacy"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "interpreter",
+                    "resource_record_id": null,
+                    "text": "Offer interpreter."
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 9,
+      "latency_ms": 7475,
+      "usage": {
+        "prompt_tokens": 12821,
+        "total_tokens": 12958,
+        "completion_tokens": 137,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031410800",
+            "need": "food"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031410800",
+            "need": "digital"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031410800",
+            "need": "language"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 10,
+      "latency_ms": 40818,
+      "usage": {
+        "prompt_tokens": 13063,
+        "total_tokens": 13835,
+        "completion_tokens": 772,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P5",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "No reliable way to get to the scheduled follow-up visits as written.",
+                    "evidence": [
+                      "tract:no_vehicle_share",
+                      "tract:places_lacktrpt"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Offer nemt."
+                  },
+                  {
+                    "category": "paratransit",
+                    "resource_record_id": null,
+                    "text": "Offer paratransit."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Offer schedule_change."
+                  }
+                ]
+              },
+              {
+                "item_id": "P6",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "Limited access to foods that fit the recommended diet.",
+                    "evidence": [
+                      "screener:food_worry"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "food_pantry",
+                    "resource_record_id": "SNAP1480852",
+                    "text": "Hyde Park Farmers Market: hours not listed; call ahead, 0.05 mi away."
+                  },
+                  {
+                    "category": "snap",
+                    "resource_record_id": "SNAP1480852",
+                    "text": "Hyde Park Farmers Market: hours not listed; call ahead, 0.05 mi away."
+                  },
+                  {
+                    "category": "medically_tailored_meals",
+                    "resource_record_id": null,
+                    "text": "Offer medically_tailored_meals."
+                  }
+                ]
+              },
+              {
+                "item_id": "P7",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "digital_access",
+                    "reason": "No device or reliable internet for patient portal or telehealth.",
+                    "evidence": [
+                      "screener:digital_access"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "library",
+                    "resource_record_id": "LIB010",
+                    "text": "Chicago Public Library, Blackstone branch: Mon 12:00-20:00; Tue 10:00-18:00; Wed 12:00-20:00; Thu 10:00-18:00; Fri 09:00-17:00; Sat 09:00-17:00; Sun 13:00-17:00, 0.52 mi away."
+                  },
+                  {
+                    "category": "telehealth",
+                    "resource_record_id": null,
+                    "text": "Offer telehealth."
+                  },
+                  {
+                    "category": "phone_calls",
+                    "resource_record_id": null,
+                    "text": "Offer phone_calls."
+                  }
+                ]
+              },
+              {
+                "item_id": "P8",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "language_literacy",
+                    "reason": "Risk of misunderstanding instructions or labels.",
+                    "evidence": [
+                      "screener:language_literacy"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "interpreter",
+                    "resource_record_id": null,
+                    "text": "Offer interpreter."
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 11,
+      "latency_ms": 1979,
+      "usage": {
+        "prompt_tokens": 13890,
+        "total_tokens": 13920,
+        "completion_tokens": 30,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T009"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 12,
+      "latency_ms": 57270,
+      "usage": {
+        "prompt_tokens": 13963,
+        "total_tokens": 14936,
+        "completion_tokens": 973,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P5",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "No reliable way to get to the scheduled follow-up visits as written.",
+                    "evidence": [
+                      "tract:no_vehicle_share",
+                      "tract:places_lacktrpt"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Offer nemt."
+                  },
+                  {
+                    "category": "paratransit",
+                    "resource_record_id": null,
+                    "text": "Offer paratransit."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Offer schedule_change."
+                  }
+                ]
+              },
+              {
+                "item_id": "HIV_management",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "Preventive_care",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "Screening",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "Followup",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "No reliable way to get to the scheduled follow-up visits as written.",
+                    "evidence": [
+                      "tract:no_vehicle_share",
+                      "tract:places_lacktrpt"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Offer nemt."
+                  },
+                  {
+                    "category": "paratransit",
+                    "resource_record_id": null,
+                    "text": "Offer paratransit."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Offer schedule_change."
+                  }
+                ]
+              },
+              {
+                "item_id": "Nutrition",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "Limited access to foods that fit the recommended diet.",
+                    "evidence": [
+                      "screener:food_worry"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "food_pantry",
+                    "resource_record_id": "SNAP1480852",
+                    "text": "Hyde Park Farmers Market: hours not listed; call ahead, 0.05 mi away."
+                  },
+                  {
+                    "category": "snap",
+                    "resource_record_id": "SNAP1480852",
+                    "text": "Hyde Park Farmers Market: hours not listed; call ahead, 0.05 mi away."
+                  },
+                  {
+                    "category": "medically_tailored_meals",
+                    "resource_record_id": null,
+                    "text": "Offer medically_tailored_meals."
+                  }
+                ]
+              },
+              {
+                "item_id": "Digital_access",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "digital_access",
+                    "reason": "No device or reliable internet for patient portal or telehealth.",
+                    "evidence": [
+                      "screener:digital_access"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "library",
+                    "resource_record_id": "LIB010",
+                    "text": "Chicago Public Library, Blackstone branch: Mon 12:00-20:00; Tue 10:00-18:00; Wed 12:00-20:00; Thu 10:00-18:00; Fri 09:00-17:00; Sat 09:00-17:00; Sun 13:00-17:00, 0.52 mi away."
+                  },
+                  {
+                    "category": "telehealth",
+                    "resource_record_id": null,
+                    "text": "Offer telehealth."
+                  },
+                  {
+                    "category": "phone_calls",
+                    "resource_record_id": null,
+                    "text": "Offer phone_calls."
+                  }
+                ]
+              },
+              {
+                "item_id": "Health_literacy",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "language_literacy",
+                    "reason": "Risk of misunderstanding instructions or labels.",
+                    "evidence": [
+                      "screener:language_literacy"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "interpreter",
+                    "resource_record_id": null,
+                    "text": "Offer interpreter."
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 13,
+      "latency_ms": 39332,
+      "usage": {
+        "prompt_tokens": 15101,
+        "total_tokens": 15873,
+        "completion_tokens": 772,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P5",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "No reliable way to get to the scheduled follow-up visits as written.",
+                    "evidence": [
+                      "tract:no_vehicle_share",
+                      "tract:places_lacktrpt"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Offer nemt."
+                  },
+                  {
+                    "category": "paratransit",
+                    "resource_record_id": null,
+                    "text": "Offer paratransit."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Offer schedule_change."
+                  }
+                ]
+              },
+              {
+                "item_id": "P6",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "Limited access to foods that fit the recommended diet.",
+                    "evidence": [
+                      "screener:food_worry"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "food_pantry",
+                    "resource_record_id": "SNAP1480852",
+                    "text": "Hyde Park Farmers Market: hours not listed; call ahead, 0.05 mi away."
+                  },
+                  {
+                    "category": "snap",
+                    "resource_record_id": "SNAP1480852",
+                    "text": "Hyde Park Farmers Market: hours not listed; call ahead, 0.05 mi away."
+                  },
+                  {
+                    "category": "medically_tailored_meals",
+                    "resource_record_id": null,
+                    "text": "Offer medically_tailored_meals."
+                  }
+                ]
+              },
+              {
+                "item_id": "P7",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "digital_access",
+                    "reason": "No device or reliable internet for patient portal or telehealth.",
+                    "evidence": [
+                      "screener:digital_access"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "library",
+                    "resource_record_id": "LIB010",
+                    "text": "Chicago Public Library, Blackstone branch: Mon 12:00-20:00; Tue 10:00-18:00; Wed 12:00-20:00; Thu 10:00-18:00; Fri 09:00-17:00; Sat 09:00-17:00; Sun 13:00-17:00, 0.52 mi away."
+                  },
+                  {
+                    "category": "telehealth",
+                    "resource_record_id": null,
+                    "text": "Offer telehealth."
+                  },
+                  {
+                    "category": "phone_calls",
+                    "resource_record_id": null,
+                    "text": "Offer phone_calls."
+                  }
+                ]
+              },
+              {
+                "item_id": "P8",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "language_literacy",
+                    "reason": "Risk of misunderstanding instructions or labels.",
+                    "evidence": [
+                      "screener:language_literacy"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "interpreter",
+                    "resource_record_id": null,
+                    "text": "Offer interpreter."
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 14,
+      "latency_ms": 41330,
+      "usage": {
+        "prompt_tokens": 15954,
+        "total_tokens": 16726,
+        "completion_tokens": 772,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P5",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "No reliable way to get to the scheduled follow-up visits as written.",
+                    "evidence": [
+                      "tract:no_vehicle_share",
+                      "tract:places_lacktrpt"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Offer nemt."
+                  },
+                  {
+                    "category": "paratransit",
+                    "resource_record_id": null,
+                    "text": "Offer paratransit."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Offer schedule_change."
+                  }
+                ]
+              },
+              {
+                "item_id": "P6",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "Limited access to foods that fit the recommended diet.",
+                    "evidence": [
+                      "screener:food_worry"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "food_pantry",
+                    "resource_record_id": "SNAP1480852",
+                    "text": "Hyde Park Farmers Market: hours not listed; call ahead, 0.05 mi away."
+                  },
+                  {
+                    "category": "snap",
+                    "resource_record_id": "SNAP1480852",
+                    "text": "Hyde Park Farmers Market: hours not listed; call ahead, 0.05 mi away."
+                  },
+                  {
+                    "category": "medically_tailored_meals",
+                    "resource_record_id": null,
+                    "text": "Offer medically_tailored_meals."
+                  }
+                ]
+              },
+              {
+                "item_id": "P7",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "digital_access",
+                    "reason": "No device or reliable internet for patient portal or telehealth.",
+                    "evidence": [
+                      "screener:digital_access"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "library",
+                    "resource_record_id": "LIB010",
+                    "text": "Chicago Public Library, Blackstone branch: Mon 12:00-20:00; Tue 10:00-18:00; Wed 12:00-20:00; Thu 10:00-18:00; Fri 09:00-17:00; Sat 09:00-17:00; Sun 13:00-17:00, 0.52 mi away."
+                  },
+                  {
+                    "category": "telehealth",
+                    "resource_record_id": null,
+                    "text": "Offer telehealth."
+                  },
+                  {
+                    "category": "phone_calls",
+                    "resource_record_id": null,
+                    "text": "Offer phone_calls."
+                  }
+                ]
+              },
+              {
+                "item_id": "P8",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "language_literacy",
+                    "reason": "Risk of misunderstanding instructions or labels.",
+                    "evidence": [
+                      "screener:language_literacy"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "interpreter",
+                    "resource_record_id": null,
+                    "text": "Offer interpreter."
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 15,
+      "latency_ms": 2943,
+      "usage": {
+        "prompt_tokens": 16781,
+        "total_tokens": 16823,
+        "completion_tokens": 42,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_visit_transcript",
+          "args": {
+            "visit_id": "V-T009",
+            "topic": "any"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 16,
+      "latency_ms": 38327,
+      "usage": {
+        "prompt_tokens": 16866,
+        "total_tokens": 17638,
+        "completion_tokens": 772,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P5",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "No reliable way to get to the scheduled follow-up visits as written.",
+                    "evidence": [
+                      "tract:no_vehicle_share",
+                      "tract:places_lacktrpt"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Offer nemt."
+                  },
+                  {
+                    "category": "paratransit",
+                    "resource_record_id": null,
+                    "text": "Offer paratransit."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Offer schedule_change."
+                  }
+                ]
+              },
+              {
+                "item_id": "P6",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "Limited access to foods that fit the recommended diet.",
+                    "evidence": [
+                      "screener:food_worry"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "food_pantry",
+                    "resource_record_id": "SNAP1480852",
+                    "text": "Hyde Park Farmers Market: hours not listed; call ahead, 0.05 mi away."
+                  },
+                  {
+                    "category": "snap",
+                    "resource_record_id": "SNAP1480852",
+                    "text": "Hyde Park Farmers Market: hours not listed; call ahead, 0.05 mi away."
+                  },
+                  {
+                    "category": "medically_tailored_meals",
+                    "resource_record_id": null,
+                    "text": "Offer medically_tailored_meals."
+                  }
+                ]
+              },
+              {
+                "item_id": "P7",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "digital_access",
+                    "reason": "No device or reliable internet for patient portal or telehealth.",
+                    "evidence": [
+                      "screener:digital_access"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "library",
+                    "resource_record_id": "LIB010",
+                    "text": "Chicago Public Library, Blackstone branch: Mon 12:00-20:00; Tue 10:00-18:00; Wed 12:00-20:00; Thu 10:00-18:00; Fri 09:00-17:00; Sat 09:00-17:00; Sun 13:00-17:00, 0.52 mi away."
+                  },
+                  {
+                    "category": "telehealth",
+                    "resource_record_id": null,
+                    "text": "Offer telehealth."
+                  },
+                  {
+                    "category": "phone_calls",
+                    "resource_record_id": null,
+                    "text": "Offer phone_calls."
+                  }
+                ]
+              },
+              {
+                "item_id": "P8",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "language_literacy",
+                    "reason": "Risk of misunderstanding instructions or labels.",
+                    "evidence": [
+                      "screener:language_literacy"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "interpreter",
+                    "resource_record_id": null,
+                    "text": "Offer interpreter."
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

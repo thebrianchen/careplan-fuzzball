@@ -1,0 +1,57 @@
+{
+  "started": "20261114T224126Z",
+  "git": null,
+  "conditions": {
+    "C3": "8 typed tools, smaller planner"
+  },
+  "profiles": {
+    "C3": {
+      "name": "nano-lora-vllm",
+      "model": "planner",
+      "base_url": "http://reader:8000/v1",
+      "api_key_env": "VLLM_API_KEY",
+      "temperature": 1.0,
+      "top_p": 0.95,
+      "max_tokens": 8192,
+      "tool_mode": "native",
+      "quantization": "bf16 + LoRA",
+      "extra_body": {
+        "chat_template_kwargs": {
+          "enable_thinking": false
+        }
+      },
+      "template_dir": null,
+      "base_url_env": "READER_URL"
+    }
+  },
+  "reps": 1,
+  "prefetch": false,
+  "final": "tool",
+  "signals": false,
+  "tract_table": "/code/app/data/processed/tracts.csv",
+  "tract_table_is_fixture": false,
+  "resource_table": "/code/app/data/processed/resources.csv",
+  "cases": {
+    "T001": "8fbc3a121f010401c5301b2a8e4589364d9550ca1d48a0eaaaa511b3beb6c3f0",
+    "T002": "05078cbf037e5d034898b02d02bad4088fe31a2b594eaa76a7274c9f534908bf",
+    "T003": "87a4c797245ec0568c6f4e5e52708201307f36f2d0e2140c27183b157015d1cd",
+    "T004": "c42124b12238bd212c2bda8440f3b9f0ca25d1de0bfe96bc99b47af6cfc13ff3",
+    "T005": "a8941e7c137ff91a7cb4ab42e9c2f7a89b918b9c2599daddbf948ab1928c4a4c",
+    "T006": "a14596b0af3d707595067b7e9bd011b3a307eee6f499af0dbb40dc04857efc7b",
+    "T007": "8104ebfd988f1c6dda18c87509bade1f9cce9fa979136407091008879ac5804f",
+    "T008": "53fa24684897fb279b0047701fede5a9dc8494e565f02d550c06c59917149011",
+    "T009": "23e9f295dc77d3455fdefd185568f5a8ceb51ce9a631ae179a2b833a8d889214",
+    "T010": "29634a05c2f83437de3180b5170469a98066ace21c0613c9a61335b1851e06cf",
+    "T011": "b264c6ce91d33bd31f4945333345e2ea7ce6fb1fe1c67f890448fcf9df064e5e",
+    "T012": "6507afc21228c7144e681a7779dba2884fdf0a168a3188731193d5c0f0a4361a",
+    "T013": "aac86e4ad0a104270922a7ab398a9d5d0306b360aa08f95d346697390ac15309",
+    "T014": "7d588a6ee104898fc4119a575a4e332996cef84dc96c1113417c221512a4c6b2",
+    "T015": "6b54f28b508ae174dd95427f6f1fa44ed4403590bc01115da366cc2af69450bc",
+    "T016": "83f500e9abdc5b7126dadaa8788dd16f67c815d317c282b00d2f1378b01a87bd",
+    "T017": "514e471c56213353415733d75e65bd3028a18af0d5e47fe3dec42e9aae385934",
+    "T018": "5b52d1b6f86c2bd801b751beae6d5e3de1242859132b686c1e2c37556dc8987c",
+    "T019": "c14c8045993a4f0c10aed4816592a3a23db28b28739fd69b314b903b21586d76",
+    "T020": "1ba15c859fb987045b31179a64e136cb68e88343d8c22f2d1de52c705aed8ca7"
+  },
+  "unfrozen_warnings": []
+}

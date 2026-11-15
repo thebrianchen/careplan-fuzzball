@@ -1,0 +1,68 @@
+{
+  "case_id": "T005",
+  "condition": "C3",
+  "rep": 1,
+  "profile": "nano-base-vllm",
+  "assessment": null,
+  "error": "model stopped without calling submit_assessment",
+  "steps": 3,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 15936,
+    "completion_tokens": 1941
+  },
+  "latency_ms": 105607,
+  "wall_s": 105.64,
+  "log": [
+    {
+      "prompt_sha256": "9c8789d639cb93c2f34a1f6a9b0a355b92d7a99e140dc966ad8aaa33cce74ec4",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 36080,
+      "usage": {
+        "prompt_tokens": 4640,
+        "total_tokens": 5287,
+        "completion_tokens": 647,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "{\n  \"items\": [\n    {\n      \"item_id\": \"P1\",\n      \"status\": \"likely_ok\",\n      \"barriers\": [],\n      \"alternatives\": []\n    },\n    {\n      \"item_id\": \"P2\",\n      \"status\": \"blocked\",\n      \"barriers\": [\n        {\n          \"barrier\": \"transport\",\n          \"reason\": \"Caregiver cannot arrange childcare for infant; no responsible adult available for travel\",\n          \"evidence\": [\n            \"turn:T08\",\n            \"turn:T10\"\n          ]\n        },\n        {\n          \"barrier\": \"work_schedule\",\n          \"reason\": \"Sister works mornings, limiting childcare options\",\n          \"evidence\": [\n            \"turn:T08\",\n            \"turn:T10\"\n          ]\n        }\n      ],\n      \"alternatives\": [\n        {\n          \"category\": \"schedule_change\",\n          \"resource_record_id\": null,\n          \"text\": \"Request a later clinic chair time or alternate weekday to coordinate with sister's availability\"\n        },\n        {\n          \"category\": \"coordinate_with_existing_visit\",\n          \"resource_record_id\": null,\n          \"text\": \"Schedule allergy visit on same day as another appointment to reduce trips\"\n        },\n        {\n          \"category\": \"home_dialysis_evaluation\",\n          \"resource_record_id\": null,\n          \"text\": \"Explore home allergy testing or tele\u2011visit option to avoid travel\"\n        }\n      ]\n    },\n    {\n      \"item_id\": \"P3\",\n      \"status\": \"likely_ok\",\n      \"barriers\": [],\n      \"alternatives\": []\n    },\n    {\n      \"item_id\": \"P4\",\n      \"status\": \"likely_ok\",\n      \"barriers\": [],\n      \"alternatives\": []\n    },\n    {\n      \"item_id\": \"P5\",\n      \"status\": \"at_risk\",\n      \"barriers\": [\n        {\n          \"barrier\": \"transport\",\n          \"reason\": \"Roosevelt bus may not run reliably early morning; no backup ride identified\",\n          \"evidence\": [\n            \"turn:T12\",\n            \"tract:roosevelt_bus_service\",\n            \"appt:2\"\n          ]\n        }\n      ],\n      \"alternatives\": [\n        {\n          \"category\": \"ada_paratransit\",\n     ",
+      "tool_calls": []
+    },
+    {
+      "step": 2,
+      "latency_ms": 34300,
+      "usage": {
+        "prompt_tokens": 5312,
+        "total_tokens": 5959,
+        "completion_tokens": 647,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "{\n  \"items\": [\n    {\n      \"item_id\": \"P1\",\n      \"status\": \"likely_ok\",\n      \"barriers\": [],\n      \"alternatives\": []\n    },\n    {\n      \"item_id\": \"P2\",\n      \"status\": \"blocked\",\n      \"barriers\": [\n        {\n          \"barrier\": \"transport\",\n          \"reason\": \"Caregiver cannot arrange childcare for infant; no responsible adult available for travel\",\n          \"evidence\": [\n            \"turn:T08\",\n            \"turn:T10\"\n          ]\n        },\n        {\n          \"barrier\": \"work_schedule\",\n          \"reason\": \"Sister works mornings, limiting childcare options\",\n          \"evidence\": [\n            \"turn:T08\",\n            \"turn:T10\"\n          ]\n        }\n      ],\n      \"alternatives\": [\n        {\n          \"category\": \"schedule_change\",\n          \"resource_record_id\": null,\n          \"text\": \"Request a later clinic chair time or alternate weekday to coordinate with sister's availability\"\n        },\n        {\n          \"category\": \"coordinate_with_existing_visit\",\n          \"resource_record_id\": null,\n          \"text\": \"Schedule allergy visit on same day as another appointment to reduce trips\"\n        },\n        {\n          \"category\": \"home_dialysis_evaluation\",\n          \"resource_record_id\": null,\n          \"text\": \"Explore home allergy testing or tele\u2011visit option to avoid travel\"\n        }\n      ]\n    },\n    {\n      \"item_id\": \"P3\",\n      \"status\": \"likely_ok\",\n      \"barriers\": [],\n      \"alternatives\": []\n    },\n    {\n      \"item_id\": \"P4\",\n      \"status\": \"likely_ok\",\n      \"barriers\": [],\n      \"alternatives\": []\n    },\n    {\n      \"item_id\": \"P5\",\n      \"status\": \"at_risk\",\n      \"barriers\": [\n        {\n          \"barrier\": \"transport\",\n          \"reason\": \"Roosevelt bus may not run reliably early morning; no backup ride identified\",\n          \"evidence\": [\n            \"turn:T12\",\n            \"tract:roosevelt_bus_service\",\n            \"appt:2\"\n          ]\n        }\n      ],\n      \"alternatives\": [\n        {\n          \"category\": \"ada_paratransit\",\n     ",
+      "tool_calls": []
+    },
+    {
+      "step": 3,
+      "latency_ms": 35227,
+      "usage": {
+        "prompt_tokens": 5984,
+        "total_tokens": 6631,
+        "completion_tokens": 647,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "{\n  \"items\": [\n    {\n      \"item_id\": \"P1\",\n      \"status\": \"likely_ok\",\n      \"barriers\": [],\n      \"alternatives\": []\n    },\n    {\n      \"item_id\": \"P2\",\n      \"status\": \"blocked\",\n      \"barriers\": [\n        {\n          \"barrier\": \"transport\",\n          \"reason\": \"Caregiver cannot arrange childcare for infant; no responsible adult available for travel\",\n          \"evidence\": [\n            \"turn:T08\",\n            \"turn:T10\"\n          ]\n        },\n        {\n          \"barrier\": \"work_schedule\",\n          \"reason\": \"Sister works mornings, limiting childcare options\",\n          \"evidence\": [\n            \"turn:T08\",\n            \"turn:T10\"\n          ]\n        }\n      ],\n      \"alternatives\": [\n        {\n          \"category\": \"schedule_change\",\n          \"resource_record_id\": null,\n          \"text\": \"Request a later clinic chair time or alternate weekday to coordinate with sister's availability\"\n        },\n        {\n          \"category\": \"coordinate_with_existing_visit\",\n          \"resource_record_id\": null,\n          \"text\": \"Schedule allergy visit on same day as another appointment to reduce trips\"\n        },\n        {\n          \"category\": \"home_dialysis_evaluation\",\n          \"resource_record_id\": null,\n          \"text\": \"Explore home allergy testing or tele\u2011visit option to avoid travel\"\n        }\n      ]\n    },\n    {\n      \"item_id\": \"P3\",\n      \"status\": \"likely_ok\",\n      \"barriers\": [],\n      \"alternatives\": []\n    },\n    {\n      \"item_id\": \"P4\",\n      \"status\": \"likely_ok\",\n      \"barriers\": [],\n      \"alternatives\": []\n    },\n    {\n      \"item_id\": \"P5\",\n      \"status\": \"at_risk\",\n      \"barriers\": [\n        {\n          \"barrier\": \"transport\",\n          \"reason\": \"Roosevelt bus may not run reliably early morning; no backup ride identified\",\n          \"evidence\": [\n            \"turn:T12\",\n            \"tract:roosevelt_bus_service\",\n            \"appt:2\"\n          ]\n        }\n      ],\n      \"alternatives\": [\n        {\n          \"category\": \"ada_paratransit\",\n     ",
+      "tool_calls": []
+    }
+  ]
+}

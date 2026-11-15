@@ -1,0 +1,627 @@
+{
+  "case_id": "T001",
+  "condition": "C3",
+  "rep": 1,
+  "profile": "nano-base-vllm",
+  "assessment": null,
+  "error": "no valid assessment after 16 steps",
+  "steps": 16,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T001"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T001"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T001"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T001",
+        "window_days": 90,
+        "dept": "dialysis"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T001"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031660500"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031660500",
+        "need": "transport",
+        "days": [
+          "Tue",
+          "Thu",
+          "Sat"
+        ],
+        "start": "07:00",
+        "end": "14:00"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031660500",
+        "need": "food",
+        "days": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri"
+        ],
+        "start": "09:00",
+        "end": "12:00"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031660500",
+        "need": "med_cost",
+        "days": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri",
+          "Sat",
+          "Sun"
+        ],
+        "start": "09:00",
+        "end": "17:00"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031660500",
+        "need": "housing",
+        "days": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri"
+        ],
+        "start": "09:00",
+        "end": "17:00"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031660500",
+        "need": "caregiving",
+        "days": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri"
+        ],
+        "start": "09:00",
+        "end": "17:00"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031660500",
+        "need": "language",
+        "days": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri"
+        ],
+        "start": "09:00",
+        "end": "17:00"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031660500",
+        "need": "digital",
+        "days": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri"
+        ],
+        "start": "09:00",
+        "end": "17:00"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 128826,
+    "completion_tokens": 2781
+  },
+  "latency_ms": 154894,
+  "wall_s": 154.98,
+  "log": [
+    {
+      "prompt_sha256": "7cbcc91a7aaa513caefd77f4ba2b65d2a81088094871888c2cb3a8b1f6a00258",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 8015,
+      "usage": {
+        "prompt_tokens": 4664,
+        "total_tokens": 4693,
+        "completion_tokens": 29,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T001"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 1786,
+      "usage": {
+        "prompt_tokens": 4819,
+        "total_tokens": 4849,
+        "completion_tokens": 30,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T001"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 1838,
+      "usage": {
+        "prompt_tokens": 5036,
+        "total_tokens": 5067,
+        "completion_tokens": 31,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T001"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 2982,
+      "usage": {
+        "prompt_tokens": 5285,
+        "total_tokens": 5340,
+        "completion_tokens": 55,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T001",
+            "window_days": 90,
+            "dept": "dialysis"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 5,
+      "latency_ms": 2843,
+      "usage": {
+        "prompt_tokens": 6150,
+        "total_tokens": 6181,
+        "completion_tokens": 31,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T001"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 6,
+      "latency_ms": 2672,
+      "usage": {
+        "prompt_tokens": 6387,
+        "total_tokens": 6424,
+        "completion_tokens": 37,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031660500"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 7,
+      "latency_ms": 4724,
+      "usage": {
+        "prompt_tokens": 7055,
+        "total_tokens": 7148,
+        "completion_tokens": 93,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031660500",
+            "need": "transport",
+            "days": [
+              "Tue",
+              "Thu",
+              "Sat"
+            ],
+            "start": "07:00",
+            "end": "14:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 8,
+      "latency_ms": 5058,
+      "usage": {
+        "prompt_tokens": 7165,
+        "total_tokens": 7265,
+        "completion_tokens": 100,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031660500",
+            "need": "food",
+            "days": [
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri"
+            ],
+            "start": "09:00",
+            "end": "12:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 9,
+      "latency_ms": 5959,
+      "usage": {
+        "prompt_tokens": 8161,
+        "total_tokens": 8268,
+        "completion_tokens": 107,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031660500",
+            "need": "med_cost",
+            "days": [
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri",
+              "Sat",
+              "Sun"
+            ],
+            "start": "09:00",
+            "end": "17:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 10,
+      "latency_ms": 5816,
+      "usage": {
+        "prompt_tokens": 9191,
+        "total_tokens": 9292,
+        "completion_tokens": 101,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031660500",
+            "need": "housing",
+            "days": [
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri"
+            ],
+            "start": "09:00",
+            "end": "17:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 11,
+      "latency_ms": 8486,
+      "usage": {
+        "prompt_tokens": 9309,
+        "total_tokens": 9410,
+        "completion_tokens": 101,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031660500",
+            "need": "caregiving",
+            "days": [
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri"
+            ],
+            "start": "09:00",
+            "end": "17:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 12,
+      "latency_ms": 5105,
+      "usage": {
+        "prompt_tokens": 9427,
+        "total_tokens": 9527,
+        "completion_tokens": 100,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031660500",
+            "need": "language",
+            "days": [
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri"
+            ],
+            "start": "09:00",
+            "end": "17:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 13,
+      "latency_ms": 5121,
+      "usage": {
+        "prompt_tokens": 9544,
+        "total_tokens": 9644,
+        "completion_tokens": 100,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031660500",
+            "need": "digital",
+            "days": [
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri"
+            ],
+            "start": "09:00",
+            "end": "17:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 14,
+      "latency_ms": 32853,
+      "usage": {
+        "prompt_tokens": 10914,
+        "total_tokens": 11536,
+        "completion_tokens": 622,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "[{\"item_id\": \"P1\", \"status\": \"blocked\", \"barriers\": [{\"barrier\": \"transport\", \"reason\": \"Patient reports no reliable ride Thursdays due to childcare responsibilities and no public transit access; patient must drive 10 minutes, likely cannot attend Thursday sessions\", \"evidence\": [\"turn:T02\", \"turn:T04\", \"tract:no_vehicle_share\"]}], \"alternatives\": [{\"category\": \"nmt\", \"resource_record_id\": \"HC09064\", \"text\": \"Ask social work to arrange Medicaid Non-Emergency Medical Transportation; can schedule rides to dialysis unit\"}, {\"category\": \"ada_paratransit\", \"resource_record_id\": \"PLcf547c4e\", \"text\": \"Apply for ADA Paratransit certification through NICTA (312-663-HELP); eligible due to childcare constraint preventing bus use\"}, {\"category\": \"schedule_change\", \"resource_record_id\": null, \"text\": \"Request a later chair time on Thursdays to align with childcare availability or switch to Tuesdays/Saturdays that patient can drive\"} }, {\"item_id\": \"P2\", \"status\": \"at_risk\", \"barriers\": [{\"barrier\": \"food_access\", \"reason\": \"Patient relies on processed meats and boxed macaroni for dinner, uses SNAP sporadically, and lives in a low-income area with limited fresh produce options\", \"evidence\": [\"turn:T08\", \"screener:food_worry\", \"tract:places_lacktrpt\"]}], \"alternatives\": [{\"category\": \"food_pantry\", \"resource_record_id\": \"PLcf547c4e\", \"text\": \"Visit Sanad Organization pantry (0.31\u202fmi away) on non\u2011treatment days; hours not listed, call ahead\"}, {\"category\": \"food_pantry\", \"resource_record_id\": \"PLf7cc17f1\", \"text\": \"Visit Beth Shalom B'nai Zaken E.H.C. pantry (0.31\u202fmi away); call ahead for hours\"}, {\"category\": \"renal_dietitian\", \"resource_record_id\": null, \"text\": \"Ask unit dietitian to tailor renal diet to foods patient can obtain locally, such as fresh produce from nearby markets\"} }, {\"item_id\": \"P3\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": [] }, {\"item_id\": \"P4\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": [] }, {\"item_id\": \"P5\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": [] }]"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 15,
+      "latency_ms": 30266,
+      "usage": {
+        "prompt_tokens": 12211,
+        "total_tokens": 12833,
+        "completion_tokens": 622,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "[{\"item_id\": \"P1\", \"status\": \"blocked\", \"barriers\": [{\"barrier\": \"transport\", \"reason\": \"Patient reports no reliable ride Thursdays due to childcare responsibilities and no public transit access; patient must drive 10 minutes, likely cannot attend Thursday sessions\", \"evidence\": [\"turn:T02\", \"turn:T04\", \"tract:no_vehicle_share\"]}], \"alternatives\": [{\"category\": \"nmt\", \"resource_record_id\": \"HC09064\", \"text\": \"Ask social work to arrange Medicaid Non-Emergency Medical Transportation; can schedule rides to dialysis unit\"}, {\"category\": \"ada_paratransit\", \"resource_record_id\": \"PLcf547c4e\", \"text\": \"Apply for ADA Paratransit certification through NICTA (312-663-HELP); eligible due to childcare constraint preventing bus use\"}, {\"category\": \"schedule_change\", \"resource_record_id\": null, \"text\": \"Request a later chair time on Thursdays to align with childcare availability or switch to Tuesdays/Saturdays that patient can drive\"} }, {\"item_id\": \"P2\", \"status\": \"at_risk\", \"barriers\": [{\"barrier\": \"food_access\", \"reason\": \"Patient relies on processed meats and boxed macaroni for dinner, uses SNAP sporadically, and lives in a low-income area with limited fresh produce options\", \"evidence\": [\"turn:T08\", \"screener:food_worry\", \"tract:places_lacktrpt\"]}], \"alternatives\": [{\"category\": \"food_pantry\", \"resource_record_id\": \"PLcf547c4e\", \"text\": \"Visit Sanad Organization pantry (0.31\u202fmi away) on non\u2011treatment days; hours not listed, call ahead\"}, {\"category\": \"food_pantry\", \"resource_record_id\": \"PLf7cc17f1\", \"text\": \"Visit Beth Shalom B'nai Zaken E.H.C. pantry (0.31\u202fmi away); call ahead for hours\"}, {\"category\": \"renal_dietitian\", \"resource_record_id\": null, \"text\": \"Ask unit dietitian to tailor renal diet to foods patient can obtain locally, such as fresh produce from nearby markets\"} }, {\"item_id\": \"P3\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": [] }, {\"item_id\": \"P4\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": [] }, {\"item_id\": \"P5\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": [] }]"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 16,
+      "latency_ms": 31370,
+      "usage": {
+        "prompt_tokens": 13508,
+        "total_tokens": 14130,
+        "completion_tokens": 622,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "[{\"item_id\": \"P1\", \"status\": \"blocked\", \"barriers\": [{\"barrier\": \"transport\", \"reason\": \"Patient reports no reliable ride Thursdays due to childcare responsibilities and no public transit access; patient must drive 10 minutes, likely cannot attend Thursday sessions\", \"evidence\": [\"turn:T02\", \"turn:T04\", \"tract:no_vehicle_share\"]}], \"alternatives\": [{\"category\": \"nmt\", \"resource_record_id\": \"HC09064\", \"text\": \"Ask social work to arrange Medicaid Non-Emergency Medical Transportation; can schedule rides to dialysis unit\"}, {\"category\": \"ada_paratransit\", \"resource_record_id\": \"PLcf547c4e\", \"text\": \"Apply for ADA Paratransit certification through NICTA (312-663-HELP); eligible due to childcare constraint preventing bus use\"}, {\"category\": \"schedule_change\", \"resource_record_id\": null, \"text\": \"Request a later chair time on Thursdays to align with childcare availability or switch to Tuesdays/Saturdays that patient can drive\"} }, {\"item_id\": \"P2\", \"status\": \"at_risk\", \"barriers\": [{\"barrier\": \"food_access\", \"reason\": \"Patient relies on processed meats and boxed macaroni for dinner, uses SNAP sporadically, and lives in a low-income area with limited fresh produce options\", \"evidence\": [\"turn:T08\", \"screener:food_worry\", \"tract:places_lacktrpt\"]}], \"alternatives\": [{\"category\": \"food_pantry\", \"resource_record_id\": \"PLcf547c4e\", \"text\": \"Visit Sanad Organization pantry (0.31\u202fmi away) on non\u2011treatment days; hours not listed, call ahead\"}, {\"category\": \"food_pantry\", \"resource_record_id\": \"PLf7cc17f1\", \"text\": \"Visit Beth Shalom B'nai Zaken E.H.C. pantry (0.31\u202fmi away); call ahead for hours\"}, {\"category\": \"renal_dietitian\", \"resource_record_id\": null, \"text\": \"Ask unit dietitian to tailor renal diet to foods patient can obtain locally, such as fresh produce from nearby markets\"} }, {\"item_id\": \"P3\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": [] }, {\"item_id\": \"P4\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": [] }, {\"item_id\": \"P5\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": [] }]"
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

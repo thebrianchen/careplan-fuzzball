@@ -1,0 +1,644 @@
+{
+  "case_id": "T008",
+  "condition": "C3",
+  "rep": 1,
+  "profile": "nano-lora-vllm",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "likely_ok"
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok"
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok"
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok"
+      },
+      {
+        "item_id": "P5",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "No reliable way to get there as scheduled.",
+            "evidence": [
+              "transit:appt:3"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "nemt",
+            "resource_record_id": null,
+            "text": "Offer nemt."
+          },
+          {
+            "category": "paratransit",
+            "resource_record_id": null,
+            "text": "Offer paratransit."
+          }
+        ]
+      }
+    ]
+  },
+  "error": null,
+  "steps": 10,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T008"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T008"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T008"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T008"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T008"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031200010"
+      },
+      "ok": false
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031100200"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_visit_transcript",
+      "args": {
+        "visit_id": "V-T008",
+        "topic": "transport"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_visit_transcript",
+      "args": {
+        "visit_id": "V-T008",
+        "topic": "caregiving"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031100200",
+        "need": "transport",
+        "days": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri"
+        ]
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_visit_transcript",
+      "args": {
+        "visit_id": "V-T008",
+        "topic": "any"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 67035,
+    "completion_tokens": 1368
+  },
+  "latency_ms": 74569,
+  "wall_s": 74.63,
+  "log": [
+    {
+      "prompt_sha256": "9f28056c1d5f55108c03bddb5c61aa22df90711e8b9a4548f3abaf12ac172d3a",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 11735,
+      "usage": {
+        "prompt_tokens": 4536,
+        "total_tokens": 4716,
+        "completion_tokens": 180,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T008"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T008"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T008"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T008"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T008"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031200010"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 2229,
+      "usage": {
+        "prompt_tokens": 5690,
+        "total_tokens": 5727,
+        "completion_tokens": 37,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031100200"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 4848,
+      "usage": {
+        "prompt_tokens": 6351,
+        "total_tokens": 6434,
+        "completion_tokens": 83,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_visit_transcript",
+          "args": {
+            "visit_id": "V-T008",
+            "topic": "transport"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_visit_transcript",
+          "args": {
+            "visit_id": "V-T008",
+            "topic": "caregiving"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 3731,
+      "usage": {
+        "prompt_tokens": 6572,
+        "total_tokens": 6644,
+        "completion_tokens": 72,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031100200",
+            "need": "transport",
+            "days": [
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri"
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 5,
+      "latency_ms": 6124,
+      "usage": {
+        "prompt_tokens": 6661,
+        "total_tokens": 6778,
+        "completion_tokens": 117,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P5",
+                "status": "at_risk"
+              },
+              {
+                "item_id": "P6",
+                "status": "likely_ok"
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 6,
+      "latency_ms": 10269,
+      "usage": {
+        "prompt_tokens": 6837,
+        "total_tokens": 7050,
+        "completion_tokens": 213,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P5",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "No reliable way to get there as scheduled.",
+                    "evidence": [
+                      "transit:appt:3"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Offer nemt."
+                  },
+                  {
+                    "category": "paratransit",
+                    "resource_record_id": null,
+                    "text": "Offer paratransit."
+                  }
+                ]
+              },
+              {
+                "item_id": "P6",
+                "status": "likely_ok"
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 7,
+      "latency_ms": 12017,
+      "usage": {
+        "prompt_tokens": 7097,
+        "total_tokens": 7310,
+        "completion_tokens": 213,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P5",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "No reliable way to get there as scheduled.",
+                    "evidence": [
+                      "transit:appt:3"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Offer nemt."
+                  },
+                  {
+                    "category": "paratransit",
+                    "resource_record_id": null,
+                    "text": "Offer paratransit."
+                  }
+                ]
+              },
+              {
+                "item_id": "P6",
+                "status": "likely_ok"
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 8,
+      "latency_ms": 2445,
+      "usage": {
+        "prompt_tokens": 7357,
+        "total_tokens": 7399,
+        "completion_tokens": 42,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_visit_transcript",
+          "args": {
+            "visit_id": "V-T008",
+            "topic": "any"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 9,
+      "latency_ms": 10839,
+      "usage": {
+        "prompt_tokens": 7837,
+        "total_tokens": 8050,
+        "completion_tokens": 213,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P5",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "No reliable way to get there as scheduled.",
+                    "evidence": [
+                      "transit:appt:3"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Offer nemt."
+                  },
+                  {
+                    "category": "paratransit",
+                    "resource_record_id": null,
+                    "text": "Offer paratransit."
+                  }
+                ]
+              },
+              {
+                "item_id": "P6",
+                "status": "likely_ok"
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 10,
+      "latency_ms": 10332,
+      "usage": {
+        "prompt_tokens": 8097,
+        "total_tokens": 8295,
+        "completion_tokens": 198,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P5",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "No reliable way to get there as scheduled.",
+                    "evidence": [
+                      "transit:appt:3"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Offer nemt."
+                  },
+                  {
+                    "category": "paratransit",
+                    "resource_record_id": null,
+                    "text": "Offer paratransit."
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

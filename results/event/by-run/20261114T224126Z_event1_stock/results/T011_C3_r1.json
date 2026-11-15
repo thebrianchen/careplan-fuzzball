@@ -1,0 +1,568 @@
+{
+  "case_id": "T011",
+  "condition": "C3",
+  "rep": 1,
+  "profile": "nano-base-vllm",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "blocked",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "Appointment scheduled for Tuesdays 8:30\u202fAM but husband can only drive on infusion days (Thursdays) and no transport options identified; could miss infusions.",
+            "evidence": [
+              "turn:T05",
+              "turn:T07",
+              "tract:17031151200"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "ada_paratransit",
+            "resource_record_id": null,
+            "text": "Apply for ADA Paratransit certification through NICTA (312-663-HELP, weekdays 8:30\u20115:00). Service matches fixed\u2011route times, but requires certification before use."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 13,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T011"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T011"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T011",
+        "window_days": 90,
+        "dept": "infusion"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_visit_transcript",
+      "args": {
+        "visit_id": "V-T011",
+        "topic": "any"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "need": "transport",
+        "days": [
+          "Tue"
+        ],
+        "tract_id": "17031151200"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "need": "transport",
+        "days": [
+          "Mon"
+        ],
+        "tract_id": "17031151200"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 78778,
+    "completion_tokens": 2232
+  },
+  "latency_ms": 118759,
+  "wall_s": 118.82,
+  "log": [
+    {
+      "prompt_sha256": "531dfd0fb669f07706f8a96305ee4f37491d4d9fed042380a017081005ff5469",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 29948,
+      "usage": {
+        "prompt_tokens": 4630,
+        "total_tokens": 5210,
+        "completion_tokens": 580,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "",
+            "item_id": "P1",
+            "status": "at_risk",
+            "barriers": "",
+            "evidence": "[\"turn:T05\"]",
+            "reason": "Patient has appointment Tuesdays 8:30 AM; no evidence of transportation arranged; husband only available on infusion days (Thursdays) contradicts schedule; likely cannot attend Tue infusions.",
+            "alternatives": "",
+            "category": "medicaid_nemt",
+            "resource_record_id": "null",
+            "text": "Medicaid non-emergency medical transportation (coverage likely; call number on back of plan card for MCO or use Transdev for fee-for-service)."
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 1835,
+      "usage": {
+        "prompt_tokens": 4918,
+        "total_tokens": 4948,
+        "completion_tokens": 30,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T011"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 1862,
+      "usage": {
+        "prompt_tokens": 5093,
+        "total_tokens": 5124,
+        "completion_tokens": 31,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T011"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 4042,
+      "usage": {
+        "prompt_tokens": 5357,
+        "total_tokens": 5412,
+        "completion_tokens": 55,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T011",
+            "window_days": 90,
+            "dept": "infusion"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 5,
+      "latency_ms": 2442,
+      "usage": {
+        "prompt_tokens": 5429,
+        "total_tokens": 5471,
+        "completion_tokens": 42,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_visit_transcript",
+          "args": {
+            "visit_id": "V-T011",
+            "topic": "any"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 6,
+      "latency_ms": 3301,
+      "usage": {
+        "prompt_tokens": 6002,
+        "total_tokens": 6061,
+        "completion_tokens": 59,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "need": "transport",
+            "days": [
+              "Tue"
+            ],
+            "tract_id": "17031151200"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 7,
+      "latency_ms": 3251,
+      "usage": {
+        "prompt_tokens": 6078,
+        "total_tokens": 6136,
+        "completion_tokens": 58,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "need": "transport",
+            "days": [
+              "Mon"
+            ],
+            "tract_id": "17031151200"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 8,
+      "latency_ms": 10805,
+      "usage": {
+        "prompt_tokens": 6153,
+        "total_tokens": 6373,
+        "completion_tokens": 220,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "",
+            "item_id": "P1",
+            "status": "blocked",
+            "alternatives": "[{\"category\": \"ada_paratransit\", \"resource_record_id\": null, \"text\": \"Apply for ADA Paratransit certification through NICTA (312-663-HELP, weekdays 8:30\u20115:00). Service matches fixed\u2011route times, but requires certification before use.\"}]",
+            "barriers": "[{\"barrier\": \"transport\", \"evidence\": [\"turn:T05\", \"turn:T07\", \"home_tract:17031151200\"], \"reason\": \"Appointment scheduled for Tuesdays 8:30\u202fAM but husband can only drive on infusion days (Thursdays) and no transport options identified.\"}]"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 9,
+      "latency_ms": 11212,
+      "usage": {
+        "prompt_tokens": 6444,
+        "total_tokens": 6661,
+        "completion_tokens": 217,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "alternatives": "[{\"category\": \"ada_paratransit\", \"resource_record_id\": null, \"text\": \"Apply for ADA Paratransit certification through NICTA (312-663-HELP, weekdays 8:30\u20115:00). Service matches fixed\u2011route times, but requires certification before use.\"}]",
+            "status": "blocked",
+            "barriers": "[{\"barrier\": \"transport\", \"reason\": \"Appointment scheduled for Tuesdays 8:30\u202fAM but husband can only drive on infusion days (Thursdays) and no transport options identified; could miss infusions.\", \"evidence\": [\"turn:T05\", \"turn:T07\", \"home_tract:17031151200\"]}]",
+            "item_id": "P1"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 10,
+      "latency_ms": 10170,
+      "usage": {
+        "prompt_tokens": 6732,
+        "total_tokens": 6942,
+        "completion_tokens": 210,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "blocked",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Appointment scheduled for Tuesdays 8:30\u202fAM but husband can only drive on infusion days (Thursdays) and no transport options identified; could miss infusions.",
+                    "evidence": [
+                      "turn:T05",
+                      "turn:T07",
+                      "home_tract:17031151200"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "ada_paratransit",
+                    "resource_record_id": null,
+                    "text": "Apply for ADA Paratransit certification through NICTA (312-663-HELP, weekdays 8:30\u20115:00). Service matches fixed\u2011route times, but requires certification before use."
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 11,
+      "latency_ms": 13079,
+      "usage": {
+        "prompt_tokens": 7046,
+        "total_tokens": 7255,
+        "completion_tokens": 209,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "blocked",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Appointment scheduled for Tuesdays 8:30\u202fAM but husband can only drive on infusion days (Thursdays) and no transport options identified; could miss infusions.",
+                    "evidence": [
+                      "turn:T05",
+                      "turn:T07",
+                      "tract:17031151200"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "ada_paratransit",
+                    "resource_record_id": null,
+                    "text": "Apply for ADA Paratransit certification through NICTA (312-663-HELP, weekdays 8:30\u20115:00). Service matches fixed\u2011route times, but requires certification before use."
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 12,
+      "latency_ms": 10201,
+      "usage": {
+        "prompt_tokens": 7314,
+        "total_tokens": 7523,
+        "completion_tokens": 209,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "blocked",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Appointment scheduled for Tuesdays 8:30\u202fAM but husband can only drive on infusion days (Thursdays) and no transport options identified; could miss infusions.",
+                    "evidence": [
+                      "turn:T05",
+                      "turn:T07",
+                      "tract:17031151200"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "ada_paratransit",
+                    "resource_record_id": null,
+                    "text": "Apply for ADA Paratransit certification through NICTA (312-663-HELP, weekdays 8:30\u20115:00). Service matches fixed\u2011route times, but requires certification before use."
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 13,
+      "latency_ms": 16611,
+      "usage": {
+        "prompt_tokens": 7582,
+        "total_tokens": 7894,
+        "completion_tokens": 312,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "blocked",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Appointment scheduled for Tuesdays 8:30\u202fAM but husband can only drive on infusion days (Thursdays) and no transport options identified; could miss infusions.",
+                    "evidence": [
+                      "turn:T05",
+                      "turn:T07",
+                      "tract:17031151200"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "ada_paratransit",
+                    "resource_record_id": null,
+                    "text": "Apply for ADA Paratransit certification through NICTA (312-663-HELP, weekdays 8:30\u20115:00). Service matches fixed\u2011route times, but requires certification before use."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

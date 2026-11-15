@@ -1,0 +1,575 @@
+{
+  "case_id": "T007",
+  "condition": "C3",
+  "rep": 1,
+  "profile": "nano-lora-vllm",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P2",
+        "status": "blocked",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "Patient's work hours conflict with the scheduled therapy time.",
+            "evidence": [
+              "turn:T04"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Offer flexible scheduling or telehealth to fit the patient's rotating work schedule."
+          },
+          {
+            "category": "telehealth",
+            "resource_record_id": null,
+            "text": "Offer telehealth sessions to fit the patient's schedule."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "No reliable way to get around outside of scheduled appointments.",
+            "evidence": [
+              "tract:no_vehicle_share",
+              "tract:places_lacktrpt"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "food_pantry",
+            "resource_record_id": "PL0254c3bf",
+            "text": "Bryn Mawr Community Foundation, hours not listed; call ahead, 0.21 mi away."
+          },
+          {
+            "category": "walking_group",
+            "resource_record_id": null,
+            "text": "Suggest walking groups or buddy systems."
+          },
+          {
+            "category": "utility_assistance",
+            "resource_record_id": "WARM002",
+            "text": "Don Nash (Parks), Mon 09:00-20:00; Tue 09:00-20:00; Wed 09:00-20:00; Thu 09:00-20:00; Fri 09:00-20:00; Sat 09:00-16:00, 0.41 mi away."
+          }
+        ]
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      }
+    ]
+  },
+  "error": null,
+  "steps": 5,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T007"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T007"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T007"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T007"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T007"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "87085040602"
+      },
+      "ok": false
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031430101"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031430101",
+        "need": "caregiving"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031430101",
+        "need": "language"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031430101",
+        "need": "digital"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031430101",
+        "need": "food"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031430101",
+        "need": "housing"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031430101",
+        "need": "utilities"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031430101",
+        "need": "med_cost"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031430101",
+        "need": "caregiving",
+        "days": [
+          "Tue"
+        ],
+        "start": "14:00",
+        "end": "15:00"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031430101",
+        "need": "language",
+        "days": [
+          "Tue"
+        ],
+        "start": "14:00",
+        "end": "15:00"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031430101",
+        "need": "digital",
+        "days": [
+          "Tue"
+        ],
+        "start": "14:00",
+        "end": "15:00"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 39617,
+    "completion_tokens": 1441
+  },
+  "latency_ms": 76226,
+  "wall_s": 76.34,
+  "log": [
+    {
+      "prompt_sha256": "3ebc8be03fab0ac5a626ee5dc988cec64119711f2b4475d5b9b48f5d0e8c3537",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 9483,
+      "usage": {
+        "prompt_tokens": 4589,
+        "total_tokens": 4769,
+        "completion_tokens": 180,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T007"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T007"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T007"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T007"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T007"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "87085040602"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 2219,
+      "usage": {
+        "prompt_tokens": 5513,
+        "total_tokens": 5550,
+        "completion_tokens": 37,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031430101"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 16420,
+      "usage": {
+        "prompt_tokens": 6181,
+        "total_tokens": 6502,
+        "completion_tokens": 321,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031430101",
+            "need": "caregiving"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031430101",
+            "need": "language"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031430101",
+            "need": "digital"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031430101",
+            "need": "food"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031430101",
+            "need": "housing"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031430101",
+            "need": "utilities"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031430101",
+            "need": "med_cost"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 21100,
+      "usage": {
+        "prompt_tokens": 10795,
+        "total_tokens": 11191,
+        "completion_tokens": 396,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031430101",
+            "need": "caregiving",
+            "days": [
+              "Tue"
+            ],
+            "start": "14:00",
+            "end": "15:00"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031430101",
+            "need": "language",
+            "days": [
+              "Tue"
+            ],
+            "start": "14:00",
+            "end": "15:00"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031430101",
+            "need": "digital",
+            "days": [
+              "Tue"
+            ],
+            "start": "14:00",
+            "end": "15:00"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031430101",
+            "need": "housing"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031430101",
+            "need": "utilities"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031430101",
+            "need": "med_cost"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 5,
+      "latency_ms": 27004,
+      "usage": {
+        "prompt_tokens": 12539,
+        "total_tokens": 13046,
+        "completion_tokens": 507,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P2",
+                "status": "blocked",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Patient's work hours conflict with the scheduled therapy time.",
+                    "evidence": [
+                      "turn:T04"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Offer flexible scheduling or telehealth to fit the patient's rotating work schedule."
+                  },
+                  {
+                    "category": "telehealth",
+                    "resource_record_id": null,
+                    "text": "Offer telehealth sessions to fit the patient's schedule."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "No reliable way to get around outside of scheduled appointments.",
+                    "evidence": [
+                      "tract:no_vehicle_share",
+                      "tract:places_lacktrpt"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "food_pantry",
+                    "resource_record_id": "PL0254c3bf",
+                    "text": "Bryn Mawr Community Foundation, hours not listed; call ahead, 0.21 mi away."
+                  },
+                  {
+                    "category": "walking_group",
+                    "resource_record_id": null,
+                    "text": "Suggest walking groups or buddy systems."
+                  },
+                  {
+                    "category": "utility_assistance",
+                    "resource_record_id": "WARM002",
+                    "text": "Don Nash (Parks), Mon 09:00-20:00; Tue 09:00-20:00; Wed 09:00-20:00; Thu 09:00-20:00; Fri 09:00-20:00; Sat 09:00-16:00, 0.41 mi away."
+                  }
+                ]
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

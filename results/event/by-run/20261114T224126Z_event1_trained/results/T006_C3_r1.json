@@ -1,0 +1,533 @@
+{
+  "case_id": "T006",
+  "condition": "C3",
+  "rep": 1,
+  "profile": "nano-lora-vllm",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "med_cost",
+            "reason": "Out-of-pocket cost exceeds what the patient can afford.",
+            "evidence": [
+              "med:1"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "med_assistance_program",
+            "resource_record_id": null,
+            "text": "Offer med cost help."
+          },
+          {
+            "category": "generic_or_formulary_switch",
+            "resource_record_id": null,
+            "text": "Offer generic or formulary switch."
+          },
+          {
+            "category": "patient_assistance_program",
+            "resource_record_id": null,
+            "text": "Offer patient assistance program."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok"
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "Group meets when the patient is scheduled to work.",
+            "evidence": [
+              "turn:T06"
+            ]
+          },
+          {
+            "barrier": "transport",
+            "reason": "No reliable way to get there at the scheduled time.",
+            "evidence": [
+              "tract:places_lacktrpt"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Offer schedule change."
+          },
+          {
+            "category": "telehealth",
+            "resource_record_id": null,
+            "text": "Offer telehealth."
+          },
+          {
+            "category": "community_group",
+            "resource_record_id": "HC04493",
+            "text": "Broadway Youth Center: hours not listed; call ahead."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok"
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok"
+      }
+    ]
+  },
+  "error": null,
+  "steps": 5,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T006"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T006"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T006"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T006"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T006"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "55577040932"
+      },
+      "ok": false
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031830700"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_transit_trip",
+      "args": {
+        "appt_ref": "appt:3",
+        "arrive_by": "11:00"
+      },
+      "ok": false
+    },
+    {
+      "tool": "get_visit_transcript",
+      "args": {
+        "visit_id": "V-T006",
+        "topic": "transport"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_visit_transcript",
+      "args": {
+        "visit_id": "V-T006",
+        "topic": "work_schedule"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_visit_transcript",
+      "args": {
+        "visit_id": "V-T006",
+        "topic": "alcohol_use"
+      },
+      "ok": false
+    },
+    {
+      "tool": "get_visit_transcript",
+      "args": {
+        "visit_id": "V-T006",
+        "topic": "any"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031830700",
+        "need": "transport",
+        "days": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri"
+        ],
+        "start": "08:00",
+        "end": "16:00"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031830700",
+        "need": "food_access"
+      },
+      "ok": false
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031830700",
+        "need": "med_cost"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031830700",
+        "need": "housing"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 32150,
+    "completion_tokens": 1065
+  },
+  "latency_ms": 54450,
+  "wall_s": 54.53,
+  "log": [
+    {
+      "prompt_sha256": "9ceeac2a0eec00dd3e1444b7fdcb78e7c2bfd11c64b584ef6a63f74f34b4327d",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 9452,
+      "usage": {
+        "prompt_tokens": 4606,
+        "total_tokens": 4786,
+        "completion_tokens": 180,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T006"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T006"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T006"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T006"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T006"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "55577040932"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 4368,
+      "usage": {
+        "prompt_tokens": 5612,
+        "total_tokens": 5695,
+        "completion_tokens": 83,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031830700"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_transit_trip",
+          "args": {
+            "appt_ref": "appt:3",
+            "arrive_by": "11:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 8701,
+      "usage": {
+        "prompt_tokens": 6343,
+        "total_tokens": 6509,
+        "completion_tokens": 166,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_visit_transcript",
+          "args": {
+            "visit_id": "V-T006",
+            "topic": "transport"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_visit_transcript",
+          "args": {
+            "visit_id": "V-T006",
+            "topic": "work_schedule"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_visit_transcript",
+          "args": {
+            "visit_id": "V-T006",
+            "topic": "alcohol_use"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_visit_transcript",
+          "args": {
+            "visit_id": "V-T006",
+            "topic": "any"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 11527,
+      "usage": {
+        "prompt_tokens": 7189,
+        "total_tokens": 7427,
+        "completion_tokens": 238,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031830700",
+            "need": "transport",
+            "days": [
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri"
+            ],
+            "start": "08:00",
+            "end": "16:00"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031830700",
+            "need": "food_access"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031830700",
+            "need": "med_cost"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031830700",
+            "need": "housing"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 5,
+      "latency_ms": 20402,
+      "usage": {
+        "prompt_tokens": 8400,
+        "total_tokens": 8798,
+        "completion_tokens": 398,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "med_cost",
+                    "reason": "Out-of-pocket cost exceeds what the patient can afford.",
+                    "evidence": [
+                      "med:1"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "med_assistance_program",
+                    "resource_record_id": null,
+                    "text": "Offer med cost help."
+                  },
+                  {
+                    "category": "generic_or_formulary_switch",
+                    "resource_record_id": null,
+                    "text": "Offer generic or formulary switch."
+                  },
+                  {
+                    "category": "patient_assistance_program",
+                    "resource_record_id": null,
+                    "text": "Offer patient assistance program."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Group meets when the patient is scheduled to work.",
+                    "evidence": [
+                      "turn:T06"
+                    ]
+                  },
+                  {
+                    "barrier": "transport",
+                    "reason": "No reliable way to get there at the scheduled time.",
+                    "evidence": [
+                      "tract:places_lacktrpt"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Offer schedule change."
+                  },
+                  {
+                    "category": "telehealth",
+                    "resource_record_id": null,
+                    "text": "Offer telehealth."
+                  },
+                  {
+                    "category": "community_group",
+                    "resource_record_id": "HC04493",
+                    "text": "Broadway Youth Center: hours not listed; call ahead."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok"
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

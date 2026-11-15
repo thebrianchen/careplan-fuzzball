@@ -1,0 +1,58 @@
+{
+  "runs": [
+    "runs/20261114T224126Z_event1_trained"
+  ],
+  "cases": [
+    "T001",
+    "T002",
+    "T003",
+    "T004",
+    "T005",
+    "T006",
+    "T007",
+    "T008",
+    "T009",
+    "T010",
+    "T011",
+    "T012",
+    "T013",
+    "T014",
+    "T015",
+    "T016",
+    "T017",
+    "T018",
+    "T019",
+    "T020"
+  ],
+  "by_condition": {
+    "C3": {
+      "all": {
+        "conflict_reps": 43,
+        "supported_recall": 0.349,
+        "ci95": [
+          0.191,
+          0.524
+        ]
+      },
+      "record_only": {
+        "conflict_reps": 20,
+        "supported_recall": 0.3,
+        "ci95": [
+          0.1,
+          0.529
+        ]
+      },
+      "spoken": {
+        "conflict_reps": 23,
+        "supported_recall": 0.391,
+        "ci95": [
+          0.2,
+          0.667
+        ]
+      },
+      "false_flags_per_case": 1.15,
+      "failed_runs": 4,
+      "runs": 20
+    }
+  }
+}

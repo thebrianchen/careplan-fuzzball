@@ -1,0 +1,521 @@
+{
+  "case_id": "T020",
+  "condition": "C3",
+  "rep": 1,
+  "profile": "nano-lora-vllm",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "No reliable way to get there on the days or times the clinic expects.",
+            "evidence": [
+              "tract:no_vehicle_share",
+              "tract:places_lacktrpt"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "nemt",
+            "resource_record_id": null,
+            "text": "Offer nemt."
+          },
+          {
+            "category": "paratransit",
+            "resource_record_id": null,
+            "text": "Offer paratransit."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "language_literacy",
+            "reason": "Materials and instructions are not in the patient's preferred language or format.",
+            "evidence": [
+              "turn:T06"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "interpreter",
+            "resource_record_id": null,
+            "text": "Offer interpreter."
+          },
+          {
+            "category": "plain_language_materials",
+            "resource_record_id": null,
+            "text": "Offer plain-language materials."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok"
+      },
+      {
+        "item_id": "P4",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "med_cost",
+            "reason": "Out-of-pocket cost could make the medication hard to keep filling.",
+            "evidence": [
+              "med:1"
+            ]
+          },
+          {
+            "barrier": "digital_access",
+            "reason": "No online or phone access to manage refills or monitoring tools.",
+            "evidence": [
+              "tract:places_lacktrpt"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "med_assistance_program",
+            "resource_record_id": null,
+            "text": "Offer med assistance program."
+          },
+          {
+            "category": "generic_switch",
+            "resource_record_id": null,
+            "text": "Offer generic switch."
+          },
+          {
+            "category": "mail_order",
+            "resource_record_id": null,
+            "text": "Offer mail order."
+          }
+        ]
+      },
+      {
+        "item_id": "P5",
+        "status": "likely_ok"
+      }
+    ]
+  },
+  "error": null,
+  "steps": 4,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T020"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T020"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T020"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T020"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T020"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031100100"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031100100",
+        "need": "transport",
+        "days": [
+          "Mon",
+          "Wed",
+          "Fri"
+        ],
+        "start": "05:00",
+        "end": "06:00"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031100100",
+        "need": "language"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 27056,
+    "completion_tokens": 1252
+  },
+  "latency_ms": 63314,
+  "wall_s": 63.37,
+  "log": [
+    {
+      "prompt_sha256": "5385b3ba1fa2c6df3d4c6bf588de9e0116055e3cef901543b3145a561139370c",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 9438,
+      "usage": {
+        "prompt_tokens": 4660,
+        "total_tokens": 4840,
+        "completion_tokens": 180,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T020"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T020"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T020"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T020"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T020"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031100100"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 8449,
+      "usage": {
+        "prompt_tokens": 7190,
+        "total_tokens": 7328,
+        "completion_tokens": 138,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031100100",
+            "need": "transport",
+            "days": [
+              "Mon",
+              "Wed",
+              "Fri"
+            ],
+            "start": "05:00",
+            "end": "06:00"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031100100",
+            "need": "language"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 22535,
+      "usage": {
+        "prompt_tokens": 7350,
+        "total_tokens": 7809,
+        "completion_tokens": 459,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "No reliable way to get there on the days or times the clinic expects.",
+                    "evidence": [
+                      "tract:no_vehicle_share",
+                      "tract:places_lacktrpt"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Offer nemt."
+                  },
+                  {
+                    "category": "paratransit",
+                    "resource_record_id": null,
+                    "text": "Offer paratransit."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "language_literacy",
+                    "reason": "Materials and instructions are not in the patient's preferred language or format.",
+                    "evidence": [
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "interpreter",
+                    "resource_record_id": null,
+                    "text": "Offer interpreter."
+                  },
+                  {
+                    "category": "plain_language_materials",
+                    "resource_record_id": null,
+                    "text": "Offer plain-language materials."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "med_cost",
+                    "reason": "Out-of-pocket cost could make the medication hard to keep filling.",
+                    "evidence": [
+                      "med:1"
+                    ]
+                  },
+                  {
+                    "barrier": "digital_access",
+                    "reason": "No online or phone access to manage refills or monitoring tools.",
+                    "evidence": [
+                      "tract:places_lacktrpt"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "med_assistance_program",
+                    "resource_record_id": null,
+                    "text": "Offer med assistance program."
+                  },
+                  {
+                    "category": "generic_switch",
+                    "resource_record_id": null,
+                    "text": "Offer generic switch."
+                  },
+                  {
+                    "category": "mail_order",
+                    "resource_record_id": null,
+                    "text": "Offer mail order."
+                  }
+                ]
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok"
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 22892,
+      "usage": {
+        "prompt_tokens": 7856,
+        "total_tokens": 8331,
+        "completion_tokens": 475,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "No reliable way to get there on the days or times the clinic expects.",
+                    "evidence": [
+                      "tract:no_vehicle_share",
+                      "tract:places_lacktrpt"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Offer nemt."
+                  },
+                  {
+                    "category": "paratransit",
+                    "resource_record_id": null,
+                    "text": "Offer paratransit."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "language_literacy",
+                    "reason": "Materials and instructions are not in the patient's preferred language or format.",
+                    "evidence": [
+                      "turn:T06"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "interpreter",
+                    "resource_record_id": null,
+                    "text": "Offer interpreter."
+                  },
+                  {
+                    "category": "plain_language_materials",
+                    "resource_record_id": null,
+                    "text": "Offer plain-language materials."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P4",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "med_cost",
+                    "reason": "Out-of-pocket cost could make the medication hard to keep filling.",
+                    "evidence": [
+                      "med:1"
+                    ]
+                  },
+                  {
+                    "barrier": "digital_access",
+                    "reason": "No online or phone access to manage refills or monitoring tools.",
+                    "evidence": [
+                      "tract:places_lacktrpt"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "med_assistance_program",
+                    "resource_record_id": null,
+                    "text": "Offer med assistance program."
+                  },
+                  {
+                    "category": "generic_switch",
+                    "resource_record_id": null,
+                    "text": "Offer generic switch."
+                  },
+                  {
+                    "category": "mail_order",
+                    "resource_record_id": null,
+                    "text": "Offer mail order."
+                  }
+                ]
+              },
+              {
+                "item_id": "P5",
+                "status": "likely_ok"
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

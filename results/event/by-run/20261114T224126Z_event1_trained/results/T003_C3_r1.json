@@ -1,0 +1,68 @@
+{
+  "case_id": "T003",
+  "condition": "C3",
+  "rep": 1,
+  "profile": "nano-lora-vllm",
+  "assessment": null,
+  "error": "model stopped without calling submit_assessment",
+  "steps": 3,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 15477,
+    "completion_tokens": 1461
+  },
+  "latency_ms": 71541,
+  "wall_s": 71.57,
+  "log": [
+    {
+      "prompt_sha256": "60cca595c8d5cf8839745be9c36f96527b781ad97b9eb93186b3f8afc53e5126",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 23979,
+      "usage": {
+        "prompt_tokens": 4644,
+        "total_tokens": 5137,
+        "completion_tokens": 493,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "{\n  \"items\": [\n    {\n      \"item_id\": \"P1\",\n      \"status\": \"blocked\",\n      \"barriers\": [\n        {\n          \"barrier\": \"transport\",\n          \"reason\": \"No reliable way to get to the scheduled rehab appointments.\",\n          \"evidence\": [\n            \"turn:T04\",\n            \"turn:T06\"\n          ]\n        },\n        {\n          \"barrier\": \"work_schedule\",\n          \"reason\": \"Caregiver's work hours conflict with the therapy schedule.\",\n          \"evidence\": [\n            \"turn:T04\"\n          ]\n        }\n      ],\n      \"alternatives\": [\n        {\n          \"category\": \"nemt\",\n          \"resource_record_id\": null,\n          \"text\": \"Offer nemt for transport.\"\n        },\n        {\n          \"category\": \"paratransit\",\n          \"resource_record_id\": null,\n          \"text\": \"Offer paratransit.\"\n        },\n        {\n          \"category\": \"schedule_change\",\n          \"resource_record_id\": null,\n          \"text\": \"Offer schedule change.\"\n        }\n      ]\n    },\n    {\n      \"item_id\": \"P2\",\n      \"status\": \"likely_ok\"\n    },\n    {\n      \"item_id\": \"P3\",\n      \"status\": \"likely_ok\"\n    },\n    {\n      \"item_id\": \"P4\",\n      \"status\": \"at_risk\",\n      \"barriers\": [\n        {\n          \"barrier\": \"utilities\",\n          \"reason\": \"No reliable electricity or refrigeration could affect BP monitoring.\",\n          \"evidence\": [\n            \"note:history_of_housing_instability\"\n          ]\n        }\n      ],\n      \"alternatives\": [\n        {\n          \"category\": \"medical_certificate_utilities\",\n          \"resource_record_id\": null,\n          \"text\": \"Offer medical certificate utilities.\"\n        },\n        {\n          \"category\": \"snap\",\n          \"resource_record_id\": null,\n          \"text\": \"Offer snap.\"\n        },\n        {\n          \"category\": \"food_pantry\",\n          \"resource_record_id\": null,\n          \"text\": \"Offer food pantry.\"\n        }\n      ]\n    },\n    {\n      \"item_id\": \"P5\",\n      \"status\": \"likely_ok\"\n    }\n  ],\n  \"note\": \"Assessment completed.\"\n}",
+      "tool_calls": []
+    },
+    {
+      "step": 2,
+      "latency_ms": 24339,
+      "usage": {
+        "prompt_tokens": 5162,
+        "total_tokens": 5646,
+        "completion_tokens": 484,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "{\n  \"items\": [\n    {\n      \"item_id\": \"P1\",\n      \"status\": \"blocked\",\n      \"barriers\": [\n        {\n          \"barrier\": \"transport\",\n          \"reason\": \"No reliable way to get to the scheduled rehab appointments.\",\n          \"evidence\": [\n            \"turn:T04\",\n            \"turn:T06\"\n          ]\n        },\n        {\n          \"barrier\": \"work_schedule\",\n          \"reason\": \"Caregiver's work hours conflict with the therapy schedule.\",\n          \"evidence\": [\n            \"turn:T04\"\n          ]\n        }\n      ],\n      \"alternatives\": [\n        {\n          \"category\": \"nemt\",\n          \"resource_record_id\": null,\n          \"text\": \"Offer nemt for transport.\"\n        },\n        {\n          \"category\": \"paratransit\",\n          \"resource_record_id\": null,\n          \"text\": \"Offer paratransit.\"\n        },\n        {\n          \"category\": \"schedule_change\",\n          \"resource_record_id\": null,\n          \"text\": \"Offer schedule change.\"\n        }\n      ]\n    },\n    {\n      \"item_id\": \"P2\",\n      \"status\": \"likely_ok\"\n    },\n    {\n      \"item_id\": \"P3\",\n      \"status\": \"likely_ok\"\n    },\n    {\n      \"item_id\": \"P4\",\n      \"status\": \"at_risk\",\n      \"barriers\": [\n        {\n          \"barrier\": \"utilities\",\n          \"reason\": \"No reliable electricity or refrigeration could affect BP monitoring.\",\n          \"evidence\": [\n            \"note:history_of_housing_instability\"\n          ]\n        }\n      ],\n      \"alternatives\": [\n        {\n          \"category\": \"medical_certificate_utilities\",\n          \"resource_record_id\": null,\n          \"text\": \"Offer medical certificate utilities.\"\n        },\n        {\n          \"category\": \"snap\",\n          \"resource_record_id\": null,\n          \"text\": \"Offer snap.\"\n        },\n        {\n          \"category\": \"food_pantry\",\n          \"resource_record_id\": null,\n          \"text\": \"Offer food pantry.\"\n        }\n      ]\n    },\n    {\n      \"item_id\": \"P5\",\n      \"status\": \"likely_ok\"\n    }\n  ]\n}",
+      "tool_calls": []
+    },
+    {
+      "step": 3,
+      "latency_ms": 23223,
+      "usage": {
+        "prompt_tokens": 5671,
+        "total_tokens": 6155,
+        "completion_tokens": 484,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "{\n  \"items\": [\n    {\n      \"item_id\": \"P1\",\n      \"status\": \"blocked\",\n      \"barriers\": [\n        {\n          \"barrier\": \"transport\",\n          \"reason\": \"No reliable way to get to the scheduled rehab appointments.\",\n          \"evidence\": [\n            \"turn:T04\",\n            \"turn:T06\"\n          ]\n        },\n        {\n          \"barrier\": \"work_schedule\",\n          \"reason\": \"Caregiver's work hours conflict with the therapy schedule.\",\n          \"evidence\": [\n            \"turn:T04\"\n          ]\n        }\n      ],\n      \"alternatives\": [\n        {\n          \"category\": \"nemt\",\n          \"resource_record_id\": null,\n          \"text\": \"Offer nemt for transport.\"\n        },\n        {\n          \"category\": \"paratransit\",\n          \"resource_record_id\": null,\n          \"text\": \"Offer paratransit.\"\n        },\n        {\n          \"category\": \"schedule_change\",\n          \"resource_record_id\": null,\n          \"text\": \"Offer schedule change.\"\n        }\n      ]\n    },\n    {\n      \"item_id\": \"P2\",\n      \"status\": \"likely_ok\"\n    },\n    {\n      \"item_id\": \"P3\",\n      \"status\": \"likely_ok\"\n    },\n    {\n      \"item_id\": \"P4\",\n      \"status\": \"at_risk\",\n      \"barriers\": [\n        {\n          \"barrier\": \"utilities\",\n          \"reason\": \"No reliable electricity or refrigeration could affect BP monitoring.\",\n          \"evidence\": [\n            \"note:history_of_housing_instability\"\n          ]\n        }\n      ],\n      \"alternatives\": [\n        {\n          \"category\": \"medical_certificate_utilities\",\n          \"resource_record_id\": null,\n          \"text\": \"Offer medical certificate utilities.\"\n        },\n        {\n          \"category\": \"snap\",\n          \"resource_record_id\": null,\n          \"text\": \"Offer snap.\"\n        },\n        {\n          \"category\": \"food_pantry\",\n          \"resource_record_id\": null,\n          \"text\": \"Offer food pantry.\"\n        }\n      ]\n    },\n    {\n      \"item_id\": \"P5\",\n      \"status\": \"likely_ok\"\n    }\n  ]\n}",
+      "tool_calls": []
+    }
+  ]
+}

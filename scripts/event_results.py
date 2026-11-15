@@ -72,7 +72,7 @@ ROWS = [
      ["leaktest_event1.json"], lambda d: leak_row(d, "B")),
     ("Attack test size", "leaktest-1127",
      ["leaktest_event1.json", "leaktest_event1.times"], attack_size),
-    ("Small model after one training pass, against stock", "score-trained",
+    ("Small model after one training pass, against stock", "score-trained-1624",
      ["trained_event1_test.json", "stock_event1_test.json"],
      lambda d: f"{trained(d, 'trained_event1_test.json')} against "
                f"{trained(d, 'stock_event1_test.json')}"),

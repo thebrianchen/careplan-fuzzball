@@ -32,6 +32,7 @@ workflow that produced each file.
 | Patient identifiers leaked, one agent with chart and web | 17 of 114 (19 hijacked) | `leaktest-1127` | `results/event/leaktest_event1.json` |
 | Same attacks, two-sided design | 0 of 114 (0 hijacked) | `leaktest-1127` | `results/event/leaktest_event1.json` |
 | Attack test size | 228 runs, 0 errors, 123.5 min as a 6-task array | `leaktest-1127` | `results/event/leaktest_event1.json`, `results/event/leaktest_event1.times` |
+| Small model after one training pass, against stock | 35% (19% to 52%) (4 failed) against 12% (4% to 21%) (7 failed) | `score-trained-1624` | `results/event/trained_event1_test.json`, `results/event/stock_event1_test.json` |
 <!-- event-results:end -->
 
 The comparison in the first rows is against the same model with only the visit transcript. On what the patient said aloud,
@@ -70,6 +71,7 @@ The result files name these folders as `runs/...`, their path on the cluster.
 | `gateway-1210` | Ran the gateway behind a Fuzzball endpoint. It admits a caller only when the endpoint's signed identity checks out | `fuzzball/event/gateway.fz.yaml` | `results/event/workflows/gateway-1210.yaml` |
 | `splitcost-1336` | Reviewed the development patients again with every resource lookup crossing the gateway | `fuzzball/event/splitcost.fz.yaml` | `results/event/workflows/splitcost-1336.yaml` |
 | `train-1344` | Trained a LoRA add-on for Nemotron 3 Nano on one GB10 | `fuzzball/event/train.fz.yaml` | `results/event/workflows/train-1344.yaml` |
+| `score-trained-1624` | Reviewed the 20 held-out patients with Nemotron 3 Nano, with and without the trained add-on | `fuzzball/event/score-trained.fz.yaml` | `results/event/workflows/score-trained-1624.yaml` |
 
 The files under `results/event/workflows/` are the output of `fuzzball workflow get` for each run.
 

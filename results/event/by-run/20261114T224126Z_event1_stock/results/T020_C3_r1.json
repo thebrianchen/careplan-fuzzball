@@ -1,0 +1,527 @@
+{
+  "case_id": "T020",
+  "condition": "C3",
+  "rep": 1,
+  "profile": "nano-base-vllm",
+  "assessment": {
+    "items": [
+      {
+        "barriers": [
+          {
+            "barrier": "transport",
+            "evidence": [
+              "appt:2"
+            ],
+            "reason": "Cannot reach dialysis unit on time without transport; latest departure 04:34, 1 hr 10 min travel (transit:appt:2)"
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "nep",
+            "resource_record_id": null,
+            "text": "Contact dialysis unit social worker immediately to arrange transportation, especially via Medicaid Non-Emergency Medical Transportation (NemT)"
+          }
+        ],
+        "item_id": "P1",
+        "status": "blocked"
+      },
+      {
+        "barriers": [
+          {
+            "barrier": "food_access",
+            "evidence": [
+              "turn:T06",
+              "screener:food_worry"
+            ],
+            "reason": "Potential language barrier and limited food access may prevent adherence to low-potassium diet; patient expressed need for materials in Polish and concerns about food availability (turn:T06, screener:food_worry)"
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "food_access",
+            "resource_record_id": null,
+            "text": "Ask dialysis unit dietitian for a Polish-language low-potassium food handout or referral to community food resource"
+          }
+        ],
+        "item_id": "P2",
+        "status": "at_risk"
+      },
+      {
+        "barriers": [
+          {
+            "barrier": "other_cost",
+            "evidence": [
+              "turn:T10"
+            ],
+            "reason": "Patient must record weight and BP daily; potential literacy or language barrier may affect consistency (turn:T10)"
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "other_cost",
+            "resource_record_id": null,
+            "text": "Provide patient with a simple log template or mobile app that supports plain language and Polish language options"
+          }
+        ],
+        "item_id": "P3",
+        "status": "at_risk"
+      },
+      {
+        "alternatives": [],
+        "item_id": "P4",
+        "status": "likely_ok"
+      },
+      {
+        "alternatives": [],
+        "item_id": "P5",
+        "status": "likely_ok"
+      }
+    ]
+  },
+  "error": null,
+  "steps": 5,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 32953,
+    "completion_tokens": 2677
+  },
+  "latency_ms": 100470,
+  "wall_s": 100.5,
+  "log": [
+    {
+      "prompt_sha256": "5385b3ba1fa2c6df3d4c6bf588de9e0116055e3cef901543b3145a561139370c",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 23294,
+      "usage": {
+        "prompt_tokens": 4660,
+        "total_tokens": 5287,
+        "completion_tokens": 627,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "",
+            "item_id": "P1",
+            "status": "blocked",
+            "barriers": "",
+            "evidence": "[\"appt:2\"]",
+            "alternatives": "",
+            "[{\"category\":\"nep\",\"resource_record_id\":null,\"text\":\"Contact dialysis unit social worker immediately to arrange transportation, especially via Medicaid Non-Emergency Medical Transportation (NemT\"}]}]\n</parameter": "",
+            "barrier": "transport",
+            "reason": "Cannot reach dialysis unit on time without transport; latest departure 04:34, 1 hr 10 min travel (transit:appt:2)"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "",
+            "item_id": "P2",
+            "status": "at_risk",
+            "barriers": "",
+            "evidence": "[\"screener:food_worry\", \"turn:T06\"]",
+            "alternatives": "",
+            "[{\"category\":\"food_access\",\"resource_record_id\":null,\"text\":\"Ask dialysis unit dietitian for a Polish-language low-potassium food handout or referral to community food resource\"}]}]\n</parameter": "",
+            "barrier": "food_access",
+            "reason": "Potential language barrier and limited food access may prevent adherence to low-potassium diet; patient expressed need for materials in Polish and concerns about food availability (turn:T06, screener:food_worry)"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "",
+            "item_id": "P3",
+            "status": "at_risk",
+            "barriers": "",
+            "evidence": "[\"turn:T10\"]",
+            "alternatives": "",
+            "[{\"category\":\"other_cost\",\"resource_record_id\":null,\"text\":\"Provide patient with a simple log template or mobile app that supports plain language and Polish language options\"}]}]\n</parameter": "",
+            "barrier": "other_cost",
+            "reason": "Patient must record weight and BP daily; potential literacy or language barrier may affect consistency (turn:T10)"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "",
+            "item_id": "P4",
+            "status": "likely_ok",
+            "alternatives": "",
+            "[]": ""
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "",
+            "item_id": "P5",
+            "status": "likely_ok",
+            "alternatives": "",
+            "[]": ""
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 20304,
+      "usage": {
+        "prompt_tokens": 5816,
+        "total_tokens": 6374,
+        "completion_tokens": 558,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "blocked",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Cannot reach dialysis unit on time without transport; latest departure 04:34, 1 hr 10 min travel (transit:appt:2)",
+                    "evidence": [
+                      "appt:2"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nep",
+                    "resource_record_id": null,
+                    "text": "Contact dialysis unit social worker immediately to arrange transportation, especially via Medicaid Non-Emergency Medical Transportation (NemT)"
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "Potential language barrier and limited food access may prevent adherence to low-potassium diet; patient expressed need for materials in Polish and concerns about food availability (turn:T06, screener:food_worry)",
+                    "evidence": [
+                      "turn:T06",
+                      "screener:food_worry"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "food_access",
+                    "resource_record_id": null,
+                    "text": "Ask dialysis unit dietitian for a Polish-language low-potassium food handout or referral to community food resource"
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "other_cost",
+                    "reason": "Patient must record weight and BP daily; potential literacy or language barrier may affect consistency (turn:T10)",
+                    "evidence": [
+                      "turn:T10"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "other_cost",
+                    "resource_record_id": null,
+                    "text": "Provide patient with a simple log template or mobile app that supports plain language and Polish language options"
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P5",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 17575,
+      "usage": {
+        "prompt_tokens": 6621,
+        "total_tokens": 7087,
+        "completion_tokens": 466,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "[{\"item_id\": \"P1\", \"status\": \"blocked\", \"barriers\": [{\"barrier\": \"transport\", \"reason\": \"Cannot reach dialysis unit on time without transport; latest departure 04:34, 1 hr 10 min travel (transit:appt:2)\", \"evidence\": [\"appt:2\"]}], \"alternatives\": [{\"category\": \"nep\", \"resource_record_id\": null, \"text\": \"Contact dialysis unit social worker immediately to arrange transportation, especially via Medicaid Non-Emergency Medical Transportation (NemT)\"}]}], {\"item_id\": \"P2\", \"status\": \"at_risk\", \"barriers\": [{\"barrier\": \"food_access\", \"reason\": \"Potential language barrier and limited food access may prevent adherence to low-potassium diet; patient expressed need for materials in Polish and concerns about food availability (turn:T06, screener:food_worry)\", \"evidence\": [\"turn:T06\", \"screener:food_worry\"]}], \"alternatives\": [{\"category\": \"food_access\", \"resource_record_id\": null, \"text\": \"Ask dialysis unit dietitian for a Polish-language low-potassium food handout or referral to community food resource\"}]}], {\"item_id\": \"P3\", \"status\": \"at_risk\", \"barriers\": [{\"barrier\": \"other_cost\", \"reason\": \"Patient must record weight and BP daily; potential literacy or language barrier may affect consistency (turn:T10)\", \"evidence\": [\"turn:T10\"]}], \"alternatives\": [{\"category\": \"other_cost\", \"resource_record_id\": null, \"text\": \"Provide patient with a simple log template or mobile app that supports plain language and Polish language options\"}]}], {\"item_id\": \"P4\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}, {\"item_id\": \"P5\", \"status\": \"likely_ok\", \"barriers\": [], \"alternatives\": []}]"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 21274,
+      "usage": {
+        "prompt_tokens": 7592,
+        "total_tokens": 8166,
+        "completion_tokens": 574,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "evidence": [
+                      "appt:2"
+                    ],
+                    "reason": "Cannot reach dialysis unit on time without transport; latest departure 04:34, 1 hr 10 min travel (transit:appt:2)"
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nep",
+                    "resource_record_id": null,
+                    "text": "Contact dialysis unit social worker immediately to arrange transportation, especially via Medicaid Non-Emergency Medical Transportation (NemT)"
+                  }
+                ],
+                "item_id": "P1",
+                "reason": "Cannot reach dialysis unit on time without transport; latest departure 04:34, 1 hr 10 min travel (transit:appt:2)",
+                "status": "blocked"
+              },
+              {
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "evidence": [
+                      "turn:T06",
+                      "screener:food_worry"
+                    ],
+                    "reason": "Potential language barrier and limited food access may prevent adherence to low-potassium diet; patient expressed need for materials in Polish and concerns about food availability (turn:T06, screener:food_worry)"
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "food_access",
+                    "resource_record_id": null,
+                    "text": "Ask dialysis unit dietitian for a Polish-language low-potassium food handout or referral to community food resource"
+                  }
+                ],
+                "item_id": "P2",
+                "reason": "Potential language barrier and limited food access may prevent adherence to low-potassium diet; patient expressed need for materials in Polish and concerns about food availability (turn:T06, screener:food_worry)",
+                "status": "at_risk"
+              },
+              {
+                "barriers": [
+                  {
+                    "barrier": "other_cost",
+                    "evidence": [
+                      "turn:T10"
+                    ],
+                    "reason": "Patient must record weight and BP daily; potential literacy or language barrier may affect consistency (turn:T10)"
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "other_cost",
+                    "resource_record_id": null,
+                    "text": "Provide patient with a simple log template or mobile app that supports plain language and Polish language options"
+                  }
+                ],
+                "item_id": "P3",
+                "reason": "Patient must record weight and BP daily; potential literacy or language barrier may affect consistency (turn:T10)",
+                "status": "at_risk"
+              },
+              {
+                "alternatives": [],
+                "item_id": "P4",
+                "reason": "",
+                "status": "likely_ok"
+              },
+              {
+                "alternatives": [],
+                "item_id": "P5",
+                "reason": "",
+                "status": "likely_ok"
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 5,
+      "latency_ms": 18023,
+      "usage": {
+        "prompt_tokens": 8264,
+        "total_tokens": 8716,
+        "completion_tokens": 452,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "evidence": [
+                      "appt:2"
+                    ],
+                    "reason": "Cannot reach dialysis unit on time without transport; latest departure 04:34, 1 hr 10 min travel (transit:appt:2)"
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "nep",
+                    "resource_record_id": null,
+                    "text": "Contact dialysis unit social worker immediately to arrange transportation, especially via Medicaid Non-Emergency Medical Transportation (NemT)"
+                  }
+                ],
+                "item_id": "P1",
+                "status": "blocked"
+              },
+              {
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "evidence": [
+                      "turn:T06",
+                      "screener:food_worry"
+                    ],
+                    "reason": "Potential language barrier and limited food access may prevent adherence to low-potassium diet; patient expressed need for materials in Polish and concerns about food availability (turn:T06, screener:food_worry)"
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "food_access",
+                    "resource_record_id": null,
+                    "text": "Ask dialysis unit dietitian for a Polish-language low-potassium food handout or referral to community food resource"
+                  }
+                ],
+                "item_id": "P2",
+                "status": "at_risk"
+              },
+              {
+                "barriers": [
+                  {
+                    "barrier": "other_cost",
+                    "evidence": [
+                      "turn:T10"
+                    ],
+                    "reason": "Patient must record weight and BP daily; potential literacy or language barrier may affect consistency (turn:T10)"
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "other_cost",
+                    "resource_record_id": null,
+                    "text": "Provide patient with a simple log template or mobile app that supports plain language and Polish language options"
+                  }
+                ],
+                "item_id": "P3",
+                "status": "at_risk"
+              },
+              {
+                "alternatives": [],
+                "item_id": "P4",
+                "status": "likely_ok"
+              },
+              {
+                "alternatives": [],
+                "item_id": "P5",
+                "status": "likely_ok"
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

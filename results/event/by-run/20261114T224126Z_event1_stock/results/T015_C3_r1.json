@@ -1,0 +1,411 @@
+{
+  "case_id": "T015",
+  "condition": "C3",
+  "rep": 1,
+  "profile": "nano-base-vllm",
+  "assessment": {
+    "items": [
+      {
+        "alternatives": [],
+        "barriers": [],
+        "item_id": "P1",
+        "status": "likely_ok"
+      },
+      {
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Propose alternative class time that fits after 4pm or Saturday, when patient is free, to avoid conflict with work shift."
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "Schedule diabetes educator session on same day as another appointment or as telehealth to reduce travel burden."
+          },
+          {
+            "category": "home_dialysis_evaluation",
+            "resource_record_id": null,
+            "text": "Consider home dialysis evaluation to eliminate daily travel, if clinically appropriate."
+          }
+        ],
+        "barriers": [
+          {
+            "barrier": "transport",
+            "evidence": [
+              "turn:T04",
+              "tract:patient_home_tract_not_provided"
+            ],
+            "reason": "Patient has weekday work shift 7am-3:30pm; weekday 1pm appointment would cause loss of half shift and write-up; no feasible transport available given work schedule."
+          }
+        ],
+        "item_id": "P2",
+        "status": "blocked"
+      },
+      {
+        "alternatives": [],
+        "barriers": [],
+        "item_id": "P3",
+        "status": "likely_ok"
+      },
+      {
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Propose alternative eye exam slot on a weekday after 4pm or any day patient can arrange transport, possibly paired with dialysis day if applicable."
+          },
+          {
+            "category": "transport",
+            "resource_record_id": null,
+            "text": "Arrange Medicaid non-emergency medical transport (Medicaid_NEMT) for Saturday appointment; verify coverage and scheduling with plan."
+          },
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "Combine eye exam with another scheduled appointment to reduce separate travel."
+          }
+        ],
+        "barriers": [
+          {
+            "barrier": "transport",
+            "evidence": [
+              "turn:T13",
+              "turn:T14"
+            ],
+            "reason": "Patient plans eye exam only on Saturday; no transportation support identified; Saturday may conflict with personal commitments and lacks ride assistance."
+          }
+        ],
+        "item_id": "P4",
+        "status": "blocked"
+      },
+      {
+        "alternatives": [],
+        "barriers": [],
+        "item_id": "P5",
+        "status": "likely_ok"
+      }
+    ]
+  },
+  "error": null,
+  "steps": 5,
+  "tool_calls": [
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "004030010",
+        "need": "transport",
+        "days": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri"
+        ],
+        "end": "15:00",
+        "start": "08:00"
+      },
+      "ok": false
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "4030010",
+        "need": "transport",
+        "days": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri"
+        ],
+        "end": "15:00",
+        "start": "08:00"
+      },
+      "ok": false
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "0040300100",
+        "need": "transport",
+        "days": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri"
+        ],
+        "end": "15:00",
+        "start": "08:00"
+      },
+      "ok": false
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "40300100",
+        "need": "transport",
+        "days": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri"
+        ],
+        "end": "15:00",
+        "start": "08:00"
+      },
+      "ok": false
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 24430,
+    "completion_tokens": 948
+  },
+  "latency_ms": 50754,
+  "wall_s": 50.8,
+  "log": [
+    {
+      "prompt_sha256": "e4d7bc2938f6bbd50fad7d36a96acf86c0d514ce022802545917a1b5bf996c62",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 5654,
+      "usage": {
+        "prompt_tokens": 4588,
+        "total_tokens": 4686,
+        "completion_tokens": 98,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "004030010",
+            "need": "transport",
+            "days": [
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri"
+            ],
+            "end": "15:00",
+            "start": "08:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 4917,
+      "usage": {
+        "prompt_tokens": 4738,
+        "total_tokens": 4834,
+        "completion_tokens": 96,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "4030010",
+            "need": "transport",
+            "days": [
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri"
+            ],
+            "end": "15:00",
+            "start": "08:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 5067,
+      "usage": {
+        "prompt_tokens": 4884,
+        "total_tokens": 4983,
+        "completion_tokens": 99,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "0040300100",
+            "need": "transport",
+            "days": [
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri"
+            ],
+            "end": "15:00",
+            "start": "08:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 6883,
+      "usage": {
+        "prompt_tokens": 5036,
+        "total_tokens": 5133,
+        "completion_tokens": 97,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "40300100",
+            "need": "transport",
+            "days": [
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri"
+            ],
+            "end": "15:00",
+            "start": "08:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 5,
+      "latency_ms": 28233,
+      "usage": {
+        "prompt_tokens": 5184,
+        "total_tokens": 5742,
+        "completion_tokens": 558,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "alternatives": [],
+                "barriers": [],
+                "item_id": "P1",
+                "status": "likely_ok"
+              },
+              {
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Propose alternative class time that fits after 4pm or Saturday, when patient is free, to avoid conflict with work shift."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Schedule diabetes educator session on same day as another appointment or as telehealth to reduce travel burden."
+                  },
+                  {
+                    "category": "home_dialysis_evaluation",
+                    "resource_record_id": null,
+                    "text": "Consider home dialysis evaluation to eliminate daily travel, if clinically appropriate."
+                  }
+                ],
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "evidence": [
+                      "turn:T04",
+                      "tract:patient_home_tract_not_provided"
+                    ],
+                    "reason": "Patient has weekday work shift 7am-3:30pm; weekday 1pm appointment would cause loss of half shift and write-up; no feasible transport available given work schedule."
+                  }
+                ],
+                "item_id": "P2",
+                "status": "blocked"
+              },
+              {
+                "alternatives": [],
+                "barriers": [],
+                "item_id": "P3",
+                "status": "likely_ok"
+              },
+              {
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Propose alternative eye exam slot on a weekday after 4pm or any day patient can arrange transport, possibly paired with dialysis day if applicable."
+                  },
+                  {
+                    "category": "transport",
+                    "resource_record_id": null,
+                    "text": "Arrange Medicaid non-emergency medical transport (Medicaid_NEMT) for Saturday appointment; verify coverage and scheduling with plan."
+                  },
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Combine eye exam with another scheduled appointment to reduce separate travel."
+                  }
+                ],
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "evidence": [
+                      "turn:T13",
+                      "turn:T14"
+                    ],
+                    "reason": "Patient plans eye exam only on Saturday; no transportation support identified; Saturday may conflict with personal commitments and lacks ride assistance."
+                  }
+                ],
+                "item_id": "P4",
+                "status": "blocked"
+              },
+              {
+                "alternatives": [],
+                "barriers": [],
+                "item_id": "P5",
+                "status": "likely_ok"
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

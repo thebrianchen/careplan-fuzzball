@@ -1,0 +1,387 @@
+{
+  "case_id": "T009",
+  "condition": "C3",
+  "rep": 1,
+  "profile": "nano-base-vllm",
+  "assessment": {
+    "items": [
+      {
+        "alternatives": [],
+        "item_id": "P1",
+        "status": "likely_ok",
+        "barriers": [
+          {
+            "barrier": "food_access",
+            "reason": "Patient reports stable finances and ability to purchase medication; no food insecurity indicated.",
+            "evidence": [
+              "turn:T04",
+              "turn:T06"
+            ]
+          }
+        ]
+      },
+      {
+        "alternatives": [],
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [
+          {
+            "barrier": "food_access",
+            "reason": "No indication of limited food access; patient reports adequate diet and no financial strain.",
+            "evidence": [
+              "turn:T04",
+              "turn:T06"
+            ]
+          }
+        ]
+      },
+      {
+        "alternatives": [],
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [
+          {
+            "barrier": "language_literacy",
+            "reason": "Patient communicates fluently in English and shows good health literacy.",
+            "evidence": [
+              "turn:T01",
+              "turn:T04"
+            ]
+          }
+        ]
+      },
+      {
+        "alternatives": [
+          {
+            "category": "ada_paratransit",
+            "resource_record_id": null,
+            "text": "Apply for ADA Paratransit through NICTA; certification can take up to 21\u202fdays but provides rides matching fixed\u2011route times."
+          },
+          {
+            "category": "medicaid_nemt",
+            "resource_record_id": null,
+            "text": "Use Medicaid Non\u2011Emergency Medical Transportation (877\u2011725\u20110569) for scheduled rides; advance booking required per MCO rules."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Request a later dialysis chair time or alternate day that aligns with available rides."
+          }
+        ],
+        "item_id": "P4",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "Patient currently bikes, but future appointments may require travel beyond bike range; no arranged transportation.",
+            "evidence": [
+              "turn:T07",
+              "turn:T08"
+            ]
+          }
+        ]
+      },
+      {
+        "alternatives": [
+          {
+            "category": "ada_paratransit",
+            "resource_record_id": null,
+            "text": "Apply for ADA Paratransit through NICTA; certification can take up to 21\u202fdays but provides rides matching fixed\u2011route times."
+          },
+          {
+            "category": "medicaid_nemt",
+            "resource_record_id": null,
+            "text": "Use Medicaid Non\u2011Emergency Medical Transportation (877\u2011725\u20110569) for scheduled rides; advance booking required per MCO rules."
+          },
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Request a later dialysis chair time or alternate day that aligns with available rides."
+          }
+        ],
+        "item_id": "P5",
+        "status": "blocked",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "Patient relies on biking; no confirmed ride for future visits beyond current location.",
+            "evidence": [
+              "turn:T07",
+              "turn:T08"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "error": null,
+  "steps": 3,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 18576,
+    "completion_tokens": 3328
+  },
+  "latency_ms": 174601,
+  "wall_s": 174.63,
+  "log": [
+    {
+      "prompt_sha256": "cfbe788a59e0accd6189007e57599302c0faeddea26fae7aa21bda40eb12de3a",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 56844,
+      "usage": {
+        "prompt_tokens": 4494,
+        "total_tokens": 5594,
+        "completion_tokens": 1100,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "[{\"alternatives\": [{\"category\": \"renal_dietitian\", \"resource_record_id\": null, \"text\": \"Schedule a session with the dialysis unit dietitian to tailor a renal-friendly diet using foods you can access.\"}, {\"category\": \"food_pantry\", \"resource_record_id\": null, \"text\": \"Visit the Greater Chicago Food Depository pantry on Tuesdays 10\u202fam\u20132\u202fpm for free groceries; bring a list of renal\u2011friendly items.\"}, {\"category\": \"snap\", \"resource_record_id\": null, \"text\": \"Apply for SNAP benefits via Illinois ABE to help cover food costs; eligibility may expedite within 7\u202fdays.\"}], \"item_id\": \"P1\", \"status\": \"likely_ok\", \"barriers\": [{\"barrier\": \"food_access\", \"reason\": \"Patient reports stable finances and ability to purchase medication; no food insecurity indicated.\", \"evidence\": [\"turn:T04\", \"turn:T06\"]}, []]}, {\"alternatives\": [{\"category\": \"renal_dietitian\", \"resource_record_id\": null, \"text\": \"Schedule a session with the dialysis unit dietitian to tailor a renal-friendly diet using foods you can access.\"}, {\"category\": \"food_pantry\", \"resource_record_id\": null, \"text\": \"Visit the Greater Chicago Food Depository pantry on Tuesdays 10\u202fam\u20132\u202fpm for free groceries; bring a list of renal\u2011friendly items.\"}, {\"category\": \"snap\", \"resource_record_id\": null, \"text\": \"Apply for SNAP benefits via Illinois ABE to help cover food costs; eligibility may expedite within 7\u202fdays.\"}], \"item_id\": \"P2\", \"status\": \"likely_ok\", \"barriers\": [{\"barrier\": \"food_access\", \"reason\": \"No indication of limited food access; patient reports adequate diet and no financial strain.\", \"evidence\": [\"turn:T04\", \"turn:T06\"]}, []]}, {\"alternatives\": [{\"category\": \"interpreter\", \"resource_record_id\": null, \"text\": \"Request a multilingual flu and COVID\u201119 vaccine administration; the clinic provides interpreter services on demand.\"}, {\"category\": \"interpreter\", \"resource_record_id\": null, \"text\": \"Ask the infectious disease clinic to schedule a tele\u2011health check\u2011in with a language line if needed.\"}, {\"category\": \"interpreter\", \"resource_record_id\": null, \"text\": \"Enroll in the clinic\u2019s plain\u2011language education packet for vaccine preparation.\"}], \"item_id\": \"P3\", \"status\": \"likely_ok\", \"barriers\": [{\"barrier\": \"language_literacy\", \"reason\": \"Patient communicates fluently in English and shows good health literacy.\", \"evidence\": [\"turn:T01\", \"turn:T04\"]}, []]}, {\"alternatives\": [{\"category\": \"ada_paratransit\", \"resource_record_id\": null, \"text\": \"Apply for ADA Paratransit through NICTA; certification can take up to 21\u202fdays but provides rides matching fixed\u2011route times.\"}, {\"category\": \"medicaid_nemt\", \"resource_record_id\": null, \"text\": \"Use Medicaid Non\u2011Emergency Medical Transportation (877\u2011725\u20110569) for scheduled rides; advance booking required per MCO rules.\"}, {\"category\": \"schedule_change\", \"resource_record_id\": null, \"text\": \"Request a later dialysis chair time or alternate day that aligns with available rides.\"}], \"item_id\": \"P4\", \"status\": \"at_risk\", \"barriers\": [{\"barrier\": \"transport\", \"reason\": \"Patient currently bikes, but future appointments may require travel beyond bike range; no arranged transportation.\", \"evidence\": [\"turn:T07\", \"turn:T08\"]}, []}, {\"alternatives\": [{\"category\": \"ada_paratransit\", \"resource_record_id\": null, \"text\": \"Apply for ADA Paratransit through NICTA; certification can take up to 21\u202fdays but provides rides matching fixed\u2011route times.\"}, {\"category\": \"medicaid_nemt\", \"resource_record_id\": null, \"text\": \"Use Medicaid Non\u2011Emergency Medical Transportation (877\u2011725\u20110569) for scheduled rides; advance booking required per MCO rules.\"}, {\"category\": \"schedule_change\", \"resource_record_id\": null, \"text\": \"Request a later dialysis chair time or alternate day that aligns with available rides.\"}], \"item_id\": \"P5\", \"status\": \"blocked\", \"barriers\": [{\"barrier\": \"transport\", \"reason\": \"Patient relies on biking; no confirmed ride for future visits beyond current location.\", \"evidence\": [\"turn:T07\", \"turn:T08\"]}, []}]"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 81473,
+      "usage": {
+        "prompt_tokens": 6787,
+        "total_tokens": 8331,
+        "completion_tokens": 1544,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "alternatives": [],
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "Patient reports stable finances and ability to purchase medication; no food insecurity indicated.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T06"
+                    ]
+                  }
+                ]
+              },
+              {
+                "alternatives": [],
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "No indication of limited food access; patient reports adequate diet and no financial strain.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T06"
+                    ]
+                  }
+                ]
+              },
+              {
+                "alternatives": [],
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [
+                  {
+                    "barrier": "language_literacy",
+                    "reason": "Patient communicates fluently in English and shows good health literacy.",
+                    "evidence": [
+                      "turn:T01",
+                      "turn:T04"
+                    ]
+                  }
+                ]
+              },
+              {
+                "alternatives": [
+                  {
+                    "category": "ada_paratransit",
+                    "resource_record_id": null,
+                    "text": "Apply for ADA Paratransit through NICTA; certification can take up to 21\u202fdays but provides rides matching fixed\u2011route times."
+                  },
+                  {
+                    "category": "medicaid_nemt",
+                    "resource_record_id": null,
+                    "text": "Use Medicaid Non\u2011Emergency Medical Transportation (877\u2011725\u20110569) for scheduled rides; advance booking required per MCO rules."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Request a later dialysis chair time or alternate day that aligns with available rides."
+                  }
+                ],
+                "item_id": "P5",
+                "status": "blocked",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Patient relies on biking; no confirmed ride for future visits beyond current location.",
+                    "evidence": [
+                      "turn:T07",
+                      "turn:T08"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 36284,
+      "usage": {
+        "prompt_tokens": 7295,
+        "total_tokens": 7979,
+        "completion_tokens": 684,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "alternatives": [],
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "Patient reports stable finances and ability to purchase medication; no food insecurity indicated.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T06"
+                    ]
+                  }
+                ]
+              },
+              {
+                "alternatives": [],
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "No indication of limited food access; patient reports adequate diet and no financial strain.",
+                    "evidence": [
+                      "turn:T04",
+                      "turn:T06"
+                    ]
+                  }
+                ]
+              },
+              {
+                "alternatives": [],
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [
+                  {
+                    "barrier": "language_literacy",
+                    "reason": "Patient communicates fluently in English and shows good health literacy.",
+                    "evidence": [
+                      "turn:T01",
+                      "turn:T04"
+                    ]
+                  }
+                ]
+              },
+              {
+                "alternatives": [
+                  {
+                    "category": "ada_paratransit",
+                    "resource_record_id": null,
+                    "text": "Apply for ADA Paratransit through NICTA; certification can take up to 21\u202fdays but provides rides matching fixed\u2011route times."
+                  },
+                  {
+                    "category": "medicaid_nemt",
+                    "resource_record_id": null,
+                    "text": "Use Medicaid Non\u2011Emergency Medical Transportation (877\u2011725\u20110569) for scheduled rides; advance booking required per MCO rules."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Request a later dialysis chair time or alternate day that aligns with available rides."
+                  }
+                ],
+                "item_id": "P4",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Patient currently bikes, but future appointments may require travel beyond bike range; no arranged transportation.",
+                    "evidence": [
+                      "turn:T07",
+                      "turn:T08"
+                    ]
+                  }
+                ]
+              },
+              {
+                "alternatives": [
+                  {
+                    "category": "ada_paratransit",
+                    "resource_record_id": null,
+                    "text": "Apply for ADA Paratransit through NICTA; certification can take up to 21\u202fdays but provides rides matching fixed\u2011route times."
+                  },
+                  {
+                    "category": "medicaid_nemt",
+                    "resource_record_id": null,
+                    "text": "Use Medicaid Non\u2011Emergency Medical Transportation (877\u2011725\u20110569) for scheduled rides; advance booking required per MCO rules."
+                  },
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Request a later dialysis chair time or alternate day that aligns with available rides."
+                  }
+                ],
+                "item_id": "P5",
+                "status": "blocked",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Patient relies on biking; no confirmed ride for future visits beyond current location.",
+                    "evidence": [
+                      "turn:T07",
+                      "turn:T08"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

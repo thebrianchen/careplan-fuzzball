@@ -1,0 +1,567 @@
+{
+  "case_id": "T004",
+  "condition": "C3",
+  "rep": 1,
+  "profile": "nano-lora-vllm",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "Work hours conflict with appointment time.",
+            "evidence": [
+              "turn:T02",
+              "turn:T04"
+            ]
+          },
+          {
+            "barrier": "transport",
+            "reason": "No reliable way to get there at the scheduled time.",
+            "evidence": [
+              "tract:no_vehicle_share",
+              "tract:places_lacktrpt"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Offer a later or different day that matches her work schedule."
+          },
+          {
+            "category": "nemt",
+            "resource_record_id": null,
+            "text": "Offer medicaid nemt for transport."
+          },
+          {
+            "category": "paratransit",
+            "resource_record_id": null,
+            "text": "Offer paratransit."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok"
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "work_schedule",
+            "reason": "Saturday morning conflicts with work.",
+            "evidence": [
+              "turn:T02"
+            ]
+          },
+          {
+            "barrier": "transport",
+            "reason": "No reliable way to get there on Saturday.",
+            "evidence": [
+              "tract:places_lacktrpt"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "schedule_change",
+            "resource_record_id": null,
+            "text": "Offer a different day or time that fits her schedule."
+          },
+          {
+            "category": "telehealth",
+            "resource_record_id": null,
+            "text": "Offer telehealth if an in\u2011person session isn\u2019t required."
+          },
+          {
+            "category": "food_pantry",
+            "resource_record_id": "CUR040",
+            "text": "Casa Catalina: Tue 09:30-11:30; Wed 13:00-17:30; Thu 09:30-11:30, 1.47 mi away."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok"
+      },
+      {
+        "item_id": "P5",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "food_access",
+            "reason": "Limited access to iron\u2011rich and fresh foods at home.",
+            "evidence": [
+              "screener:food_worry"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "food_pantry",
+            "resource_record_id": "CUR040",
+            "text": "Casa Catalina: Tue 09:30-11:30; Wed 13:00-17:30; Thu 09:30-11:30, 1.47 mi away."
+          },
+          {
+            "category": "snap",
+            "resource_record_id": "SNAP296074",
+            "text": "Supermercado El Guero 10: hours not listed; call ahead, 0.23 mi away."
+          },
+          {
+            "category": "renal_dietitian",
+            "resource_record_id": null,
+            "text": "Offer renal dietitian."
+          }
+        ]
+      }
+    ]
+  },
+  "error": null,
+  "steps": 7,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T004"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T004"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T004"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T004"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T004"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031580600"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_transit_trip",
+      "args": {
+        "appt_ref": "appt:1"
+      },
+      "ok": false
+    },
+    {
+      "tool": "get_visit_transcript",
+      "args": {
+        "visit_id": "V-T004",
+        "topic": "work_schedule"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_visit_transcript",
+      "args": {
+        "visit_id": "V-T004",
+        "topic": "language_literacy"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031580600",
+        "need": "transport",
+        "days": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri"
+        ],
+        "start": "08:00",
+        "end": "16:00"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031580600",
+        "need": "food",
+        "days": [
+          "Tue",
+          "Sat"
+        ],
+        "start": "00:00",
+        "end": "23:59"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 43770,
+    "completion_tokens": 1207
+  },
+  "latency_ms": 63857,
+  "wall_s": 63.93,
+  "log": [
+    {
+      "prompt_sha256": "7e6a4304f69dee4eaf96084a0452c7fc57ed5c60b5a92ae0b2c8f37db55e2d52",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 7789,
+      "usage": {
+        "prompt_tokens": 4610,
+        "total_tokens": 4755,
+        "completion_tokens": 145,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T004"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T004"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T004"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T004"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T004"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 2222,
+      "usage": {
+        "prompt_tokens": 5554,
+        "total_tokens": 5591,
+        "completion_tokens": 37,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031580600"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 2079,
+      "usage": {
+        "prompt_tokens": 6222,
+        "total_tokens": 6254,
+        "completion_tokens": 32,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_transit_trip",
+          "args": {
+            "appt_ref": "appt:1"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 4836,
+      "usage": {
+        "prompt_tokens": 6283,
+        "total_tokens": 6370,
+        "completion_tokens": 87,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_visit_transcript",
+          "args": {
+            "visit_id": "V-T004",
+            "topic": "work_schedule"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_visit_transcript",
+          "args": {
+            "visit_id": "V-T004",
+            "topic": "language_literacy"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 5,
+      "latency_ms": 6652,
+      "usage": {
+        "prompt_tokens": 6580,
+        "total_tokens": 6680,
+        "completion_tokens": 100,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031580600",
+            "need": "transport",
+            "days": [
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri"
+            ],
+            "start": "08:00",
+            "end": "16:00"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 6,
+      "latency_ms": 4557,
+      "usage": {
+        "prompt_tokens": 6697,
+        "total_tokens": 6787,
+        "completion_tokens": 90,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031580600",
+            "need": "food",
+            "days": [
+              "Tue",
+              "Sat"
+            ],
+            "start": "00:00",
+            "end": "23:59"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 7,
+      "latency_ms": 35722,
+      "usage": {
+        "prompt_tokens": 7824,
+        "total_tokens": 8540,
+        "completion_tokens": 716,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Work hours conflict with appointment time.",
+                    "evidence": [
+                      "turn:T02",
+                      "turn:T04"
+                    ]
+                  },
+                  {
+                    "barrier": "transport",
+                    "reason": "No reliable way to get there at the scheduled time.",
+                    "evidence": [
+                      "tract:no_vehicle_share",
+                      "tract:places_lacktrpt"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Offer a later or different day that matches her work schedule."
+                  },
+                  {
+                    "category": "nemt",
+                    "resource_record_id": null,
+                    "text": "Offer medicaid nemt for transport."
+                  },
+                  {
+                    "category": "paratransit",
+                    "resource_record_id": null,
+                    "text": "Offer paratransit."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "work_schedule",
+                    "reason": "Saturday morning conflicts with work.",
+                    "evidence": [
+                      "turn:T02"
+                    ]
+                  },
+                  {
+                    "barrier": "transport",
+                    "reason": "No reliable way to get there on Saturday.",
+                    "evidence": [
+                      "tract:places_lacktrpt"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "schedule_change",
+                    "resource_record_id": null,
+                    "text": "Offer a different day or time that fits her schedule."
+                  },
+                  {
+                    "category": "telehealth",
+                    "resource_record_id": null,
+                    "text": "Offer telehealth if an in\u2011person session isn\u2019t required."
+                  },
+                  {
+                    "category": "food_pantry",
+                    "resource_record_id": "CUR040",
+                    "text": "Casa Catalina: Tue 09:30-11:30; Wed 13:00-17:30; Thu 09:30-11:30, 1.47 mi away."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P5",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "Limited access to iron\u2011rich and fresh foods at home.",
+                    "evidence": [
+                      "screener:food_worry"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "food_pantry",
+                    "resource_record_id": "CUR040",
+                    "text": "Casa Catalina: Tue 09:30-11:30; Wed 13:00-17:30; Thu 09:30-11:30, 1.47 mi away."
+                  },
+                  {
+                    "category": "snap",
+                    "resource_record_id": "SNAP296074",
+                    "text": "Supermercado El Guero 10: hours not listed; call ahead, 0.23 mi away."
+                  },
+                  {
+                    "category": "renal_dietitian",
+                    "resource_record_id": null,
+                    "text": "Offer renal dietitian."
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

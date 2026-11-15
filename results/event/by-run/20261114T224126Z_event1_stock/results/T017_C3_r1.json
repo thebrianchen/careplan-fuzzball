@@ -1,0 +1,809 @@
+{
+  "case_id": "T017",
+  "condition": "C3",
+  "rep": 1,
+  "profile": "nano-base-vllm",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P2",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P3",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok",
+        "barriers": [],
+        "alternatives": []
+      },
+      {
+        "item_id": "P5",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "transport",
+            "reason": "Father says 10 minute car ride, but no personal vehicle; asthma visit tied to dialysis schedule which may need transit.",
+            "evidence": [
+              "turn:T12"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "coordinate_with_existing_visit",
+            "resource_record_id": null,
+            "text": "Schedule appointment to coincide with dialysis session or arrange community ride via Medicaid non-emergency transport."
+          },
+          {
+            "category": "medicaid_nemt",
+            "resource_record_id": null,
+            "text": "Apply for Medicaid Non-Emergency Medical Transportation; eligible because family likely covered by Medicaid (no spouse income mentioned)."
+          },
+          {
+            "category": "ada_paratransit",
+            "resource_record_id": null,
+            "text": "Seek ADA Paratransit service through NICTA if disability impacts ability to use car; eligibility requires certification."
+          }
+        ]
+      }
+    ]
+  },
+  "error": null,
+  "steps": 7,
+  "tool_calls": [],
+  "usage": {
+    "prompt_tokens": 51240,
+    "completion_tokens": 4433
+  },
+  "latency_ms": 171701,
+  "wall_s": 171.74,
+  "log": [
+    {
+      "prompt_sha256": "6bec6e50e389d32b0d335883564e0aa0b4421e9fbf104531eb7b4b8accd26c3c",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 24425,
+      "usage": {
+        "prompt_tokens": 4486,
+        "total_tokens": 4982,
+        "completion_tokens": 496,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "",
+            "item_id": "P1",
+            "status": "likely_ok",
+            "barriers": "[]",
+            "alternatives": "[]"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "",
+            "item_id": "P2",
+            "status": "likely_ok",
+            "barriers": "[]",
+            "alternatives": "[]"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "",
+            "item_id": "P3",
+            "status": "likely_ok",
+            "barriers": "[]",
+            "alternatives": "[]"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "",
+            "item_id": "P4",
+            "status": "likely_ok",
+            "barriers": "[]",
+            "alternatives": "[]"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": "",
+            "item_id": "P5",
+            "status": "at_risk",
+            "barriers": "[{\"barrier\": \"transport\", \"reason\": \"Father says 10 minute car ride, but no personal vehicle; asthma visit tied to dialysis schedule which may need transit.\", \"evidence\": [\"turn:T12\"]}]",
+            "alternatives": "[{\"category\": \"coordinate_with_existing_visit\", \"resource_record_id\": null, \"text\": \"Schedule appointment to coincide with dialysis session or arrange community ride via Medicaid non-emergency transport.\"}, {\"category\": \"medicaid_nemt\", \"resource_record_id\": null, \"text\": \"Apply for Medicaid Non-Emergency Medical Transportation; eligible because family likely covered by Medicaid (no spouse income mentioned).\"}, {\"category\": \"ada_paratransit\", \"resource_record_id\": null, \"text\": \"Seek ADA Paratransit service through NICTA if disability impacts ability to use car; eligibility requires certification.\"}]"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 33035,
+      "usage": {
+        "prompt_tokens": 5304,
+        "total_tokens": 6136,
+        "completion_tokens": 832,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ],
+            "item_id": "P1",
+            "status": "likely_ok",
+            "barriers": "[]",
+            "alternatives": "[]"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ],
+            "item_id": "P2",
+            "status": "likely_ok",
+            "barriers": "[]",
+            "alternatives": "[]"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ],
+            "item_id": "P3",
+            "status": "likely_ok",
+            "barriers": "[]",
+            "alternatives": "[]"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ],
+            "item_id": "P4",
+            "status": "likely_ok",
+            "barriers": "[]",
+            "alternatives": "[]"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Father says 10 minute car ride, but no personal vehicle; asthma visit tied to dialysis schedule which may need transit.",
+                    "evidence": [
+                      "turn:T12"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Schedule appointment to coincide with dialysis session or arrange community ride via Medicaid non-emergency transport."
+                  },
+                  {
+                    "category": "medicaid_nemt",
+                    "resource_record_id": null,
+                    "text": "Apply for Medicaid Non-Emergency Medical Transportation; eligible because family likely covered by Medicaid (no spouse income mentioned)."
+                  },
+                  {
+                    "category": "ada_paratransit",
+                    "resource_record_id": null,
+                    "text": "Seek ADA Paratransit service through NICTA if disability impacts ability to use car; eligibility requires certification."
+                  }
+                ],
+                "status": "at_risk",
+                "item_id": "P5"
+              }
+            ],
+            "item_id": "P5",
+            "status": "at_risk",
+            "barriers": "[{\"barrier\": \"transport\", \"reason\": \"Father says 10 minute car ride, but no personal vehicle; asthma visit tied to dialysis schedule which may need transit.\", \"evidence\": [\"turn:T12\"]}]",
+            "alternatives": "[{\"category\": \"coordinate_with_existing_visit\", \"resource_record_id\": null, \"text\": \"Schedule appointment to coincide with dialysis session or arrange community ride via Medicaid non-emergency transport.\"}, {\"category\": \"medicaid_nemt\", \"resource_record_id\": null, \"text\": \"Apply for Medicaid Non-Emergency Medical Transportation; eligible because family likely covered by Medicaid (no spouse income mentioned).\"}, {\"category\": \"ada_paratransit\", \"resource_record_id\": null, \"text\": \"Seek ADA Paratransit service through NICTA if disability impacts ability to use car; eligibility requires certification.\"}]"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 26850,
+      "usage": {
+        "prompt_tokens": 6398,
+        "total_tokens": 7126,
+        "completion_tokens": 728,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ],
+            "item_id": "P2",
+            "status": "likely_ok",
+            "barriers": "[]",
+            "alternatives": "[]"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ],
+            "item_id": "P3",
+            "status": "likely_ok",
+            "barriers": "[]",
+            "alternatives": "[]"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ],
+            "item_id": "P4",
+            "status": "likely_ok",
+            "barriers": "[]",
+            "alternatives": "[]"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P5",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Father says 10 minute car ride, but no personal vehicle; asthma visit tied to dialysis schedule which may need transit.",
+                    "evidence": [
+                      "turn:T12"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Schedule appointment to coincide with dialysis session or arrange community ride via Medicaid non-emergency transport."
+                  },
+                  {
+                    "category": "medicaid_nemt",
+                    "resource_record_id": null,
+                    "text": "Apply for Medicaid Non-Emergency Medical Transportation; eligible because family likely covered by Medicaid (no spouse income mentioned)."
+                  },
+                  {
+                    "category": "ada_paratransit",
+                    "resource_record_id": null,
+                    "text": "Seek ADA Paratransit service through NICTA if disability impacts ability to use car; eligibility requires certification."
+                  }
+                ]
+              }
+            ],
+            "status": "at_risk",
+            "barriers": "[{\"barrier\": \"transport\", \"reason\": \"Father says 10 minute car ride, but no personal vehicle; asthma visit tied to dialysis schedule which may need transit.\", \"evidence\": [\"turn:T12\"]}]",
+            "alternatives": "[{\"category\": \"coordinate_with_existing_visit\", \"resource_record_id\": null, \"text\": \"Schedule appointment to coincide with dialysis session or arrange community ride via Medicaid non-emergency transport.\"}, {\"category\": \"medicaid_nemt\", \"resource_record_id\": null, \"text\": \"Apply for Medicaid Non-Emergency Medical Transportation; eligible because family likely covered by Medicaid (no spouse income mentioned).\"}, {\"category\": \"ada_paratransit\", \"resource_record_id\": null, \"text\": \"Seek ADA Paratransit service through NICTA if disability impacts ability to use car; eligibility requires certification.\"}]"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 28168,
+      "usage": {
+        "prompt_tokens": 7334,
+        "total_tokens": 8114,
+        "completion_tokens": 780,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok"
+              }
+            ],
+            "item_id": "P1",
+            "status": "likely_ok",
+            "barriers": "[]",
+            "alternatives": "[]"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P2",
+                "status": "likely_ok"
+              }
+            ],
+            "item_id": "P2",
+            "status": "likely_ok",
+            "barriers": "[]",
+            "alternatives": "[]"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P3",
+                "status": "likely_ok"
+              }
+            ],
+            "item_id": "P3",
+            "status": "likely_ok",
+            "barriers": "[]",
+            "alternatives": "[]"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P4",
+                "status": "likely_ok"
+              }
+            ],
+            "item_id": "P4",
+            "status": "likely_ok",
+            "barriers": "[]",
+            "alternatives": "[]"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P5",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Father says 10 minute car ride, but no personal vehicle; asthma visit tied to dialysis schedule which may need transit.",
+                    "evidence": [
+                      "turn:T12"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Schedule appointment to coincide with dialysis session or arrange community ride via Medicaid non-emergency transport."
+                  },
+                  {
+                    "category": "medicaid_nemt",
+                    "resource_record_id": null,
+                    "text": "Apply for Medicaid Non-Emergency Medical Transportation; eligible because family likely covered by Medicaid (no spouse income mentioned)."
+                  },
+                  {
+                    "category": "ada_paratransit",
+                    "resource_record_id": null,
+                    "text": "Seek ADA Paratransit service through NICTA if disability impacts ability to use car; eligibility requires certification."
+                  }
+                ]
+              }
+            ],
+            "status": "at_risk",
+            "barriers": "[{\"barrier\": \"transport\", \"reason\": \"Father says 10 minute car ride, but no personal vehicle; asthma visit tied to dialysis schedule which may need transit.\", \"evidence\": [\"turn:T12\"]}]",
+            "alternatives": "[{\"category\": \"coordinate_with_existing_visit\", \"resource_record_id\": null, \"text\": \"Schedule appointment to coincide with dialysis session or arrange community ride via Medicaid non-emergency transport.\"}, {\"category\": \"medicaid_nemt\", \"resource_record_id\": null, \"text\": \"Apply for Medicaid Non-Emergency Medical Transportation; eligible because family likely covered by Medicaid (no spouse income mentioned).\"}, {\"category\": \"ada_paratransit\", \"resource_record_id\": null, \"text\": \"Seek ADA Paratransit service through NICTA if disability impacts ability to use car; eligibility requires certification.\"}]"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 5,
+      "latency_ms": 22344,
+      "usage": {
+        "prompt_tokens": 8372,
+        "total_tokens": 8980,
+        "completion_tokens": 608,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok"
+              }
+            ]
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P2",
+                "status": "likely_ok"
+              }
+            ]
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P3",
+                "status": "likely_ok"
+              }
+            ]
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P4",
+                "status": "likely_ok"
+              }
+            ]
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P5",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Father says 10 minute car ride, but no personal vehicle; asthma visit tied to dialysis schedule which may need transit.",
+                    "evidence": [
+                      "turn:T12"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Schedule appointment to coincide with dialysis session or arrange community ride via Medicaid non-emergency transport."
+                  },
+                  {
+                    "category": "medicaid_nemt",
+                    "resource_record_id": null,
+                    "text": "Apply for Medicaid Non-Emergency Medical Transportation; eligible because family likely covered by Medicaid (no spouse income mentioned)."
+                  },
+                  {
+                    "category": "ada_paratransit",
+                    "resource_record_id": null,
+                    "text": "Seek ADA Paratransit service through NICTA if disability impacts ability to use car; eligibility requires certification."
+                  }
+                ]
+              }
+            ],
+            "status": "at_risk",
+            "barriers": "[{\"barrier\": \"transport\", \"reason\": \"Father says 10 minute car ride, but no personal vehicle; asthma visit tied to dialysis schedule which may need transit.\", \"evidence\": [\"turn:T12\"]}]",
+            "alternatives": "[{\"category\": \"coordinate_with_existing_visit\", \"resource_record_id\": null, \"text\": \"Schedule appointment to coincide with dialysis session or arrange community ride via Medicaid non-emergency transport.\"}, {\"category\": \"medicaid_nemt\", \"resource_record_id\": null, \"text\": \"Apply for Medicaid Non-Emergency Medical Transportation; eligible because family likely covered by Medicaid (no spouse income mentioned).\"}, {\"category\": \"ada_paratransit\", \"resource_record_id\": null, \"text\": \"Seek ADA Paratransit service through NICTA if disability impacts ability to use car; eligibility requires certification.\"}]"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 6,
+      "latency_ms": 24202,
+      "usage": {
+        "prompt_tokens": 9226,
+        "total_tokens": 9874,
+        "completion_tokens": 648,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              }
+            ]
+          },
+          "parse_error": null
+        },
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P5",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Father says 10 minute car ride, but no personal vehicle; asthma visit tied to dialysis schedule which may need transit.",
+                    "evidence": [
+                      "turn:T12"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Schedule appointment to coincide with dialysis session or arrange community ride via Medicaid non-emergency transport."
+                  },
+                  {
+                    "category": "medicaid_nemt",
+                    "resource_record_id": null,
+                    "text": "Apply for Medicaid Non-Emergency Medical Transportation; eligible because family likely covered by Medicaid (no spouse income mentioned)."
+                  },
+                  {
+                    "category": "ada_paratransit",
+                    "resource_record_id": null,
+                    "text": "Seek ADA Paratransit service through NICTA if disability impacts ability to use car; eligibility requires certification."
+                  }
+                ]
+              }
+            ],
+            "status": "at_risk",
+            "barriers": "[{\"barrier\": \"transport\", \"reason\": \"Father says 10 minute car ride, but no personal vehicle; asthma visit tied to dialysis schedule which may need transit.\", \"evidence\": [\"turn:T12\"]}]",
+            "alternatives": "[{\"category\": \"coordinate_with_existing_visit\", \"resource_record_id\": null, \"text\": \"Schedule appointment to coincide with dialysis session or arrange community ride via Medicaid non-emergency transport.\"}, {\"category\": \"medicaid_nemt\", \"resource_record_id\": null, \"text\": \"Apply for Medicaid Non-Emergency Medical Transportation; eligible because family likely covered by Medicaid (no spouse income mentioned).\"}, {\"category\": \"ada_paratransit\", \"resource_record_id\": null, \"text\": \"Seek ADA Paratransit service through NICTA if disability impacts ability to use car; eligibility requires certification.\"}]"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 7,
+      "latency_ms": 12677,
+      "usage": {
+        "prompt_tokens": 10120,
+        "total_tokens": 10461,
+        "completion_tokens": 341,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P2",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P3",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok",
+                "barriers": [],
+                "alternatives": []
+              },
+              {
+                "item_id": "P5",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "transport",
+                    "reason": "Father says 10 minute car ride, but no personal vehicle; asthma visit tied to dialysis schedule which may need transit.",
+                    "evidence": [
+                      "turn:T12"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "coordinate_with_existing_visit",
+                    "resource_record_id": null,
+                    "text": "Schedule appointment to coincide with dialysis session or arrange community ride via Medicaid non-emergency transport."
+                  },
+                  {
+                    "category": "medicaid_nemt",
+                    "resource_record_id": null,
+                    "text": "Apply for Medicaid Non-Emergency Medical Transportation; eligible because family likely covered by Medicaid (no spouse income mentioned)."
+                  },
+                  {
+                    "category": "ada_paratransit",
+                    "resource_record_id": null,
+                    "text": "Seek ADA Paratransit service through NICTA if disability impacts ability to use car; eligibility requires certification."
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}

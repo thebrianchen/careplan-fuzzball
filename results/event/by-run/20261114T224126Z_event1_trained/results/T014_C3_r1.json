@@ -1,0 +1,541 @@
+{
+  "case_id": "T014",
+  "condition": "C3",
+  "rep": 1,
+  "profile": "nano-lora-vllm",
+  "assessment": {
+    "items": [
+      {
+        "item_id": "P1",
+        "status": "blocked",
+        "barriers": [
+          {
+            "barrier": "housing",
+            "reason": "No stable place to receive services.",
+            "evidence": [
+              "note:1",
+              "tract:places_housinsecu",
+              "tract:places_lacktrpt"
+            ]
+          },
+          {
+            "barrier": "utilities",
+            "reason": "Power loss and gas shutoff impair daily functioning.",
+            "evidence": [
+              "note:2",
+              "screener:utilities_shutoff"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "housing_support",
+            "resource_record_id": "resource:PLbf37074a",
+            "text": "Ignatian Mission Center: hours not listed; call ahead, 0.09 mi away."
+          },
+          {
+            "category": "housing_support",
+            "resource_record_id": "resource:WARM217",
+            "text": "Rogers Park (Library): Mon 12:00-20:00; Tue 10:00-18:00; Wed 12:00-20:00; Thu 10:00-18:00; Fri 09:00-17:00; Sat 09:00-17:00; Sun 13:00-17:00, 0.16 mi away."
+          },
+          {
+            "category": "shelter",
+            "resource_record_id": "resource:WARM264",
+            "text": "Paschen (Parks): hours not listed; call ahead, 0.34 mi away."
+          }
+        ]
+      },
+      {
+        "item_id": "P2",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "digital_access",
+            "reason": "No smartphone or internet for daily upload.",
+            "evidence": [
+              "screener:digital_access"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "phone_checkins",
+            "resource_record_id": null,
+            "text": "Offer phone checkins."
+          },
+          {
+            "category": "remote_monitoring_support",
+            "resource_record_id": null,
+            "text": "Offer remote monitoring support."
+          }
+        ]
+      },
+      {
+        "item_id": "P3",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "utilities",
+            "reason": "No power for CPAP at night.",
+            "evidence": [
+              "note:1"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "power_assistance",
+            "resource_record_id": "resource:WARM217",
+            "text": "Rogers Park (Library): Mon 12:00-20:00; Tue 10:00-18:00; Wed 12:00-20:00; Thu 10:00-18:00; Fri 09:00-17:00; Sat 09:00-17:00; Sun 13:00-17:00, 0.16 mi away."
+          },
+          {
+            "category": "sleep_apnea_equipment",
+            "resource_record_id": null,
+            "text": "Offer sleep apnea equipment."
+          }
+        ]
+      },
+      {
+        "item_id": "P4",
+        "status": "likely_ok"
+      },
+      {
+        "item_id": "P5",
+        "status": "at_risk",
+        "barriers": [
+          {
+            "barrier": "food_access",
+            "reason": "Limited access to renal-friendly foods.",
+            "evidence": [
+              "tract:places_foodinsecu"
+            ]
+          }
+        ],
+        "alternatives": [
+          {
+            "category": "food_pantry",
+            "resource_record_id": "resource:SNAP705309",
+            "text": "Case Hernandez: hours not listed; call ahead, 0.02 mi away."
+          },
+          {
+            "category": "food_pantry",
+            "resource_record_id": "resource:SNAP1600035",
+            "text": "Wild Onion Market: hours not listed; call ahead, 0.04 mi away."
+          },
+          {
+            "category": "food_pantry",
+            "resource_record_id": "resource:PLbf37074a",
+            "text": "Ignatian Mission Center: hours not listed; call ahead, 0.09 mi away."
+          }
+        ]
+      }
+    ]
+  },
+  "error": null,
+  "steps": 4,
+  "tool_calls": [
+    {
+      "tool": "get_patient",
+      "args": {
+        "patient_id": "P-T014"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_problems",
+      "args": {
+        "patient_id": "P-T014"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_meds",
+      "args": {
+        "patient_id": "P-T014"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_appointments",
+      "args": {
+        "patient_id": "P-T014"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_screener",
+      "args": {
+        "patient_id": "P-T014"
+      },
+      "ok": true
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031570305"
+      },
+      "ok": false
+    },
+    {
+      "tool": "get_tract_profile",
+      "args": {
+        "tract_id": "17031010702"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031010702",
+        "need": "food"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031010702",
+        "need": "housing"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031010702",
+        "need": "utilities"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031010702",
+        "need": "med_cost"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031010702",
+        "need": "language"
+      },
+      "ok": true
+    },
+    {
+      "tool": "find_resources",
+      "args": {
+        "tract_id": "17031010702",
+        "need": "digital"
+      },
+      "ok": true
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 27694,
+    "completion_tokens": 1444
+  },
+  "latency_ms": 77909,
+  "wall_s": 77.98,
+  "log": [
+    {
+      "prompt_sha256": "9923095edff0cf31c60c12bbb4c2b7b1241920a80b76a3fd0c9b724ffb16ae82",
+      "prefetch": false,
+      "final": "tool"
+    },
+    {
+      "step": 1,
+      "latency_ms": 12869,
+      "usage": {
+        "prompt_tokens": 4628,
+        "total_tokens": 4808,
+        "completion_tokens": 180,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_patient",
+          "args": {
+            "patient_id": "P-T014"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_problems",
+          "args": {
+            "patient_id": "P-T014"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_meds",
+          "args": {
+            "patient_id": "P-T014"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_appointments",
+          "args": {
+            "patient_id": "P-T014"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_screener",
+          "args": {
+            "patient_id": "P-T014"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031570305"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "latency_ms": 2251,
+      "usage": {
+        "prompt_tokens": 5807,
+        "total_tokens": 5844,
+        "completion_tokens": 37,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "get_tract_profile",
+          "args": {
+            "tract_id": "17031010702"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "latency_ms": 13784,
+      "usage": {
+        "prompt_tokens": 6475,
+        "total_tokens": 6750,
+        "completion_tokens": 275,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031010702",
+            "need": "food"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031010702",
+            "need": "housing"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031010702",
+            "need": "utilities"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031010702",
+            "need": "med_cost"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031010702",
+            "need": "language"
+          },
+          "parse_error": null
+        },
+        {
+          "name": "find_resources",
+          "args": {
+            "tract_id": "17031010702",
+            "need": "digital"
+          },
+          "parse_error": null
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "latency_ms": 49005,
+      "usage": {
+        "prompt_tokens": 10784,
+        "total_tokens": 11736,
+        "completion_tokens": 952,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "served_model": "planner",
+      "provider": null,
+      "content": "",
+      "tool_calls": [
+        {
+          "name": "submit_assessment",
+          "args": {
+            "items": [
+              {
+                "item_id": "P1",
+                "status": "blocked",
+                "barriers": [
+                  {
+                    "barrier": "housing",
+                    "reason": "No stable place to receive services.",
+                    "evidence": [
+                      "note:1",
+                      "tract:places_housinsecu",
+                      "tract:places_lacktrpt"
+                    ]
+                  },
+                  {
+                    "barrier": "utilities",
+                    "reason": "Power loss and gas shutoff impair daily functioning.",
+                    "evidence": [
+                      "note:2",
+                      "screener:utilities_shutoff"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "housing_support",
+                    "resource_record_id": "resource:PLbf37074a",
+                    "text": "Ignatian Mission Center: hours not listed; call ahead, 0.09 mi away."
+                  },
+                  {
+                    "category": "housing_support",
+                    "resource_record_id": "resource:WARM217",
+                    "text": "Rogers Park (Library): Mon 12:00-20:00; Tue 10:00-18:00; Wed 12:00-20:00; Thu 10:00-18:00; Fri 09:00-17:00; Sat 09:00-17:00; Sun 13:00-17:00, 0.16 mi away."
+                  },
+                  {
+                    "category": "shelter",
+                    "resource_record_id": "resource:WARM264",
+                    "text": "Paschen (Parks): hours not listed; call ahead, 0.34 mi away."
+                  }
+                ]
+              },
+              {
+                "item_id": "P2",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "digital_access",
+                    "reason": "No smartphone or internet for daily upload.",
+                    "evidence": [
+                      "screener:digital_access"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "phone_checkins",
+                    "resource_record_id": null,
+                    "text": "Offer phone checkins."
+                  },
+                  {
+                    "category": "remote_monitoring_support",
+                    "resource_record_id": null,
+                    "text": "Offer remote monitoring support."
+                  }
+                ]
+              },
+              {
+                "item_id": "P3",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "utilities",
+                    "reason": "No power for CPAP at night.",
+                    "evidence": [
+                      "note:1"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "power_assistance",
+                    "resource_record_id": "resource:WARM217",
+                    "text": "Rogers Park (Library): Mon 12:00-20:00; Tue 10:00-18:00; Wed 12:00-20:00; Thu 10:00-18:00; Fri 09:00-17:00; Sat 09:00-17:00; Sun 13:00-17:00, 0.16 mi away."
+                  },
+                  {
+                    "category": "sleep_apnea_equipment",
+                    "resource_record_id": null,
+                    "text": "Offer sleep apnea equipment."
+                  }
+                ]
+              },
+              {
+                "item_id": "P4",
+                "status": "likely_ok"
+              },
+              {
+                "item_id": "P5",
+                "status": "at_risk",
+                "barriers": [
+                  {
+                    "barrier": "food_access",
+                    "reason": "Limited access to renal-friendly foods.",
+                    "evidence": [
+                      "tract:places_foodinsecu"
+                    ]
+                  }
+                ],
+                "alternatives": [
+                  {
+                    "category": "food_pantry",
+                    "resource_record_id": "resource:SNAP705309",
+                    "text": "Case Hernandez: hours not listed; call ahead, 0.02 mi away."
+                  },
+                  {
+                    "category": "food_pantry",
+                    "resource_record_id": "resource:SNAP1600035",
+                    "text": "Wild Onion Market: hours not listed; call ahead, 0.04 mi away."
+                  },
+                  {
+                    "category": "food_pantry",
+                    "resource_record_id": "resource:PLbf37074a",
+                    "text": "Ignatian Mission Center: hours not listed; call ahead, 0.09 mi away."
+                  }
+                ]
+              }
+            ]
+          },
+          "parse_error": null
+        }
+      ]
+    }
+  ]
+}
