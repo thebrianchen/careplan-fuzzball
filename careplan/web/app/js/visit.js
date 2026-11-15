@@ -91,15 +91,19 @@ function evidenceRow({ e, strip, bar }, rows) {
     <span class="src ${srcKind(e)}">${e.source}</span><span class="ev-text">${evidenceText(e, rows)}${bar ? countyBar(bar) : ''}</span>${unsaid(e)}</button></li>`;
 }
 
-// An open finding leads with its first barrier and the three strongest pieces of evidence, what the visit never said first.
-// The rest of the evidence and any further barrier open on request.
+// An open finding reads top to bottom: why the item may not work (one line), the evidence, what could work instead.
+// Evidence shows the three strongest rows, what the visit never said first; the rest, a second barrier and the map open on request.
 const KEEP = 3;
-function barrierBlock(b, i, rows) {
+function evidenceList(b, rows) {
   const ordered = [...b.rows].sort((x, y) => x.e.said_in_visit - y.e.said_in_visit), rest = ordered.slice(KEEP);
-  const body = h`<ul class="evidence">${ordered.slice(0, KEEP).map(r => evidenceRow(r, rows))}</ul>
+  return h`<ul class="evidence">${ordered.slice(0, KEEP).map(r => evidenceRow(r, rows))}</ul>
     ${rest.length ? h`<details class="more-ev"><summary>${plural(rest.length, 'more piece')} of evidence</summary><ul class="evidence">${rest.map(r => evidenceRow(r, rows))}</ul></details>` : ''}`;
-  return i ? h`<details class="barrier also"><summary><b>Also: ${b.label}.</b> ${cap(b.reason)}</summary>${body}</details>`
-    : h`<div class="barrier"><p class="why"><b>${cap(b.label)}.</b> ${cap(b.reason)}</p>${body}</div>`;
+}
+// The map in one line, shown while the map itself is folded away.
+function mapLine(m) {
+  const p = m.places[0], t = p && p.trip, n = t && t.feasible ? (t.rides || []).length : 0;
+  if (p) return t && t.feasible ? `${t.minutes} min ${n ? `on ${plural(n, 'ride')}` : 'by bus or train'} to ${p.name}, ${p.miles_from_home} mi` : `${p.name}, ${p.miles_from_home} mi from home`;
+  return `${plural(m.resources.length, 'place')} that could help, near home`;
 }
 
 // One thing the doctor can choose for a flagged item: a row with a name and one line under it. `key` is what the page
@@ -124,9 +128,12 @@ function finding(it, rows, chart, animate, picks = new Set()) {
   const ex = exhibitsOf(it, chart);
   const alts = ex.alts.map((a, i) => option(altOption(a, i), picks));
   const care = dialysisTransport(it) ? DIALYSIS_ACTIONS.map((a, i) => option({ key: `c${i}`, title: a.label, detail: a.text, long: true }, picks)) : [];
-  return h`${ex.barriers.map((b, i) => barrierBlock(b, i, rows))}
-    ${ex.map ? map({ ...ex.map, animate }) : ''}
-    ${care.length || alts.length ? h`<div class="alts"><h4>What could work instead</h4><ul>${care.length ? care : alts}</ul>
+  const [main, ...also] = ex.barriers;
+  return h`<p class="why"><b>${cap(main.label)}.</b> ${cap(main.reason)}</p>
+    <div class="sec barrier"><h4>Evidence</h4>${evidenceList(main, rows)}
+      ${also.map(b => h`<details class="more-ev also"><summary>Also ${b.label}: ${b.reason}</summary>${evidenceList(b, rows)}</details>`)}
+      ${ex.map ? h`<details class="more-ev mapfold"><summary>Map: ${mapLine(ex.map)}</summary>${map({ ...ex.map, animate })}</details>` : ''}</div>
+    ${care.length || alts.length ? h`<div class="sec alts"><h4>What could work instead</h4><ul>${care.length ? care : alts}</ul>
       ${care.length && alts.length ? h`<details><summary>${plural(alts.length, 'more suggestion')} from this review</summary><ul>${alts}</ul></details>` : ''}</div>` : ''}`;
 }
 
