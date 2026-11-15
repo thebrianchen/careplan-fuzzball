@@ -208,12 +208,18 @@ export async function visit(root, id) {
   }
   let untucked = false;
   const tuckedNow = () => untucked ? [] : repeats(doc, doc.plan);
+  const shown = () => doc.items.filter(i => !tuckedNow().includes(i.item_id));     // what the page counts is what it shows
   function tuck() {                                   // after every paint: which repeats are folded away, and the line that says so
-    const ids = repeats(doc, doc.plan), names = ids.map(i => doc.plan.findIndex(p => p.item_id === i) + 1);
-    $$('.pitem', root).forEach(n => n.classList.toggle('tuck', !untucked && ids.includes(n.id.slice(2))));
+    const ids = repeats(doc, doc.plan);
+    let n = 0;                                         // the items on screen are numbered 1, 2, 3 with no gaps
+    $$('.pitem', root).forEach(node => {
+      const away = !untucked && ids.includes(node.id.slice(2));
+      node.classList.toggle('tuck', away);
+      if (!away) $('.num', node).textContent = ++n;
+    });
     const b = el('#tucked');
     b.hidden = !ids.length;
-    b.textContent = untucked ? `Hide ${plural(ids.length, 'item')} with the same barriers` : `${plural(ids.length, 'more plan item')} (${names.join(' and ')}) ${ids.length === 1 ? 'has' : 'have'} the same barriers. Show ${ids.length === 1 ? 'it' : 'them'}`;
+    b.textContent = untucked ? `Hide the ${plural(ids.length, 'item')} with the same barriers` : `${plural(ids.length, 'more plan item')} with the same barriers`;
   }
   const nextUndecided = () => flaggedOf(doc).find(i => !doc.decisions[i.item_id] && !tuckedNow().includes(i.item_id));
   function openNext() { const next = nextUndecided(); open = new Set(next ? [next.item_id] : []); }
@@ -247,19 +253,19 @@ export async function visit(root, id) {
     if (state !== 'running') el('#runclock').textContent = '';
   }
   function paintSummary() {
-    const flagged = flaggedOf(doc), s = el('#summary');
+    const items = shown(), flagged = items.filter(i => i.status !== 'likely_ok'), s = el('#summary');
     s.hidden = !doc.items.length;
     if (s.hidden) return;
-    const unsaid = doc.items.flatMap(i => i.barriers.flatMap(b => b.evidence)).filter(e => !e.said_in_visit).length;
+    const unsaid = items.flatMap(i => i.barriers.flatMap(b => b.evidence)).filter(e => !e.said_in_visit).length;
     const done = flagged.filter(i => doc.decisions[i.item_id]).length;
-    s.innerHTML = h`<div><b>${flagged.length ? `${flagged.length} of ${doc.items.length} plan items may not work for this patient.` : 'No barrier found for any plan item.'}</b>
+    s.innerHTML = h`<div><b>${flagged.length ? `${flagged.length} of ${items.length} plan items may not work for this patient.` : 'No barrier found for any plan item.'}</b>
       ${unsaid ? h`<span>${plural(unsaid, 'piece')} of evidence ${unsaid === 1 ? 'was' : 'were'} never said in the visit.
         <button type="button" id="unsaid" aria-pressed="${onlyUnsaid}" title="Dim what was said in the visit. What stays came from the chart, the neighborhood and the schedules.">${onlyUnsaid ? 'Show everything' : `Show only ${unsaid === 1 ? 'that' : 'those'}`}</button></span>` : ''}</div>
       ${flagged.length ? h`<span class="count ${done === flagged.length ? 'all' : ''}">${done} of ${flagged.length} decided</span>` : ''}`;
   }
   function showUnsaid(on) { onlyUnsaid = on; el('.review').classList.toggle('only-unsaid', on); }
   function paintAfter() {
-    const a = el('#after'), flagged = flaggedOf(doc);
+    const a = el('#after'), flagged = shown().filter(i => i.status !== 'likely_ok');
     a.hidden = !doc.items.length;
     if (a.hidden) return;
     const open = flagged.filter(i => !doc.decisions[i.item_id]).length;
@@ -407,7 +413,7 @@ export async function visit(root, id) {
     if (seg) { mode = seg.dataset.mode; localStorage.setItem('cp.mode', mode); return paintControls(); }
     if (t.closest('#go')) return start(mode);
     if (t.closest('#unsaid')) { showUnsaid(!onlyUnsaid); return paintSummary(); }
-    if (t.closest('#tucked')) { untucked = !untucked; return tuck(); }
+    if (t.closest('#tucked')) { untucked = !untucked; tuck(); paintSummary(); return paintAfter(); }
     const head = t.closest('.pitem.folds .pitem-head, .pitem.folds .brief');
     if (head) { const node = head.closest('.pitem'); return fold(node.id.slice(2), node.classList.contains('shut')); }
     if (cites) return showSource(cites.dataset.ref);
