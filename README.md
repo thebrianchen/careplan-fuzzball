@@ -5,6 +5,8 @@ probably can't follow. The patient side and the web side run on separate nodes, 
 
 CIQ Supercomputing Hackathon, Nov 13–15, 2026. Team: Brian Chen, Lynna Yang, Kevin Yin.
 
+The one-page summary is [`submission/one-pager.pdf`](submission/one-pager.pdf).
+
 The patient side and the web side run as separate Fuzzball services with separate volumes, and the only request that
 crosses asks for a neighborhood, a kind of need and days. The workflow files that ran at the event are in `fuzzball/event/`.
 
