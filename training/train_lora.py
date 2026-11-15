@@ -1,4 +1,4 @@
-"""LoRA fine-tune of Nemotron 3 Nano 30B-A3B on the synthetic planner trajectories, on box 2 / the rental.
+"""LoRA fine-tune of Nemotron 3 Nano 30B-A3B on the synthetic planner trajectories, on one GB10.
 
 Loss is computed only on the planner's own turns (tool calls and the final submit_assessment): the
 Nemotron chat template doesn't mark assistant turns, so masks are built by rendering each
@@ -8,7 +8,7 @@ Pre-flight on a laptop (CPU, tiny model) catches data and template bugs before p
     .venv-train/bin/python training/check_template.py --model nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16
     .venv-train/bin/python training/train_lora.py --model Qwen/Qwen2.5-0.5B-Instruct --limit 2 --max-steps 1 \
         --targets q_proj,v_proj --out /tmp/lora-smoke --cpu
-On the Spark (see spark/RUNBOOK.md):
+On a GB10 (fuzzball/event/train.fz.yaml runs this on the cluster):
     python training/train_lora.py --list-modules --model nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16
     python training/train_lora.py --model nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16 --targets <from above> --out runs/lora-nano
 """

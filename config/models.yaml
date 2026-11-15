@@ -134,7 +134,7 @@ profiles:
     max_tokens: 8192
     tool_mode: native
     quantization: NVFP4
-  nano-base-vllm:                 # DGX Spark week: base Nano BF16 on local vLLM (spark/finetune.sh)
+  nano-base-vllm:                 # base Nano BF16 on a local vLLM, serving the LoRA from training/train_lora.py
     model: nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16
     base_url: http://localhost:8001/v1
     base_url_env: READER_URL      # on the cluster: the small model's service or endpoint URL
@@ -156,7 +156,7 @@ profiles:
     tool_mode: native
     quantization: bf16 + LoRA
     extra_body: {chat_template_kwargs: {enable_thinking: false}}
-  nano-base-vllm-alt:             # spark/finetune.sh fallback: base Nano on :8002 when the tuned model is merged on :8001
+  nano-base-vllm-alt:             # the same base Nano on :8002, when another model is on :8001
     model: nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16
     base_url: http://localhost:8002/v1
     api_key_env: VLLM_API_KEY
