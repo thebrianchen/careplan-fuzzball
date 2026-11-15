@@ -432,3 +432,16 @@ html.stage .cbar-track{background:var(--line2)}html.stage .cbar-zone{background:
 .alts li[data-alt]:hover{background:var(--brand-soft)}
 .alts li.picked{background:var(--brand-soft);box-shadow:inset 3px 0 0 var(--brand)}
 .alts li.picked .cat::before{content:"✓ "}
+
+/* ---- the clinic page's focused view: two barriers, the map, a short list; the rest is behind "Show everything" */
+.cfocus{margin:0 0 12px}.cfocus button{padding:8px 16px;font-size:15px}.cfocus small{margin-left:6px}
+.cwhole{display:block;margin:16px 2px 0;color:var(--muted)}
+.page.clinic:not(.focus) .cfocus{display:none}
+.page.clinic.focus .cbars,.page.clinic.focus .cdetail,.page.clinic.focus .cpublic,.page.clinic.focus .rorder,.page.clinic.focus .crank .hint,
+.page.clinic.focus .cfrom,.page.clinic.focus .cfacts,.page.clinic.focus .cgaps .cmore,.page.clinic.focus .cgaps-says{display:none}
+.page.clinic.focus .cgrid{grid-template-columns:minmax(0,1fr) 360px;grid-template-areas:"map rank"}
+.page.clinic.focus .cgrid2{grid-template-columns:minmax(0,1fr)}
+@media (max-width:980px){.page.clinic.focus .cgrid{grid-template-columns:minmax(0,1fr);grid-template-areas:"map" "rank"}}
+.page.clinic.focus .cgaps-row:nth-child(n+3){display:none}
+.cfocus{display:flex;flex-wrap:wrap;max-width:100%}
+@media (max-width:620px){.cfocus button{padding:7px 10px;font-size:14px;flex:1 1 auto}.cfocus small{display:block;margin:0}}
