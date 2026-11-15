@@ -162,17 +162,6 @@ table.mini tr:last-child td{border-bottom:0}
 .src{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
 .src.chart,.src.transit,.src.hood{color:var(--mark)}
 .unsaid{justify-self:start;font-size:11.5px;font-weight:600;color:var(--mark);background:var(--mark-soft);border-radius:6px;padding:1px 7px;white-space:nowrap}
-.alts{margin-top:12px;background:#f7faf9;border:1px solid #e0ece9;border-radius:10px;padding:10px 14px}
-.alts h4{font-size:12px;font-weight:600;color:var(--brand-ink);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
-.alts ul{list-style:none;margin:0;padding:0}
-.alts li{display:grid;grid-template-columns:150px 1fr;gap:10px;padding:4px 6px;margin:0 -6px;border-radius:7px;font-size:14px;transition:background .15s}
-.alts .cat{font-size:12.5px;font-weight:600;color:var(--brand)}
-.alts .res{display:block;margin-top:5px;padding:7px 10px;background:var(--surface);border:1px solid #e0ece9;border-radius:8px}
-.alts .res b{font-weight:600}
-.alts .res .far{float:right;font-size:12.5px;font-weight:600;color:var(--brand-ink)}
-.alts .res small{display:block;margin-top:1px}
-.alts .res a{color:inherit;text-decoration:underline}
-.alts li.hl{background:var(--brand-soft)}
 .resnum{display:inline-grid;place-items:center;width:17px;height:17px;border-radius:50%;background:var(--brand);color:#fff;font-size:11px;font-weight:700;margin-right:6px;vertical-align:1px}
 
 /* ---- exhibits: the finding shown, not only said */
@@ -237,10 +226,6 @@ table.mini tr:last-child td{border-bottom:0}
 .cbar.compact .cbar-track{top:5px;height:5px}.cbar.compact .cbar-lab{font-size:11.5px}.cbar.compact .cbar-lab.med{top:17px}
 .cbar.compact .cbar-dot{width:11px;height:11px;margin:-5.5px 0 0 -5.5px}
 .decide{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px solid var(--line2)}
-.care-actions{flex-basis:100%}
-.care-actions>b{display:block;margin-bottom:6px;font-size:14px}
-.care-actions>div{display:flex;gap:8px;flex-wrap:wrap}
-.care-actions button{font-size:14px}
 .decide-btns{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
 .decide-btns button{border:0;border-radius:0;border-left:1px solid var(--line);padding:6px 14px;font-size:14px}
 .decide-btns button:first-child{border-left:0}
@@ -371,7 +356,6 @@ table.grid td.mono{white-space:nowrap}
   .banner{grid-template-columns:1fr}.back{grid-row:auto;border:0;padding:0}.problems{grid-column:1}
   .row{grid-template-columns:1fr}.row>span:nth-child(3){display:none}
   .pitem-body{margin-left:0}.runclock{font-size:17px}
-  .alts .res .far{float:none;display:block;font-weight:500}
   input[type=search]{width:100%}.page-tools{width:100%;flex-wrap:wrap}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
@@ -430,10 +414,6 @@ html.stage .cbar-track{background:var(--line2)}html.stage .cbar-zone{background:
 .more-ev{margin:2px 0 0}.more-ev>summary{color:var(--brand);font-weight:500}
 .steps-toggle{display:block;margin:0 2px 8px;font-size:13px}
 .steps.brief-steps .step:not(.pending){display:none}
-.alts li[data-alt]{cursor:pointer}
-.alts li[data-alt]:hover{background:var(--brand-soft)}
-.alts li.picked{background:var(--brand-soft);box-shadow:inset 3px 0 0 var(--brand)}
-.alts li.picked .cat::before{content:"✓ "}
 
 /* ---- the clinic page's first view: every barrier, the map and the neighborhoods; the rest opens with ?full=1 in the address */
 .page.clinic.focus .cdetail,.page.clinic.focus .cpublic,.page.clinic.focus .crank,.page.clinic.focus .cfrom,.page.clinic.focus .cfacts,
@@ -459,3 +439,23 @@ html.stage .cbar-track{background:var(--line2)}html.stage .cbar-zone{background:
 
 /* ---- the patient's record beside the plan: each tab scrolls inside the panel, so the page is as tall as the plan */
 .visit .context [data-pane]{max-height:clamp(280px,calc(100vh - 420px),520px);overflow:auto}
+
+/* ---- what the doctor can choose for a flagged item: one list of rows, the same for every item */
+.alts{margin-top:12px;background:#f7faf9;border:1px solid #e0ece9;border-radius:10px;padding:10px 12px 12px}
+.alts h4{font-size:12px;font-weight:600;color:var(--brand-ink);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.alts ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.alts .opt{display:grid;grid-template-columns:18px minmax(0,1fr) auto;gap:11px;align-items:start;padding:9px 12px;background:var(--surface);border:1px solid #dbe7e4;border-radius:9px;font-size:14px;cursor:pointer;transition:border-color .15s,background .15s}
+.alts .opt:hover,.alts .opt.hl,.alts .opt:focus-visible{border-color:var(--brand);outline:0}
+.alts .opt.picked{border-color:var(--brand);background:var(--brand-soft);box-shadow:inset 3px 0 0 var(--brand)}
+.alts .tick{width:18px;height:18px;margin-top:1px;border:1.5px solid #9fb6b2;border-radius:50%;display:grid;place-items:center;background:var(--surface)}
+.alts .picked .tick{background:var(--brand);border-color:var(--brand)}
+.alts .picked .tick::after{content:"";width:9px;height:5px;margin-top:-2px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg)}
+.alts .opt-main{min-width:0}
+.alts .res{display:block}.alts .res b{font-weight:600;color:var(--ink)}
+.alts .opt small{display:block;margin-top:1px;font-size:13px;color:var(--ink2)}
+.alts .opt.long small{display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.alts .opt.long.picked small{display:block}
+.alts .far{font-size:12.5px;font-weight:600;color:var(--brand-ink);white-space:nowrap;margin-top:2px}
+.alts .opt a{color:inherit;text-decoration:underline}
+.alts details{margin-top:9px}.alts details>summary{cursor:pointer;font-size:13px;font-weight:500;color:var(--brand)}.alts details ul{margin-top:7px}
+.ptext{min-width:0;overflow-wrap:anywhere}

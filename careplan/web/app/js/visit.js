@@ -102,33 +102,54 @@ function barrierBlock(b, i, rows) {
     : h`<div class="barrier"><p class="why"><b>${cap(b.label)}.</b> ${cap(b.reason)}</p>${body}</div>`;
 }
 
-function finding(it, rows, chart, animate) {
+// One thing the doctor can choose for a flagged item: a row with a name and one line under it. `key` is what the page
+// remembers as chosen: 'a2' is the review's third alternative, 'c0' the first clinician action. A located place keeps its
+// number on the map.
+function option({ key, title, detail, far, n, long }, picks) {
+  const on = picks.has(key);
+  return h`<li class="opt${on ? ' picked' : ''}${long ? ' long' : ''}" data-opt="${key}"${n ? h` data-res="${n}"` : ''} tabindex="0" role="checkbox" aria-checked="${String(on)}">
+    <span class="tick" aria-hidden="true"></span>
+    <span class="opt-main"><span class="res"><b>${n ? h`<span class="resnum">${n}</span>` : ''}${title}</b></span><small>${detail}</small></span>
+    ${far ? h`<span class="far">${far}</span>` : ''}</li>`;
+}
+function altOption(a, i) {
+  const r = a.resource;
+  if (!r) return { key: `a${i}`, title: category(a.label), detail: a.text };
+  return { key: `a${i}`, n: a.n, title: r.name, far: r.miles_from_home != null ? `${r.miles_from_home} mi` : '',
+    detail: h`${[category(a.label), hours(r.hours), (r.address || '').split(',')[0]].filter(Boolean).join(' · ')}${r.phone ? h` · <a href="tel:${r.phone.replace(/[^\d+]/g, '')}">${r.phone}</a>` : ''}` };
+}
+
+function finding(it, rows, chart, animate, picks = new Set()) {
   if (it.status === 'likely_ok') return h`<p class="okline">No barrier found for this patient.</p>`;
   const ex = exhibitsOf(it, chart);
-  const alternatives = ex.alts.length ? h`<div class="alts"><h4>What could work instead</h4><ul>${ex.alts.map(a => {
-      const r = a.resource;
-      return h`<li data-alt="${ex.alts.indexOf(a)}"${a.n ? h` data-res="${a.n}" tabindex="0"` : ''} title="Choose this for the patient's plan"><span class="cat">${category(a.label)}</span><span>${a.text}${r ? h`<span class="res">
-        <b>${a.n ? h`<span class="resnum">${a.n}</span>` : ''}${r.name}</b>${r.miles_from_home != null ? h`<span class="far">${r.miles_from_home} mi from home</span>` : ''}
-        <small>${[r.address, hours(r.hours)].filter(Boolean).join(' · ')}${r.phone ? h` · <a href="tel:${r.phone.replace(/[^\d+]/g, '')}">${r.phone}</a>` : ''}</small></span>` : ''}</span></li>`;
-    })}</ul></div>` : '';
+  const alts = ex.alts.map((a, i) => option(altOption(a, i), picks));
+  const care = dialysisTransport(it) ? DIALYSIS_ACTIONS.map((a, i) => option({ key: `c${i}`, title: a.label, detail: a.text, long: true }, picks)) : [];
   return h`${ex.barriers.map((b, i) => barrierBlock(b, i, rows))}
     ${ex.map ? map({ ...ex.map, animate }) : ''}
-    ${dialysisTransport(it) && ex.alts.length ? h`<details class="more-ev"><summary>Suggestions from this review</summary>${alternatives}</details>` : alternatives}`;
+    ${care.length || alts.length ? h`<div class="alts"><h4>What could work instead</h4><ul>${care.length ? care : alts}</ul>
+      ${care.length && alts.length ? h`<details><summary>${plural(alts.length, 'more suggestion')} from this review</summary><ul>${alts}</ul></details>` : ''}</div>` : ''}`;
 }
 
 const DECIDED = { accept: 'Accepted', edit: 'Changed', dismiss: 'Dismissed' };
+// The options a saved decision stands for, so a reopened item shows what was chosen.
+function chosenIn(it, dec) {
+  if (!dec || !dec.note) return new Set();
+  const action = DIALYSIS_ACTIONS.findIndex(a => a.text === dec.note), lines = dec.note.split('\n');
+  if (action >= 0) return new Set([`c${action}`]);
+  return new Set(dec.decision === 'accept' ? it.alternatives.flatMap((a, i) => lines.some(l => l.includes(a.text)) ? [`a${i}`] : []) : []);
+}
+const actionOf = dec => dec && dec.decision === 'edit' && DIALYSIS_ACTIONS.find(a => a.text === dec.note);   // an edit that is one of the offered actions
 // A flagged item folded shut: what stands in its way, and how much is behind the fold.
 function brief(it, dec) {
   const evidence = it.barriers.reduce((n, b) => n + b.evidence.length, 0);
   return h`<b>${it.barriers.map(b => cap(b.label)).join(' · ')}</b>
-    <span>${dec && dec.decision === 'edit' ? h`Changed to: “${dec.note}”` : [plural(evidence, 'piece') + ' of evidence', it.alternatives.length && plural(it.alternatives.length, 'alternative')].filter(Boolean).join(' · ')}</span>`;
+    <span>${actionOf(dec) ? actionOf(dec).label : dec && dec.decision === 'edit' ? h`Changed to: “${dec.note}”` : [plural(evidence, 'piece') + ' of evidence', it.alternatives.length && plural(it.alternatives.length, 'alternative')].filter(Boolean).join(' · ')}</span>`;
 }
-const decided = dec => !dec ? '' : dec.decision === 'accept' ? 'Accepted.' : dec.decision === 'dismiss' ? 'Dismissed: the plan stays as written.' : h`Changed to: “${dec.note}”`;
+const decided = dec => !dec ? '' : actionOf(dec) ? `Accepted: ${actionOf(dec).label}.` : dec.decision === 'accept' ? 'Accepted.' : dec.decision === 'dismiss' ? 'Dismissed: the plan stays as written.' : h`Changed to: “${dec.note}”`;
 
 function decideBar(it, dec, saved) {
   const on = d => dec && dec.decision === d ? 'on' : '';
   return h`<div class="decide" data-item="${it.item_id}">
-    ${dialysisTransport(it) ? h`<div class="care-actions"><b>Clinician’s next step</b><div>${DIALYSIS_ACTIONS.map((a, i) => h`<button type="button" data-care-action="${i}">${a.label}</button>`)}</div></div>` : ''}
     <div class="decide-btns" role="group" aria-label="Your decision on this flag">
       <button type="button" data-d="accept" class="${on('accept')}" title="The flag is right. The handout carries these alternatives.">Accept</button>
       <button type="button" data-d="edit" class="${on('edit')}" title="Write what this plan item should say instead.">Edit</button>
@@ -136,7 +157,7 @@ function decideBar(it, dec, saved) {
     </div>
     <span class="decided">${decided(dec)}${saved ? h` <small>Saved ${timeOfDay(saved)}</small>` : ''}</span>
     <form class="editbox" hidden><label>What should this plan item say instead?
-      <textarea rows="${dialysisTransport(it) ? 4 : 2}" maxlength="400">${dec && dec.note || ''}</textarea></label>
+      <textarea rows="3" maxlength="400">${dec && dec.note || ''}</textarea></label>
       <div><button type="submit" class="primary small">Save change</button><button type="button" class="link" data-cancel>Cancel</button></div></form>
   </div>`;
 }
@@ -203,10 +224,10 @@ export async function visit(root, id) {
     node.className = `pitem done ${it.status}${animate ? ' in' : ''}${flagged ? ' folds' : ''}${shut ? ' shut' : ''}`;
     node.style.animationDelay = animate && delay ? `${delay}ms` : '';
     node.dataset.decision = dec ? dec.decision : '';
-    $('.slot', node).innerHTML = h`${dec ? h`<span class="chip dec ${dec.decision}">${DECIDED[dec.decision]}</span>` : ''}<span class="chip ${it.status}">${it.status_label}</span>
+    $('.slot', node).innerHTML = h`${dec ? h`<span class="chip dec ${actionOf(dec) ? 'accept' : dec.decision}">${DECIDED[actionOf(dec) ? 'accept' : dec.decision]}</span>` : ''}<span class="chip ${it.status}">${it.status_label}</span>
       ${flagged ? h`<button type="button" class="fold" aria-expanded="${String(!shut)}" aria-label="Evidence for plan item ${it.item_id}"></button>` : ''}`;
     $('.brief', node).innerHTML = flagged ? brief(it, dec) : '';
-    $('.pitem-body', node).innerHTML = h`${finding(it, rows, doc.chart, animate)}${decidable && it.status !== 'likely_ok' ? decideBar(it, dec, savedAt[it.item_id]) : ''}`;
+    $('.pitem-body', node).innerHTML = h`${finding(it, rows, doc.chart, animate, picked[it.item_id] || chosenIn(it, dec))}${decidable && it.status !== 'likely_ok' ? decideBar(it, dec, savedAt[it.item_id]) : ''}`;
     mount(node, city);
     tuck();
   }
@@ -217,7 +238,7 @@ export async function visit(root, id) {
     $('.fold', node).setAttribute('aria-expanded', String(on));
   }
   let untucked = false, stepsOpen = false;
-  const picked = {};                                  // item id -> the alternatives the doctor chose, by position
+  const picked = {};                                  // item id -> the keys of the options the doctor chose (see option())
   const tuckedNow = () => untucked ? [] : repeats(doc, doc.plan);
   const shown = () => doc.items.filter(i => !tuckedNow().includes(i.item_id));     // what the page counts is what it shows
   function tuck() {                                   // after every paint: which repeats are folded away, and the line that says so
@@ -336,7 +357,7 @@ export async function visit(root, id) {
     follow(rid, useMode, Date.now() / 1000, `/api/app/review/${id}?mode=${useMode}&speed=${speed}&rid=${rid}${keep ? '&record=1' : ''}`);
   }
   function begin(note) {
-    running = true; savedAt = {}; open.clear();
+    running = true; savedAt = {}; open.clear(); Object.keys(picked).forEach(k => delete picked[k]);
     doc = { ...doc, items: [], steps: [], crossings: [], decisions: {}, meta: { ...doc.meta, source: 'none' } };
     el('#fail').hidden = !note; el('#fail').className = 'notice'; el('#fail').innerHTML = note || '';
     el('#summary').hidden = true; el('#after').hidden = true;
@@ -436,18 +457,16 @@ export async function visit(root, id) {
     if (seg) { mode = seg.dataset.mode; localStorage.setItem('cp.mode', mode); return paintControls(); }
     if (t.closest('#go')) return start(mode);
     if (t.closest('#steps-toggle')) { stepsOpen = !stepsOpen; return paintSteps(running ? 'Reviewing' : null); }
-    const care = t.closest('[data-care-action]');
-    if (care) {
-      const box = $('.editbox', care.closest('.decide')), text = $('textarea', box);
-      text.value = DIALYSIS_ACTIONS[+care.dataset.careAction].text;
-      box.hidden = false; text.focus();
+    const opt = t.closest('.alts li[data-opt]');
+    if (opt && !t.closest('a')) {                       // choose what goes on the patient's plan, then Accept
+      const node = opt.closest('.pitem'), set = picked[node.id.slice(2)] || (picked[node.id.slice(2)] = new Set()), key = opt.dataset.opt;
+      if (set.has(key)) set.delete(key);
+      else {                                            // a clinician action stands alone; the review's alternatives can be combined
+        [...set].filter(k => key[0] === 'c' || k[0] === 'c').forEach(k => set.delete(k));
+        set.add(key);
+      }
+      $$('.alts li[data-opt]', node).forEach(li => { const on = set.has(li.dataset.opt); li.classList.toggle('picked', on); li.setAttribute('aria-checked', String(on)); });
       return;
-    }
-    const alt = t.closest('.alts li[data-alt]');
-    if (alt && !t.closest('a')) {                       // choose which alternatives go on the patient's plan, then Accept
-      const itemId = alt.closest('.pitem').id.slice(2), set = picked[itemId] || (picked[itemId] = new Set()), n = +alt.dataset.alt;
-      set.has(n) ? set.delete(n) : set.add(n);
-      return alt.classList.toggle('picked', set.has(n));
     }
     const head = t.closest('.pitem.folds .pitem-head, .pitem.folds .brief');
     if (head) { const node = head.closest('.pitem'); return fold(node.id.slice(2), node.classList.contains('shut')); }
@@ -455,15 +474,20 @@ export async function visit(root, id) {
     if (d) {
       const bar = d.closest('.decide'), box = $('.editbox', bar);
       if (d.dataset.d !== 'edit') {
-        const itemId = bar.dataset.item, it = doc.items.find(i => i.item_id === itemId);
-        const chosen = d.dataset.d === 'accept' ? [...(picked[itemId] || [])].sort().map(n => it.alternatives[n]).filter(Boolean) : [];
+        const itemId = bar.dataset.item, it = doc.items.find(i => i.item_id === itemId), keys = [...(picked[itemId] || [])].sort();
+        const action = d.dataset.d === 'accept' && keys.find(k => k[0] === 'c');
+        if (action) return save(bar, 'edit', DIALYSIS_ACTIONS[+action.slice(1)].text);     // the action's full wording becomes the plan item
+        const chosen = d.dataset.d === 'accept' ? keys.map(k => it.alternatives[+k.slice(1)]).filter(Boolean) : [];
         return save(bar, d.dataset.d, chosen.map(a => a.resource && !a.text.includes(a.resource.name) ? `${a.resource.name}: ${a.text}` : a.text).join('\n') || undefined);
       }
       box.hidden = false; $('textarea', box).focus();
       return;
     }
     if (t.closest('[data-cancel]')) { t.closest('.editbox').hidden = true; return; }
-    if (t.closest('#reset')) { await api(`reset/${id}`, {}); doc = await api(`case/${id}`); savedAt = {}; el('#fail').hidden = true; paintAll(); paintControls(); }
+    if (t.closest('#reset')) { await api(`reset/${id}`, {}); doc = await api(`case/${id}`); savedAt = {}; Object.keys(picked).forEach(k => delete picked[k]); el('#fail').hidden = true; paintAll(); paintControls(); }
+  });
+  page.addEventListener('keydown', e => {
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('.alts li[data-opt]')) { e.preventDefault(); e.target.click(); }
   });
   page.addEventListener('submit', e => {
     e.preventDefault();
