@@ -478,3 +478,5 @@ html.stage .cbar-track{background:var(--line2)}html.stage .cbar-zone{background:
 .altmap-box{margin:0 0 8px}.altmap-box .exmap{margin-top:0}
 @media (max-width:980px){.ev{grid-template-columns:1fr}.ev-more{margin-left:0}}
 .back-draft{display:block;margin:0 0 4px;font-size:13px;font-weight:500}
+.seg button:disabled{opacity:.45;cursor:not-allowed}
+.live-note{margin:0 0 8px;text-align:right}

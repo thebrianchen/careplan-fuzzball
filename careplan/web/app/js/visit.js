@@ -7,6 +7,7 @@ import { countyBar, linkResources, map, mount, stripCount, visitStrip } from './
 import { setupVisitLayout } from './visit_layout.js';
 
 const SPEEDS = [1, 4, 8, 20];
+const LIVE_OFF = 'A live review needs the model, so it runs only on a local setup with a GPU. This site plays saved runs.';
 const DIALYSIS_ACTIONS = [
   { label: 'Request covered rides', text: 'Call the health plan using the number on the insurance card. Explain that long bus trips and lack of a car have led to missed dialysis. Request covered round-trip rides to dialysis, and confirm approval and pickup times. Keep attending scheduled dialysis while rides are arranged.' },
   { label: 'Assess home dialysis', text: 'Ask the dialysis team to assess whether home dialysis is suitable. Review support at home, training, space and insurance coverage with the team. Continue scheduled in-center dialysis until the team agrees on a new plan.' },
@@ -214,13 +215,14 @@ export async function visit(root, id) {
     <div class="cols">
       <aside class="context" aria-label="What the doctor already has">${context(doc)}</aside>
       <section class="review">
+        <p class="hint live-note" id="live-note" hidden>Live is available on a local setup with the model running. Here, reviews play from saved runs.</p>
         <div class="review-head">
           <div><button type="button" class="link back-draft" id="back-draft" hidden>← Back to the draft plan</button><h2>The plan</h2><p class="muted">${plural(doc.plan.length, 'item')} written in this visit</p></div>
           <div class="actions">
             <div class="seg" role="group" aria-label="Where the review comes from">
               <button type="button" data-mode="recorded" ${doc.has_recording ? '' : 'disabled'} title="${doc.has_recording ? 'Replay a real run of this review that was saved earlier' : 'No run has been saved for this visit'}">Saved run</button>
               ${doc.can_sample && !doc.has_recording ? h`<button type="button" data-mode="sample" title="Play a stand-in built from this visit's answer key. Not a model run.">Sample</button>` : ''}
-              <button type="button" data-mode="live" title="${doc.planner.answers ? `Run the planner now, on ${doc.planner.label}` : 'Run the planner now'}">Live</button>
+              <button type="button" data-mode="live" ${doc.planner.answers ? '' : 'disabled'} title="${doc.planner.answers ? `Run the planner now, on ${doc.planner.label}` : LIVE_OFF}">Live</button>
             </div>
             <select id="speed" aria-label="Playback speed of the saved run" title="Playback speed of the saved run">${SPEEDS.map(s => h`<option value="${s}">${s === 1 ? 'Real time' : `${s}× speed`}</option>`)}</select>
             <label class="keep" id="keep" title="Keep this live run so the visit can be replayed without the planner. A saved run is never overwritten."><input type="checkbox" id="record"> Save this run</label>
@@ -309,7 +311,7 @@ export async function visit(root, id) {
     const where = info.where || m.where, on = where ? ` on ${where}` : '';
     el('#runtext').title = profile ? `Profile ${profile} in config/models.yaml` : '';
     el('#runtext').textContent = src === 'sample' ? 'A stand-in built from this visit\'s answer key, for work on the pages. Not a model run.' : src === 'recorded'
-      ? `Recorded${on}, ${date(when)}.${state === 'running' ? '' : ` It took ${secs(m.seconds)}.`}`     // a saved run always says that it is one
+      ? (state === 'running' ? '' : `It took ${secs(m.seconds)}.`)     // the tag says it is a saved run
       : (state === 'running' ? `The planner (${model})${on} is reviewing this plan now` : `Reviewed just now by the planner (${model})${on} in ${secs(m.seconds)}.`);
     if (state !== 'running') el('#runclock').textContent = '';
   }
@@ -361,7 +363,9 @@ export async function visit(root, id) {
     saved.title = doc.has_recording ? 'Replay a real run of this review that was saved earlier' : 'No run has been saved for this visit';
     el('#speed').value = String(speed);
     el('#go').disabled = running || blocked;
-    $$('.seg button, #speed, #record', root).forEach(b => { if (b.dataset.mode !== 'recorded' || doc.has_recording) b.disabled = running; });
+    const off = b => (b.dataset.mode === 'recorded' && !doc.has_recording) || (b.dataset.mode === 'live' && !doc.planner.answers);
+    $$('.seg button, #speed, #record', root).forEach(b => { b.disabled = running || off(b); });
+    el('#live-note').hidden = doc.planner.answers;
   }
 
   // ---- the review
