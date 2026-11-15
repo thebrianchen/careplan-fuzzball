@@ -199,7 +199,7 @@ export async function clinic(root, query) {
       <section class="card cgaps" id="gaps"></section>
       <section class="card cpublic" id="public"></section>
     </div>
-    <button type="button" class="link cwhole" id="whole"></button></div>`;
+</div>`;
   const el = sel => $(sel, root);
   const byId = Object.fromEntries(P.tracts.map(t => [t.tract_id, t]));
   const hidden = new Set();                            // kinds of place the manager switched off in the legend, for this visit only
@@ -217,7 +217,6 @@ export async function clinic(root, query) {
     if (location.hash.startsWith('#/clinic') && location.hash !== address(state)) history.replaceState(null, '', address(state));
     el('.page').classList.toggle('focus', !state.full);
     el('#areas-title').textContent = chosen ? `${nameOf(chosen)} by neighborhood` : 'Patients with a flag, by neighborhood';
-    el('#whole').textContent = state.full ? 'Show less' : 'Show everything';
     el('#bars').innerHTML = barChart(P, b);
     el('#map-title').textContent = chosen ? `${nameOf(chosen)}: where flags fall` : 'Where flagged plans live';
     el('#says').textContent = says(P, state);
@@ -243,8 +242,7 @@ export async function clinic(root, query) {
     const bar = e.target.closest('[data-barrier]'), order = e.target.closest('[data-order]'), hood = e.target.closest('[data-tract]');
     const go = e.target.closest('[data-go-barrier],[data-go-tract]');     // a card below the map sends the manager to a view of it
     const kind = e.target.closest('.lg-kinds [data-kind]');
-    if (e.target.closest('#whole')) set({ full: !state.full });
-    else if (go) {
+    if (go) {
       set({ barrier: go.dataset.goBarrier ?? state.barrier, tract: go.dataset.goTract ?? state.tract });
       el('.cgrid').scrollIntoView({ behavior: 'smooth', block: 'start' });
     } else if (kind) {

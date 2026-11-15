@@ -431,8 +431,7 @@ html.stage .cbar-track{background:var(--line2)}html.stage .cbar-zone{background:
 .alts li.picked{background:var(--brand-soft);box-shadow:inset 3px 0 0 var(--brand)}
 .alts li.picked .cat::before{content:"✓ "}
 
-/* ---- the clinic page's first view: every barrier, the map and the neighborhoods; the rest is behind "Show everything" */
-.cwhole{display:block;margin:16px 2px 0;color:var(--muted)}
+/* ---- the clinic page's first view: every barrier, the map and the neighborhoods; the rest opens with ?full=1 in the address */
 .page.clinic.focus .cdetail,.page.clinic.focus .cpublic,.page.clinic.focus .crank,.page.clinic.focus .cfrom,.page.clinic.focus .cfacts,
 .page.clinic.focus .cgaps .cmore,.page.clinic.focus .cgaps-says,.page.clinic.focus .csays,.page.clinic.focus .lg-keys>span:first-child{display:none}
 .page.clinic.focus .cgrid{grid-template-columns:340px minmax(0,1fr);grid-template-areas:"bars map"}
