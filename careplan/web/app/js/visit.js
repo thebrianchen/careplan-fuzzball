@@ -87,8 +87,9 @@ function exhibitsOf(it, chart) {
 const unsaid = e => e.said_in_visit ? '' : h`<span class="unsaid">not said in the visit</span>`;
 function evidenceRow({ e, strip, bar }, rows) {
   if (strip) return h`<li class="${e.said_in_visit ? 'said' : ''}"><div class="ev strip-row"><span class="src ${srcKind(e)}">${e.source}</span><span class="ev-text">${visitStrip(strip)}</span>${unsaid(e)}</div></li>`;
-  return h`<li class="${e.said_in_visit ? 'said' : ''}"><button type="button" class="ev" data-ref="${e.ref}" title="Show where this comes from">
-    <span class="src ${srcKind(e)}">${e.source}</span><span class="ev-text">${evidenceText(e, rows)}${bar ? countyBar(bar) : ''}</span>${unsaid(e)}</button></li>`;
+  // What the patient said is a quote of several lines: it shows one line, and a click opens the rest (and finds it in the transcript).
+  return h`<li class="${e.said_in_visit ? 'said clip' : ''}"><button type="button" class="ev" data-ref="${e.ref}"${e.said_in_visit ? h` aria-expanded="false"` : ''} title="Show where this comes from">
+    <span class="src ${srcKind(e)}">${e.source}</span><span class="ev-text">${evidenceText(e, rows)}${bar ? countyBar(bar) : ''}</span>${e.said_in_visit ? h`<span class="caret" aria-hidden="true"></span>` : unsaid(e)}</button></li>`;
 }
 
 // An open finding reads top to bottom: why the item may not work (one line), the evidence, what could work instead.
@@ -474,7 +475,11 @@ export async function visit(root, id) {
     }
     const head = t.closest('.pitem.folds .pitem-head, .pitem.folds .brief');
     if (head) { const node = head.closest('.pitem'); return fold(node.id.slice(2), node.classList.contains('shut')); }
-    if (cites) return showSource(cites.dataset.ref);
+    if (cites) {
+      const row = cites.closest('.evidence li.clip');
+      if (row) cites.setAttribute('aria-expanded', String(row.classList.toggle('open')));
+      return showSource(cites.dataset.ref);
+    }
     if (d) {
       const bar = d.closest('.decide'), box = $('.editbox', bar);
       if (d.dataset.d !== 'edit') {
