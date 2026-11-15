@@ -4,6 +4,7 @@
 // Decisions are saved with POST /api/app/decision/<case>; nothing is kept only on the page.
 import { $, $$, api, cap, clock, date, h, hours, plural, secs, setPlanner, timeOfDay } from './ui.js';
 import { countyBar, linkResources, map, mount, visitStrip } from './exhibits.js';
+import { setupVisitLayout } from './visit_layout.js';
 
 const SPEEDS = [1, 4, 8, 20];
 const srcKind = e => e.said_in_visit ? 'visit' : e.source === 'Neighborhood' ? 'hood' : e.source === 'Transit schedules' ? 'transit' : 'chart';
@@ -264,10 +265,11 @@ export async function visit(root, id) {
   }
   function paintAll() {
     const reviewed = doc.items.length > 0;
+    layout.setResults(reviewed);
     if (reviewed) { openNext(); doc.items.forEach(it => paintItem(it, { decidable: true })); } else clearItems('');
     paintSteps(null); paintRunline('done'); paintSummary(); paintAfter(); markCited();
     el('#boundary').innerHTML = boundary(doc, reviewed ? 'done' : 'before');
-    el('#go').textContent = reviewed ? 'Review again' : 'Review the plan';
+    el('#go').textContent = reviewed ? 'Review again' : 'Review Plan';
   }
   function paintControls() {
     $$('.seg button', root).forEach(b => b.classList.toggle('on', b.dataset.mode === mode));
@@ -305,6 +307,7 @@ export async function visit(root, id) {
     doc = { ...doc, items: [], steps: [], crossings: [], decisions: {}, meta: { ...doc.meta, source: 'none' } };
     el('#fail').hidden = !note; el('#fail').className = 'notice'; el('#fail').innerHTML = note || '';
     el('#summary').hidden = true; el('#after').hidden = true;
+    layout.setResults(true);
     clearItems('checking'); markCited(); paintControls();
     el('#go').textContent = 'Reviewing…';
     el('#boundary').innerHTML = boundary(doc, 'running');
@@ -373,7 +376,10 @@ export async function visit(root, id) {
     n.classList.remove('flash'); void n.offsetWidth; n.classList.add('flash');
   }
   function openTab(name) {
-    $$('.tabs button', root).forEach(b => b.classList.toggle('on', b.dataset.tab === name));
+    $$('.tabs button', root).forEach(b => {
+      const active = b.dataset.tab === name;
+      b.classList.toggle('on', active); b.setAttribute('aria-selected', String(active));
+    });
     $$('.pane', root).forEach(x => { x.hidden = x.dataset.pane !== name; });
   }
 
@@ -406,6 +412,7 @@ export async function visit(root, id) {
   const onSpeed = e => { speed = +e.target.value; localStorage.setItem('cp.speed', String(speed)); };
   el('#speed').addEventListener('change', onSpeed);
 
+  const layout = setupVisitLayout(root, doc);
   paintAll(); paintControls();
   return () => { running = false; if (es) es.close(); clearInterval(tick); };
 }

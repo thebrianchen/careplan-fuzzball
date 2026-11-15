@@ -1,0 +1,78 @@
+/* Clinician workspace: patient cards, read-only drafts, and the original review results. */
+.patient-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.patient-card{display:flex;flex-direction:column;overflow:hidden;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow)}
+.patient-card:hover{border-color:var(--brand);text-decoration:none;box-shadow:0 3px 12px #17212b12}
+.patient-card-body{padding:20px;flex:1;min-width:0}
+.patient-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:18px}
+.patient-identity{display:flex;align-items:center;gap:12px;min-width:0}
+.patient-avatar{width:46px;height:46px;border-radius:50%;flex-shrink:0}
+.patient-card h2{font-size:18px;letter-spacing:-.02em}
+.patient-status{flex-shrink:0}
+.patient-status .chip{font-size:11px;padding:3px 8px}
+.patient-visit{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 12px;margin-bottom:7px;font-size:14px}
+.patient-problems{font-size:13px;line-height:1.6;color:var(--muted);min-height:42px}
+.patient-card-footer{display:flex;align-items:center;gap:10px;background:#fafbfc;border-top:1px solid var(--line2);padding:11px 20px;min-height:44px;font-size:12px;color:var(--muted)}
+.patient-card-footer>span+span:not(:empty)::before{content:'·';padding-right:10px}
+.patient-empty{color:var(--muted);grid-column:1 / -1}
+.visit>.page-back{grid-column:1 / -1;grid-row:1;font-size:13px;font-weight:500}
+.breadcrumb{display:flex;align-items:center;gap:10px;color:var(--muted)}
+.breadcrumb [aria-current]{color:var(--ink2)}
+.visit>.banner{display:flex;flex-direction:column;align-items:stretch;gap:12px;padding:18px 20px;margin:0}
+.banner .who{display:flex;flex-direction:column;align-items:flex-start;gap:3px}
+.banner .who h1{font-size:20px}
+.banner .who>span{font-size:13px;color:var(--muted);font-weight:400}
+.patient-facts{display:flex;flex-direction:column;gap:10px;font-size:13px;line-height:1.5}
+.patient-fact{display:grid;grid-template-columns:70px minmax(0,1fr);gap:8px}
+.patient-fact b,.condition-label{font-size:11px;font-weight:600;color:var(--muted)}
+.banner .problems{margin:0;gap:5px}
+.banner .problems span{font-size:12px}
+.visit .context{overflow-anchor:none}
+.visit .context .tabs{display:flex;flex-wrap:nowrap;justify-content:space-between;overflow-x:auto;gap:0;padding:6px 6px 0}
+.visit .context .tabs button{flex:0 0 auto;padding:10px 4px;font-size:12.5px;letter-spacing:-.025em;white-space:nowrap}
+.visit .turn{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:0;margin:0 0 16px;border:0;max-width:88%;border-radius:0}
+.visit .turn>.who{font-size:10px;letter-spacing:.04em;padding:0 3px;color:var(--muted)}
+.visit .turn>p{padding:10px 12px;background:#f0f3f6;border-radius:3px 12px 12px 12px;color:var(--ink);font-size:14px;line-height:1.55}
+.visit .turn.patient,.visit .turn.interpreter,.visit .turn.caregiver{margin-left:auto;align-items:flex-end}
+.visit .turn.patient>p,.visit .turn.interpreter>p,.visit .turn.caregiver>p{background:var(--brand-soft);border-radius:12px 3px 12px 12px;text-align:left}
+.visit .turn.cited>p{box-shadow:inset 3px 0 var(--risk-line)}
+.visit-summary{margin-bottom:20px}
+.visit-picker{width:100%;display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:2px 0;border:0;border-radius:0;background:transparent;text-align:left;white-space:normal;cursor:default;font-weight:400;box-shadow:none}
+.visit-picker:hover{background:transparent;border:0}
+.visit-picker-copy{display:flex;flex-direction:column;gap:5px;min-width:0}
+.visit-picker-title{font-size:15px;font-weight:600;line-height:1.45}
+.visit-picker-date{font-size:12px;color:var(--muted)}
+.visit-picker svg{flex-shrink:0;color:var(--muted);margin-top:4px}
+[data-pane=medications] .rowline{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 14px;align-items:baseline;padding:10px 0;margin:0;border-left:0;border-bottom:1px solid var(--line2)}
+[data-pane=medications] .rowline:last-child{border-bottom:0}
+.med-description{min-width:0;font-size:13px;line-height:1.6}
+.med-cost{text-align:right;white-space:nowrap;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.med-refill{grid-column:1 / -1;font-size:12px;color:var(--risk)}
+.visit .review-head{flex-wrap:nowrap;align-items:center;gap:12px;padding-bottom:16px;border-bottom:1px solid var(--line);margin:0 0 16px;min-height:46px}
+.visit .review-head>div:first-child{flex-shrink:0}
+.visit .review-head h2{font-size:17px}
+.visit .review-head .actions{margin-left:auto;flex-wrap:nowrap;gap:6px}
+.visit .review-head button,.visit .review-head select{font-size:12px;padding:7px 9px}
+.review-action{position:relative;display:flex;align-items:center}
+.review-action>#boundary{display:none;position:absolute;right:0;top:calc(100% + 8px);width:340px;max-width:80vw;z-index:40;box-shadow:0 6px 24px #17212b22;background:var(--surface);font-size:13px;margin:0}
+.review-action:hover>#boundary,.review-action:focus-within>#boundary{display:block}
+.visit .review:not(.review-results) .plan>.pitem,.blank-category{background:transparent;border:0;box-shadow:none;border-radius:0;padding:0;margin-bottom:16px;list-style:none}
+.visit .review:not(.review-results) .pitem-head{display:block}
+.visit .review:not(.review-results) .num{display:none}
+.visit .review:not(.review-results) .ptext{font-weight:400}
+.plan-field-label{display:block;font-size:15px;font-weight:600;color:var(--ink2);margin-bottom:7px}
+.plan-field{display:block;width:100%;resize:none;overflow:hidden;min-height:66px;border:1px solid #cfd9e2;border-radius:8px;background:var(--surface);padding:11px 12px;color:var(--ink);font:400 14px/1.55 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;cursor:text}
+.review-results .blank-category{display:none}
+@media(min-width:901px){
+ .page.visit{display:grid;grid-template-columns:minmax(320px,5fr) 8fr;grid-template-rows:auto min-content 1fr;gap:16px;align-items:start;align-content:start}
+ .visit>.banner{grid-column:1;grid-row:2}
+ .visit>.cols{display:contents}
+ .visit>.cols>.context{grid-column:1;grid-row:3;position:static;max-height:none;align-self:start}
+ .visit>.cols>.review{grid-column:2;grid-row:2 / span 2;min-width:0}
+}
+@media(min-width:1350px){.patient-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:1100px){.visit .review-head{flex-wrap:wrap}.visit .review-head .actions{margin-left:0;flex-wrap:wrap}}
+@media(max-width:900px){.visit>.page-back{margin-bottom:14px}.visit>.banner{margin-bottom:16px}.visit .review-head{margin-top:16px}}
+@media(max-width:700px){.patient-grid{grid-template-columns:1fr}.page-tools{flex-wrap:wrap}.patient-card-head{gap:8px}}
+@media(max-width:400px){.patient-card h2{font-size:15px}.patient-avatar{width:38px;height:38px}.patient-identity{gap:8px}.patient-card-body{padding:16px}.patient-status .chip{font-size:10px}}
+@media(max-width:620px){.top .stage-toggle{display:none}.top{gap:8px}.top-right{gap:4px}}
+html.stage .patient-problems,html.stage .med-description,html.stage .plan-field{font-size:15px}
