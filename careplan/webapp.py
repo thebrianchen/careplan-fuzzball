@@ -29,6 +29,7 @@ import functools
 import ipaddress
 import json
 import os
+import re
 import statistics
 import time
 import types
@@ -414,7 +415,7 @@ class Clinic:
         def send(ev: dict) -> None:
             ev = {**ev, "i": len(log)}               # numbered, so a page that hears an event twice (stream and poll) applies it once
             log.append(ev)
-            h.wfile.write(f"data: {json.dumps(ev, default=str, ensure_ascii=False)}\n\n".encode())
+            h.wfile.write(f"data: {_plain(json.dumps(ev, default=str, ensure_ascii=False))}\n\n".encode())
             h.wfile.flush()
 
         def relay(t: float, ev: dict) -> None:
@@ -546,12 +547,18 @@ def clinic(app) -> Clinic:
     return app.clinic
 
 
+def _plain(text: str) -> str:
+    """The case files mark invented names ("Dr. A. Moreno (fictional)", "(fictional Medicaid MCO)"). The pages drop the word:
+    every patient in the app is made up, so the word on each name is noise."""
+    return re.sub(r"\(fictional ", "(", re.sub(r" ?\(fictional\)", "", text))
+
+
 def handle(app, h, method: str, path: str, query: str) -> None:
     """Called by careplan.serve for /app... and /api/app/...; `h` is the request handler."""
     from .serve import STATIC_TYPES
 
     def js(code: int, obj) -> None:
-        h._send(code, json.dumps(obj, ensure_ascii=False, default=str), "application/json; charset=utf-8")
+        h._send(code, _plain(json.dumps(obj, ensure_ascii=False, default=str)), "application/json; charset=utf-8")
 
     if not path.startswith("/api/"):
         if method != "GET":

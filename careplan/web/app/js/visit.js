@@ -137,7 +137,7 @@ function decideBar(it, dec, saved) {
 export async function visit(root, id) {
   let doc = await api(`case/${id}`);
   setPlanner(doc.planner);
-  let es = null, tick = null, poll = null, running = false, savedAt = {}, onlyUnsaid = false;
+  let es = null, tick = null, poll = null, running = false, savedAt = {};
   let open = new Set();                              // the flagged items whose evidence is unfolded; the rest show one line
   const MODES = ['recorded', 'sample', 'live'];        // in the order a visit falls back to them
   // A stand-in review is offered only for a visit that has no recorded run to play.
@@ -265,11 +265,9 @@ export async function visit(root, id) {
     const unsaid = items.flatMap(i => i.barriers.flatMap(b => b.evidence)).filter(e => !e.said_in_visit).length;
     const done = flagged.filter(i => doc.decisions[i.item_id]).length;
     s.innerHTML = h`<div><b>${flagged.length ? `${flagged.length} of ${items.length} plan items may not work for this patient.` : 'No barrier found for any plan item.'}</b>
-      ${unsaid ? h`<span>${plural(unsaid, 'piece')} of evidence ${unsaid === 1 ? 'was' : 'were'} never said in the visit.
-        <button type="button" id="unsaid" aria-pressed="${onlyUnsaid}" title="Dim what was said in the visit. What stays came from the chart, the neighborhood and the schedules.">${onlyUnsaid ? 'Show everything' : `Show only ${unsaid === 1 ? 'that' : 'those'}`}</button></span>` : ''}</div>
+      ${unsaid ? h`<span>${plural(unsaid, 'piece')} of evidence ${unsaid === 1 ? 'was' : 'were'} never said in the visit.</span>` : ''}</div>
       ${flagged.length ? h`<span class="count ${done === flagged.length ? 'all' : ''}">${done} of ${flagged.length} decided</span>` : ''}`;
   }
-  function showUnsaid(on) { onlyUnsaid = on; el('.review').classList.toggle('only-unsaid', on); }
   function paintAfter() {
     const a = el('#after'), flagged = shown().filter(i => i.status !== 'likely_ok');
     a.hidden = !doc.items.length;
@@ -325,7 +323,7 @@ export async function visit(root, id) {
   }
   function start(useMode, note) {
     if (running) return;
-    running = true; savedAt = {}; open.clear(); showUnsaid(false);
+    running = true; savedAt = {}; open.clear();
     doc = { ...doc, items: [], steps: [], crossings: [], decisions: {}, meta: { ...doc.meta, source: 'none' } };
     el('#fail').hidden = !note; el('#fail').className = 'notice'; el('#fail').innerHTML = note || '';
     el('#summary').hidden = true; el('#after').hidden = true;
@@ -418,7 +416,6 @@ export async function visit(root, id) {
     if (tab) return openTab(tab.dataset.tab);
     if (seg) { mode = seg.dataset.mode; localStorage.setItem('cp.mode', mode); return paintControls(); }
     if (t.closest('#go')) return start(mode);
-    if (t.closest('#unsaid')) { showUnsaid(!onlyUnsaid); return paintSummary(); }
     if (t.closest('#steps-toggle')) { stepsOpen = !stepsOpen; return paintSteps(running ? 'Reviewing' : null); }
     const alt = t.closest('.alts li[data-alt]');
     if (alt && !t.closest('a')) {                       // choose which alternatives go on the patient's plan, then Accept
@@ -440,7 +437,7 @@ export async function visit(root, id) {
       return;
     }
     if (t.closest('[data-cancel]')) { t.closest('.editbox').hidden = true; return; }
-    if (t.closest('#reset')) { await api(`reset/${id}`, {}); doc = await api(`case/${id}`); savedAt = {}; el('#fail').hidden = true; showUnsaid(false); paintAll(); paintControls(); }
+    if (t.closest('#reset')) { await api(`reset/${id}`, {}); doc = await api(`case/${id}`); savedAt = {}; el('#fail').hidden = true; paintAll(); paintControls(); }
   });
   page.addEventListener('submit', e => {
     e.preventDefault();

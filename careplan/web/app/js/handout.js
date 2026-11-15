@@ -36,7 +36,7 @@ export async function handout(root, id) {
       </div>
       ${message ? h`<div class="notice bad">${message}</div>` : ''}
       <article class="sheet">
-        <h1>Your care plan</h1>
+        <h1>${doc.patient.name}’s care plan</h1>
         <p class="lede">Prepared after your visit on ${date(doc.visit.date)}. Bring this with you.</p>
         ${sections.map(s => h`<h2>${s.heading}</h2>${s.steps.map(x => h`<p class="stepline">${x}</p>`)}`)}
         ${w && w.closing ? h`<p class="closing">${w.closing}</p>` : ''}

@@ -173,7 +173,7 @@ function head(P) {
     : h`<span class="runtag reviews">${P.reviewed} of ${P.patients} plans reviewed</span><span>Counted ${date(P.built)}, ${new Date(P.built).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}.</span>`;
   return h`<div class="page-head clinic-head"><div><h1>Clinic</h1>
       <p class="muted">Every care plan in the clinic's panel, checked and counted by the patient's neighborhood, to show where plans fail and why. No patient is shown.</p>
-      <p class="cfacts"><b>${P.patients}</b> made-up patients · <b>${P.reviewed}</b> reviewed · <b>${P.tracts.length}</b> census tracts${P.areas?.length ? h` in <b>${P.areas.length}</b> neighborhoods` : ''}</p></div>
+      <p class="cfacts"><b>${P.patients}</b> patients · <b>${P.reviewed}</b> reviewed · <b>${P.tracts.length}</b> census tracts${P.areas?.length ? h` in <b>${P.areas.length}</b> neighborhoods` : ''}</p></div>
     <div class="runline csource">${tag}</div></div>`;
 }
 
