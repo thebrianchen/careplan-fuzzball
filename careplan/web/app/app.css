@@ -422,3 +422,7 @@ html.stage .cbar-track{background:var(--line2)}html.stage .cbar-zone{background:
 .cpublic.folded #public-spread,.cpublic.folded #public-hood,.cpublic.folded>.hint{display:none}
 .pitem.tuck{display:none}
 .tucked{display:block;width:100%;margin:0 0 10px;padding:9px 14px;text-align:left;font-size:14px;color:var(--ink2);background:none;border:1px dashed var(--line);border-radius:var(--radius)}
+
+.barrier.also{margin-top:10px}
+.barrier.also>summary,.more-ev>summary{cursor:pointer;font-size:14px;color:var(--ink2)}
+.more-ev{margin:2px 0 0}.more-ev>summary{color:var(--brand);font-weight:500}

@@ -92,13 +92,21 @@ function evidenceRow({ e, strip, bar }, rows) {
     <span class="src ${srcKind(e)}">${e.source}</span><span class="ev-text">${evidenceText(e, rows)}${bar ? countyBar(bar) : ''}</span>${unsaid(e)}</button></li>`;
 }
 
+// An open finding leads with its first barrier and the three strongest pieces of evidence, what the visit never said first.
+// The rest of the evidence and any further barrier open on request.
+const KEEP = 3;
+function barrierBlock(b, i, rows) {
+  const ordered = [...b.rows].sort((x, y) => x.e.said_in_visit - y.e.said_in_visit), rest = ordered.slice(KEEP);
+  const body = h`<ul class="evidence">${ordered.slice(0, KEEP).map(r => evidenceRow(r, rows))}</ul>
+    ${rest.length ? h`<details class="more-ev"><summary>${plural(rest.length, 'more piece')} of evidence</summary><ul class="evidence">${rest.map(r => evidenceRow(r, rows))}</ul></details>` : ''}`;
+  return i ? h`<details class="barrier also"><summary><b>Also: ${b.label}.</b> ${cap(b.reason)}</summary>${body}</details>`
+    : h`<div class="barrier"><p class="why"><b>${cap(b.label)}.</b> ${cap(b.reason)}</p>${body}</div>`;
+}
+
 function finding(it, rows, chart, animate) {
   if (it.status === 'likely_ok') return h`<p class="okline">No barrier found for this patient.</p>`;
   const ex = exhibitsOf(it, chart);
-  return h`${ex.barriers.map(b => h`<div class="barrier">
-      <p class="why"><b>${cap(b.label)}.</b> ${cap(b.reason)}</p>
-      <ul class="evidence">${b.rows.map(r => evidenceRow(r, rows))}</ul>
-    </div>`)}
+  return h`${ex.barriers.map((b, i) => barrierBlock(b, i, rows))}
     ${ex.map ? map({ ...ex.map, animate }) : ''}
     ${ex.alts.length ? h`<div class="alts"><h4>What could work instead</h4><ul>${ex.alts.map(a => {
       const r = a.resource;

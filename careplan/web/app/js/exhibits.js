@@ -113,8 +113,7 @@ export function map({ id, status, home, places, resources, animate = false }) {
       <canvas data-view="${view.lat0},${view.lon0},${view.k}" aria-hidden="true"></canvas>
       <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" role="group" aria-label="Map: ${said}">${legs}${resMarks}${placeMarks}${homeMark}</svg>
     </div>
-    <figcaption>${places.map(p => h`<p>${places.length > 1 ? h`<b>${p.name}.</b> ` : ''}${tripText(p)}</p>${tripBar(p)}`)}
-      <small>${ridden.length ? 'The route is the last scheduled trip that arrives in time, which may not be the one the patient takes. ' : ''}Drawn here from tables already on the private side. Drawing it sends nothing anywhere.</small></figcaption>
+    <figcaption title="${ridden.length ? 'The route is the last scheduled trip that arrives in time, which may not be the one the patient takes. ' : ''}Drawn here from tables already on the private side. Drawing it sends nothing anywhere.">${places.map(p => h`<p>${places.length > 1 ? h`<b>${p.name}.</b> ` : ''}${tripText(p)}</p>${tripBar(p)}`)}</figcaption>
   </figure>`;
 }
 
