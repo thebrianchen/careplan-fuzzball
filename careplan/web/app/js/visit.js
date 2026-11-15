@@ -208,7 +208,6 @@ export async function visit(root, id) {
         </div>
         <div class="notice" id="blocked" hidden></div>
         <div class="runline" id="runline" hidden><span class="runtag" id="runtag"></span><span id="runtext"></span><span class="runclock" id="runclock"></span></div>
-        <button type="button" class="link steps-toggle" id="steps-toggle" hidden></button>
         <ul class="steps" id="steps" hidden></ul>
         <div class="notice bad" id="fail" hidden></div>
         <div class="summary" id="summary" hidden></div>
@@ -244,7 +243,7 @@ export async function visit(root, id) {
     node.classList.toggle('shut', !on);
     $('.fold', node).setAttribute('aria-expanded', String(on));
   }
-  let untucked = false, stepsOpen = false;
+  let untucked = false;
   const picked = {};                                  // item id -> the keys of the options the doctor chose (see option())
   const tuckedNow = () => untucked ? [] : repeats(doc, doc.plan);
   const shown = () => doc.items.filter(i => !tuckedNow().includes(i.item_id));     // what the page counts is what it shows
@@ -270,25 +269,23 @@ export async function visit(root, id) {
     untucked = false; tuck();
   }
   function paintSteps(phase) {                       // phase: a pending label while running, or null when done
-    const s = el('#steps'), t = el('#steps-toggle');
-    t.hidden = !doc.steps.length;
-    t.textContent = `${stepsOpen ? 'Hide' : 'Show'} the ${plural(doc.steps.length, 'check')}`;
-    s.classList.toggle('brief-steps', !stepsOpen);     // closed: only what it is doing now
-    s.hidden = !phase && !(stepsOpen && doc.steps.length);
+    const s = el('#steps');
+    s.classList.add('brief-steps');                    // only what it is doing now; nothing once the review is done
+    s.hidden = !phase;
     s.innerHTML = h`${doc.steps.map(x => h`<li class="step ${x.kind}"><span class="tick" aria-hidden="true">${x.kind === 'crossing' ? '→' : '✓'}</span>${x.label}<small>${secs(x.t)}</small></li>`)}
       ${phase ? h`<li class="step pending"><span class="spin" aria-hidden="true"></span>${phase}</li>` : ''}`;
   }
   function paintRunline(state, info = {}) {
     const m = doc.meta, line = el('#runline');
     const src = info.source || m.source;
-    line.hidden = src === 'none';
+    line.hidden = src === 'none' || (src === 'recorded' && state !== 'running');   // a saved run shows only its clock while it plays
     if (line.hidden) return;
+    el('#runtag').hidden = src === 'recorded';
     el('#runtag').className = `runtag ${src}`;
     el('#runtag').textContent = { recorded: 'Saved run', sample: 'Sample', live: 'Live' }[src];
     const when = info.saved || m.saved, model = info.model || m.model, profile = info.profile || m.profile;
     const where = info.where || m.where, on = where ? ` on ${where}` : '';
     el('#runtext').title = profile ? `Profile ${profile} in config/models.yaml` : '';
-    el('#runtag').title = src === 'recorded' && when ? `Recorded${on}, ${date(when)}${m.seconds ? `. It took ${secs(m.seconds)} with ${model}.` : ''}` : '';
     el('#runtext').textContent = src === 'sample' ? 'A stand-in built from this visit\'s answer key, for work on the pages. Not a model run.' : src === 'recorded'
       ? ''                                               // the tag says it is a saved run; where and when it was recorded is its tooltip
       : (state === 'running' ? `The planner (${model})${on} is reviewing this plan now` : `Reviewed just now by the planner (${model})${on} in ${secs(m.seconds)}.`);
@@ -464,7 +461,6 @@ export async function visit(root, id) {
     if (tab) return openTab(tab.dataset.tab);
     if (seg) { mode = seg.dataset.mode; localStorage.setItem('cp.mode', mode); return paintControls(); }
     if (t.closest('#go')) return start(mode);
-    if (t.closest('#steps-toggle')) { stepsOpen = !stepsOpen; return paintSteps(running ? 'Reviewing' : null); }
     const opt = t.closest('.alts li[data-opt]');
     if (opt && !t.closest('a')) {                       // choose what goes on the patient's plan, then Accept
       const node = opt.closest('.pitem'), set = picked[node.id.slice(2)] || (picked[node.id.slice(2)] = new Set()), key = opt.dataset.opt;
