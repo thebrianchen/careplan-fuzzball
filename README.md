@@ -1,22 +1,27 @@
-# Care Plan Check on Fuzzball
+# Care Plan Check
 
-Checks a doctor's care plan against the patient's chart and public neighborhood data, and flags the items this patient
-probably can't follow. The patient side and the web side run on separate nodes, and Fuzzball keeps them apart.
+**A doctor's care plan only works if the patient can follow it.** Care Plan Check reads the plan alongside the patient's
+chart and public neighborhood data. It flags the items this patient probably can't follow, such as a dialysis visit two
+buses away or a prescription they can't afford, and shows the evidence. The doctor accepts, edits or dismisses each flag
+before the patient leaves.
 
-CIQ Supercomputing Hackathon, Nov 13–15, 2026. Team: Brian Chen, Lynna Yang, Kevin Yin.
+The AI has to read both the patient's chart and the outside world, and it never gets to hold both at once. Fuzzball
+keeps the two sides apart.
+
+CIQ Supercomputing Hackathon, Nov 13–15, 2026 · Team 4: Brian Chen, Lynna Yang, MD, Kevin Yin · All patients are
+synthetic. There is no real patient data in this repo.
 
 The one-page summary is [`submission/one-pager.pdf`](submission/one-pager.pdf).
 
-The patient side and the web side run as separate Fuzzball services with separate volumes, and the only request that
-crosses asks for a neighborhood, a kind of need and days. The workflow files that ran at the event are in `fuzzball/event/`.
-
-All patients are made up. There is no real patient data in this repo.
+| | Measured on the event cluster |
+|---|---|
+| **17 → 0** | of 114 prompt-injection attacks leaked a patient's identity: one AI holding chart and web, then the two-sided design |
+| **3 of 3** | attempts to get around the gateway refused: no token, an added free-text field, a forged identity |
+| **43% vs 0%** | of the problems patients never said out loud were found, against none for an AI that only hears the visit |
 
 ## How it works
 
 ![Two sides, and one question between them](docs/architecture.png)
-
-The review has to read the patient's chart and the outside world. No part of the system holds both.
 
 - **Private side.** The planner is NVIDIA Nemotron 3.5 Super (120B) on vLLM, with a small draft model that speeds up its
   decoding. It reads the visit, the patient chart, bus and train schedules and neighborhood figures through nine typed tools
@@ -32,15 +37,12 @@ The review has to read the patient's chart and the outside world. No part of the
 The attack test (`leaktest/`) plants hidden instructions in web pages and runs them against both designs. The results are
 in the table below.
 
-## Results from the event cluster
+## Results
 
-These numbers come from the two GB10 nodes that the event's Fuzzball cluster gave our team, on November 14, 2026. The planner is
-Nemotron 3.5 Super (120B, NVFP4) on vLLM with medium-effort reasoning and three requests in flight. A physician on the team
-reviewed the answer key of every test patient; every score uses her key. "Barriers found with evidence" counts a barrier
-only when the review cites evidence that can support it.
-
-`scripts/event_results.py` builds this table from the files in `results/event/`. The Workflow column names the Fuzzball
-workflow that produced each file.
+These numbers come from the two GB10 nodes that the event's Fuzzball cluster gave our team, on November 14, 2026. The
+planner is Nemotron 3.5 Super (120B, NVFP4) on vLLM with medium-effort reasoning and three requests in flight. A physician
+on the team reviewed the answer key of every test patient, and every score uses her key. "Barriers found with evidence"
+counts a barrier only when the review cites evidence that can support it.
 
 <!-- event-results:start -->
 | Measure | Result | Workflow | File(s) |
@@ -59,12 +61,66 @@ workflow that produced each file.
 
 The comparison in the first rows is against the same model with only the visit transcript. On what the patient said aloud,
 the transcript-only review does as well or better. Care Plan Check's gain comes from the chart and the neighborhood.
-On the event cluster both sides ran under one team login, so the cluster did not refuse the public side access to patient
-files. The separation there is the workflow files (the gateway mounts only the public volume) and the gateway's checks.
+
+**Limits.** On the event cluster both sides ran under one team login, so the cluster did not refuse the public side access
+to patient files. The separation there is the workflow files (the gateway mounts only the public volume) and the gateway's
+checks.
+
+## Try it
+
+You need Python 3.12. You do not need a GPU, an API key or the cluster.
+
+```sh
+python3.12 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+.venv/bin/python -m careplan.serve
+```
+
+Open http://localhost:8080/app/, choose the first visit, Raymond Ellis, and press **Review Plan**. The page replays a real
+review saved earlier and labels it as a saved run. Click a line of evidence to open it: a map of the trip to dialysis, the
+visits he missed, and how his neighborhood compares with the county. Accept, edit or dismiss each flag, then prepare the
+patient handout.
+
+To see the recorded demo page with no install, run `python3 -m http.server 8000 -d careplan/web/demo` and open
+http://localhost:8000/.
+
+<details>
+<summary><b>More about the app</b>: saved runs, connecting a planner, the Clinic page, the transit map, tests</summary>
+
+Raymond Ellis's saved run was recorded on our own GB10 on November 11, before the event, with Nemotron 3 Super (the
+planner before 3.5). Flagged items whose barriers repeat an earlier item's are folded under one line below the plan; click
+it to see them. With no planner the handout is a draft built from the review; **Write it in plain English** asks the
+planner for the plain-language version, and works without one only for the decisions saved in `recordings/handouts/`.
+
+Seven more visits have a saved run from the event cluster's planner (Nemotron 3.5 Super with medium-effort reasoning,
+November 14): D002, T004, T008, T010, T012, T013 and T014. They are listed first. The other 24 visits need the planner.
+The server looks for the event planner (Nemotron 3.5 Super on vLLM) at `PLANNER_URL`, or at `http://localhost:8000/v1`
+when that is not set. On the cluster, `PLANNER_URL` is the planner service or its endpoint. `CAREPLAN_PLANNER_FALLBACKS`
+lists other planner endpoints, separated by commas. The server uses the first endpoint that answers, and the System page
+says which one. When no planner answers, the page says so and offers the saved run.
+
+```sh
+PLANNER_URL=http://<cluster planner>:8000/v1 CAREPLAN_PLANNER_FALLBACKS=http://<our GB10>:8000/v1 .venv/bin/python -m careplan.serve
+```
+
+The Clinic page counts a whole panel of patients by neighborhood. Without published panel reviews
+(`reports/panel_aggregates.json`, not in this repo) it shows `reports/panel_aggregates_sample.json`, counts taken from the
+patients' answer keys rather than model reviews, and labels them Sample.
+
+The map draws the bus and train trip from `data/processed/transit_wed.npz`, one weekday of CTA and Pace schedules. To
+rebuild it from the current feeds, run `python -m pipeline.download --only gtfs_cta`, then the same command with
+`gtfs_pace`, then `python -m pipeline.transit build`.
+
+To run the tests, run `.venv/bin/python -m unittest discover -s tests`.
+
+</details>
+
+## Reproduce the results
 
 ### Check a number
 
-To rebuild the table, or to confirm that this README matches the files:
+`scripts/event_results.py` builds the results table from the files in `results/event/`. The Workflow column names the
+Fuzzball workflow that produced each file. To rebuild the table, or to confirm that this README matches the files:
 
 ```sh
 python scripts/event_results.py
@@ -104,47 +160,3 @@ To run the measurements on another Fuzzball cluster with two GPU nodes:
 3. Start `scores.fz.yaml` on one node and `leaktest.fz.yaml` on the other.
 4. Start `zones.fz.yaml`, then `gateway.fz.yaml`. Put the gateway's endpoint address and your own account id in `gateway.fz.yaml` and `splitcost.fz.yaml`, then start `splitcost.fz.yaml`.
 5. Start `train.fz.yaml`, then `score-trained.fz.yaml` when it finishes.
-
-## Try it
-
-You need Python 3.12. You do not need a GPU, an API key or the cluster.
-
-```sh
-python3.12 -m venv .venv
-.venv/bin/pip install -r requirements.txt
-.venv/bin/python -m careplan.serve
-```
-
-Open http://localhost:8080/app/ and choose the first visit, Raymond Ellis. Press **Review Plan**. The page replays a
-real review that was saved earlier, and labels it as a saved run. This one was recorded on our own GB10 on November 11,
-before the event, with Nemotron 3 Super (the planner before 3.5). Click a line of evidence to open it: a map of the trip to
-dialysis, the visits he missed, and how his neighborhood compares with the county. Flagged items whose barriers repeat an
-earlier item's are folded under one line below the plan; click it to see them. Accept, edit or dismiss each flag, then
-prepare the patient handout. With no planner the handout is a draft built from the review; **Write it in plain English**
-asks the planner for the plain-language version, and works without one only for the decisions saved in
-`recordings/handouts/`.
-
-Seven more visits have a saved run from the event cluster's planner (Nemotron 3.5 Super with medium-effort reasoning,
-November 14): D002, T004, T008, T010, T012, T013 and T014. They are listed first. The other 24 visits need the planner.
-The server looks for the event planner (Nemotron 3.5 Super on vLLM) at `PLANNER_URL`, or at `http://localhost:8000/v1`
-when that is not set. On the cluster, `PLANNER_URL` is the
-planner service or its endpoint. `CAREPLAN_PLANNER_FALLBACKS` lists other planner endpoints, separated by commas. The
-server uses the first endpoint that answers, and the System page says which one. When no planner answers, the page says
-so and offers the saved run.
-
-The Clinic page counts a whole panel of patients by neighborhood. Without published panel reviews
-(`reports/panel_aggregates.json`, not in this repo) it shows `reports/panel_aggregates_sample.json`, counts taken from the
-patients' answer keys rather than model reviews, and labels them Sample.
-
-```sh
-PLANNER_URL=http://<cluster planner>:8000/v1 CAREPLAN_PLANNER_FALLBACKS=http://<our GB10>:8000/v1 .venv/bin/python -m careplan.serve
-```
-
-The map draws the bus and train trip from `data/processed/transit_wed.npz`, one weekday of CTA and Pace schedules. To
-rebuild it from the current feeds, run `python -m pipeline.download --only gtfs_cta`, then the same command with
-`gtfs_pace`, then `python -m pipeline.transit build`.
-
-To see the recorded demo page with no install, run `python3 -m http.server 8000 -d careplan/web/demo` and open
-http://localhost:8000/.
-
-To run the tests, run `.venv/bin/python -m unittest discover -s tests`.
