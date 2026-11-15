@@ -10,6 +10,26 @@ crosses asks for a neighborhood, a kind of need and days. The workflow files tha
 
 All patients are made up. There is no real patient data in this repo.
 
+## How it works
+
+![Two sides, and one question between them](docs/architecture.png)
+
+The review has to read the patient's chart and the outside world. No part of the system holds both.
+
+- **Private side.** The planner is NVIDIA Nemotron 3.5 Super (120B) on vLLM, with a small draft model that speeds up its
+  decoding. It reads the visit, the patient chart, bus and train schedules and neighborhood figures through nine typed tools
+  (`careplan/tools.py`). It never opens a web page.
+- **Public side.** The gateway (`careplan/gateway.py`) answers from 2,003 public resource listings. Its workflow mounts only
+  the public volume, which holds no patient files (`fuzzball/event/gateway.fz.yaml`, `fuzzball/event/zones.fz.yaml`).
+- **What may cross.** One request with five fixed fields: a census tract, a kind of need, days, and a start and end time.
+  The request has no field for a name, a birth date or free text. A Fuzzball endpoint signs the caller's identity. The
+  gateway checks the signature and the fields, refuses anything else, and logs each decision.
+- **A third model.** Nemotron 3 Nano (30B) was trained on the cluster in one pass (`fuzzball/event/train.fz.yaml`) and scored
+  with and without the trained add-on.
+
+The attack test (`leaktest/`) plants hidden instructions in web pages and runs them against both designs. The results are
+in the table below.
+
 ## Results from the event cluster
 
 These numbers come from the two GB10 nodes that the event's Fuzzball cluster gave our team, on November 14, 2026. The planner is
