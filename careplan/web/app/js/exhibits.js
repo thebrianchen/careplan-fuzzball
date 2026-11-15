@@ -161,11 +161,13 @@ const SHAPE = {
   no_show: h`<svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 3l8 8M11 3l-8 8"/></svg>`,
   other: h`<svg viewBox="0 0 14 14" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/></svg>`,
 };
+const stripDay = appts => { const oneYear = new Set(appts.map(a => (a.date || '').slice(0, 4))).size === 1; return iso => oneYear ? date(iso).replace(/, \d{4}$/, '') : date(iso); };
+export function stripCount({ appts, depts }) {      // "3 of 5 dialysis visits missed since Sep 28"
+  return cap(`${appts.filter(a => a.status === 'no_show').length} of ${appts.length} ${depts.join(' and ')} visits missed since ${stripDay(appts)(appts[0].date)}`);
+}
 export function visitStrip({ appts, cited, depts }) {
-  const oneYear = new Set(appts.map(a => (a.date || '').slice(0, 4))).size === 1;
-  const day = iso => oneYear ? date(iso).replace(/, \d{4}$/, '') : date(iso);
-  const missed = appts.filter(a => a.status === 'no_show').length;
-  return h`<span class="strip-count">${cap(`${missed} of ${appts.length} ${depts.join(' and ')} visits missed since ${day(appts[0].date)}`)}</span>
+  const day = stripDay(appts);
+  return h`<span class="strip-count">${stripCount({ appts, depts })}</span>
     <span class="strip">${appts.map(a => {
       const shape = SHAPE[a.status] ? a.status : 'other';
       return h`<button type="button" class="mk ${shape}${cited.has(a.ref) ? ' cited' : ''}" data-ref="${a.ref}" title="${date(a.date)}, ${clock(a.time)}, ${cap(a.dept)}: ${(a.status || 'no status').replace('_', ' ')}">${SHAPE[shape]}<span>${day(a.date)}</span></button>`;

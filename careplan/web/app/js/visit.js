@@ -3,7 +3,7 @@
 //   GET /api/app/review/<case>?mode=recorded|live   ->  start, step*, item*, [rewrite], end {ok, doc | error}
 // Decisions are saved with POST /api/app/decision/<case>; nothing is kept only on the page.
 import { $, $$, api, cap, clock, date, h, hours, plural, secs, setPlanner, timeOfDay } from './ui.js';
-import { countyBar, linkResources, map, mount, visitStrip } from './exhibits.js';
+import { countyBar, linkResources, map, mount, stripCount, visitStrip } from './exhibits.js';
 import { setupVisitLayout } from './visit_layout.js';
 
 const SPEEDS = [1, 4, 8, 20];
@@ -85,26 +85,38 @@ function exhibitsOf(it, chart) {
 }
 
 const unsaid = e => e.said_in_visit ? '' : h`<span class="unsaid">not said in the visit</span>`;
+// One piece of evidence is one line: where it comes from and what it says in a sentence. When there is more to see (the rest
+// of a quote, the visits one by one, the neighborhood against the county, the trip on a map), the line opens in place.
+function evRow({ ref, kind, source, summary, more, e }) {
+  return h`<li class="${more ? 'more' : ''}"><button type="button" class="ev" data-ref="${ref}"${more ? h` aria-expanded="false"` : ''}>
+    <span class="src ${kind}">${source}</span><span class="ev-text">${summary}</span>${unsaid(e)}${more ? h`<span class="caret" aria-hidden="true"></span>` : ''}</button>
+    ${more ? h`<div class="ev-more">${more}</div>` : ''}</li>`;
+}
+// The first sentence of what was said, without the speaker: 'Patient: “Two buses, all the way down. That was…”' -> “Two buses, all the way down.”
+function firstSentence(text) {
+  const said = text.replace(/^[^:“"]{0,24}:\s*/, '').replace(/^[“"]|[”"]$/g, ''), m = said.match(/^.*?[.!?](?=\s|$)/);
+  return { summary: `“${m ? m[0] : said}”`, whole: !m || m[0].length >= said.length };
+}
 function evidenceRow({ e, strip, bar }, rows) {
-  if (strip) return h`<li class="${e.said_in_visit ? 'said' : ''}"><div class="ev strip-row"><span class="src ${srcKind(e)}">${e.source}</span><span class="ev-text">${visitStrip(strip)}</span>${unsaid(e)}</div></li>`;
-  // What the patient said is a quote of several lines: it shows one line, and a click opens the rest (and finds it in the transcript).
-  return h`<li class="${e.said_in_visit ? 'said clip' : ''}"><button type="button" class="ev" data-ref="${e.ref}"${e.said_in_visit ? h` aria-expanded="false"` : ''} title="Show where this comes from">
-    <span class="src ${srcKind(e)}">${e.source}</span><span class="ev-text">${evidenceText(e, rows)}${bar ? countyBar(bar) : ''}</span>${e.said_in_visit ? h`<span class="caret" aria-hidden="true"></span>` : unsaid(e)}</button></li>`;
+  const base = { ref: e.ref, kind: srcKind(e), source: e.source, e };
+  if (strip) return evRow({ ...base, ref: 'visits', summary: stripCount(strip), more: visitStrip(strip) });
+  if (e.said_in_visit) { const f = firstSentence(e.text); return evRow({ ...base, summary: f.summary, more: f.whole ? '' : cap(e.text) }); }
+  const text = evidenceText(e, rows), cut = bar ? text.lastIndexOf(' (') : -1;     // a neighborhood figure: the comparison goes under the line
+  return evRow({ ...base, summary: cut > 0 ? text.slice(0, cut) : text, more: bar ? h`${cut > 0 ? h`<p>${cap(text.slice(cut + 2).replace(/\)$/, ''))}</p>` : ''}${countyBar(bar)}` : '' });
 }
-
-// An open finding reads top to bottom: why the item may not work (one line), the evidence, what could work instead.
-// Evidence shows the three strongest rows, what the visit never said first; the rest, a second barrier and the map open on request.
-const KEEP = 3;
-function evidenceList(b, rows) {
-  const ordered = [...b.rows].sort((x, y) => x.e.said_in_visit - y.e.said_in_visit), rest = ordered.slice(KEEP);
-  return { top: h`<ul class="evidence">${ordered.slice(0, KEEP).map(r => evidenceRow(r, rows))}</ul>`,
-    more: rest.length ? h`<details class="more-ev"><summary>${rest.length} more</summary><ul class="evidence">${rest.map(r => evidenceRow(r, rows))}</ul></details>` : '' };
-}
-// The map in one line, shown while the map itself is folded away.
-function mapLine(m) {
-  const p = m.places[0], t = p && p.trip, n = t && t.feasible ? (t.rides || []).length : 0;
-  if (p) return t && t.feasible ? `${t.minutes} min${n ? `, ${plural(n, 'ride')}` : ''}` : `${p.miles_from_home} mi`;
-  return plural(m.resources.length, 'place');
+// Every piece of evidence for the item in one list: the visits strip, then what the visit never said, the trip, and what was said.
+function evidenceRows(ex, rows, animate) {
+  const seen = new Set(), out = [];
+  for (const r of ex.barriers.flatMap(b => b.rows)) {
+    if (seen.has(r.e.ref)) continue;
+    seen.add(r.e.ref);
+    out.push({ rank: r.strip ? 0 : r.e.said_in_visit ? 3 : 1, html: evidenceRow(r, rows) });
+  }
+  const p = ex.map && ex.map.places[0], t = p && p.trip, n = t && t.feasible ? (t.rides || []).length : 0;
+  if (p) out.push({ rank: 2, html: evRow({ ref: 'map', kind: 'transit', source: 'Transit', e: { said_in_visit: false },
+    summary: t && t.feasible ? `${t.minutes} min ${n ? `on ${plural(n, 'ride')}` : 'by bus or train'} to ${p.name}, ${p.miles_from_home} mi` : `${p.name} is ${p.miles_from_home} mi from home`,
+    more: map({ ...ex.map, animate }) }) });
+  return out.sort((x, y) => x.rank - y.rank).map(x => x.html);
 }
 
 // One thing the doctor can choose for a flagged item: a row with a name and one line under it. `key` is what the page
@@ -130,12 +142,12 @@ function finding(it, rows, chart, animate, picks = new Set()) {
   const alts = ex.alts.map((a, i) => option(altOption(a, i), picks));
   const care = dialysisTransport(it) ? DIALYSIS_ACTIONS.map((a, i) => option({ key: `c${i}`, title: a.label, detail: a.text, long: true }, picks)) : [];
   const [main, ...also] = ex.barriers;
+  const places = ex.map && !ex.map.places.length;      // a map of places that could help belongs with the choices, not the evidence
   return h`<p class="why"><b>${cap(main.label)}.</b> ${cap(main.reason)}</p>
-    <div class="sec barrier"><h4>Evidence</h4>${evidenceList(main, rows).top}
-      <div class="folds-row">${evidenceList(main, rows).more}
-        ${also.map(b => { const ev = evidenceList(b, rows); return h`<details class="more-ev also"><summary>Also: ${b.label}</summary><p class="why">${cap(b.reason)}</p>${ev.top}${ev.more}</details>`; })}
-        ${ex.map ? h`<details class="more-ev mapfold"><summary>Map: ${mapLine(ex.map)}</summary>${map({ ...ex.map, animate })}</details>` : ''}</div></div>
-    ${care.length || alts.length ? h`<div class="sec alts"><h4>What could work instead</h4><ul>${care.length ? care : alts}</ul>
+    ${also.map(b => h`<p class="why also"><b>Also ${b.label}.</b> ${cap(b.reason)}</p>`)}
+    <div class="sec barrier"><h4>Evidence</h4><ul class="evidence">${evidenceRows(ex, rows, animate)}</ul></div>
+    ${care.length || alts.length ? h`<div class="sec alts"><h4>What could work instead${places ? h`<button type="button" class="link altmap" data-altmap aria-expanded="false">Map</button>` : ''}</h4>
+      ${places ? h`<div class="altmap-box" hidden>${map({ ...ex.map, animate })}</div>` : ''}<ul>${care.length ? care : alts}</ul>
       ${care.length && alts.length ? h`<details><summary>${plural(alts.length, 'more suggestion')} from this review</summary><ul>${alts}</ul></details>` : ''}</div>` : ''}`;
 }
 
@@ -443,9 +455,8 @@ export async function visit(root, id) {
     const n = root.querySelector(`.context [data-ref="${CSS.escape(target(ref))}"]`);
     if (!n) return;
     openTab(n.closest('.pane').dataset.pane);
-    const box = el('.context');
-    if (box.scrollHeight > box.clientHeight + 4) box.scrollTop += n.getBoundingClientRect().top - box.getBoundingClientRect().top - box.clientHeight / 2 + n.offsetHeight / 2;
-    else n.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    const box = [n.closest('[data-pane]'), el('.context')].find(x => x && x.scrollHeight > x.clientHeight + 4);   // the page itself never moves
+    if (box) box.scrollTop += n.getBoundingClientRect().top - box.getBoundingClientRect().top - box.clientHeight / 2 + n.offsetHeight / 2;
     n.classList.remove('flash'); void n.offsetWidth; n.classList.add('flash');
   }
   function openTab(name) {
@@ -476,9 +487,11 @@ export async function visit(root, id) {
     }
     const head = t.closest('.pitem.folds .pitem-head, .pitem.folds .brief');
     if (head) { const node = head.closest('.pitem'); return fold(node.id.slice(2), node.classList.contains('shut')); }
+    const altmap = t.closest('[data-altmap]');
+    if (altmap) { const box = $('.altmap-box', altmap.closest('.alts')); box.hidden = !box.hidden; return altmap.setAttribute('aria-expanded', String(!box.hidden)); }
     if (cites) {
-      const row = cites.closest('.evidence li.clip');
-      if (row) cites.setAttribute('aria-expanded', String(row.classList.toggle('open')));
+      const head = t.closest('.evidence li.more > .ev');
+      if (head) head.setAttribute('aria-expanded', String(head.parentElement.classList.toggle('open')));
       return showSource(cites.dataset.ref);
     }
     if (d) {
