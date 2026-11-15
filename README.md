@@ -93,16 +93,26 @@ python3.12 -m venv .venv
 .venv/bin/python -m careplan.serve
 ```
 
-Open http://localhost:8080/app/ and choose the first visit, Raymond Ellis. Press **Review the plan**. The page replays a
-real review that was saved earlier, and labels it as a saved run. Each flag shows its evidence: a map of the trip to
-dialysis, the visits he missed, and how his neighborhood compares with the county. Click a line of evidence to see where
-it comes from. Accept, edit or dismiss each flag, then prepare the patient handout.
+Open http://localhost:8080/app/ and choose the first visit, Raymond Ellis. Press **Review Plan**. The page replays a
+real review that was saved earlier, and labels it as a saved run. This one was recorded on our own GB10 on November 11,
+before the event, with Nemotron 3 Super (the planner before 3.5). Click a line of evidence to open it: a map of the trip to
+dialysis, the visits he missed, and how his neighborhood compares with the county. Flagged items whose barriers repeat an
+earlier item's are folded under one line below the plan; click it to see them. Accept, edit or dismiss each flag, then
+prepare the patient handout. With no planner the handout is a draft built from the review; **Write it in plain English**
+asks the planner for the plain-language version, and works without one only for the decisions saved in
+`recordings/handouts/`.
 
-The other 31 visits have no saved run, so they need the planner. The server looks for the event planner (Nemotron 3.5
-Super on vLLM) at `PLANNER_URL`, or at `http://localhost:8000/v1` when that is not set. On the cluster, `PLANNER_URL` is the
+Seven more visits have a saved run from the event cluster's planner (Nemotron 3.5 Super with medium-effort reasoning,
+November 14): D002, T004, T008, T010, T012, T013 and T014. They are listed first. The other 24 visits need the planner.
+The server looks for the event planner (Nemotron 3.5 Super on vLLM) at `PLANNER_URL`, or at `http://localhost:8000/v1`
+when that is not set. On the cluster, `PLANNER_URL` is the
 planner service or its endpoint. `CAREPLAN_PLANNER_FALLBACKS` lists other planner endpoints, separated by commas. The
 server uses the first endpoint that answers, and the System page says which one. When no planner answers, the page says
 so and offers the saved run.
+
+The Clinic page counts a whole panel of patients by neighborhood. Without published panel reviews
+(`reports/panel_aggregates.json`, not in this repo) it shows `reports/panel_aggregates_sample.json`, counts taken from the
+patients' answer keys rather than model reviews, and labels them Sample.
 
 ```sh
 PLANNER_URL=http://<cluster planner>:8000/v1 CAREPLAN_PLANNER_FALLBACKS=http://<our GB10>:8000/v1 .venv/bin/python -m careplan.serve
