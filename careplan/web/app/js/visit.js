@@ -144,7 +144,7 @@ export async function visit(root, id) {
   const canRun = m => m === 'recorded' ? doc.has_recording : m === 'sample' ? doc.can_sample && !doc.has_recording : doc.planner.answers;
   const kept = localStorage.getItem('cp.mode');
   let mode = MODES.includes(kept) && canRun(kept) ? kept : MODES.find(canRun) || 'live';
-  let speed = SPEEDS.includes(+localStorage.getItem('cp.speed')) ? +localStorage.getItem('cp.speed') : 20;
+  let speed = SPEEDS.includes(+localStorage.getItem('cp.speed')) ? +localStorage.getItem('cp.speed') : 1;
   const p = doc.patient, el = sel => $(sel, root);
   const rows = Object.fromEntries([...doc.chart.appointments, ...doc.chart.screener.answers].map(r => [r.ref, r]));
 
@@ -323,6 +323,12 @@ export async function visit(root, id) {
   }
   function start(useMode, note) {
     if (running) return;
+    begin(note);
+    const keep = useMode === 'live' && !doc.has_recording && el('#record').checked;
+    const rid = Math.random().toString(36).slice(2);
+    follow(rid, useMode, Date.now() / 1000, `/api/app/review/${id}?mode=${useMode}&speed=${speed}&rid=${rid}${keep ? '&record=1' : ''}`);
+  }
+  function begin(note) {
     running = true; savedAt = {}; open.clear();
     doc = { ...doc, items: [], steps: [], crossings: [], decisions: {}, meta: { ...doc.meta, source: 'none' } };
     el('#fail').hidden = !note; el('#fail').className = 'notice'; el('#fail').innerHTML = note || '';
@@ -331,20 +337,27 @@ export async function visit(root, id) {
     clearItems('checking'); markCited(); paintControls();
     el('#go').textContent = 'Reviewing…';
     paintSteps('Starting');
-    let rate = 1;
-    const t0 = performance.now();
-    tick = setInterval(() => { el('#runclock').textContent = secs((performance.now() - t0) / 1000 * rate); }, 200);
-    const keep = useMode === 'live' && !doc.has_recording && el('#record').checked;
-    const rid = Math.random().toString(36).slice(2);
-    let seen = -1;
-    es = new EventSource(`/api/app/review/${id}?mode=${useMode}&speed=${speed}&rid=${rid}${keep ? '&record=1' : ''}`);
-    es.onmessage = m => apply(JSON.parse(m.data));
-    // Some proxies hold an event stream back until it ends, so the same events are also asked for; each is applied once.
-    poll = setInterval(async () => {
-      try { (await api(`progress/${id}?rid=${rid}&after=${seen}`)).events.forEach(apply); } catch (e) { /* the stream may still deliver */ }
-    }, 700);
+  }
+  // A review runs on the server to its end, whether or not this page stays. The page follows it by its id: over the stream
+  // when it started the review here, and by asking for its events either way, so a page that left picks it up on return.
+  function follow(rid, useMode, started, streamUrl) {
+    let rate = 1, seen = -1, misses = 0;
+    tick = setInterval(() => { el('#runclock').textContent = secs(Math.max(0, Date.now() / 1000 - started) * rate); }, 200);
+    if (streamUrl) {
+      es = new EventSource(streamUrl);
+      es.onmessage = m => apply(JSON.parse(m.data));
+      es.onerror = () => { if (es) { es.close(); es = null; } };       // never reconnect: that would ask for the review again
+    }
+    const ask = async () => {
+      try { (await api(`progress/${id}?rid=${rid}&after=${seen}`)).events.forEach(apply); misses = 0; }
+      catch (e) { if (++misses >= 8 && running) { stop(); failed('The connection to the app server dropped during the review.', useMode); } }
+    };
+    poll = setInterval(ask, 700);
+    if (!streamUrl) ask();                             // picking a review up: show where it stands at once
     function apply(ev) {
-      if (!running || ev.i <= seen) return;
+      if (!running) return;
+      if (ev.type === 'busy') { stop(); begin(); return follow(ev.rid, ev.mode, ev.started, null); }   // already under way: follow that one
+      if (ev.i <= seen) return;
       seen = ev.i;
       if (ev.type === 'start') {
         rate = ev.speed || 1;
@@ -372,7 +385,6 @@ export async function visit(root, id) {
         el('#go').textContent = 'Review again';
       }
     }
-    es.onerror = () => { if (running) { stop(); failed('The connection to the app server dropped during the review.', useMode); } };
   }
 
   // ---- decisions
@@ -450,5 +462,6 @@ export async function visit(root, id) {
 
   const layout = setupVisitLayout(root, doc);
   paintAll(); paintControls();
+  if (doc.running) { begin(); follow(doc.running.rid, doc.running.mode, doc.running.started, null); }   // a review started before this page loaded
   return () => { running = false; if (es) es.close(); clearInterval(tick); clearInterval(poll); };
 }

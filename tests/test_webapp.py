@@ -4,6 +4,7 @@ import os
 import shutil
 import tempfile
 import threading
+import time
 import unittest
 import urllib.error
 import urllib.request
@@ -369,6 +370,33 @@ class WebAppTests(unittest.TestCase):
             self.assertIsNone(self.get("case/D001")["handout"])                            # other decisions, another handout
         finally:
             self.app.client = client
+
+    def test_a_review_runs_to_its_end_after_the_page_leaves_and_the_page_can_pick_it_up(self):
+        r = urllib.request.urlopen(f"{self.url}/api/app/review/D001?mode=recorded&speed=30&rid=left1")     # about 3 s at this speed
+        r.readline()
+        r.close()                                                                          # the page leaves after the first event
+        doc = self.get("case/D001")
+        self.assertEqual((doc["running"]["rid"], doc["running"]["mode"], doc["items"]), ("left1", "recorded", []))
+        self.assertTrue(next(c for c in self.get("cases")["cases"] if c["case_id"] == "D001")["running"])
+        self.assertEqual((self.review("mode=recorded&speed=1000&rid=second")[0]["type"], self.get("progress/D001?rid=second")["events"]),
+                         ("busy", []))                                                     # a second request does not start another
+        for _ in range(100):
+            if not self.get("case/D001")["running"]:
+                break
+            time.sleep(0.1)
+        doc, events = self.get("case/D001"), self.get("progress/D001?rid=left1")["events"]
+        self.assertEqual((doc["running"], doc["meta"]["source"], len(doc["items"])), (None, "recorded", 5))
+        self.assertEqual((events[0]["type"], events[-1]["type"], events[-1]["ok"]), ("start", "end", True))
+
+    def test_a_review_that_failed_while_the_page_was_away_is_still_there_to_be_read(self):
+        self.clinic.planner = lambda fresh=False: {"profile": "p", "model": "m", "host": "x", "hosted": False, "label": "x", "fallback": False,
+                                                   "answers": False, "why": "x did not answer", "skipped": []}
+        self.review("mode=live&rid=failed1")
+        cur = self.get("case/D001")["running"]
+        self.assertEqual((cur["rid"], cur["done"]), ("failed1", True))
+        self.assertFalse(self.get("progress/D001?rid=failed1")["events"][-1]["ok"])
+        self.assertEqual(self.review("mode=recorded&speed=1000")[-1]["ok"], True)          # a failed one does not block the next
+        self.assertIsNone(self.get("case/D001")["running"])
 
     def test_pages_are_served_and_nothing_outside_them(self):
         with urllib.request.urlopen(f"{self.url}/app/") as r:

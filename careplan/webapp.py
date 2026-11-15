@@ -4,7 +4,9 @@ system page. JSON routes and one event stream, all riding on the App in careplan
 GET  /app/                    the pages (plain static files, no build step)
 GET  /api/app/cases           the day's visits: who, what setting, whether a review exists
 GET  /api/app/case/<id>       one visit: patient, chart, visit, plan, and the review if there is one
-GET  /api/app/review/<id>     event stream of a review. ?mode=recorded replays a saved real run (&speed=N); ?mode=live runs the planner now;
+GET  /api/app/review/<id>     event stream of a review. It runs to its end even if the page leaves; the visit then says it is `running`
+                              and the page follows it through /progress. One review of a visit at a time: a second request gets `busy`.
+                              ?mode=recorded replays a saved real run (&speed=N); ?mode=live runs the planner now;
                               ?mode=sample plays a stand-in built from the answer key, only when the server runs with CAREPLAN_SAMPLE=1
                               (&record=1 keeps a finished live run as this visit's saved run, if it has none; a saved run is never overwritten)
 POST /api/app/decision/<id>   {item_id, decision: accept|edit|dismiss, note}: the clinician's call on one flagged item
@@ -261,6 +263,7 @@ class Clinic:
         self.fallbacks = [u.strip() for u in os.environ.get("CAREPLAN_PLANNER_FALLBACKS", "").split(",") if u.strip()]
         self.county = county(app.tracts)
         self.progress: collections.OrderedDict[str, list] = collections.OrderedDict()   # review id -> its events so far, for pages that poll
+        self.running: dict[str, dict] = {}                   # case_id -> the review in progress, or the last one if it failed (done)
 
     @functools.cached_property
     def city(self) -> dict:
@@ -353,7 +356,8 @@ class Clinic:
             out.append({"case_id": cid, "name": p.get("name"), "age": _age(p, v), "sex": p.get("sex"),
                         "language": LANGUAGE.get((p.get("language") or "en").lower(), p.get("language")),
                         "setting": v.get("setting"), "date": v.get("date"), "problems": [x.get("display") for x in p.get("problems", [])][:2],
-                        "plan_items": len(c.plan) - len(self.tucked(cid)), "has_recording": self.recording(cid).is_file(), "review": self.state(cid)})
+                        "plan_items": len(c.plan) - len(self.tucked(cid)), "has_recording": self.recording(cid).is_file(), "review": self.state(cid),
+                        "running": cid in self.running and not self.running[cid].get("done")})
         return {"cases": out, "planner": self.planner(), "samples": self.samples}
 
     def case(self, cid: str) -> dict:
@@ -367,6 +371,8 @@ class Clinic:
         doc["decisions"] = dict((app.results.get(cid) or {}).get("decisions") or {}) if s else {}
         doc["handout"] = self.handout(cid) if s else None
         doc["has_recording"] = self.recording(cid).is_file()
+        cur = self.running.get(cid)
+        doc["running"] = cur if cur and (not cur.get("done") or (not s and time.time() - cur["started"] < 900)) else None
         doc["tucked"] = self.tucked(cid)
         doc["can_sample"] = self.samples
         doc["planner"] = self.planner()
@@ -410,16 +416,31 @@ class Clinic:
         h.send_header("Content-Type", "text/event-stream")
         h.send_header("Cache-Control", "no-cache")
         h.end_headers()
+        with app.lock:
+            cur = self.running.get(cid)
+            busy = bool(cur and not cur.get("done"))
+            if not busy:
+                self.running[cid] = {"rid": rid, "mode": mode, "started": time.time()}
+        if busy:                                     # the page is pointed at the review already in progress
+            h.wfile.write(f"data: {json.dumps({'type': 'busy', **cur})}\n\n".encode())
+            return h.wfile.flush()
         steps: list[dict] = []
         log = self.progress[rid] = []
         while len(self.progress) > 40:
             self.progress.popitem(last=False)
+        gone = False
 
         def send(ev: dict) -> None:
+            nonlocal gone
             ev = {**ev, "i": len(log)}               # numbered, so a page that hears an event twice (stream and poll) applies it once
             log.append(ev)
-            h.wfile.write(f"data: {_plain(json.dumps(ev, default=str, ensure_ascii=False))}\n\n".encode())
-            h.wfile.flush()
+            if gone:
+                return
+            try:
+                h.wfile.write(f"data: {_plain(json.dumps(ev, default=str, ensure_ascii=False))}\n\n".encode())
+                h.wfile.flush()
+            except OSError:                          # the page left: the review goes on, and the page follows the log when it is back
+                gone = True
 
         def relay(t: float, ev: dict) -> None:
             if ev.get("type") == "tool":
@@ -435,6 +456,7 @@ class Clinic:
             elif ev.get("type") == "rejected":           # the card failed its checks and is being rewritten
                 send({"type": "rewrite", "t": t})
 
+        ok = False
         try:
             if mode in ("recorded", "sample"):
                 f = self.recording(cid)
@@ -474,8 +496,6 @@ class Clinic:
                 client.timeout, client.retries = (10, self.stall_s), 1
                 try:
                     rec = app.check(cid, on_event=push)
-                except (BrokenPipeError, ConnectionResetError):
-                    raise
                 except Exception as ex:
                     self.fail(cid, "live", f"{type(ex).__name__}: {ex}")
                     stalled = "timed out" in str(ex).lower()
@@ -492,9 +512,12 @@ class Clinic:
                     save_recording(f"stream_{cid}", events, rec, app.client.p.name, where=pl["label"])
                     self.note("run saved", cid)
             self.install(cid, rec, doc, doc["meta"]["source"])
+            self.running.pop(cid, None)
+            ok = True
             send({"type": "end", "ok": True, "doc": self.case(cid)})
-        except (BrokenPipeError, ConnectionResetError):
-            pass
+        finally:
+            if not ok:                               # kept, so a page that was away learns the review failed and why
+                self.running[cid] = {**self.running.get(cid, {}), "done": True}
 
     def decide(self, cid: str, body: dict) -> dict:
         s, rec = self.shown.get(cid), self.app.results.get(cid)
@@ -564,6 +587,8 @@ class Clinic:
         with self.app.lock:
             for d in (self.shown, self.app.results, self.app.summaries):
                 d.pop(cid, None)
+            if self.running.get(cid, {}).get("done"):
+                del self.running[cid]
         self.note("reset", cid)
         return {"ok": True}
 

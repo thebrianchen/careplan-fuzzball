@@ -4,6 +4,7 @@ import { avatar } from './visit_layout.js';
 
 function status(c) {
   const r = c.review;
+  if (c.running) return h`<span class="chip wait">Reviewing…</span>`;
   if (!r) return h`<span class="chip none">Not reviewed</span>`;
   if (!r.flagged) return h`<span class="chip likely_ok">Reviewed, no flags</span>`;
   return h`<span class="chip ${r.decided === r.flagged ? 'likely_ok' : 'at_risk'}">${r.flagged} of ${r.items} flagged</span>`;
